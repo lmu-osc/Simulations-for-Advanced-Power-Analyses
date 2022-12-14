@@ -1,0 +1,9 @@
+---
+title: "GLM"
+---
+
+Generalized Linear Models
+
+```{r}
+1 + 1
+```

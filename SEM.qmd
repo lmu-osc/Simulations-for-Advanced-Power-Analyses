@@ -1,0 +1,9 @@
+---
+title: "SEM"
+---
+
+Structural Equation Models
+
+```{r}
+1 + 1
+```

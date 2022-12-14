@@ -1,0 +1,9 @@
+---
+title: "LM"
+---
+
+Linear Models
+
+```{r}
+1 + 1
+```

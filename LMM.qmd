@@ -1,0 +1,9 @@
+---
+title: "LMM"
+---
+
+Linear Mixed Effect Models
+
+```{r}
+1 + 1
+```

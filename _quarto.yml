@@ -1,0 +1,26 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - index.qmd
+      - section: "Models"
+        contents:
+          - LM.qmd
+          - GLM.qmd
+          - LMM.qmd
+          - GLMM.qmd
+          - SEM.qmd
+      - Resources.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+editor: visual

@@ -1,0 +1,51 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
+    "section": "",
+    "text": "check alpha so your models don’t yield more than 5% false-positive results\ncheck beta (power) for easy tests such as t-tests (where this isn’t really needed)\nprepare a preregistration and make sure your code works\ncheck your understanding of statistics\n\nLet’s dive deeper into power calculations for different complex models.\nFor each, we will follow the structure:\n\ndefine what type of data and variables need to be simulated, i.e. their distribution, their class (e.g. factor vs numerical value), sample sizes (within a dataset, and number of replicates), what will need to vary (e.g. the strength of relationship)\ngenerate data, random data or data including an effect (e.g. an imposed correlation between two variables)\nrun the statistical test you think is appropriate, and record the relevant statistic (e.g. p-value)\nreplicate step 2 and 3 to get the distribution of the statistic of interest\ntry out different parameter sets (explore the parameter space for which results are similar)\nanalyze and interpret the combined results of many simulations within each set of parameters. For instance, check that you only get a significant result in 5% of the simulations (if alpha = 0.05) when you simulated no effect; and that you get at a significant result in 80% of the simulations (if you targeted a power of 80%) when you simulated an effect\n\nHere are the type of models we will cover, you can pick and choose what is relevant to you!\n\n[LM](LM.qmd)\nGLM\nLMM\nGLMM\nSEM\n\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "GLM.html",
+    "href": "GLM.html",
+    "title": "GLM",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "GLMM.html",
+    "href": "GLMM.html",
+    "title": "GLMM",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "LM.html",
+    "href": "LM.html",
+    "title": "LM",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "LMM.html",
+    "href": "LMM.html",
+    "title": "LMM",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "SEM.html",
+    "href": "SEM.html",
+    "title": "SEM",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  }
+]
