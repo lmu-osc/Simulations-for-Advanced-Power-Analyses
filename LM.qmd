@@ -116,7 +116,7 @@ mean(BtheB$bdi.2m, na.rm=TRUE)
 
 So, the average reduction across both treatments is $17-23=6$.
 
-# Enter specific values for the model parameters
+## Enter specific values for the model parameters
 
 Let's rewrite the abstract equation with the specific variable names. We first write the equation for the systematic part (without the error term). This also represents the predicted value:
 
@@ -210,7 +210,7 @@ summary(lm(BDI ~ treatment, data=df))
 
 Here, and in the entire tutorial, we assume an $\alpha$-level of .005 (Benjamin et al., 2018). As you can see, in this specific sample the treatment effect is not significant at p > .02. But maybe in another sample of the same size?
 
-# Doing the power analysis
+## Doing the power analysis
 
 Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a loop and repeatedly do the procedure.
 
@@ -322,6 +322,13 @@ We can use the `t.test` function to compute a CI around that value:
 ```{r}
 t.test(BtheB$bdi.2m, BtheB$bdi.pre, na.rm=TRUE, conf.level = 0.60)
 ```
+::: {.callout-note}
+# MOTE Online Calculator
+You can also use the MOTE online calculator by Erin Buchanan et al. to compute effect sizes and confidence intervals around them: https://doomlab.shinyapps.io/mote/
+
+This takes either raw statistics (means, SDs) or test statistics as input.
+:::
+
 
 As the assumed effect is negative, we aim for the *upper*, i.e., the more conservative limit, which is considerably smaller, at -5.1.
 
@@ -481,6 +488,8 @@ for (n in ns) {
 print(result)
 ```
 
+Now the power increases monotonically with sample size, as expected.
+
 # Recap: What did we do?
 
 These are the steps we did in the tutorial:
@@ -529,6 +538,8 @@ for (i in 1:iterations) {
   
 })
 ```
+
+Generally, you can start with few iterations for a fast exploration of the parameter space. When you found the relevant range (e.g., the necessary sample size to achieve a power between 70% and 90 %), you can restrict the parameter space to that range and increase the number of iterations to get more precise results.
 
 
 # References

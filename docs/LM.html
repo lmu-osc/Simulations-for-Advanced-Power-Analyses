@@ -209,14 +209,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#a-concrete-example" id="toc-a-concrete-example" class="nav-link" data-scroll-target="#a-concrete-example">A concrete example</a>
   <ul class="collapse">
   <li><a href="#get-some-real-bdi-data-as-starting-point" id="toc-get-some-real-bdi-data-as-starting-point" class="nav-link" data-scroll-target="#get-some-real-bdi-data-as-starting-point">Get some real BDI data as starting point</a></li>
-  </ul></li>
-  <li><a href="#enter-specific-values-for-the-model-parameters" id="toc-enter-specific-values-for-the-model-parameters" class="nav-link" data-scroll-target="#enter-specific-values-for-the-model-parameters">Enter specific values for the model parameters</a>
-  <ul class="collapse">
+  <li><a href="#enter-specific-values-for-the-model-parameters" id="toc-enter-specific-values-for-the-model-parameters" class="nav-link" data-scroll-target="#enter-specific-values-for-the-model-parameters">Enter specific values for the model parameters</a></li>
   <li><a href="#what-is-the-effect-size-in-the-model" id="toc-what-is-the-effect-size-in-the-model" class="nav-link" data-scroll-target="#what-is-the-effect-size-in-the-model">What is the effect size in the model?</a></li>
   </ul></li>
-  <li><a href="#lets-simulate" id="toc-lets-simulate" class="nav-link" data-scroll-target="#lets-simulate">Let’s simulate!</a></li>
-  <li><a href="#doing-the-power-analysis" id="toc-doing-the-power-analysis" class="nav-link" data-scroll-target="#doing-the-power-analysis">Doing the power analysis</a>
+  <li><a href="#lets-simulate" id="toc-lets-simulate" class="nav-link" data-scroll-target="#lets-simulate">Let’s simulate!</a>
   <ul class="collapse">
+  <li><a href="#doing-the-power-analysis" id="toc-doing-the-power-analysis" class="nav-link" data-scroll-target="#doing-the-power-analysis">Doing the power analysis</a></li>
   <li><a href="#sample-size-planning-find-the-necessary-sample-size" id="toc-sample-size-planning-find-the-necessary-sample-size" class="nav-link" data-scroll-target="#sample-size-planning-find-the-necessary-sample-size">Sample size planning: Find the necessary sample size</a></li>
   </ul></li>
   <li><a href="#sensitivity-analyses" id="toc-sensitivity-analyses" class="nav-link" data-scroll-target="#sensitivity-analyses">Sensitivity analyses</a>
@@ -372,9 +370,8 @@ FALSE  TRUE
 </div>
 <p>So, the average reduction across both treatments is <span class="math inline">\(17-23=6\)</span>.</p>
 </section>
-</section>
-<section id="enter-specific-values-for-the-model-parameters" class="level1">
-<h1>Enter specific values for the model parameters</h1>
+<section id="enter-specific-values-for-the-model-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="enter-specific-values-for-the-model-parameters">Enter specific values for the model parameters</h2>
 <p>Let’s rewrite the abstract equation with the specific variable names. We first write the equation for the systematic part (without the error term). This also represents the predicted value:</p>
 <p><span id="eq-2"><span class="math display">\[\widehat{\text{BDI}} = b_0 + b_1*\text{treatment} \tag{2}\]</span></span></p>
 <p>We use the notation <span class="math inline">\(\widehat{\text{BDI}}\)</span> (with a hat) to denote the predicted BDI score.</p>
@@ -389,6 +386,7 @@ FALSE  TRUE
 <p>As a final step, we add the random noise to the model, based on the variance in the pilot data:</p>
 <p><span class="math display">\[\text{BDI} = 23 - 6*treatment + e; e \sim N(0, var=117) \]</span></p>
 <p>That’s our final equation with assumed population parameters! With that equation, we assume a certain state of reality and can sample “virtual participants”.</p>
+</section>
 <section id="what-is-the-effect-size-in-the-model" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-the-effect-size-in-the-model">What is the effect size in the model?</h2>
 <p>The <em>raw</em> effect size is simply the treatment effect on the original BDI scale (i.e., the group difference in the outcome variable). In our case we assume that the treatment lowers the BDI score by 6 points, on average. The <em>standardized</em> effect size relates the raw effect size to the variability. In the two-group example, this can be expressed as Cohen’s <em>d</em>, which is the mean difference divided by the standard deviation (SD):</p>
@@ -481,9 +479,8 @@ F-statistic: 5.643 on 1 and 48 DF,  p-value: 0.02156</code></pre>
 </div>
 </div>
 <p>Here, and in the entire tutorial, we assume an <span class="math inline">\(\alpha\)</span>-level of .005 (Benjamin et al., 2018). As you can see, in this specific sample the treatment effect is not significant at p &gt; .02. But maybe in another sample of the same size?</p>
-</section>
-<section id="doing-the-power-analysis" class="level1">
-<h1>Doing the power analysis</h1>
+<section id="doing-the-power-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="doing-the-power-analysis">Doing the power analysis</h2>
 <p>Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a loop and repeatedly do the procedure.</p>
 <div class="cell" data-hash="LM_cache/html/unnamed-chunk-12_ae4e2781624cf4ea3109225b5c2d2e50">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
@@ -517,6 +514,7 @@ FALSE  TRUE
 </div>
 <p>Only 46% of samples with the same size of <span class="math inline">\(n=100\)</span> result in a significant p-value.</p>
 <p>46% - that is our power for <span class="math inline">\(\alpha = .005\)</span>, Cohen’s <span class="math inline">\(d=.55\)</span>, and <span class="math inline">\(n=100\)</span>.</p>
+</section>
 <section id="sample-size-planning-find-the-necessary-sample-size" class="level2">
 <h2 class="anchored" data-anchor-id="sample-size-planning-find-the-necessary-sample-size">Sample size planning: Find the necessary sample size</h2>
 <p>Now we know that a sample size of 100 does not lead to a sufficient power. But what sample size would we need to achieve a power of at least 80%? In the simulation approach you need to test different <span class="math inline">\(n\)</span>s until you find the necessary sample size. We do this by wrapping the simulation code into another loop that continuously increases the n.&nbsp;We then store the computed power for each n.</p>
@@ -614,6 +612,20 @@ mean of x mean of y
  16.91753  23.33000 </code></pre>
 </div>
 </div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+MOTE Online Calculator
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can also use the MOTE online calculator by Erin Buchanan et al.&nbsp;to compute effect sizes and confidence intervals around them: https://doomlab.shinyapps.io/mote/</p>
+<p>This takes either raw statistics (means, SDs) or test statistics as input.</p>
+</div>
+</div>
 <p>As the assumed effect is negative, we aim for the <em>upper</em>, i.e., the more conservative limit, which is considerably smaller, at -5.1.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -685,7 +697,7 @@ ci.smd(smd=0.55, n.1=50, n.2=50, conf.level=0.60)</code></pre>
 </section>
 <section id="smallest-effect-size-of-interest-sesoi" class="level2">
 <h2 class="anchored" data-anchor-id="smallest-effect-size-of-interest-sesoi">Smallest effect size of interest (SESOI)</h2>
-<p>Many methodologists argue that we should not power for the <em>expected</em> effects size, but rather for the samllest effect size of interest. In this case, a non-significant result can be interpreted as “We accept the <span class="math inline">\(H_0\)</span>, and even if a real effect existed, it most likely is too small to be relevant”.</p>
+<p>Many methodologists argue that we should not power for the <em>expected</em> effects size, but rather for the smallest effect size of interest. In this case, a non-significant result can be interpreted as “We accept the <span class="math inline">\(H_0\)</span>, and even if a real effect existed, it most likely is too small to be relevant”.</p>
 <p>What change of BDI scores is perceived as “clinically important”? The hard part is to find a convincing theoretical or empirical argument for the chosen SESOI. In the case of the BDI, luckily someone else did that work.</p>
 <p>The <a href="https://www.nice.org.uk/guidance/qs8">NICE guidance</a> suggest that a change of &gt;=3 BDI-II points is clinically important.</p>
 <p>However, as you can expect, things are more complicated. Button et al.&nbsp;(2015) analyzed data sets where patients have been asked, after a treatment, whether they felt “better”, “the same” or “worse”. With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms where measureably reduced in the BDI, patients still might answer “feels the same”, which indicates that the reduction did not surpass a threshold of subjective relevant improvement. For example, the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need <em>more</em> reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are <em>higher</em> than the NICE guidelines, more in the range of -6 BDI points.</p>
