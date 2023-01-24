@@ -1,0 +1,296 @@
+---
+title: "Bonus: Optimizing R code for speed"
+author: "Felix Schönbrodt"
+---
+
+Optimizing code for speed can be an art (and you get lost and spend/waste hours by micro-optimizing some milliseconds). But the Pareto principle also applies here: with 20% effort, you can have quick and substantial gains.
+
+*Code profiling* means that the code execution is timed, just like you had a stopwatch. You try to make your code snippet as fast as possible. RStudio has a [built-in profiler](https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE) that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we'll resort to the simplest way of timing code: We simple measure overall execution time by wrapping our code in a `system.time({ ... })` call.
+
+# First, naive version
+
+We use `system.time()` to measure how long our code execution takes. Longer code blocks need to be wrapped in curly braces `{...}`. The function returns multiple timings; the relevant number for us is the "user" time.
+
+Here is a first version of the power simulation code for a simple LM.
+
+```{r}
+t0 <- system.time({
+
+iterations <- 2000
+ns <- seq(300, 500, by=50)
+result <- data.frame()
+
+for (n in ns) {
+  p_values <- c()
+  
+  for (i in 1:iterations) {
+    treatment <- c(rep(0, n/2), rep(1, n/2))
+    BDI <- 23 - 3*treatment + rnorm(n, mean=0, sd=sqrt(117))
+    df <- data.frame(treatment, BDI)
+    res <- lm(BDI ~ treatment, data=df)
+    p_values <- c(p_values, summary(res)$coefficients["treatment", "Pr(>|t|)"])
+  }
+  
+  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
+}
+
+})
+t0
+
+result
+```
+
+This first version takes `r t0[1]` seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won't see speed improvements very well.
+
+# Rule 1: No growing vectors/data frames
+
+This is one of the most common bottlenecks: You start with an empty vector (or even worse: data frame), and grow it by `rbind`-ing new rows to it in each iteration.
+
+```{r}
+t1 <- system.time({
+
+iterations <- 2000
+ns <- seq(300, 500, by=50)
+
+result <- data.frame()
+
+for (n in ns) {
+  print(n)
+  
+  # CHANGE: Preallocate vector with the final size, initialize with NAs
+  p_values <- rep(NA, iterations)
+  
+  for (i in 1:iterations) {
+    treatment <- c(rep(0, n/2), rep(1, n/2))
+    BDI <- 23 - 6*treatment + rnorm(n, mean=0, sd=sqrt(117))
+    df <- data.frame(treatment, BDI)
+    res <- lm(BDI ~ treatment, data=df)
+    
+    # CHANGE: assign resulting p-value to specific slot in vector
+    p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
+  }
+  
+  # Here we stil have a growing data.frame - but as this is only done 5 times, it does not matter.
+  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
+}
+
+})
+
+# Combine the different timings in a data frame
+timings <- rbind(t0, t1) |> data.frame()
+
+# compute the absolute and relativ difference of consecutive rows:
+timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
+timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1])
+
+timings
+```
+
+OK, this didn't really change anything here. But in general (in particular with data frames) this is worth looking at.
+
+# Rule 2: Avoid data frames as far as possible
+
+Use matrizes instead of data frames wherever possible; or avoid them at all (as we do in the code below).
+
+```{r}
+t2 <- system.time({
+
+iterations <- 2000
+ns <- seq(300, 500, by=50)
+
+result <- data.frame()
+
+for (n in ns) {
+  treatment <- c(rep(0, n/2), rep(1, n/2))
+  p_values <- rep(NA, iterations)
+  
+  for (i in 1:iterations) {
+    BDI <- 23 - 3*treatment + rnorm(n, mean=0, sd=sqrt(117))
+    
+    # CHANGE: We don't need the data frame - just create the two variables in the environment and lm() takes them from there.
+    #df <- data.frame(treatment, BDI)
+    res <- lm(BDI ~ treatment)
+    
+    p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
+  }
+  
+  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
+}
+
+})
+
+timings <- rbind(t0, t1, t2) |> data.frame()
+timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
+timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1])
+timings
+```
+
+This showed a substantial improvement of around `r round(t2[1] - t1[1], 1)` seconds; a relative gain of `r round(timings$rel_diff[3]*100, 1)`%.
+
+# Rule 3: Avoid unnecessary computations
+
+What do we actually need? In fact only the p-value for our focal predictor. But the `lm` function does so many more things, for example parsing the formula `BDI ~ treatment`.
+
+We could strip away all overhead and do only the necessary steps: Fit the linear model, and retrieve the p-values (see https://stackoverflow.com/q/49732933). This needs some deeper knowledge of the functions and some google-fu. When you do this, you should definitely compare your results with the original result from the `lm` function and verify that they are identical!
+
+```{r}
+t3 <- system.time({
+
+iterations <- 2000
+ns <- seq(300, 500, by=50)
+
+result <- data.frame()
+
+for (n in ns) {
+  # construct the design matrix: first column is all-1 (intercept), second column is the treatment factor
+  x <- cbind(
+    rep(1, n),
+    c(rep(0, n/2), rep(1, n/2))
+  )
+  
+  p_values <- rep(NA, iterations)
+  
+  for (i in 1:iterations) {
+    y <- 23 - 3*x[, 2] + rnorm(n, mean=0, sd=sqrt(117))
+
+    # For comparison - do we get the same results? Yes!
+    # res0 <- lm(y ~ x[, 2])
+    # summary(res0)
+    
+    # fut the model:
+    m <- .lm.fit(x, y)
+    
+    # compute p-values based on the residuals:
+    rss <- sum(m$residuals^2)
+    rdf <- length(y) - ncol(x)
+    resvar <- rss/rdf
+    R <- chol2inv(m$qr)
+    se <- sqrt(diag(R) * resvar)
+    ps <- 2*pt(abs(m$coef/se),rdf,lower.tail=FALSE)
+    
+    p_values[i] <- ps[2]
+  }
+  
+  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
+}
+
+})
+timings <- rbind(t0, t1, t2, t3) |> data.frame()
+timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
+timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1])
+timings
+```
+
+# Rule 4: Use optimized packages
+
+For many statistical models, there are packages optimized for speed, see for example here:
+[https://stackoverflow.com/q/49732933](https://stackoverflow.com/q/49732933)
+
+```{r}
+library(RcppArmadillo)
+
+t4 <- system.time({
+
+iterations <- 2000
+ns <- seq(300, 500, by=50)
+
+result <- data.frame()
+
+for (n in ns) {
+  # construct the design matrix: first column is all-1 (intercept), second column is the treatment factor
+  x <- cbind(
+    rep(1, n),
+    c(rep(0, n/2), rep(1, n/2))
+  )
+  
+  p_values <- rep(NA, iterations)
+  
+  for (i in 1:iterations) {
+    y <- 23 - 3*x[, 2] + rnorm(n, mean=0, sd=sqrt(117))
+
+    # For comparison - do we get the same results? Yes!
+    # res0 <- lm(y ~ x[, 2])
+    # summary(res0)
+    
+    mdl <- RcppArmadillo::fastLmPure(x, y)
+    pval <- 2*pt(abs(mdl$coefficients/mdl$stderr), mdl$df.residual, lower.tail=FALSE)
+    
+    p_values[i] <- pval[2]
+  }
+  
+  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
+}
+
+})
+timings <- rbind(t0, t1, t2, t3, t4) |> data.frame()
+timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
+timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1])
+timings
+```
+
+This step only gave a minor `r round(timings$rel_diff[5]*100)`% relative increase in speed - but as a bonus, it made our code much easier to read and shorter.
+
+I think we can stop here - we managed to reduce the execution time for our example from `r timings[1, 1]` seconds to `r timings[5, 1]` seconds - `r round(timings[1, 1]/timings[5, 1], 1)`x faster!
+
+With that fast code, we can easily explore a broad parameter range (n ranging from 100 to 1000) and increase the iterations to 2000 for more stable results. (See also: "[Bonus: How many Monte-Carlo iterations are necessary?](how_many_iterations.qmd)")
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+t5 <- system.time({
+
+iterations <- 2000
+ns <- seq(100, 1000, by=50)
+
+result <- data.frame()
+
+for (n in ns) {
+
+    x <- cbind(
+    rep(1, n),
+    c(rep(0, n/2), rep(1, n/2))
+  )
+  
+  p_values <- rep(NA, iterations)
+  
+  for (i in 1:iterations) {
+    y <- 23 - 3*x[, 2] + rnorm(n, mean=0, sd=sqrt(117))
+    
+    mdl <- RcppArmadillo::fastLmPure(x, y)
+    pval <- 2*pt(abs(mdl$coefficients/mdl$stderr), mdl$df.residual, lower.tail=FALSE)
+    
+    p_values[i] <- pval[2]
+  }
+  
+  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
+}
+
+})
+result
+```
+
+Some steps, such as avoiding growing vectors, didn't really help here, but will help a lot in other scenarios.
+
+There are *many* blog post showing and comparing strategies to increase R performance, e.g.:
+
+-   [https://www.r-bloggers.com/2016/01/strategies-to-speedup-r-code/](https://www.r-bloggers.com/2016/01/strategies-to-speedup-r-code/)
+-   [https://adv-r.hadley.nz/perf-improve.html](https://adv-r.hadley.nz/perf-improve.html)
+-   [https://csgillespie.github.io/efficientR/performance.html](https://csgillespie.github.io/efficientR/performance.html)
+
+::: callout-note
+# But always remember:
+
+"We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil.
+Yet we should not pass up our opportunities in that critical 3%."
+
+Donald Knuth *(Structured Programming with go to Statements, ACM Journal Computing Surveys, Vol 6, No. 4, Dec. 1974. p. 268)*
+:::
+
+# Session Info
+
+These speed measurements have been performed on a 2021 MacBook Pro with M1 processor.
+
+```{r}
+sessionInfo()
+```

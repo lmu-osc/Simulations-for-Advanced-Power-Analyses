@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Felix Schönbrodt">
 
 <title>Linear Model (a single predictor)</title>
 <style>
@@ -193,6 +194,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./optimizing_code.html" class="sidebar-item-text sidebar-link">Bonus: Optimizing R code for speed</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./how_many_iterations.html" class="sidebar-item-text sidebar-link">Bonus: How many Monte-Carlo iterations are necessary?</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./Resources.html" class="sidebar-item-text sidebar-link">Resources</a>
   </div>
 </li>
@@ -225,6 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#recap-what-did-we-do" id="toc-recap-what-did-we-do" class="nav-link" data-scroll-target="#recap-what-did-we-do">Recap: What did we do?</a></li>
   <li><a href="#bonus-1-beyond-power-general-design-analysis" id="toc-bonus-1-beyond-power-general-design-analysis" class="nav-link" data-scroll-target="#bonus-1-beyond-power-general-design-analysis">Bonus 1: Beyond power: General design analysis</a></li>
   <li><a href="#bonus-2-optimizing-your-code-for-speed" id="toc-bonus-2-optimizing-your-code-for-speed" class="nav-link" data-scroll-target="#bonus-2-optimizing-your-code-for-speed">Bonus 2: Optimizing your code for speed</a></li>
+  <li><a href="#bonus-3-the-quick-solution-sampling-from-pilot-samples" id="toc-bonus-3-the-quick-solution-sampling-from-pilot-samples" class="nav-link" data-scroll-target="#bonus-3-the-quick-solution-sampling-from-pilot-samples">Bonus 3: The quick solution: sampling from pilot samples</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -241,6 +253,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Felix Schönbrodt </p>
+          </div>
+  </div>
     
     
   </div>
@@ -799,16 +817,17 @@ ci.smd(smd=0.55, n.1=50, n.2=50, conf.level=0.60)</code></pre>
 11 800 0.8682</code></pre>
 </div>
 </div>
+<p>Now the power increases monotonically with sample size, as expected.</p>
 </section>
 </section>
 <section id="recap-what-did-we-do" class="level1">
 <h1>Recap: What did we do?</h1>
 <p>These are the steps we did in the tutorial:</p>
 <ol type="1">
-<li>Define the statistical model that you will use to analyze your data (<em>in our case: a linear regression</em>)</li>
-<li>Find empirical information about the parameters in the model. These are typically mean values, variances, group differences, regression coefficients, or correlations (<em>in our case: a mean value (before treatment), a group difference, and an error variance</em>). These numbers define your assumed state of the population.</li>
-<li>Program your equation, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.</li>
-<li>Do the simulation:
+<li><strong>Define the statistical model that you will use to analyze your data</strong> (<em>in our case: a linear regression</em>). This sometimes is called the <em>data generating mechanism</em> or the <em>data generating model</em>.</li>
+<li><strong>Find empirical information about the parameters in the model.</strong> These are typically mean values, variances, group differences, regression coefficients, or correlations (<em>in our case: a mean value (before treatment), a group difference, and an error variance</em>). These numbers define your assumed state of the population.</li>
+<li><strong>Program your equation</strong>, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.</li>
+<li><strong>Do the simulation</strong>:
 <ol type="a">
 <li>Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same)</li>
 <li>Compute the index of interest (typically: the p-value of a focal effect)</li>
@@ -849,6 +868,12 @@ ci.smd(smd=0.55, n.1=50, n.2=50, conf.level=0.60)</code></pre>
 <span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Generally, you can start with few iterations for a fast exploration of the parameter space. When you found the relevant range (e.g., the necessary sample size to achieve a power between 70% and 90 %), you can restrict the parameter space to that range and increase the number of iterations to get more precise results.</p>
+</section>
+<section id="bonus-3-the-quick-solution-sampling-from-pilot-samples" class="level1">
+<h1>Bonus 3: The quick solution: sampling from pilot samples</h1>
+<p>If your pilot study has exactly the same data structure as the study you are planning for you can take the resulting <code>lm</code> object and directly sample from that.</p>
+<p>With that procedure, however, you assume that the pilot study perfectly hit the true effect size (and all other parameters of the model)</p>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>

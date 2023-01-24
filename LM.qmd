@@ -1,5 +1,6 @@
 ---
 title: "Linear Model (a single predictor)"
+author: "Felix Schönbrodt"
 execute:
   cache: true
 ---
@@ -499,10 +500,10 @@ Now the power increases monotonically with sample size, as expected.
 
 These are the steps we did in the tutorial:
 
-1. Define the statistical model that you will use to analyze your data (*in our case: a linear regression*)
-2. Find empirical information about the parameters in the model. These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define your assumed state of the population.
-3. Program your equation, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.
-4. Do the simulation:
+1. **Define the statistical model that you will use to analyze your data** (*in our case: a linear regression*). This sometimes is called the *data generating mechanism* or the *data generating model*.
+2. **Find empirical information about the parameters in the model.** These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define your assumed state of the population.
+3. **Program your equation**, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.
+4. **Do the simulation**:
     a) Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same)
     b) Compute the index of interest (typically: the p-value of a focal effect)
     c) Count how many samples would have detected the effect
@@ -546,6 +547,12 @@ for (i in 1:iterations) {
 
 Generally, you can start with few iterations for a fast exploration of the parameter space. When you found the relevant range (e.g., the necessary sample size to achieve a power between 70% and 90 %), you can restrict the parameter space to that range and increase the number of iterations to get more precise results.
 
+
+# Bonus 3: The quick solution: sampling from pilot samples
+
+If your pilot study has exactly the same data structure as the study you are planning for you can take the resulting `lm` object and directly sample from that.
+
+With that procedure, however, you assume that the pilot study perfectly hit the true effect size (and all other parameters of the model)
 
 # References
 
