@@ -43,7 +43,7 @@ This is an opportunity to think about the actual scale of our variables. At the 
 
 All of these values are needed to be able to simulate data, and the chosen numbers imply a certain effect size.
 
-## Get some real BDI data as starting point
+## Get some real data as starting point
 
 ::: {.callout-note}
 The creators of this tutorial are no experts in clinical psychology; we opportunistically selected open data sets based on their availability. Usually, we would look for meta-analyses - ideally bias-corrected - for more comprehensive evidence.
@@ -71,15 +71,17 @@ The standardized cutoffs for the BDI are:
 -   20--28: moderate depression
 -   29--63: severe depression.
 
+According to these cutoffs, what is the percentage of participants who had at least "mild depression" before treatment?
+
 ```{r}
 table(BtheB$bdi.pre >= 14) |> prop.table() |> round(2)
 ```
 
-Hence, 80% of participants had at least a "mild depression" before treatment according to these cutoffs.
+This tells us that 80% of participants had at least a "mild depression" before treatment. #FIXME any particular reason to check for that that could be made explicit?
 
 Returning to our questions from above:
 
-**What BDI values would we expect on average in our sample (before treatment)?**
+**What BDI values would we expect on average in our sample (before #FIXME and after? treatment)?**
 
 ```{r}
 # we take the pre-score here:
@@ -106,7 +108,7 @@ mean(BtheB$bdi.2m[BtheB$treatment == "BtheB"])
 
 Hence, the two treatments reduced BDI scores from an average of 23 to 19 (`TAU`) and 15 (`BtheB`). Based on that data set, we can conclude that a typical treatment effect is somewhere between a 4 and a 8-point reduction of BDI scores.[^1]
 
-[^1]: By comparing only the post-treatment scores we used an unbiased causal model for the treatment effect. Later we will increase the precision of the estimate by including the baseline score into the model.
+[^1]: By comparing only the post-treatment scores we used an unbiased causal model for the treatment effect. Later we will increase the precision of the estimate by including the baseline score #FIXME of each treatment group? or each participant?  into the model.
 
 For our purpose, we compute the average treatment effect combined for both treatments. The average post-treatment score is:
 
@@ -118,7 +120,7 @@ So, the average reduction across both treatments is $17-23=6$.
 
 ## Enter specific values for the model parameters
 
-Let's rewrite the abstract equation with the specific variable names. We first write the equation for the systematic part (without the error term). This also represents the predicted value:
+Let's rewrite the abstract equation with the specific variable names. We first write the equation for the systematic part (without the error term). This also represents the predicted value #FIXME (i.e. post-2m BDI values) ?:
 
 $$\widehat{\text{BDI}} = b_0 + b_1*\text{treatment}$$ {#eq-2}
 
@@ -202,17 +204,20 @@ ggplot(df, aes(x=as.factor(treatment), y=BDI)) +
   gghalves::geom_half_point(side = "l", range_scale = .4, alpha = .5)
 ```
 
+#FIXME can you say what we are supposed to notice in this graph? e.g. post treatment (after two months) control group has this mean, treated group  has this other mean - is this right? 
+
 Let's assume that we collected and analyzed this sample - what would have been the results?
 
 ```{r}
 summary(lm(BDI ~ treatment, data=df))
 ```
 
-Here, and in the entire tutorial, we assume an $\alpha$-level of .005 (Benjamin et al., 2018). As you can see, in this specific sample the treatment effect is not significant at p > .02. But maybe in another sample of the same size?
+Here, and in the entire tutorial, we assume an $\alpha$-level of .005 (Benjamin et al., 2018). As you can see, in this specific sample the treatment effect is not significant at p > .02. But maybe in another sample of the same size? #FIXME do you mean with another randomly simulated sample? I got confused what you meant here for a sec. Perhaps say something like: with the seed XX, randomly generating a sample of the same sample size, the effect is significant at p = XX. How likely are we to detect an effect with a sample of this sample size? or perhaps simply: How likely were we to detect an effect with a sample of this size?
 
 ## Doing the power analysis
 
 Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a loop and repeatedly do the procedure.
+#FIXME maybe we can use the function 'replicate' seen in first tutorial instead of for loop - maybe faster?
 
 ```{r}
 #| echo: true
