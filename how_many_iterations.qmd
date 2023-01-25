@@ -5,7 +5,12 @@ execute:
   cache: true
 ---
 
-Using the [optimized code](optimizing_code.qmd), we can easily explore how many Monte-Carlo iterations are necessary to get stable computational results: Simply re-run the same simulation with the same sample size! 
+
+#FIXME I couldn't jump right into this page and understand what is iteration, repetition and n were. one or two lines could be added at the top, something like:
+
+To find the sample size needed for a study, we have previsouly use e.g. 1000 iterations of data simulation and analysis, and varied the sample size from e.g. 100 to 1000, every 50, to find where the e.g. 80% power threshold was crossed (see e.g. https://shiny.psy.lmu.de/r-tutorials/powersim/LM.html#sample-size-planning-find-the-necessary-sample-size #FIXME relative link). But is 1000 iterations giving a precise enough result?
+
+Using the [optimized code](optimizing_code.qmd), we can explore how many Monte-Carlo iterations are necessary to get stable computational results: we can re-run the same simulation with the same sample size!
 
 Let's start with 1000 iterations (at n = 100, and 10 repetitions of the same power analysis):
 ```{r}
