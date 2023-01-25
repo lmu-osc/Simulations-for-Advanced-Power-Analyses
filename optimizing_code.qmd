@@ -3,9 +3,9 @@ title: "Bonus: Optimizing R code for speed"
 author: "Felix Schönbrodt"
 ---
 
-Optimizing code for speed can be an art (and you get lost and spend/waste hours by micro-optimizing some milliseconds). But the Pareto principle also applies here: with 20% effort, you can have quick and substantial gains.
+Optimizing code for speed can be an art (and you get lost and spend/waste hours by micro-optimizing some milliseconds). But the Pareto principle applies here: with 20% effort, you can have quick and substantial gains.
 
-*Code profiling* means that the code execution is timed, just like you had a stopwatch. You try to make your code snippet as fast as possible. RStudio has a [built-in profiler](https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE) that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we'll resort to the simplest way of timing code: We simple measure overall execution time by wrapping our code in a `system.time({ ... })` call.
+*Code profiling* means that the code execution is timed, just like you had a stopwatch. You try to make your code snippet as fast as possible. RStudio has a [built-in profiler](https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE) that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we'll resort to the simplest way of timing code: We will measure overall execution time by wrapping our code in a `system.time({ ... })` call.
 
 # First, naive version
 
@@ -71,7 +71,7 @@ for (n in ns) {
   }
   
   # Here we stil have a growing data.frame - but as this is only done 5 times, it does not matter.
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
+  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations)) #FIXME the result is printed in the preview, but it doesn't show what I'd expect from this line, it isn't two columns with n and power but only the values of n.
 }
 
 })
@@ -131,7 +131,7 @@ This showed a substantial improvement of around `r round(t2[1] - t1[1], 1)` seco
 
 What do we actually need? In fact only the p-value for our focal predictor. But the `lm` function does so many more things, for example parsing the formula `BDI ~ treatment`.
 
-We could strip away all overhead and do only the necessary steps: Fit the linear model, and retrieve the p-values (see https://stackoverflow.com/q/49732933). This needs some deeper knowledge of the functions and some google-fu. When you do this, you should definitely compare your results with the original result from the `lm` function and verify that they are identical!
+We could strip away all overhead and do only the necessary steps: Fit the linear model, and retrieve the p-values (see [https://stackoverflow.com/q/49732933](https://stackoverflow.com/q/49732933)). This needs some deeper knowledge of the functions and some google-fu. When you do this, you should definitely compare your results with the original result from the `lm` function and verify that they are identical!
 
 ```{r}
 t3 <- system.time({
@@ -157,7 +157,7 @@ for (n in ns) {
     # res0 <- lm(y ~ x[, 2])
     # summary(res0)
     
-    # fut the model:
+    # fit the model:
     m <- .lm.fit(x, y)
     
     # compute p-values based on the residuals:
