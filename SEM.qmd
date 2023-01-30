@@ -1,9 +1,276 @@
 ---
-title: "SEM"
+title: "Structural Equation Models (SEM)"
+format: html
+author: Moritz Fischer
 ---
 
-Structural Equation Models
+```{r install packages, message=FALSE, warning=FALSE}
 
-```{r}
-1 + 1
+#install.packages(c("ggplot2", "MASS", "apaTables", "MBESS))
+library("lavaan")
+library("MASS")
+library("tidyverse")
+library("MBESS")
 ```
+
+In this chapter, we will focus on a few rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). We will start with the former, i.e., a power analysis for a fit index.
+
+# A simulation-based power analysis for a fit index in SEM
+
+Let's consider the following example: We are planning to conduct a study investigating whether prejudice towards different social groups (e.g., women, foreigners, homosexuals, disabled people) can be conceptualized as manifestations of a single underlying latent factor (aka "generalized prejudice"). In other words, we aim to test whether a SEM in which four manifest variables load on a single higher factor ("generalized prejudice") has an adequate fit. There are multiple fit indices which we could use to decide whether this model has an acceptable fit, such as Chi-Squared, CFI, SRMR, or RMSEA. We will not go into detail of the pros and cons of these indices here. Let's for now just focus on one of these indices: The Chi-Squared statistic. 
+
+## Let's get some real data as starting point
+
+Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let's assume that there is a published study that measured the four manifest variables of interest (i.e., prejudice towards women, foreigners, homosexuals, and disabled people) and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al (2016) and the corresponding data set which has been made accessible as part of the `MPsychoR` package. Let's take a look at this data set.
+
+
+```{r load data, message=FALSE}
+#install.packages("MPsychoR")
+library(MPsychoR)
+data("Bergh")
+
+#let's take a look
+head(Bergh)
+
+```
+
+This data set comprises 11 variables measured in 861 participants. For now, we will focus on four measured variables: 
+
+-   `EP` is a continuous variable measuring ethnic prejudice. 
+-   `SP` is a continuous variable measuring sexism. 
+-   `HP` is a continuous variable measuring sexual prejudice towards gays and lesbians. 
+-   `DP` is a continuous variable measuring prejudice toward mentally people with disabilities. 
+
+To get an impression of this data, we can inspect means, standard deviations, and correlations of 
+the variables we're interested in. I am using the `attach` function which makes it easier to access variables of this data set thourght this tutorial without specifying the data set containing this variable again and again. 
+
+```{r correlations}
+
+attach(Bergh)
+apaTables::apa.cor.table(cbind(EP, SP, HP, DP))
+
+```
+
+As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. With these population parameters, we can then simulate data, for example using the `mrvnorm` function from the `MASS` package. In our example, we estimate the population parameters from the study by Bergh et al. (2016). We start by calculating the means of the four variables, rounding them generously, and storing them in a vector called `means_vector`. 
+
+```{r mean vector cfa}
+
+means_vector <- c(mean(EP), mean(SP), mean(HP), mean(DP)) %>% round(1)
+
+```
+
+We also need the variance-covariance matrix of our variables in order to simulate data. Again, we can estimate this from the Bergh et al. data. The following chunk takes the correlation matrix as well as the standard deviations from the Bergh et al. study. These two objects can later be used to estimate the variance-covariance matrix.
+
+```{r sd vector and correlations cfa}
+
+#store correlation matrix
+cor_mat <- cor(cbind(EP, SP, HP, DP))
+
+#store standard deviations
+sd_vector <- c(sd(EP), sd(SP), sd(HP), sd(DP))
+
+```
+
+To transform these two objects into a variance-covariance matrix, we can use the `cor2cov` function in the `MBESS` package. Like before, we round the resulting matrix generously and store it in an object. 
+
+```{r covariance matrix cfa}
+
+cov_mat <- MBESS::cor2cov(cor.mat = cor_mat, sd = sd_vector) %>% as.data.frame() %>% round(1)
+
+```
+
+Now that we have an approximation of the variance-covariance matrix, we use the `mvrnorm` function in the `MASS` package to simulate data from a multivariate normal distribution. The following code simulates `n = 100` observations from the specified population. 
+
+```{r simulate data cfa}
+
+#Set seed to make results reproduicble
+set.seed(2134)
+
+simulated_data <- MASS::mvrnorm(n = 100, mu=means_vector, Sigma = cov_mat) %>% as.data.frame()
+
+head(simulated_data)
+
+```
+
+We could now fit a SEM to this simulated data set and check whether the Chi-Squared value is significant at an $\alpha$-level of .005.
+
+```{r analyze data cfa}
+
+model_cfa <- "generalized_prejudice =~ EP + DP + SP + HP"
+fit_cfa <- cfa(model_cfa, data = simulated_data)
+summary(fit_cfa, fit.measures = TRUE)
+
+```
+
+The results show that in this case, the p-value is `r fitMeasures(fit_cfa)["pvalue"] %>% round(3)` and thus non-significant. But, actually, its not our primary interest to see whether this particular simulated data set results in an acceptable model fit. Rather, we want to know how many of a theoretically infinite number of simulations yield an acceptable Chi-Squared value. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 100 observations) from the specified population and store the results of the focal test (here: the p-value of the Chi-Squared test) in a vector called `p_values`. 
+
+```{r multiple iterations cfa, warning=FALSE}
+
+#Let's do 1000 iterations
+iterations <- 1000
+
+#Prepare an empty NA vector with 1000 slots
+p_values <- rep(NA, iterations)
+
+#Sample size per iteration
+n <- 100
+
+
+for(i in 1:iterations){
+  
+simulated_data <- MASS::mvrnorm(n = n, mu = means_vector, Sigma = cov_mat) %>% as.data.frame()
+fit_cfa_simulated <- cfa(model_cfa, data = simulated_data)
+p_values[i] <-fitMeasures(fit_cfa_simulated)["pvalue"] 
+
+}
+
+```
+
+How many of our 1000 virtual samples would have found a significant p-value (i.e., p < .005)?
+
+```{r results cfa}
+
+table(p_values < .005)
+
+```
+
+Only `r round(sum(p_values < .005)*100/iterations)`% of samples with the same size of $n=100$ result in a significant p-value. We conclude that $n=100$ observations seems to be insufficient. 
+
+## Sample size planning: Find the necessary sample size
+
+But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary some parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 100 to 2000. Running these simulations typically requires quite some time for your computer.
+
+
+```{r power analysis cfa, warning=FALSE}
+
+ns <- seq(100, 2000, by=100) # test ns between 100 and 2000
+
+#prepare empty vector to store results
+result <- data.frame()
+
+for (n in ns){  # outer loop
+  
+  p_values <- rep(NA, iterations)
+  iterations <- 1000
+  
+#prepare an empty NA vector with 1000 slots
+p_values <- rep(NA, iterations)
+
+for(i in 1:iterations){
+  
+simulated_data <- MASS::mvrnorm(n = n, mu = means_vector, Sigma = cov_mat) %>% as.data.frame()
+fit_cfa_simulated <- cfa(model_cfa, data = simulated_data)
+p_values[i] <-fitMeasures(fit_cfa_simulated)["pvalue"] 
+
+}
+
+
+  result <- rbind(result, data.frame(
+    n = n,
+    power = sum(p_values < .005)/iterations)
+  )
+  
+}
+
+```
+
+Let's plot there result:
+
+```{r plot cfa}
+ggplot(result, aes(x=n, y=power)) + geom_point() + geom_line() + scale_y_continuous(n.breaks = 10) + scale_x_continuous(n.breaks = 10)
+```
+
+This graph shows that we need a sample size of approximately 1250 to reach a power of 80% with the given population estimates. 
+
+# A simulation-based power analysis for a regression coefficient in SEM
+
+In many practical instances, we are, however, not so much interested in whether or not the Chi-Square statistic is significant, but rather whether a single model coefficient (e.g., a regression coefficient modelling the association between two latent factors) is significantly different from zero. We now turn to a simulation-based power analysis for this case. Let's first extend our previous model a bit in order to incorporate more than one latent factor. Luckily, the `Bergh` data set also contains other variables, for instance three items measuring Agreeableness (i.e., `A1`. `A2`, `A3`). Assume that we hypothesized that the the latent Agreeableness factor is negatively related to the (latent) generalized prejudice factor. We can test this with the `Bergh` data set.
+
+
+```{r analze sem}
+
+model_sem <- "generalized_prejudice =~ EP + DP + SP + HP
+              agreeableness =~ A1 + A2 + A3
+              generalized_prejudice ~ agreeableness 
+              "
+fit_sem <- cfa(model_sem, data = Bergh)
+summary(fit_sem, fit.measures = TRUE)
+
+```
+
+In order to plan the sample size for a (replication) study, we could like before use the means, standard deviations, and correlations of this data set in order to simulate data. We therefore again store the means of the focal variables in a vector, store the standard deviations in a vecotr, and transform the correlations into a variance-covariance matrix. 
+
+```{r vectors sem}
+
+#Store means, standard deviations, correlations
+means_vector_sem <- c(mean(EP), mean(SP), mean(HP), mean(DP), mean(A1), mean(A2), mean(A3)) %>% round(1)
+cor_mat_sem <- cor(cbind(EP, SP, HP, DP, A1, A2, A3)) %>% round(1)
+sd_vector_sem <- c(sd(EP), sd(SP), sd(HP), sd(DP), sd(A1), sd(A2), sd(A3)) %>% round(1)
+
+#Transform into a variance-covariance matrix
+cov_mat_sem <- MBESS::cor2cov(cor.mat = cor_mat_sem, sd = sd_vector_sem)
+
+```
+
+With these estimates, we can simulate a data set of for instance 500 observations. 
+
+```{r simulate data sem}
+
+simulated_data_sem <- MASS::mvrnorm(n = 500, mu = means_vector_sem, Sigma = cov_mat_sem) %>% as.data.frame()
+
+head(simulated_data_sem)
+
+```
+
+Replicating the previous power analysis, we now wrap this simulation in a loop while varying the sample size and storing the observed power. 
+
+```{r power analysis sem, warning=FALSE}
+
+ns <- seq(60, 200, by=10) # test ns between 60 and 200
+
+#prepare empty vector to store results
+result_sem <- data.frame()
+
+for (n in ns){  # outer loop
+  
+  p_values <- rep(NA, iterations)
+  iterations <- 1000
+  
+#prepare an empty NA vector with 1000 slots
+p_values <- rep(NA, iterations)
+
+for(i in 1:iterations){
+  
+simulated_data_sem <- MASS::mvrnorm(n = n, mu=means_vector_sem, Sigma = cov_mat_sem) %>% as.data.frame()
+fit_cfa_simulated <- cfa(model_sem, data = simulated_data_sem)
+parameter_sem <-parameterEstimates(fit_cfa_simulated) %>% filter(lhs == "generalized_prejudice", op == "~", rhs == "agreeableness")
+p_values[i] <- parameter_sem[1, "pvalue"]
+
+}
+
+
+  result_sem <- rbind(result_sem, data.frame(
+    n = n,
+    power = sum(p_values < .005)/iterations)
+  )
+  
+}
+
+```
+
+Let's plot this again.
+
+```{r plot sem}
+
+ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_y_continuous(n.breaks = 10) + scale_x_continuous(n.breaks = 10)
+
+```
+
+This simulation suggests that approx. 83 participants are needed to obtain 80% power. 
+
+# References
+
+Bergh, R., Akrami, N., Sidanius, J., & Sibley, C. G. (2016). Is group membership necessary for understanding generalized prejudice? A re-evaluation of why prejudices are interrelated. Journal of Personality and Social Psychology, 111(3), 367–395. https://doi.org/10.1037/pspi0000064
+
+Wang, Y. A., & Rhemtulla, M. (2021). Power analysis for parameter estimation in structural equation modeling: A discussion and tutorial. Advances in Methods and Practices in Psychological Science, 4(1), 1–17. https://doi.org/10.1177/2515245920918253
+
