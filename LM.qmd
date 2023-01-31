@@ -235,6 +235,7 @@ for (i in 1:iterations) {
   res <- lm(BDI ~ treatment)
   p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
 }
+
 ```
 
 How many of our 1000 virtual samples would have found the effect?

@@ -2,6 +2,8 @@
 title: "Structural Equation Models (SEM)"
 format: html
 author: Moritz Fischer
+execute:
+  cache: true
 ---
 
 ```{r install packages, message=FALSE, warning=FALSE}
@@ -9,7 +11,7 @@ author: Moritz Fischer
 #install.packages(c("ggplot2", "MASS", "apaTables", "MBESS))
 library("lavaan")
 library("MASS")
-library("tidyverse")
+library("ggplot2")
 library("MBESS")
 ```
 
@@ -54,8 +56,8 @@ apaTables::apa.cor.table(cbind(EP, SP, HP, DP))
 As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. With these population parameters, we can then simulate data, for example using the `mrvnorm` function from the `MASS` package. In our example, we estimate the population parameters from the study by Bergh et al. (2016). We start by calculating the means of the four variables, rounding them generously, and storing them in a vector called `means_vector`. 
 
 ```{r mean vector cfa}
-
-means_vector <- c(mean(EP), mean(SP), mean(HP), mean(DP)) %>% round(1)
+# FIXME: Rather use the base pipe |> ? --> fix below
+means_vector <- c(mean(EP), mean(SP), mean(HP), mean(DP)) |> round(1)
 
 ```
 
@@ -75,7 +77,11 @@ To transform these two objects into a variance-covariance matrix, we can use the
 
 ```{r covariance matrix cfa}
 
-cov_mat <- MBESS::cor2cov(cor.mat = cor_mat, sd = sd_vector) %>% as.data.frame() %>% round(1)
+cov_mat <- MBESS::cor2cov(cor.mat = cor_mat, sd = sd_vector) |> as.data.frame() |> round(1)
+
+# FIXME: Wouldn't it be easier here to simple run cov(cbind(EP, SP, HP, DP))?
+# (on the other hand, it is good to know how to get the var-cov-matrix if only correlations are reported in a paper)
+# -> maybe show that cov() leads to the same result here.
 
 ```
 
@@ -86,7 +92,7 @@ Now that we have an approximation of the variance-covariance matrix, we use the 
 #Set seed to make results reproduicble
 set.seed(2134)
 
-simulated_data <- MASS::mvrnorm(n = 100, mu=means_vector, Sigma = cov_mat) %>% as.data.frame()
+simulated_data <- MASS::mvrnorm(n = 100, mu=means_vector, Sigma = cov_mat) |> as.data.frame()
 
 head(simulated_data)
 
@@ -102,26 +108,29 @@ summary(fit_cfa, fit.measures = TRUE)
 
 ```
 
-The results show that in this case, the p-value is `r fitMeasures(fit_cfa)["pvalue"] %>% round(3)` and thus non-significant. But, actually, its not our primary interest to see whether this particular simulated data set results in an acceptable model fit. Rather, we want to know how many of a theoretically infinite number of simulations yield an acceptable Chi-Squared value. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 100 observations) from the specified population and store the results of the focal test (here: the p-value of the Chi-Squared test) in a vector called `p_values`. 
+The results show that in this case, the p-value is `r fitMeasures(fit_cfa)["pvalue"] |> round(3)` and thus non-significant. But, actually, its not our primary interest to see whether this particular simulated data set results in an acceptable model fit. Rather, we want to know how many of a theoretically infinite number of simulations yield an acceptable Chi-Squared value. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 100 observations) from the specified population and store the results of the focal test (here: the p-value of the Chi-Squared test) in a vector called `p_values`. 
 
 ```{r multiple iterations cfa, warning=FALSE}
 
 #Let's do 1000 iterations
-iterations <- 1000
+iterations <- 100
 
 #Prepare an empty NA vector with 1000 slots
 p_values <- rep(NA, iterations)
+RMSEAs <- rep(NA, iterations)
 
 #Sample size per iteration
-n <- 100
-
+n <- 2500
 
 for(i in 1:iterations){
+  print(i)
+  simulated_data <- MASS::mvrnorm(n = n, mu = means_vector, Sigma = cov_mat) |> as.data.frame()
+  fit_cfa_simulated <- cfa(model_cfa, data = simulated_data)
   
-simulated_data <- MASS::mvrnorm(n = n, mu = means_vector, Sigma = cov_mat) %>% as.data.frame()
-fit_cfa_simulated <- cfa(model_cfa, data = simulated_data)
-p_values[i] <-fitMeasures(fit_cfa_simulated)["pvalue"] 
-
+  p_values[i] <- fitMeasures(fit_cfa_simulated)["rmsea.notclose.pvalue"]
+  RMSEAs[i] <- fitMeasures(fit_cfa_simulated)["rmsea"] 
+  
+  summary(fit_cfa_simulated, fit.measures=TRUE)
 }
 
 ```
@@ -130,11 +139,15 @@ How many of our 1000 virtual samples would have found a significant p-value (i.e
 
 ```{r results cfa}
 
-table(p_values < .005)
-
+table(p_values < .05)
+hist(RMSEAs)
+mean(RMSEAs)
 ```
 
 Only `r round(sum(p_values < .005)*100/iterations)`% of samples with the same size of $n=100$ result in a significant p-value. We conclude that $n=100$ observations seems to be insufficient. 
+
+FIXME: Wait, for the chi2-value we actually "want" to have a nonsignificant  p-value - this makes the example a bit difficult. Maybe directly go at another index, such as CFI?
+(But it must be one that reacts to sample size; I think CFI doesn't. Maybe the CI of the RMSEA? This gets narrower with increasing n)
 
 ## Sample size planning: Find the necessary sample size
 
@@ -158,7 +171,7 @@ p_values <- rep(NA, iterations)
 
 for(i in 1:iterations){
   
-simulated_data <- MASS::mvrnorm(n = n, mu = means_vector, Sigma = cov_mat) %>% as.data.frame()
+simulated_data <- MASS::mvrnorm(n = n, mu = means_vector, Sigma = cov_mat) |> as.data.frame()
 fit_cfa_simulated <- cfa(model_cfa, data = simulated_data)
 p_values[i] <-fitMeasures(fit_cfa_simulated)["pvalue"] 
 
@@ -196,16 +209,24 @@ model_sem <- "generalized_prejudice =~ EP + DP + SP + HP
 fit_sem <- cfa(model_sem, data = Bergh)
 summary(fit_sem, fit.measures = TRUE)
 
+# TODO: How can we enter stnadardized regression coefficients?
+model_sem_stand <- "generalized_prejudice =~ EP + DP + SP + HP
+                  agreeableness =~ A1 + A2 + A3
+                  generalized_prejudice ~ agreeableness
+              "
+fit_sem_stand <- cfa(model_sem_stand, data = Bergh, std.lv=TRUE)
+summary(fit_sem_stand, standardized=TRUE)
+
 ```
 
-In order to plan the sample size for a (replication) study, we could like before use the means, standard deviations, and correlations of this data set in order to simulate data. We therefore again store the means of the focal variables in a vector, store the standard deviations in a vecotr, and transform the correlations into a variance-covariance matrix. 
+In order to plan the sample size for a (replication) study, we could like before use the means, standard deviations, and correlations of this data set in order to simulate data. We therefore again store the means of the focal variables in a vector, store the standard deviations in a vector, and transform the correlations into a variance-covariance matrix. 
 
 ```{r vectors sem}
 
 #Store means, standard deviations, correlations
-means_vector_sem <- c(mean(EP), mean(SP), mean(HP), mean(DP), mean(A1), mean(A2), mean(A3)) %>% round(1)
-cor_mat_sem <- cor(cbind(EP, SP, HP, DP, A1, A2, A3)) %>% round(1)
-sd_vector_sem <- c(sd(EP), sd(SP), sd(HP), sd(DP), sd(A1), sd(A2), sd(A3)) %>% round(1)
+means_vector_sem <- c(mean(EP), mean(SP), mean(HP), mean(DP), mean(A1), mean(A2), mean(A3)) |> round(1)
+cor_mat_sem <- cor(cbind(EP, SP, HP, DP, A1, A2, A3)) |> round(1)
+sd_vector_sem <- c(sd(EP), sd(SP), sd(HP), sd(DP), sd(A1), sd(A2), sd(A3)) |> round(1)
 
 #Transform into a variance-covariance matrix
 cov_mat_sem <- MBESS::cor2cov(cor.mat = cor_mat_sem, sd = sd_vector_sem)
@@ -216,7 +237,7 @@ With these estimates, we can simulate a data set of for instance 500 observation
 
 ```{r simulate data sem}
 
-simulated_data_sem <- MASS::mvrnorm(n = 500, mu = means_vector_sem, Sigma = cov_mat_sem) %>% as.data.frame()
+simulated_data_sem <- MASS::mvrnorm(n = 500, mu = means_vector_sem, Sigma = cov_mat_sem) |> as.data.frame()
 
 head(simulated_data_sem)
 
@@ -241,9 +262,9 @@ p_values <- rep(NA, iterations)
 
 for(i in 1:iterations){
   
-simulated_data_sem <- MASS::mvrnorm(n = n, mu=means_vector_sem, Sigma = cov_mat_sem) %>% as.data.frame()
+simulated_data_sem <- MASS::mvrnorm(n = n, mu=means_vector_sem, Sigma = cov_mat_sem) |> as.data.frame()
 fit_cfa_simulated <- cfa(model_sem, data = simulated_data_sem)
-parameter_sem <-parameterEstimates(fit_cfa_simulated) %>% filter(lhs == "generalized_prejudice", op == "~", rhs == "agreeableness")
+parameter_sem <-parameterEstimates(fit_cfa_simulated) |> filter(lhs == "generalized_prejudice", op == "~", rhs == "agreeableness")
 p_values[i] <- parameter_sem[1, "pvalue"]
 
 }
