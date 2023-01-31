@@ -249,8 +249,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Optimizing code for speed can be an art (and you get lost and spend/waste hours by micro-optimizing some milliseconds). But the Pareto principle also applies here: with 20% effort, you can have quick and substantial gains.</p>
-<p><em>Code profiling</em> means that the code execution is timed, just like you had a stopwatch. You try to make your code snippet as fast as possible. RStudio has a <a href="https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE">built-in profiler</a> that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we’ll resort to the simplest way of timing code: We simple measure overall execution time by wrapping our code in a <code>system.time({ ... })</code> call.</p>
+<p>Optimizing code for speed can be an art (and you get lost and spend/waste hours by micro-optimizing some milliseconds). But the Pareto principle applies here: with 20% effort, you can have quick and substantial gains.</p>
+<p><em>Code profiling</em> means that the code execution is timed, just like you had a stopwatch. You try to make your code snippet as fast as possible. RStudio has a <a href="https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE">built-in profiler</a> that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we’ll resort to the simplest way of timing code: We will measure overall execution time by wrapping our code in a <code>system.time({ ... })</code> call.</p>
 <section id="first-naive-version" class="level1">
 <h1>First, naive version</h1>
 <p>We use <code>system.time()</code> to measure how long our code execution takes. Longer code blocks need to be wrapped in curly braces <code>{...}</code>. The function returns multiple timings; the relevant number for us is the “user” time.</p>
@@ -280,19 +280,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>t0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-  3.923   0.068   4.424 </code></pre>
+  3.788   0.070   4.071 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    n  power
-1 300 0.3345
-2 350 0.3870
-3 400 0.4745
-4 450 0.5525
-5 500 0.6230</code></pre>
+1 300 0.3320
+2 350 0.4020
+3 400 0.4845
+4 450 0.5335
+5 500 0.6125</code></pre>
 </div>
 </div>
-<p>This first version takes 3.923 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
+<p>This first version takes 3.788 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
 </section>
 <section id="rule-1-no-growing-vectorsdata-frames" class="level1">
 <h1>Rule 1: No growing vectors/data frames</h1>
@@ -306,7 +306,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(n)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># print(n)   # uncomment to see progress</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGE: Preallocate vector with the final size, initialize with NAs</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
@@ -322,29 +322,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Here we stil have a growing data.frame - but as this is only done 5 times, it does not matter.</span></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations)) </span>
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 300
-[1] 350
-[1] 400
-[1] 450
-[1] 500</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the different timings in a data frame</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the absolute and relativ difference of consecutive rows:</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the different timings in a data frame</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the absolute and relativ difference of consecutive rows:</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user.self sys.self elapsed user.child sys.child  diff   rel_diff
-t0     3.923    0.068   4.424          0         0    NA         NA
-t1     3.982    0.044   4.202          0         0 0.059 0.01503951</code></pre>
+t0     3.788    0.070   4.071          0         0    NA         NA
+t1     3.927    0.062   4.023          0         0 0.139 0.03669483</code></pre>
 </div>
 </div>
 <p>OK, this didn’t really change anything here. But in general (in particular with data frames) this is worth looking at.</p>
@@ -353,7 +347,51 @@ t1     3.982    0.044   4.202          0         0 0.059 0.01503951</code></pre>
 <h1>Rule 2: Avoid data frames as far as possible</h1>
 <p>Use matrizes instead of data frames wherever possible; or avoid them at all (as we do in the code below).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations) {</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># CHANGE: We don't need the data frame - just create the two variables in the environment and lm() takes them from there.</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#df &lt;- data.frame(treatment, BDI)</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI <span class="sc">~</span> treatment)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1, t2) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user.self sys.self elapsed user.child sys.child   diff    rel_diff
+t0     3.788    0.070   4.071          0         0     NA          NA
+t1     3.927    0.062   4.023          0         0  0.139  0.03669483
+t2     2.971    0.042   3.025          0         0 -0.956 -0.24344283</code></pre>
+</div>
+</div>
+<p>This showed a substantial improvement of around -1 seconds; a relative gain of -24.3%.</p>
+</section>
+<section id="rule-3-avoid-unnecessary-computations" class="level1">
+<h1>Rule 3: Avoid unnecessary computations</h1>
+<p>What do we actually need? In fact only the p-value for our focal predictor. But the <code>lm</code> function does so many more things, for example parsing the formula <code>BDI ~ treatment</code>.</p>
+<p>We could strip away all overhead and do only the necessary steps: Fit the linear model, and retrieve the p-values (see <a href="https://stackoverflow.com/q/49732933">https://stackoverflow.com/q/49732933</a>). This needs some deeper knowledge of the functions and some google-fu. When you do this, you should definitely compare your results with the original result from the <code>lm</code> function and verify that they are identical!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>t3 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
@@ -361,93 +399,49 @@ t1     3.982    0.044   4.202          0         0 0.059 0.01503951</code></pre>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations) {</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># CHANGE: We don't need the data frame - just create the two variables in the environment and lm() takes them from there.</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#df &lt;- data.frame(treatment, BDI)</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI <span class="sc">~</span> treatment)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1, t2) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># construct the design matrix: first column is all-1 (intercept), second column is the treatment factor</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="dv">1</span>, n),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations) {</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>x[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For comparison - do we get the same results? Yes!</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># res0 &lt;- lm(y ~ x[, 2])</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># summary(res0)</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fit the model:</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    m <span class="ot">&lt;-</span> <span class="fu">.lm.fit</span>(x, y)</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># compute p-values based on the residuals:</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    rss <span class="ot">&lt;-</span> <span class="fu">sum</span>(m<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    rdf <span class="ot">&lt;-</span> <span class="fu">length</span>(y) <span class="sc">-</span> <span class="fu">ncol</span>(x)</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    resvar <span class="ot">&lt;-</span> rss<span class="sc">/</span>rdf</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    R <span class="ot">&lt;-</span> <span class="fu">chol2inv</span>(m<span class="sc">$</span>qr)</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(R) <span class="sc">*</span> resvar)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    ps <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(m<span class="sc">$</span>coef<span class="sc">/</span>se),rdf,<span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> ps[<span class="dv">2</span>]</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1, t2, t3) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user.self sys.self elapsed user.child sys.child   diff    rel_diff
-t0     3.923    0.068   4.424          0         0     NA          NA
-t1     3.982    0.044   4.202          0         0  0.059  0.01503951
-t2     2.926    0.044   2.978          0         0 -1.056 -0.26519337</code></pre>
-</div>
-</div>
-<p>This showed a substantial improvement of around -1.1 seconds; a relative gain of -26.5%.</p>
-</section>
-<section id="rule-3-avoid-unnecessary-computations" class="level1">
-<h1>Rule 3: Avoid unnecessary computations</h1>
-<p>What do we actually need? In fact only the p-value for our focal predictor. But the <code>lm</code> function does so many more things, for example parsing the formula <code>BDI ~ treatment</code>.</p>
-<p>We could strip away all overhead and do only the necessary steps: Fit the linear model, and retrieve the p-values (see https://stackoverflow.com/q/49732933). This needs some deeper knowledge of the functions and some google-fu. When you do this, you should definitely compare your results with the original result from the <code>lm</code> function and verify that they are identical!</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>t3 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># construct the design matrix: first column is all-1 (intercept), second column is the treatment factor</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="dv">1</span>, n),</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations) {</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>x[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For comparison - do we get the same results? Yes!</span></span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># res0 &lt;- lm(y ~ x[, 2])</span></span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># summary(res0)</span></span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fut the model:</span></span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    m <span class="ot">&lt;-</span> <span class="fu">.lm.fit</span>(x, y)</span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># compute p-values based on the residuals:</span></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    rss <span class="ot">&lt;-</span> <span class="fu">sum</span>(m<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    rdf <span class="ot">&lt;-</span> <span class="fu">length</span>(y) <span class="sc">-</span> <span class="fu">ncol</span>(x)</span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    resvar <span class="ot">&lt;-</span> rss<span class="sc">/</span>rdf</span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    R <span class="ot">&lt;-</span> <span class="fu">chol2inv</span>(m<span class="sc">$</span>qr)</span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>    se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(R) <span class="sc">*</span> resvar)</span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    ps <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(m<span class="sc">$</span>coef<span class="sc">/</span>se),rdf,<span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> ps[<span class="dv">2</span>]</span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1, t2, t3) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   user.self sys.self elapsed user.child sys.child   diff    rel_diff
-t0     3.923    0.068   4.424          0         0     NA          NA
-t1     3.982    0.044   4.202          0         0  0.059  0.01503951
-t2     2.926    0.044   2.978          0         0 -1.056 -0.26519337
-t3     0.304    0.016   0.320          0         0 -2.622 -0.89610390</code></pre>
+t0     3.788    0.070   4.071          0         0     NA          NA
+t1     3.927    0.062   4.023          0         0  0.139  0.03669483
+t2     2.971    0.042   3.025          0         0 -0.956 -0.24344283
+t3     0.303    0.019   0.321          0         0 -2.668 -0.89801414</code></pre>
 </div>
 </div>
 </section>
@@ -455,112 +449,112 @@ t3     0.304    0.016   0.320          0         0 -2.622 -0.89610390</code></pr
 <h1>Rule 4: Use optimized packages</h1>
 <p>For many statistical models, there are packages optimized for speed, see for example here: <a href="https://stackoverflow.com/q/49732933">https://stackoverflow.com/q/49732933</a></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RcppArmadillo)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>t4 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># construct the design matrix: first column is all-1 (intercept), second column is the treatment factor</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="dv">1</span>, n),</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations) {</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>x[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For comparison - do we get the same results? Yes!</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># res0 &lt;- lm(y ~ x[, 2])</span></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># summary(res0)</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    mdl <span class="ot">&lt;-</span> RcppArmadillo<span class="sc">::</span><span class="fu">fastLmPure</span>(x, y)</span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    pval <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(mdl<span class="sc">$</span>coefficients<span class="sc">/</span>mdl<span class="sc">$</span>stderr), mdl<span class="sc">$</span>df.residual, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> pval[<span class="dv">2</span>]</span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1, t2, t3, t4) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RcppArmadillo)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>t4 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># construct the design matrix: first column is all-1 (intercept), second column is the treatment factor</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="dv">1</span>, n),</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations) {</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>x[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For comparison - do we get the same results? Yes!</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># res0 &lt;- lm(y ~ x[, 2])</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># summary(res0)</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    mdl <span class="ot">&lt;-</span> RcppArmadillo<span class="sc">::</span><span class="fu">fastLmPure</span>(x, y)</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    pval <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(mdl<span class="sc">$</span>coefficients<span class="sc">/</span>mdl<span class="sc">$</span>stderr), mdl<span class="sc">$</span>df.residual, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> pval[<span class="dv">2</span>]</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1, t2, t3, t4) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user.self sys.self elapsed user.child sys.child   diff    rel_diff
-t0     3.923    0.068   4.424          0         0     NA          NA
-t1     3.982    0.044   4.202          0         0  0.059  0.01503951
-t2     2.926    0.044   2.978          0         0 -1.056 -0.26519337
-t3     0.304    0.016   0.320          0         0 -2.622 -0.89610390
-t4     0.290    0.005   0.299          0         0 -0.014 -0.04605263</code></pre>
+t0     3.788    0.070   4.071          0         0     NA          NA
+t1     3.927    0.062   4.023          0         0  0.139  0.03669483
+t2     2.971    0.042   3.025          0         0 -0.956 -0.24344283
+t3     0.303    0.019   0.321          0         0 -2.668 -0.89801414
+t4     0.287    0.010   0.299          0         0 -0.016 -0.05280528</code></pre>
 </div>
 </div>
 <p>This step only gave a minor -5% relative increase in speed - but as a bonus, it made our code much easier to read and shorter.</p>
-<p>I think we can stop here - we managed to reduce the execution time for our example from 3.923 seconds to 0.29 seconds - 13.5x faster!</p>
+<p>I think we can stop here - we managed to reduce the execution time for our example from 3.788 seconds to 0.287 seconds - 13.2x faster!</p>
 <p>With that fast code, we can easily explore a broad parameter range (n ranging from 100 to 1000) and increase the iterations to 2000 for more stable results. (See also: “<a href="./how_many_iterations.html">Bonus: How many Monte-Carlo iterations are necessary?</a>”)</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>t5 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">1000</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="dv">1</span>, n),</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations) {</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>x[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    mdl <span class="ot">&lt;-</span> RcppArmadillo<span class="sc">::</span><span class="fu">fastLmPure</span>(x, y)</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    pval <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(mdl<span class="sc">$</span>coefficients<span class="sc">/</span>mdl<span class="sc">$</span>stderr), mdl<span class="sc">$</span>df.residual, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> pval[<span class="dv">2</span>]</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>t5 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">1000</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="dv">1</span>, n),</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations) {</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>x[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    mdl <span class="ot">&lt;-</span> RcppArmadillo<span class="sc">::</span><span class="fu">fastLmPure</span>(x, y)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    pval <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(mdl<span class="sc">$</span>coefficients<span class="sc">/</span>mdl<span class="sc">$</span>stderr), mdl<span class="sc">$</span>df.residual, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> pval[<span class="dv">2</span>]</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      n  power
-1   100 0.0745
-2   150 0.1380
-3   200 0.1900
-4   250 0.2590
-5   300 0.3515
-6   350 0.4135
-7   400 0.4600
-8   450 0.5575
-9   500 0.6035
-10  550 0.6785
-11  600 0.7225
-12  650 0.7780
-13  700 0.8210
-14  750 0.8295
-15  800 0.8695
-16  850 0.8890
-17  900 0.9120
-18  950 0.9330
-19 1000 0.9490</code></pre>
+1   100 0.0720
+2   150 0.1245
+3   200 0.1880
+4   250 0.2530
+5   300 0.3345
+6   350 0.4030
+7   400 0.4640
+8   450 0.5315
+9   500 0.6380
+10  550 0.6650
+11  600 0.7050
+12  650 0.7545
+13  700 0.8155
+14  750 0.8555
+15  800 0.8715
+16  850 0.8790
+17  900 0.9070
+18  950 0.9305
+19 1000 0.9325</code></pre>
 </div>
 </div>
 <p>Some steps, such as avoiding growing vectors, didn’t really help here, but will help a lot in other scenarios.</p>
@@ -589,7 +583,7 @@ But always remember:
 <h1>Session Info</h1>
 <p>These speed measurements have been performed on a 2021 MacBook Pro with M1 processor.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.2.0 (2022-04-22)
 Platform: aarch64-apple-darwin20 (64-bit)

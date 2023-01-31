@@ -238,7 +238,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Using the <a href="./optimizing_code.html">optimized code</a>, we can easily explore how many Monte-Carlo iterations are necessary to get stable computational results: Simply re-run the same simulation with the same sample size!</p>
+<p>#FIXME I couldn’t jump right into this page and understand what is iteration, repetition and n were. one or two lines could be added at the top, something like:</p>
+<p>To find the sample size needed for a study, we have previsouly use e.g.&nbsp;1000 iterations of data simulation and analysis, and varied the sample size from e.g.&nbsp;100 to 1000, every 50, to find where the e.g.&nbsp;80% power threshold was crossed (see e.g.&nbsp;https://shiny.psy.lmu.de/r-tutorials/powersim/LM.html#sample-size-planning-find-the-necessary-sample-size #FIXME relative link). But is 1000 iterations giving a precise enough result?</p>
+<p>Using the <a href="./optimizing_code.html">optimized code</a>, we can explore how many Monte-Carlo iterations are necessary to get stable computational results: we can re-run the same simulation with the same sample size!</p>
 <p>Let’s start with 1000 iterations (at n = 100, and 10 repetitions of the same power analysis):</p>
 <div class="cell" data-hash="how_many_iterations_cache/html/unnamed-chunk-1_6a02df036426117b8bdb689e55dd6b0e">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>

@@ -72,14 +72,6 @@ The standardized cutoffs for the BDI are:
 -   20--28: moderate depression
 -   29--63: severe depression.
 
-According to these cutoffs, what is the percentage of participants who had at least "mild depression" before treatment?
-
-```{r}
-table(BtheB$bdi.pre >= 14) |> prop.table() |> round(2)
-```
-
-This tells us that 80% of participants had at least a "mild depression" before treatment. #FIXME any particular reason to check for that that could be made explicit?
-
 Returning to our questions from above:
 
 **What BDI values would we expect on average in our sample (before #FIXME and after? treatment)?**
@@ -109,7 +101,7 @@ mean(BtheB$bdi.2m[BtheB$treatment == "BtheB"])
 
 Hence, the two treatments reduced BDI scores from an average of 23 to 19 (`TAU`) and 15 (`BtheB`). Based on that data set, we can conclude that a typical treatment effect is somewhere between a 4 and a 8-point reduction of BDI scores.[^1]
 
-[^1]: By comparing only the post-treatment scores we used an unbiased causal model for the treatment effect. Later we will increase the precision of the estimate by including the baseline score #FIXME of each treatment group? or each participant?  into the model.
+[^1]: By comparing only the post-treatment scores we used an unbiased causal model for the treatment effect. Later we will increase the precision of the estimate by including the baseline score for each participant  into the model.
 
 For our purpose, we compute the average treatment effect combined for both treatments. The average post-treatment score is:
 

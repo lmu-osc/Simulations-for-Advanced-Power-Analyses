@@ -55,7 +55,7 @@ ns <- seq(300, 500, by=50)
 result <- data.frame()
 
 for (n in ns) {
-  print(n)
+  # print(n)   # uncomment to see progress
   
   # CHANGE: Preallocate vector with the final size, initialize with NAs
   p_values <- rep(NA, iterations)
@@ -71,7 +71,7 @@ for (n in ns) {
   }
   
   # Here we stil have a growing data.frame - but as this is only done 5 times, it does not matter.
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations)) #FIXME the result is printed in the preview, but it doesn't show what I'd expect from this line, it isn't two columns with n and power but only the values of n.
+  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations)) 
 }
 
 })
