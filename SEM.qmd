@@ -7,11 +7,11 @@ execute:
 ---
 
 ```{r install packages, message=FALSE, warning=FALSE}
-
 #install.packages(c("ggplot2", "MASS", "apaTables", "MBESS))
 library("lavaan")
 library("MASS")
 library("ggplot2")
+library("dplyr")
 library("MBESS")
 ```
 
@@ -108,7 +108,7 @@ summary(fit_cfa, fit.measures = TRUE)
 
 ```
 
-The results show that in this case, the p-value is `r fitMeasures(fit_cfa)["pvalue"] |> round(3)` and thus non-significant. But, actually, its not our primary interest to see whether this particular simulated data set results in an acceptable model fit. Rather, we want to know how many of a theoretically infinite number of simulations yield an acceptable Chi-Squared value. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 100 observations) from the specified population and store the results of the focal test (here: the p-value of the Chi-Squared test) in a vector called `p_values`. 
+The results show that in this case, the p-value is `r lavaan::fitMeasures(fit_cfa)["pvalue"] |> round(3)` and thus non-significant. But, actually, its not our primary interest to see whether this particular simulated data set results in an acceptable model fit. Rather, we want to know how many of a theoretically infinite number of simulations yield an acceptable Chi-Squared value. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 100 observations) from the specified population and store the results of the focal test (here: the p-value of the Chi-Squared test) in a vector called `p_values`. 
 
 ```{r multiple iterations cfa, warning=FALSE}
 
@@ -247,7 +247,7 @@ Replicating the previous power analysis, we now wrap this simulation in a loop w
 
 ```{r power analysis sem, warning=FALSE}
 
-ns <- seq(60, 200, by=10) # test ns between 60 and 200
+ns <- seq(60, 200, by=20) # test ns between 60 and 200
 
 #prepare empty vector to store results
 result_sem <- data.frame()
@@ -264,7 +264,9 @@ for(i in 1:iterations){
   
 simulated_data_sem <- MASS::mvrnorm(n = n, mu=means_vector_sem, Sigma = cov_mat_sem) |> as.data.frame()
 fit_cfa_simulated <- cfa(model_sem, data = simulated_data_sem)
-parameter_sem <-parameterEstimates(fit_cfa_simulated) |> filter(lhs == "generalized_prejudice", op == "~", rhs == "agreeableness")
+
+# TODO: This is the only place where dplyr is actually used - solve bith base R?
+parameter_sem <-parameterEstimates(fit_cfa_simulated) %>% filter(lhs == "generalized_prejudice", op == "~", rhs == "agreeableness")
 p_values[i] <- parameter_sem[1, "pvalue"]
 
 }

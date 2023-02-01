@@ -220,6 +220,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#rule-2-avoid-data-frames-as-far-as-possible" id="toc-rule-2-avoid-data-frames-as-far-as-possible" class="nav-link" data-scroll-target="#rule-2-avoid-data-frames-as-far-as-possible">Rule 2: Avoid data frames as far as possible</a></li>
   <li><a href="#rule-3-avoid-unnecessary-computations" id="toc-rule-3-avoid-unnecessary-computations" class="nav-link" data-scroll-target="#rule-3-avoid-unnecessary-computations">Rule 3: Avoid unnecessary computations</a></li>
   <li><a href="#rule-4-use-optimized-packages" id="toc-rule-4-use-optimized-packages" class="nav-link" data-scroll-target="#rule-4-use-optimized-packages">Rule 4: Use optimized packages</a></li>
+  <li><a href="#preparation-wrap-the-simulation-in-a-function" id="toc-preparation-wrap-the-simulation-in-a-function" class="nav-link" data-scroll-target="#preparation-wrap-the-simulation-in-a-function">Preparation: Wrap the simulation in a function</a></li>
+  <li><a href="#rule-5-go-parallel" id="toc-rule-5-go-parallel" class="nav-link" data-scroll-target="#rule-5-go-parallel">Rule 5: Go parallel</a></li>
+  <li><a href="#the-final-speed-test-burn-your-machine" id="toc-the-final-speed-test-burn-your-machine" class="nav-link" data-scroll-target="#the-final-speed-test-burn-your-machine">The final speed test: Burn your machine 🔥</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">Recap</a></li>
   <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session Info</a></li>
   </ul>
 </nav>
@@ -249,16 +253,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Optimizing code for speed can be an art (and you get lost and spend/waste hours by micro-optimizing some milliseconds). But the Pareto principle applies here: with 20% effort, you can have quick and substantial gains.</p>
-<p><em>Code profiling</em> means that the code execution is timed, just like you had a stopwatch. You try to make your code snippet as fast as possible. RStudio has a <a href="https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE">built-in profiler</a> that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we’ll resort to the simplest way of timing code: We will measure overall execution time by wrapping our code in a <code>system.time({ ... })</code> call.</p>
+<p>Optimizing code for speed can be an art - and you get lost and spend/waste hours by micro-optimizing some milliseconds. But the Pareto principle applies here: with 20% effort, you can have quick and substantial gains.</p>
+<p><em>Code profiling</em> means that the code execution is timed, just like you had a stopwatch. Your goal is to make your code snippet as fast as possible. RStudio has a <a href="https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE">built-in profiler</a> that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we’ll resort to the simplest way of timing code: We will measure overall execution time by wrapping our code in a <code>system.time({ ... })</code> call. Longer code blocks need to be wrapped in curly braces <code>{...}</code>. The function returns multiple timings; the relevant number for us is the “elapsed” time. This is also called the “wall clock” time - the time you actually have to wait until computation finished.</p>
 <section id="first-naive-version" class="level1">
 <h1>First, naive version</h1>
-<p>We use <code>system.time()</code> to measure how long our code execution takes. Longer code blocks need to be wrapped in curly braces <code>{...}</code>. The function returns multiple timings; the relevant number for us is the “user” time.</p>
-<p>Here is a first version of the power simulation code for a simple LM.</p>
-<div class="cell">
+<p>Here is a first version of the power simulation code for a simple LM. Let’s see how long it takes:</p>
+<div class="cell" data-hash="optimizing_code_cache/html/opt1_345cb673012ed4b9ea58a2a7a1b6937a">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -280,27 +283,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>t0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-  3.827   0.069   3.901 </code></pre>
+  9.600   0.180   9.849 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    n  power
-1 300 0.3260
-2 350 0.4010
-3 400 0.4605
-4 450 0.5530
-5 500 0.6045</code></pre>
+1 300 0.3446
+2 350 0.4096
+3 400 0.4950
+4 450 0.5574
+5 500 0.6070</code></pre>
 </div>
 </div>
-<p>This first version takes 3.827 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
+<p>This first version takes 9.849 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
 </section>
 <section id="rule-1-no-growing-vectorsdata-frames" class="level1">
 <h1>Rule 1: No growing vectors/data frames</h1>
 <p>This is one of the most common bottlenecks: You start with an empty vector (or even worse: data frame), and grow it by <code>rbind</code>-ing new rows to it in each iteration.</p>
-<div class="cell">
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-1_038bfa405cdff0bec9e8e9d3bc1cd3b0">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
@@ -328,17 +331,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the different timings in a data frame</span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0[<span class="dv">3</span>], t1[<span class="dv">3</span>]) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the absolute and relativ difference of consecutive rows:</span></span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>]) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span>
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   user.self sys.self elapsed user.child sys.child   diff     rel_diff
-t0     3.827    0.069   3.901          0         0     NA           NA
-t1     3.795    0.038   3.835          0         0 -0.032 -0.008361641</code></pre>
+<pre><code>  elapsed  diff rel_diff
+1   9.849    NA       NA
+2  10.203 0.354    0.036</code></pre>
 </div>
 </div>
 <p>OK, this didn’t really change anything here. But in general (in particular with data frames) this is worth looking at.</p>
@@ -346,10 +349,10 @@ t1     3.795    0.038   3.835          0         0 -0.032 -0.008361641</code></p
 <section id="rule-2-avoid-data-frames-as-far-as-possible" class="level1">
 <h1>Rule 2: Avoid data frames as far as possible</h1>
 <p>Use matrizes instead of data frames wherever possible; or avoid them at all (as we do in the code below).</p>
-<div class="cell">
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-2_f16144c256535abcd4c39eef8be8bd76">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
@@ -361,39 +364,40 @@ t1     3.795    0.038   3.835          0         0 -0.032 -0.008361641</code></p
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations) {</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># CHANGE: We don't need the data frame - just create the two variables in the environment and lm() takes them from there.</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#df &lt;- data.frame(treatment, BDI)</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI <span class="sc">~</span> treatment)</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1, t2) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># CHANGE: We don't need the data frame - just create the two variables</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in the environment and lm() takes them from there.</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#df &lt;- data.frame(treatment, BDI)</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI <span class="sc">~</span> treatment)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0[<span class="dv">3</span>], t1[<span class="dv">3</span>], t2[<span class="dv">3</span>]) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>]) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   user.self sys.self elapsed user.child sys.child   diff     rel_diff
-t0     3.827    0.069   3.901          0         0     NA           NA
-t1     3.795    0.038   3.835          0         0 -0.032 -0.008361641
-t2     2.937    0.030   2.968          0         0 -0.858 -0.226086957</code></pre>
+<pre><code>  elapsed   diff rel_diff
+1   9.849     NA       NA
+2  10.203  0.354    0.036
+3   7.563 -2.640   -0.259</code></pre>
 </div>
 </div>
-<p>This showed a substantial improvement of around -0.9 seconds; a relative gain of -22.6%.</p>
+<p>This showed a substantial improvement of around -2.6 seconds; a relative gain of -25.9%.</p>
 </section>
 <section id="rule-3-avoid-unnecessary-computations" class="level1">
 <h1>Rule 3: Avoid unnecessary computations</h1>
 <p>What do we actually need? In fact only the p-value for our focal predictor. But the <code>lm</code> function does so many more things, for example parsing the formula <code>BDI ~ treatment</code>.</p>
 <p>We could strip away all overhead and do only the necessary steps: Fit the linear model, and retrieve the p-values (see <a href="https://stackoverflow.com/q/49732933">https://stackoverflow.com/q/49732933</a>). This needs some deeper knowledge of the functions and some google-fu. When you do this, you should definitely compare your results with the original result from the <code>lm</code> function and verify that they are identical!</p>
-<div class="cell">
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-3_9903b1a2e2dd77f0ad04f086ef99c7e0">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>t3 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
@@ -432,28 +436,29 @@ t2     2.937    0.030   2.968          0         0 -0.858 -0.226086957</code></p
 <span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1, t2, t3) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0[<span class="dv">3</span>], t1[<span class="dv">3</span>], t2[<span class="dv">3</span>], t3[<span class="dv">3</span>]) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
 <span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>]) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span>
 <span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   user.self sys.self elapsed user.child sys.child   diff     rel_diff
-t0     3.827    0.069   3.901          0         0     NA           NA
-t1     3.795    0.038   3.835          0         0 -0.032 -0.008361641
-t2     2.937    0.030   2.968          0         0 -0.858 -0.226086957
-t3     0.307    0.013   0.320          0         0 -2.630 -0.895471570</code></pre>
+<pre><code>  elapsed   diff rel_diff
+1   9.849     NA       NA
+2  10.203  0.354    0.036
+3   7.563 -2.640   -0.259
+4   0.790 -6.773   -0.896</code></pre>
 </div>
 </div>
+<p>This step led to a massive improvement of around -6.8 seconds; a relative gain of -89.6%.</p>
 </section>
 <section id="rule-4-use-optimized-packages" class="level1">
 <h1>Rule 4: Use optimized packages</h1>
 <p>For many statistical models, there are packages optimized for speed, see for example here: <a href="https://stackoverflow.com/q/49732933">https://stackoverflow.com/q/49732933</a></p>
-<div class="cell">
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-4_74f5658420a8d60e7b97db84d4c503f3">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RcppArmadillo)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>t4 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
@@ -475,89 +480,220 @@ t3     0.307    0.013   0.320          0         0 -2.630 -0.895471570</code></p
 <span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># summary(res0)</span></span>
 <span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    mdl <span class="ot">&lt;-</span> RcppArmadillo<span class="sc">::</span><span class="fu">fastLmPure</span>(x, y)</span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    pval <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(mdl<span class="sc">$</span>coefficients<span class="sc">/</span>mdl<span class="sc">$</span>stderr), mdl<span class="sc">$</span>df.residual, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> pval[<span class="dv">2</span>]</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># compute the p-value - but only for the coefficient of interest!</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(mdl<span class="sc">$</span>coefficients[<span class="dv">2</span>]<span class="sc">/</span>mdl<span class="sc">$</span>stderr[<span class="dv">2</span>]), mdl<span class="sc">$</span>df.residual, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
 <span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
 <span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0, t1, t2, t3, t4) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0[<span class="dv">3</span>], t1[<span class="dv">3</span>], t2[<span class="dv">3</span>], t3[<span class="dv">3</span>], t4[<span class="dv">3</span>]) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
 <span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>]) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span>
 <span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   user.self sys.self elapsed user.child sys.child   diff     rel_diff
-t0     3.827    0.069   3.901          0         0     NA           NA
-t1     3.795    0.038   3.835          0         0 -0.032 -0.008361641
-t2     2.937    0.030   2.968          0         0 -0.858 -0.226086957
-t3     0.307    0.013   0.320          0         0 -2.630 -0.895471570
-t4     0.288    0.006   0.295          0         0 -0.019 -0.061889251</code></pre>
+<pre><code>  elapsed   diff rel_diff
+1   9.849     NA       NA
+2  10.203  0.354    0.036
+3   7.563 -2.640   -0.259
+4   0.790 -6.773   -0.896
+5   0.749 -0.041   -0.052</code></pre>
 </div>
 </div>
-<p>This step only gave a minor -6% relative increase in speed - but as a bonus, it made our code much easier to read and shorter.</p>
-<p>I think we can stop here - we managed to reduce the execution time for our example from 3.827 seconds to 0.288 seconds - 13.3x faster!</p>
-<p>With that fast code, we can easily explore a broad parameter range (n ranging from 100 to 1000) and increase the iterations to 2000 for more stable results. (See also: “<a href="./how_many_iterations.html">Bonus: How many Monte-Carlo iterations are necessary?</a>”)</p>
-<div class="cell">
-<details>
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>t5 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<p>This step only gave a minor -5% relative increase in speed - but as a bonus, it made our code much easier to read and shorter.</p>
+</section>
+<section id="preparation-wrap-the-simulation-in-a-function" class="level1">
+<h1>Preparation: Wrap the simulation in a function</h1>
+<p>The next step does not really change a lot: We put the simulation code into a separate function that returns the quantity of interest (in our case: the focal p-value). Different settings of the simulation parameters, such as the sample size or the effect size, can be defined as parameters of the function.</p>
+<p>Every single function call <code>sim()</code> now gives you one simulated p-value - try it out!</p>
+<p>We then use the <code>relicate</code> function to run the <code>sim</code> function many times and to store the resulting p-values in a vector. Programming the simulation in such a functional style also has the nice side effect that you do not have to pre-allocate the results vector; this is automatically done by the replicate function.</p>
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-5_444b94928ded68ac5a01db4091a465f4">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RcppArmadillo)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">1000</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="dv">1</span>, n),</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations) {</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>x[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    mdl <span class="ot">&lt;-</span> RcppArmadillo<span class="sc">::</span><span class="fu">fastLmPure</span>(x, y)</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    pval <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(mdl<span class="sc">$</span>coefficients<span class="sc">/</span>mdl<span class="sc">$</span>stderr), mdl<span class="sc">$</span>df.residual, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    p_values[i] <span class="ot">&lt;-</span> pval[<span class="dv">2</span>]</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrap the code for a single simulation into a function. It returns the quantity of interest.</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>) {</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the "n" is now taken from the function parameter "n"</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="dv">1</span>, n),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>x[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  mdl <span class="ot">&lt;-</span> RcppArmadillo<span class="sc">::</span><span class="fu">fastLmPure</span>(x, y)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  p_val <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fu">abs</span>(mdl<span class="sc">$</span>coefficients[<span class="dv">2</span>]<span class="sc">/</span>mdl<span class="sc">$</span>stderr[<span class="dv">2</span>]), mdl<span class="sc">$</span>df.residual, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_val)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>t5 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n=</span>iterations, <span class="fu">sim</span>(<span class="at">n=</span>n))</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0[<span class="dv">3</span>], t1[<span class="dv">3</span>], t2[<span class="dv">3</span>], t3[<span class="dv">3</span>], t4[<span class="dv">3</span>], t5[<span class="dv">3</span>]) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>]) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      n  power
-1   100 0.0745
-2   150 0.1350
-3   200 0.1790
-4   250 0.2590
-5   300 0.3325
-6   350 0.4285
-7   400 0.4710
-8   450 0.5765
-9   500 0.6190
-10  550 0.6730
-11  600 0.7175
-12  650 0.7595
-13  700 0.8220
-14  750 0.8465
-15  800 0.8650
-16  850 0.9000
-17  900 0.9040
-18  950 0.9185
-19 1000 0.9460</code></pre>
+<pre><code>  elapsed   diff rel_diff
+1   9.849     NA       NA
+2  10.203  0.354    0.036
+3   7.563 -2.640   -0.259
+4   0.790 -6.773   -0.896
+5   0.749 -0.041   -0.052
+6   0.885  0.136    0.182</code></pre>
 </div>
 </div>
-<p>Some steps, such as avoiding growing vectors, didn’t really help here, but will help a lot in other scenarios.</p>
+<p>While this refactoring actually slightly increased computation time, we need this for the last, final optimization where we reap the benefits.</p>
+</section>
+<section id="rule-5-go-parallel" class="level1">
+<h1>Rule 5: Go parallel</h1>
+<p>By default, R runs single-threaded. That means, a single CPU core works off all lines of code sequentially. When you optimized this single thread performance, the only way to gain more speed (except buying a faster computer) is to distribute the workload to multiple CPU cores that work in parallel. Every modern CPU comes with multiple cores (also called “workers” in the code); typically 4 to 8 on local computers and laptops.</p>
+<p>With the use of the <code>replicate</code> function in the previous step, we prepared everything for an easy switch to multi-core processing. You only need to load the <code>future.apply</code> package, start a multi-core session with the <code>plan</code> command, and replace the <code>replicate</code> function call with <code>future_replicate</code>.</p>
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-6_42c6d7eed974cb83805752cec2824008">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RcppArmadillo)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future.apply)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Show how many cores are available on your machine:</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">availableCores</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>system 
+     8 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># with plan() you enter the parallel mode. Enter the number of workers (aka. CPU cores)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>t6 <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">300</span>, <span class="dv">500</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># future.seed = TRUE is needed to set seeds in all parallel processes. Then the computation is reprpducible.</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(<span class="at">n=</span>iterations, <span class="fu">sim</span>(<span class="at">n=</span>n), <span class="at">future.seed =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>timings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(t0[<span class="dv">3</span>], t1[<span class="dv">3</span>], t2[<span class="dv">3</span>], t3[<span class="dv">3</span>], t4[<span class="dv">3</span>], t5[<span class="dv">3</span>], t6[<span class="dv">3</span>]) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="dv">1</span>] <span class="sc">-</span> timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>])</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>]) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  elapsed   diff rel_diff
+1   9.849     NA       NA
+2  10.203  0.354     0.04
+3   7.563 -2.640    -0.26
+4   0.790 -6.773    -0.90
+5   0.749 -0.041    -0.05
+6   0.885  0.136     0.18
+7   0.722 -0.163    -0.18</code></pre>
+</div>
+</div>
+<p>The speed improvement seems only small - with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take <em>longer</em>.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To improve the benefits of parallel processing, make sure that each single parallel process runs as long (i.e., in an uninterrupted way) as possible. In the current example, we loop through the different n’s, and at every n, 4 parallel processes are spawned. A more efficient way would be to distribute the levels of n to separated workers which then do all replications in a row.</p>
+</div>
+</div>
+</section>
+<section id="the-final-speed-test-burn-your-machine" class="level1">
+<h1>The final speed test: Burn your machine 🔥</h1>
+<p>Let’s see if parallel processing has an advantage when we have longer computations. We now expand the simulation by exploring a broad parameter range (n ranging from 100 to 1000) and increasing the iterations to 20,000 for more stable results. (See also: “<a href="./how_many_iterations.html">Bonus: How many Monte-Carlo iterations are necessary?</a>”)</p>
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-7_491742fe8faa392a63481ee1ed268058">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RcppArmadillo)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future.apply)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">1000</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>result_single <span class="ot">&lt;-</span> result_parallel <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># single core</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>t_single <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n=</span>iterations, <span class="fu">sim</span>(<span class="at">n=</span>n))</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    result_single <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_single, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co"># multi-core</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>t_parallel <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    p_values <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(<span class="at">n=</span>iterations, <span class="fu">sim</span>(<span class="at">n=</span>n), <span class="at">future.seed =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    result_parallel <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_parallel, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="co"># compare results</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(result_single, <span class="at">power.parallel =</span> result_parallel[, <span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      n   power power.parallel
+1   100 0.07230        0.07615
+2   150 0.12475        0.12750
+3   200 0.20110        0.18865
+4   250 0.26515        0.26450
+5   300 0.33965        0.33730
+6   350 0.41390        0.40815
+7   400 0.48415        0.47950
+8   450 0.54495        0.55080
+9   500 0.60765        0.60610
+10  550 0.67105        0.66795
+11  600 0.71790        0.71485
+12  650 0.76480        0.75995
+13  700 0.79890        0.80625
+14  750 0.84145        0.83660
+15  800 0.86190        0.86195
+16  850 0.89250        0.88860
+17  900 0.91200        0.90780
+18  950 0.93030        0.92690
+19 1000 0.94160        0.93840</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(t_single, t_parallel) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           user.self sys.self elapsed user.child sys.child
+t_single      16.361    0.791  17.195          0         0
+t_parallel     1.148    0.063   6.762          0         0</code></pre>
+</div>
+</div>
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-8_79e2eef8fd27f66e8c10cfbbce6b340f">
+
+</div>
+<p>With this optimized setup, we are running 380000 simulations in just 6.762 seconds. If you try this with the first code version, it takes 169.556 seconds.</p>
+<p><strong>With the final, parallelized version we have a 25.1x speed gain relative to the first version!</strong></p>
+</section>
+<section id="recap" class="level1">
+<h1>Recap</h1>
+<p>We covered the most important steps for speeding up your code in R:</p>
+<ol type="1">
+<li>No growing vectors/data frames. Solution: Pre-allocate the results vector.</li>
+<li>Avoid data.frames. Solution: Use matrices wherever possible, or switch to data.table for more complex data structures (not covered here).</li>
+<li>Avoid unnecessary computations and/or switch to optimized packages that do the same computations much faster. Solution: TODO (Rfast)</li>
+<li>Switch to parallel processing. Solution: If you already programmed your simulations with the <code>replicate</code> function, it is very easy with the <code>future.apply</code> package.</li>
+</ol>
+<p>Some steps, such as avoiding growing vectors, didn’t really help in our current example, but will help a lot in other scenarios.</p>
 <p>There are <em>many</em> blog post showing and comparing strategies to increase R performance, e.g.:</p>
 <ul>
 <li><a href="https://www.r-bloggers.com/2016/01/strategies-to-speedup-r-code/">https://www.r-bloggers.com/2016/01/strategies-to-speedup-r-code/</a></li>
@@ -582,8 +718,8 @@ But always remember:
 <section id="session-info" class="level1">
 <h1>Session Info</h1>
 <p>These speed measurements have been performed on a 2021 MacBook Pro with M1 processor.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-9_d465ac1e79e170a2cc9eb8d6e67babfd">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.2.0 (2022-04-22)
 Platform: aarch64-apple-darwin20 (64-bit)
@@ -600,15 +736,17 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] RcppArmadillo_0.11.4.2.1 prettycode_1.1.0         colorDF_0.1.7           
+[1] future.apply_1.10.0      future_1.30.0            RcppArmadillo_0.11.4.3.1
+[4] prettycode_1.1.0         colorDF_0.1.7           
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.9        digest_0.6.31     crayon_1.5.2      lifecycle_1.0.3  
- [5] jsonlite_1.8.4    magrittr_2.0.3    evaluate_0.19     stringi_1.7.8    
- [9] rlang_1.0.6       cli_3.6.0         rstudioapi_0.14   vctrs_0.5.1      
-[13] rmarkdown_2.19    tools_4.2.0       stringr_1.5.0     glue_1.6.2       
-[17] htmlwidgets_1.6.1 purrr_1.0.0       yaml_2.3.6        xfun_0.36        
-[21] fastmap_1.1.0     compiler_4.2.0    htmltools_0.5.4   knitr_1.41       </code></pre>
+ [1] Rcpp_1.0.10       parallelly_1.34.0 rstudioapi_0.14   knitr_1.42       
+ [5] magrittr_2.0.3    rlang_1.0.6       fastmap_1.1.0     globals_0.16.2   
+ [9] tools_4.2.0       parallel_4.2.0    xfun_0.36         cli_3.6.0        
+[13] htmltools_0.5.4   yaml_2.3.7        digest_0.6.31     lifecycle_1.0.3  
+[17] crayon_1.5.2      purrr_1.0.1       htmlwidgets_1.6.1 vctrs_0.5.2      
+[21] codetools_0.2-18  evaluate_0.20     rmarkdown_2.20    compiler_4.2.0   
+[25] jsonlite_1.8.4    listenv_0.9.0    </code></pre>
 </div>
 </div>
 

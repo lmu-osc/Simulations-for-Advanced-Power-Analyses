@@ -492,7 +492,7 @@ F-statistic: 5.643 on 1 and 48 DF,  p-value: 0.02156</code></pre>
 <section id="doing-the-power-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="doing-the-power-analysis">Doing the power analysis</h2>
 <p>Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a loop and repeatedly do the procedure. #FIXME maybe we can use the function ‘replicate’ seen in first tutorial instead of for loop - maybe faster?</p>
-<div class="cell" data-hash="LM_cache/html/unnamed-chunk-11_8cd9900b005aa002ea65ed015e98ff20">
+<div class="cell" data-hash="LM_cache/html/unnamed-chunk-11_29a5a8917a987aeee632de2f259651f2">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>

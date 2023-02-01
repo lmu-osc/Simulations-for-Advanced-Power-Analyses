@@ -1,22 +1,24 @@
 ---
 title: "Bonus: Optimizing R code for speed"
 author: "Felix Schönbrodt"
+execute:
+  cache: true
+html:
+    code-tools: true  
 ---
 
-Optimizing code for speed can be an art (and you get lost and spend/waste hours by micro-optimizing some milliseconds). But the Pareto principle applies here: with 20% effort, you can have quick and substantial gains.
+Optimizing code for speed can be an art - and you get lost and spend/waste hours by micro-optimizing some milliseconds. But the Pareto principle applies here: with 20% effort, you can have quick and substantial gains.
 
-*Code profiling* means that the code execution is timed, just like you had a stopwatch. You try to make your code snippet as fast as possible. RStudio has a [built-in profiler](https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE) that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we'll resort to the simplest way of timing code: We will measure overall execution time by wrapping our code in a `system.time({ ... })` call.
+*Code profiling* means that the code execution is timed, just like you had a stopwatch. Your goal is to make your code snippet as fast as possible. RStudio has a [built-in profiler](https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE) that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we'll resort to the simplest way of timing code: We will measure overall execution time by wrapping our code in a `system.time({ ... })` call. Longer code blocks need to be wrapped in curly braces `{...}`. The function returns multiple timings; the relevant number for us is the "elapsed" time. This is also called the "wall clock" time - the time you actually have to wait until computation finished.
 
 # First, naive version
 
-We use `system.time()` to measure how long our code execution takes. Longer code blocks need to be wrapped in curly braces `{...}`. The function returns multiple timings; the relevant number for us is the "user" time.
+Here is a first version of the power simulation code for a simple LM. Let's see how long it takes:
 
-Here is a first version of the power simulation code for a simple LM.
-
-```{r}
+```{r opt1}
 t0 <- system.time({
 
-iterations <- 2000
+iterations <- 5000
 ns <- seq(300, 500, by=50)
 result <- data.frame()
 
@@ -40,7 +42,7 @@ t0
 result
 ```
 
-This first version takes `r t0[1]` seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won't see speed improvements very well.
+This first version takes `r t0[3]` seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won't see speed improvements very well.
 
 # Rule 1: No growing vectors/data frames
 
@@ -49,7 +51,7 @@ This is one of the most common bottlenecks: You start with an empty vector (or e
 ```{r}
 t1 <- system.time({
 
-iterations <- 2000
+iterations <- 5000
 ns <- seq(300, 500, by=50)
 
 result <- data.frame()
@@ -77,11 +79,11 @@ for (n in ns) {
 })
 
 # Combine the different timings in a data frame
-timings <- rbind(t0, t1) |> data.frame()
+timings <- rbind(t0[3], t1[3]) |> data.frame()
 
 # compute the absolute and relativ difference of consecutive rows:
 timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
-timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1])
+timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
 
 timings
 ```
@@ -95,7 +97,7 @@ Use matrizes instead of data frames wherever possible; or avoid them at all (as 
 ```{r}
 t2 <- system.time({
 
-iterations <- 2000
+iterations <- 5000
 ns <- seq(300, 500, by=50)
 
 result <- data.frame()
@@ -107,7 +109,8 @@ for (n in ns) {
   for (i in 1:iterations) {
     BDI <- 23 - 3*treatment + rnorm(n, mean=0, sd=sqrt(117))
     
-    # CHANGE: We don't need the data frame - just create the two variables in the environment and lm() takes them from there.
+    # CHANGE: We don't need the data frame - just create the two variables
+    # in the environment and lm() takes them from there.
     #df <- data.frame(treatment, BDI)
     res <- lm(BDI ~ treatment)
     
@@ -119,13 +122,13 @@ for (n in ns) {
 
 })
 
-timings <- rbind(t0, t1, t2) |> data.frame()
+timings <- rbind(t0[3], t1[3], t2[3]) |> data.frame()
 timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
-timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1])
+timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
 timings
 ```
 
-This showed a substantial improvement of around `r round(t2[1] - t1[1], 1)` seconds; a relative gain of `r round(timings$rel_diff[3]*100, 1)`%.
+This showed a substantial improvement of around `r round(t2[3] - t1[3], 1)` seconds; a relative gain of `r round(timings$rel_diff[3]*100, 1)`%.
 
 # Rule 3: Avoid unnecessary computations
 
@@ -136,7 +139,7 @@ We could strip away all overhead and do only the necessary steps: Fit the linear
 ```{r}
 t3 <- system.time({
 
-iterations <- 2000
+iterations <- 5000
 ns <- seq(300, 500, by=50)
 
 result <- data.frame()
@@ -175,11 +178,12 @@ for (n in ns) {
 }
 
 })
-timings <- rbind(t0, t1, t2, t3) |> data.frame()
+timings <- rbind(t0[3], t1[3], t2[3], t3[3]) |> data.frame()
 timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
-timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1])
+timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
 timings
 ```
+This step led to a massive improvement of around `r round(t3[3] - t2[3], 1)` seconds; a relative gain of `r round(timings$rel_diff[4]*100, 1)`%.
 
 # Rule 4: Use optimized packages
 
@@ -191,7 +195,7 @@ library(RcppArmadillo)
 
 t4 <- system.time({
 
-iterations <- 2000
+iterations <- 5000
 ns <- seq(300, 500, by=50)
 
 result <- data.frame()
@@ -213,64 +217,195 @@ for (n in ns) {
     # summary(res0)
     
     mdl <- RcppArmadillo::fastLmPure(x, y)
-    pval <- 2*pt(abs(mdl$coefficients/mdl$stderr), mdl$df.residual, lower.tail=FALSE)
     
-    p_values[i] <- pval[2]
+    # compute the p-value - but only for the coefficient of interest!
+    p_values[i] <- 2*pt(abs(mdl$coefficients[2]/mdl$stderr[2]), mdl$df.residual, lower.tail=FALSE)
   }
   
   result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
 }
 
 })
-timings <- rbind(t0, t1, t2, t3, t4) |> data.frame()
+timings <- rbind(t0[3], t1[3], t2[3], t3[3], t4[3]) |> data.frame()
 timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
-timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1])
+timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
 timings
 ```
 
 This step only gave a minor `r round(timings$rel_diff[5]*100)`% relative increase in speed - but as a bonus, it made our code much easier to read and shorter.
 
-I think we can stop here - we managed to reduce the execution time for our example from `r timings[1, 1]` seconds to `r timings[5, 1]` seconds - `r round(timings[1, 1]/timings[5, 1], 1)`x faster!
 
-With that fast code, we can easily explore a broad parameter range (n ranging from 100 to 1000) and increase the iterations to 2000 for more stable results. (See also: "[Bonus: How many Monte-Carlo iterations are necessary?](how_many_iterations.qmd)")
+# Preparation: Wrap the simulation in a function
+
+The next step does not really change a lot: We put the simulation code into a separate function that returns the quantity of interest (in our case: the focal p-value). Different settings of the simulation parameters, such as the sample size or the effect size, can be defined as parameters of the function. 
+
+Every single function call `sim()` now gives you one simulated p-value - try it out!
+
+We then use the `relicate` function to run the `sim` function many times and to store the resulting p-values in a vector. Programming the simulation in such a functional style also has the nice side effect that you do not have to pre-allocate the results vector; this is automatically done by the replicate function.
+
 
 ```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
+library(RcppArmadillo)
 
-t5 <- system.time({
-
-iterations <- 2000
-ns <- seq(100, 1000, by=50)
-
-result <- data.frame()
-
-for (n in ns) {
-
-    x <- cbind(
+# Wrap the code for a single simulation into a function. It returns the quantity of interest.
+sim <- function(n=100) {
+  # the "n" is now taken from the function parameter "n"
+  x <- cbind(
     rep(1, n),
     c(rep(0, n/2), rep(1, n/2))
   )
   
-  p_values <- rep(NA, iterations)
+  y <- 23 - 3*x[, 2] + rnorm(n, mean=0, sd=sqrt(117))
+  mdl <- RcppArmadillo::fastLmPure(x, y)
+  p_val <- 2*pt(abs(mdl$coefficients[2]/mdl$stderr[2]), mdl$df.residual, lower.tail=FALSE)
+
+  return(p_val)
+}
+
+t5 <- system.time({
+
+iterations <- 5000
+ns <- seq(300, 500, by=50)
+
+result <- data.frame()
+
+for (n in ns) {
+  p_values <- replicate(n=iterations, sim(n=n))
+  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
+}
+
+})
+timings <- rbind(t0[3], t1[3], t2[3], t3[3], t4[3], t5[3]) |> data.frame()
+timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
+timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
+timings
+```
+While this refactoring actually slightly increased computation time, we need this for the last, final optimization where we reap the benefits.
+
+
+# Rule 5: Go parallel
+
+By default, R runs single-threaded. That means, a single CPU core works off all lines of code sequentially. When you optimized this single thread performance, the only way to gain more speed (except buying a faster computer) is to distribute the workload to multiple CPU cores that work in parallel. Every modern CPU comes with multiple cores (also called "workers" in the code); typically 4 to 8 on local computers and laptops. 
+
+With the use of the `replicate` function in the previous step, we prepared everything for an easy switch to multi-core processing. You only need to load the `future.apply` package, start a multi-core session with the `plan` command, and replace the `replicate` function call with `future_replicate`.
+
+```{r}
+library(RcppArmadillo)
+library(future.apply)
+
+# Show how many cores are available on your machine:
+availableCores()
+
+# with plan() you enter the parallel mode. Enter the number of workers (aka. CPU cores)
+plan(multisession, workers = 4)
+
+t6 <- system.time({
+
+iterations <- 5000
+ns <- seq(300, 500, by=50)
+
+result <- data.frame()
+
+for (n in ns) {
+  # future.seed = TRUE is needed to set seeds in all parallel processes. Then the computation is reprpducible.
+  p_values <- future_replicate(n=iterations, sim(n=n), future.seed = TRUE)
+  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
+}
+
+})
+
+timings <- rbind(t0[3], t1[3], t2[3], t3[3], t4[3], t5[3], t6[3]) |> data.frame()
+timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
+timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3) |> round(2)
+timings
+```
+The speed improvement seems only small - with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take *longer*. 
+
+::: {.callout-note}
+To improve the benefits of parallel processing, make sure that each single parallel process runs as long (i.e., in an uninterrupted way) as possible. In the current example, we loop through the different n's, and at every n, 4 parallel processes are spawned. A more efficient way would be to distribute the levels of n to separated workers which then do all replications in a row.
+:::
+
+
+# The final speed test: Burn your machine 🔥
+
+Let's see if parallel processing has an advantage when we have longer computations. We now expand the simulation by exploring a broad parameter range (n ranging from 100 to 1000) and increasing the iterations to 20,000 for more stable results. (See also: "[Bonus: How many Monte-Carlo iterations are necessary?](how_many_iterations.qmd)")
+
+```{r}
+library(RcppArmadillo)
+library(future.apply)
+
+plan(multisession, workers = 4)
+
+iterations <- 20000
+ns <- seq(100, 1000, by=50)
+result_single <- result_parallel <- data.frame()
+
+# single core
+t_single <- system.time({
+  for (n in ns) {
+    p_values <- replicate(n=iterations, sim(n=n))
+    result_single <- rbind(result_single, data.frame(n = n, power = sum(p_values < .005)/iterations))
+  }
+})
+
+# multi-core
+t_parallel <- system.time({
+  for (n in ns) {
+    p_values <- future_replicate(n=iterations, sim(n=n), future.seed = TRUE)
+    result_parallel <- rbind(result_parallel, data.frame(n = n, power = sum(p_values < .005)/iterations))
+  }
+})
+
+# compare results
+cbind(result_single, power.parallel = result_parallel[, 2])
+rbind(t_single, t_parallel) |> data.frame()
+```
+
+
+```{r}
+#| results: hide
+#| echo: false
+
+t0_extra <- system.time({
+
+iterations <- 20000
+ns <- seq(100, 1000, by=50)
+result <- data.frame()
+
+for (n in ns) {
+  print(n)
+  p_values <- c()
   
   for (i in 1:iterations) {
-    y <- 23 - 3*x[, 2] + rnorm(n, mean=0, sd=sqrt(117))
-    
-    mdl <- RcppArmadillo::fastLmPure(x, y)
-    pval <- 2*pt(abs(mdl$coefficients/mdl$stderr), mdl$df.residual, lower.tail=FALSE)
-    
-    p_values[i] <- pval[2]
+    treatment <- c(rep(0, n/2), rep(1, n/2))
+    BDI <- 23 - 3*treatment + rnorm(n, mean=0, sd=sqrt(117))
+    df <- data.frame(treatment, BDI)
+    res <- lm(BDI ~ treatment, data=df)
+    p_values <- c(p_values, summary(res)$coefficients["treatment", "Pr(>|t|)"])
   }
   
   result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
 }
 
 })
-result
 ```
 
-Some steps, such as avoiding growing vectors, didn't really help here, but will help a lot in other scenarios.
+
+With this optimized setup, we are running `r options(scipen=999); length(ns)*iterations` simulations in just `r t_parallel["elapsed"]` seconds. If you try this with the first code version, it takes `r t0_extra["elapsed"]` seconds.
+
+**With the final, parallelized version we have a `r round(t0_extra["elapsed"]/t_parallel["elapsed"], 1)`x speed gain relative to the first version!**
+
+
+# Recap
+
+We covered the most important steps for speeding up your code in R:
+
+1. No growing vectors/data frames. Solution: Pre-allocate the results vector.
+2. Avoid data.frames. Solution: Use matrices wherever possible, or switch to data.table for more complex data structures (not covered here).
+3. Avoid unnecessary computations and/or switch to optimized packages that do the same computations much faster. Solution: TODO (Rfast)
+4. Switch to parallel processing. Solution: If you already programmed your simulations with the `replicate` function, it is very easy with the `future.apply` package.
+
+Some steps, such as avoiding growing vectors, didn't really help in our current example, but will help a lot in other scenarios.
 
 There are *many* blog post showing and comparing strategies to increase R performance, e.g.:
 
