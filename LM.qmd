@@ -1,5 +1,5 @@
 ---
-title: "Linear Model (a single predictor)"
+title: "Linear Model I: a single dichotomous predictor"
 author: "Felix Schönbrodt"
 execute:
   cache: true
@@ -8,7 +8,7 @@ execute:
 ```{r}
 # TODO: collect the installation of all necessary packages in one place at the beginning of the tutorial
 
-#install.packages(c("ggplot2", "ggdist", "pwr"))
+#install.packages(c("ggplot2", "ggdist", "pwr", "MBESS"))
 ```
 
 We start with the simplest possible linear model: (a) a continuous outcome variable is predicted by a single dichotomous predictor. This model actually rephrases a t-test as a linear model! Then we build up increasingly complex models: (b) a single continuous predictor and (c) multiple continuous predictors (i.e., multiple regression).
@@ -74,14 +74,14 @@ The standardized cutoffs for the BDI are:
 
 Returning to our questions from above:
 
-**What BDI values would we expect on average in our sample (before #FIXME and after? treatment)?**
+**What BDI values would we expect on average in our sample before treatment?**
 
 ```{r}
 # we take the pre-score here:
 mean(BtheB$bdi.pre)
 ```
 
-The average BDI score in that sample was 23, corresponding to a "moderate depression".
+The average BDI score before treatment was 23, corresponding to a "moderate depression".
 
 -   What variability would we expect in our sample?
 
@@ -101,7 +101,7 @@ mean(BtheB$bdi.2m[BtheB$treatment == "BtheB"])
 
 Hence, the two treatments reduced BDI scores from an average of 23 to 19 (`TAU`) and 15 (`BtheB`). Based on that data set, we can conclude that a typical treatment effect is somewhere between a 4 and a 8-point reduction of BDI scores.[^1]
 
-[^1]: By comparing only the post-treatment scores we used an unbiased causal model for the treatment effect. Later we will increase the precision of the estimate by including the baseline score for each participant  into the model.
+[^1]: By comparing only the post-treatment scores we used an unbiased causal model for the treatment effect. Later we will increase the precision of the estimate by including the baseline score for each participant into the model.
 
 For our purpose, we compute the average treatment effect combined for both treatments. The average post-treatment score is:
 
@@ -113,7 +113,7 @@ So, the average reduction across both treatments is $17-23=6$.
 
 ## Enter specific values for the model parameters
 
-Let's rewrite the abstract equation with the specific variable names. We first write the equation for the systematic part (without the error term). This also represents the predicted value #FIXME (i.e. post-2m BDI values) ?:
+Let's rewrite the abstract equation with the specific variable names. We first write the equation for the systematic part (without the error term). This also represents the predicted value:
 
 $$\widehat{\text{BDI}} = b_0 + b_1*\text{treatment}$$ {#eq-2}
 
@@ -197,20 +197,26 @@ ggplot(df, aes(x=as.factor(treatment), y=BDI)) +
   gghalves::geom_half_point(side = "l", range_scale = .4, alpha = .5)
 ```
 
-#FIXME can you say what we are supposed to notice in this graph? e.g. post treatment (after two months) control group has this mean, treated group  has this other mean - is this right? 
+This graph gives us an impression of the plausibility of our simulation: In the control group, we have a median BDI score of 26, and 50% of participants, represented by the box of the boxplot, are roughly between 18 and 32 points (i.e., in the range of a moderate depression). After the simulated treatment, the median BDI score is at 18 (mild depression).
 
-Let's assume that we collected and analyzed this sample - what would have been the results?
+The plot also highlights an unrealistic aspect of our simulations: In reality, the BDI score is bounded to be >=0; but our random data (sampled from a normal distribution) can generate values below zero. For our current power simulations this can be neglected (as negative values are quite rare), but in real data collection such floor or ceiling effects can impose a range restriction that might lower the statistical power.
+
+Let's assume that we collected and analyzed this specific sample - what would have been the results?
 
 ```{r}
 summary(lm(BDI ~ treatment, data=df))
 ```
 
-Here, and in the entire tutorial, we assume an $\alpha$-level of .005 (Benjamin et al., 2018). As you can see, in this specific sample the treatment effect is not significant at p > .02. But maybe in another sample of the same size? #FIXME do you mean with another randomly simulated sample? I got confused what you meant here for a sec. Perhaps say something like: with the seed XX, randomly generating a sample of the same sample size, the effect is significant at p = XX. How likely are we to detect an effect with a sample of this sample size? or perhaps simply: How likely were we to detect an effect with a sample of this size?
+Here, and in the entire tutorial, we assume an $\alpha$-level of .005 (Benjamin et al., 2018). As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p > .02). But how likely are we to detect an effect with a sample of this size?
 
 ## Doing the power analysis
 
-Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a loop and repeatedly do the procedure.
-#FIXME maybe we can use the function 'replicate' seen in first tutorial instead of for loop - maybe faster?
+Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a function called `sim` that returns the focal p-value. This function takes two parameters:
+
+* `n` defines the required sample size
+* `treatment_effect` defines the treatment effect in the raw scale (i.e., reduction in BDI points)
+
+We then use the `replicate` function to repeatedly call the `sim` function for 1000 iterations.
 
 ```{r}
 #| echo: true
@@ -218,24 +224,19 @@ Now we need to repeatedly draw many samples and see how many of the analyses wou
 
 set.seed(0xBEEF)
 
-# define all predictor and simulation variables.
-# (we do this outside the loop as it stays constant)
-iterations <- 1000
-n <- 100
-treatment <- c(rep(0, n/2), rep(1, n/2))
+iterations <- 1000 # the number of Monte Carlo repetitions
+n <- 100 # the size of our simulated sample
 
-# vector that collects the p-values from all 1000 virtual samples
-# (prepare an empty NA vector with 1000 slots)
-p_values <- rep(NA, iterations)
-
-# now repeatedly draw samples, analyze, and the p-value of the 
-# focal regression weight (i.e., the slope parameter)
-for (i in 1:iterations) {
-  BDI <- 23 - 6*treatment + rnorm(n, mean=0, sd=sqrt(117))
+sim <- function(n=100, treatment_effect=-6) {
+  treatment <- c(rep(0, n/2), rep(1, n/2))
+  BDI <- 23 + treatment_effect*treatment + rnorm(n, mean=0, sd=sqrt(117))
   res <- lm(BDI ~ treatment)
-  p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
+  p_value <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
+  return(p_value)
 }
 
+# now run the sim() function a 1000 times and store the p-values in a vector:
+p_values <- replicate(iterations, sim(n=100))
 ```
 
 How many of our 1000 virtual samples would have found the effect?
@@ -250,7 +251,7 @@ Only `r round(sum(p_values < .005)*100/iterations)`% of samples with the same si
 
 ## Sample size planning: Find the necessary sample size
 
-Now we know that a sample size of 100 does not lead to a sufficient power. But what sample size would we need to achieve a power of at least 80%? In the simulation approach you need to test different $n$s until you find the necessary sample size. We do this by wrapping the simulation code into another loop that continuously increases the n. We then store the computed power for each n.
+Now we know that a sample size of 100 does not lead to a sufficient power. But what sample size would we need to achieve a power of at least 80%? In the simulation approach you need to test different $n$s until you find the necessary sample size. We do this by wrapping the simulation code into a loop that continuously increases the n. We then store the computed power for each n.
 
 ```{r}
 #| echo: true
@@ -264,16 +265,8 @@ ns <- seq(100, 300, by=20) # test ns between 100 and 400
 
 result <- data.frame()
 
-for (n in ns) {  # outer loop
-  treatment <- c(rep(0, n/2), rep(1, n/2))
-  p_values <- rep(NA, iterations)
-
-  # now repeatedly draw samples, analyze, and save p-value
-  for (i in 1:iterations) {  # inner loop
-    BDI <- 23 - 6*treatment + rnorm(n, mean=0, sd=sqrt(117))
-    res <- lm(BDI ~ treatment)
-    p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
-  } 
+for (n in ns) {  # loop through elements of the vector "ns"
+  p_values <- replicate(iterations, sim(n=n))
   
   result <- rbind(result, data.frame(
     n = n,
@@ -295,7 +288,7 @@ Hence, with n=180 (90 in each group), we have a 80% chance to detect the effect.
 
 🥳 **Congratulations! You did your first power analysis by simulation.** 🎉
 
-For these simple models, we can also compute analytic solutions. Let's verify our results with the `pwr` package:
+For these simple models, we can also compute analytic solutions. Let's verify our results with the `pwr` package - a linear regression with a single dichotomous predictor is equivalent to a t-test:
 
 ```{r}
 library(pwr)
@@ -310,39 +303,26 @@ When we entered the specific numbers into our equations, we used point estimates
 
 ## Safeguard power analysis
 
-As sensitivity analysis, we will apply a safeguard power analysis, that aims for the lower end of a two-sided 60% CI around the parameter of the focal treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)
+As sensitivity analysis, we will apply a safeguard power analysis (Perugini et al., 2014) that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)
 
 ::: {.callout-note}
-If you assume publication bias, another heuristic for aiming at a more realistic population effect size is the "divide-by-2" heuristic. (TODO: Link to presentation)
+If you assume publication bias, another heuristic for aiming at a more realistic population effect size is the "divide-by-2" heuristic. (TODO: Link to kickoff presentation)
 :::
 
-We can use the `t.test` function to compute a CI around that value:
+We can use the `ci.smd` function from the `MBESS` package to compute a CI around Cohen's $d$ that we computed for our treatment effect:
 
 ```{r}
-t.test(BtheB$bdi.2m, BtheB$bdi.pre, na.rm=TRUE, conf.level = 0.60)
+library(MBESS)
+ci.smd(smd=-0.55, n.1=50, n.2=50, conf.level=.60)
 ```
-::: {.callout-note}
-# MOTE Online Calculator
-You can also use the MOTE online calculator by Erin Buchanan et al. to compute effect sizes and confidence intervals around them: https://doomlab.shinyapps.io/mote/
+However, in the simulated regression equation, we need the *raw* effect size - so we have to backtransform the standardized confidence limits into the original metric:
 
-This takes either raw statistics (means, SDs) or test statistics as input.
-:::
+$$d = \frac{M_{diff}}{SD} \Rightarrow M_{diff} = d*SD = -0.377 * \sqrt{117} = -4.08$$
+
+As the assumed effect is negative, we aim for the *upper*, i.e., the more conservative limit. After backtransformation in the raw metric, it is considerably smaller, at -4.1.
 
 
-As the assumed effect is negative, we aim for the *upper*, i.e., the more conservative limit, which is considerably smaller, at -5.1.
-
-::: {.callout-tip}
-## Tip: Computing CIs around standardized effect sizes
-
-When you use a standardized mean difference that has been reported in a paper, you can use a function from the `MBESS` package to compute the CI:
-
-    library(MBESS)
-
-    # smd = standardized mean difference = Cohen's d
-    ci.smd(smd=0.55, n.1=50, n.2=50, conf.level=0.60)
-:::
-
-Now we can rerun the power simulation with this more conservative value (the only change to the code above is that we changed the treatment effect from -6 to -5.1).
+Now we can rerun the power simulation with this more conservative value (the only change to the code above is that we changed the treatment effect from -6 to -4.1).
 
 ```{r}
 #| results: hide
@@ -353,20 +333,12 @@ set.seed(0xBEEF)
 
 # define all predictor and simulation variables.
 iterations <- 1000
-ns <- seq(100, 300, by=20)
+ns <- seq(200, 400, by=20) # test ns between 100 and 400
 
 result <- data.frame()
 
-for (n in ns) {
-  treatment <- c(rep(0, n/2), rep(1, n/2))
-  p_values <- rep(NA, iterations)
-
-  # now repeatedly draw samples, analyze, and save p-value of 
-  for (i in 1:iterations) {
-    BDI <- 23 - 5.1*treatment + rnorm(n, mean=0, sd=sqrt(117))
-    res <- lm(BDI ~ treatment)
-    p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
-  } 
+for (n in ns) {  # loop through elements of the vector "ns"
+  p_values <- replicate(iterations, sim(n=n, treatment_effect = -4.1))
   
   result <- rbind(result, data.frame(
     n = n,
@@ -384,20 +356,20 @@ print(result)
 ```
 
 
-With that more conservative effect size assumption, we would need around 240 participants, i.e. 120 per group.
+With that more conservative effect size assumption, we would need around 380 participants, i.e. 190 per group.
 
 ## Smallest effect size of interest (SESOI)
 
-Many methodologists argue that we should not power for the *expected* effects size, but rather for the smallest effect size of interest. In this case, a non-significant result can be interpreted as "We accept the $H_0$, and even if a real effect existed, it most likely is too small to be relevant".
+Many methodologists argue that we should not power for the *expected* effects size, but rather for the smallest effect size of interest (SESOI). In this case, a non-significant result can be interpreted as "We accept the $H_0$, and even if a real effect existed, it most likely is too small to be relevant".
 
 What change of BDI scores is perceived as "clinically important"? The hard part is to find a convincing theoretical or empirical argument for the chosen SESOI. In the case of the BDI, luckily someone else did that work. 
 
 The [NICE guidance](https://www.nice.org.uk/guidance/qs8) suggest that a change of >=3 BDI-II points is clinically important.
 
-However, as you can expect, things are more complicated. Button et al. (2015) analyzed data sets where patients have been asked, after a treatment, whether they felt "better", "the same" or "worse". With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms where measureably reduced in the BDI, patients still might answer "feels the same", which indicates that the reduction did not surpass a threshold of subjective relevant improvement.
-For example, the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need *more* reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are *higher* than the NICE guidelines, more in the range of -6 BDI points.
+However, as you can expect, things are more complicated. Button et al. (2015) analyzed data sets where patients have been asked, after a treatment, whether they felt "better", "the same" or "worse". With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms were measurably reduced in the BDI, patients still might answer "feels the same", which indicates that the reduction did not surpass a threshold of subjective relevant improvement.
+But the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need *more* reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are *higher* than the NICE guidelines, more in the range of -6 BDI points.
 
-Let's use the NICE recommendation of -3 BDI points as a lower threshold for our power analysis (anything larger than that will be covered anyway).
+For our example, let's use the NICE recommendation of -3 BDI points as a lower threshold for our power analysis (anything larger than that will be covered anyway).
 
 
 ```{r}
@@ -409,25 +381,21 @@ set.seed(0xBEEF)
 
 # define all predictor and simulation variables.
 iterations <- 1000
+
+# CHANGE: we adjusted the range of probed sample sizes upwards, as the effect size now is considerably smaller
 ns <- seq(600, 800, by=20)
 
 result <- data.frame()
 
 for (n in ns) {
-  treatment <- c(rep(0, n/2), rep(1, n/2))
-  p_values <- rep(NA, iterations)
-
-  # now repeatedly draw samples, analyze, and save p-value of 
-  for (i in 1:iterations) {
-    BDI <- 23 - 3*treatment + rnorm(n, mean=0, sd=sqrt(117))
-    res <- lm(BDI ~ treatment)
-    p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
-  } 
+  p_values <- replicate(iterations, sim(n=n, treatment_effect = -3))
   
   result <- rbind(result, data.frame(
     n = n,
     power = sum(p_values < .005)/iterations)
   )
+
+  print(result)
 }
 ```
 
@@ -442,7 +410,7 @@ print(result)
 Hence, we need around 700 participants to reliably detect this smallest effect size of interest.
 
 Did you spot the strange pattern in the result? At n=720, the power is 83%, but only 82% with n=740?
-This is not possible and suggests that this is simply Monte Carlo sampling error - 1000 iterations is not enough to get precise estimates. When we increase iterations to 10,000, it takes much longer, but gives more precise results:
+This is not possible, as power monotonically increases with sample size. It suggests that this is simply Monte Carlo sampling error - 1000 iterations are not enough to get precise estimates. When we increase iterations to 10,000, it takes much longer, but gives more precise results:
 
 ```{r}
 #| results: hide
@@ -453,29 +421,18 @@ set.seed(0xBEEF)
 
 # define all predictor and simulation variables.
 iterations <- 10000
-
-# To speed up computations, we limited the range of ns to the relevant region
 ns <- seq(640, 740, by=20)
 
 result <- data.frame()
 
 for (n in ns) {
-  treatment <- c(rep(0, n/2), rep(1, n/2))
-  p_values <- rep(NA, iterations)
-
-  # now repeatedly draw samples, analyze, and save p-value of 
-  for (i in 1:iterations) {
-    BDI <- 23 - 3*treatment + rnorm(n, mean=0, sd=sqrt(117))
-    res <- lm(BDI ~ treatment)
-    p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
-  } 
+  p_values <- replicate(iterations, sim(n=n, treatment_effect = -3))
   
   result <- rbind(result, data.frame(
     n = n,
     power = sum(p_values < .005)/iterations)
   )
-  
-  # show the result after each run
+
   print(result)
 }
 ```
@@ -487,27 +444,27 @@ for (n in ns) {
 print(result)
 ```
 
-Now the power increases monotonically with sample size, as expected.
+Now power increases monotonically with sample size, as expected.
 
 # Recap: What did we do?
 
-These are the steps we did in the tutorial:
+These are the steps we did in this part of the tutorial:
 
 1. **Define the statistical model that you will use to analyze your data** (*in our case: a linear regression*). This sometimes is called the *data generating mechanism* or the *data generating model*.
-2. **Find empirical information about the parameters in the model.** These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define your assumed state of the population.
+2. **Find empirical information about the parameters in the model.** These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define the assumed state of the population.
 3. **Program your equation**, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.
 4. **Do the simulation**:
     a) Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same)
     b) Compute the index of interest (typically: the p-value of a focal effect)
-    c) Count how many samples would have detected the effect
-    d) Tune your simulation parameters until the desired level of power is achieved
+    c) Count how many samples would have detected the effect (i.e., the statistical power)
+    d) Tune your simulation parameters until the desired level of power is achieved.
 
 
 Concerning step 4d, the typical scenario is that you increase sample size until your desired level of power is achieved. But you could imagine other ways to increase power, e.g.:
 
-* increase the reliability of a measurement instrument (which will be reflected in a larger effect size) until desired power is achieved. (This could relate to a trade-off: Do you invest more effort and time in better measurement, or do you keep an unreliable measure and collect more participants?)
+* Increase the reliability of a measurement instrument (which will be reflected in a smaller error variance) until desired power is achieved. (This could relate to a trade-off: Do you invest more effort and time in better measurement, or do you keep an unreliable measure and collect more participants?)
 * Compare a within- and a between-design in simulations
-* ... TODO
+* TODO
 
 # Bonus 1: Beyond power: General design analysis
 
@@ -516,27 +473,6 @@ TBD:
 * Compute another quantity of interest (e.g., the width of a CI), and optimize the sample size for that.
 
 # Bonus 2: Optimizing your code for speed
-
-TBD
-
-```{r}
-#| eval: false
-
-system.time({
-  
-# vectors that collect the results
-p_values <- rep(NA, iterations)
-
-# now repeatedly draw samples, analyze, and save p-value of 
-for (i in 1:iterations) {
-  print(i) # show how long we have to wait ...
-  BDI <- 23 - 6*treatment + rnorm(n, mean=0, sd=sqrt(117))
-  res <- lm(BDI ~ treatment)
-  p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
-}
-  
-})
-```
 
 Generally, you can start with few iterations for a fast exploration of the parameter space. When you found the relevant range (e.g., the necessary sample size to achieve a power between 70% and 90 %), you can restrict the parameter space to that range and increase the number of iterations to get more precise results.
 
@@ -550,4 +486,6 @@ With that procedure, however, you assume that the pilot study perfectly hit the 
 # References
 
 Button, K. S., Kounali, D., Thomas, L., Wiles, N. J., Peters, T. J., Welton, N. J., Ades, A. E., & Lewis, G. (2015). Minimal clinically important difference on the Beck Depression Inventory—II according to the patient’s perspective. Psychological Medicine, 45(15), 3269–3279. https://doi.org/10.1017/S0033291715001270
+
+Perugini, M., Gallucci, M., & Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319–332. https://doi.org/10.1177/1745691614528519
 
