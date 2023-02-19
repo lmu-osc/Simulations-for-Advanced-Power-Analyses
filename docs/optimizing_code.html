@@ -166,7 +166,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LM.html" class="sidebar-item-text sidebar-link">Linear Model (a single predictor)</a>
+  <a href="./LM1.html" class="sidebar-item-text sidebar-link">Linear Model I: a single dichotomous predictor</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./LM2.html" class="sidebar-item-text sidebar-link">Linear Model I: a single dichotomous predictor</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -220,7 +225,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#rule-2-avoid-data-frames-as-far-as-possible" id="toc-rule-2-avoid-data-frames-as-far-as-possible" class="nav-link" data-scroll-target="#rule-2-avoid-data-frames-as-far-as-possible">Rule 2: Avoid data frames as far as possible</a></li>
   <li><a href="#rule-3-avoid-unnecessary-computations" id="toc-rule-3-avoid-unnecessary-computations" class="nav-link" data-scroll-target="#rule-3-avoid-unnecessary-computations">Rule 3: Avoid unnecessary computations</a></li>
   <li><a href="#rule-4-use-optimized-packages" id="toc-rule-4-use-optimized-packages" class="nav-link" data-scroll-target="#rule-4-use-optimized-packages">Rule 4: Use optimized packages</a></li>
-  <li><a href="#preparation-wrap-the-simulation-in-a-function" id="toc-preparation-wrap-the-simulation-in-a-function" class="nav-link" data-scroll-target="#preparation-wrap-the-simulation-in-a-function">Preparation: Wrap the simulation in a function</a></li>
+  <li><a href="#preparation-wrap-the-simulation-in-a-function-fixme-perhaps-it-could-under-under-rule-5-wrap-up-in-a-function-and-go-parallel-with-a-and-b-section-because-the-title-preparation-got-me-a-bit-confused-at-first" id="toc-preparation-wrap-the-simulation-in-a-function-fixme-perhaps-it-could-under-under-rule-5-wrap-up-in-a-function-and-go-parallel-with-a-and-b-section-because-the-title-preparation-got-me-a-bit-confused-at-first" class="nav-link" data-scroll-target="#preparation-wrap-the-simulation-in-a-function-fixme-perhaps-it-could-under-under-rule-5-wrap-up-in-a-function-and-go-parallel-with-a-and-b-section-because-the-title-preparation-got-me-a-bit-confused-at-first">Preparation: Wrap the simulation in a function #FIXME perhaps it could under under rule 5: Wrap up in a function and go parallel, with A and B section, because the title ‘preparation’ got me a bit confused at first</a></li>
   <li><a href="#rule-5-go-parallel" id="toc-rule-5-go-parallel" class="nav-link" data-scroll-target="#rule-5-go-parallel">Rule 5: Go parallel</a></li>
   <li><a href="#the-final-speed-test-burn-your-machine" id="toc-the-final-speed-test-burn-your-machine" class="nav-link" data-scroll-target="#the-final-speed-test-burn-your-machine">The final speed test: Burn your machine 🔥</a></li>
   <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">Recap</a></li>
@@ -504,11 +509,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>This step only gave a minor -5% relative increase in speed - but as a bonus, it made our code much easier to read and shorter.</p>
 </section>
-<section id="preparation-wrap-the-simulation-in-a-function" class="level1">
-<h1>Preparation: Wrap the simulation in a function</h1>
+<section id="preparation-wrap-the-simulation-in-a-function-fixme-perhaps-it-could-under-under-rule-5-wrap-up-in-a-function-and-go-parallel-with-a-and-b-section-because-the-title-preparation-got-me-a-bit-confused-at-first" class="level1">
+<h1>Preparation: Wrap the simulation in a function #FIXME perhaps it could under under rule 5: Wrap up in a function and go parallel, with A and B section, because the title ‘preparation’ got me a bit confused at first</h1>
 <p>The next step does not really change a lot: We put the simulation code into a separate function that returns the quantity of interest (in our case: the focal p-value). Different settings of the simulation parameters, such as the sample size or the effect size, can be defined as parameters of the function.</p>
 <p>Every single function call <code>sim()</code> now gives you one simulated p-value - try it out!</p>
-<p>We then use the <code>relicate</code> function to run the <code>sim</code> function many times and to store the resulting p-values in a vector. Programming the simulation in such a functional style also has the nice side effect that you do not have to pre-allocate the results vector; this is automatically done by the replicate function.</p>
+<p>We then use the <code>replicate</code> function to run the <code>sim</code> function many times and to store the resulting p-values in a vector. Programming the simulation in such a functional style also has the nice side effect that you do not have to pre-allocate the results vector; this is automatically done by the replicate function.</p>
 <div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-5_444b94928ded68ac5a01db4091a465f4">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RcppArmadillo)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -614,7 +619,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>To improve the benefits of parallel processing, make sure that each single parallel process runs as long (i.e., in an uninterrupted way) as possible. In the current example, we loop through the different n’s, and at every n, 4 parallel processes are spawned. A more efficient way would be to distribute the levels of n to separated workers which then do all replications in a row.</p>
+<p>To improve the benefits of parallel processing, make sure that each single parallel process runs as long (i.e., in an uninterrupted way) as possible. In the current example, we loop through the different n’s, and at every n, 4 parallel processes are spawned. A more efficient way would be to distribute the levels of n to separated workers which then do all replications in a row. #FIXME I am not sure I understand this paragraph</p>
 </div>
 </div>
 </section>

@@ -10,7 +10,8 @@ website:
       - index.qmd
       - section: "Models"
         contents:
-          - LM.qmd
+          - LM1.qmd
+          - LM2.qmd
           - GLM.qmd
           - LMM.qmd
           - GLMM.qmd
@@ -24,5 +25,8 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+
+execute:
+  cache: true
 
 editor: source

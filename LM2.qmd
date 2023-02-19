@@ -1,0 +1,121 @@
+---
+title: "Linear Model 2: Multiple predictors"
+author: "Felix Schönbrodt"
+execute:
+  cache: true
+---
+
+```{r}
+# TODO: collect the installation of all necessary packages in one place at the beginning of the tutorial
+
+#install.packages(c("ggplot2", "ggdist", "pwr", "MBESS"))
+```
+
+In the [first chapter on linear models](LM1.qmd), we had the simplest possible linear model: a continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.
+
+# Adding a continuous predictor
+
+We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are "their own control group" and we can explain a lot of (formerly) unexplained error variance by
+
+::: {.callout-note}
+Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate (https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-021-01323-9; Senn, S. (2006). Change from baseline and analysis of covariance revisited. Statistics in Medicine, 25(24), 4334–4344. https://doi.org/10.1002/sim.2682).
+:::
+
+The raw effect size stays the same - the treatment still is expected to lead to a 6-point decrease in depression scores on average. But 
+
+## Get some real data as starting point
+
+The "Beat the blues" (`BtheB`) data set from the `HSAUR` R package contains pre-treatment baseline values (`bdi.pre`), along with multiple post-treatment values. Here we focus on the first post-treatment assessment, 2 months after the treatment (`bdi.2m`).
+
+```{r}
+# load the data
+data("BtheB", package = "HSAUR")
+
+# center the BDI baseline 
+# (for better interpretability of the coefficient)
+BtheB$bdi.pre.c <- BtheB$bdi.pre - mean(BtheB$bdi.pre)
+
+l0 <- lm(bdi.2m ~ treatment, data=BtheB)
+summary(l0)
+# res_var = 10.57^2 = 112
+
+l1 <- lm(bdi.2m ~ bdi.pre.c + treatment, data=BtheB)
+summary(l1)
+# res_var = 8.366^2 = 70
+
+cor(BtheB$bdi.pre, BtheB$bdi.2m, use="p")
+cov(BtheB$bdi.pre, BtheB$bdi.2m, use="p")
+# cor_var = 0.614^2 = 38%
+```
+
+TODO: Explain how we got to the reduction of the error term!
+
+We assume (a) independence of both predictor variables. This is plausible, because the treatment was randomized.
+The pre-measurement explains 38% of the variance in the post-measurement. As this variane is unrelated to the treatment factor, it reduces the error term by 38%:
+
+$var_{err} = 117 * (1-0.38) = 72.54$
+
+This is our new estimate of the error term.
+
+## Doing the power analysis
+
+We again use the `replicate` function to repeatedly call the `sim` function for 1000 iterations.
+
+```{r}
+#| echo: true
+#| results: hide
+
+set.seed(0xBEEF)
+
+sim <- function(n=100, treatment_effect=-6, prepost_effect = 0.6) {
+  
+  # define/simulate all predictor variables
+  treatment <- c(rep(0, n/2), rep(1, n/2))
+  BDI_pre.c <- rnorm(n, mean=23, sd=sqrt(117))
+  
+  # CHANGEs (compared to chapter 1):
+  # - Add the covariate as continuous predictor
+  # - Reduce the SD of the error term from sqrt(117) to sqrt(72)
+  BDI_post <- 
+    23 +                          # intercept
+    prepost_effect*BDI_pre.c +    # covariate (baseline)
+    treatment_effect*treatment +  # treatment effect
+    rnorm(n, mean=0, sd=sqrt(72)) # error term
+  
+  res <- lm(BDI_post ~ BDI_pre.c + treatment)
+  p_value <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
+  return(p_value)
+}
+
+
+# define all predictor and simulation variables.
+iterations <- 2000
+ns <- seq(90, 130, by=4) # ns are already adjusted to the relevant range
+
+result <- data.frame()
+
+for (n in ns) {  # loop through elements of the vector "ns"
+  p_values <- replicate(iterations, sim(n=n))
+  
+  result <- rbind(result, data.frame(
+      n = n,
+      power = sum(p_values < .005)/iterations
+    )
+  )
+  
+  # show the result after each run (not shown here in the tutorial)
+  print(result)
+}
+```
+
+In the original analysis, we needed n=180 (90 in each group) for 80% power. Including the baseline covariate (which explains $r^2 = .61^2 = 37%$ of the variance in post scores) reduces that number to n=112.
+
+Let's check the plausibility of our power simulation. Borm et al ([2007](http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf), p. 1237) propose a simple method how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:
+
+> "We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r2) and add one extra subject per group.
+
+When we enter our assumed pre-post-correlation into that formula, we arrive a n=115 - very close to our value:
+$$180 * (1 - .61^2) + 2 = 115$$
+
+# Modeling an interaction
+

@@ -30,7 +30,7 @@ For each, we will follow the structure:
 
 Here are the type of models we will cover, you can pick and choose what is relevant to you!
 
--   \[LM\](LM.qmd)
+-   [LM](LM1.qmd)
 
 -   GLM
 
@@ -40,6 +40,3 @@ Here are the type of models we will cover, you can pick and choose what is relev
 
 -   SEM
 
-```{r}
-1 + 1
-```
