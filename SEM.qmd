@@ -223,7 +223,7 @@ ns_sem <- seq(50, 200, by=10)
 result_sem <- data.frame()
 
 #set number of iterations
-iterations_sem <- 10
+iterations_sem <- 1000
 
 #write function
 sim_sem <- function(n, model, mu, Sigma) {
@@ -264,13 +264,13 @@ This graph suggests that we need a sample size of approximately 58 to reach a po
 
 Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but rather whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model in the following. To this end, we assume that we were interested in whether a potential effect of gender on generalized prejudice is (fully or partially) mediated by openness to experience. Fortunately, the data set by Bergh et al (2016) also contains a gender variable. We can therefore repeat the same steps as in our previous power analysis, but only incorporate gender into our analysis. Specifically, this means that we will follow these steps:
 
-* find plausible estimates of the population parameters
-* specify the statistical model
-* simulate data from this population
-* compute the index of interest (e.g., the p-value) and store the results
-* repeat steps 2) and 3) multiple times
-* count how many samples would have detected the specified effect (i.e., compute the statistical power)
-* vary your simulation parameters until the desired level of power (e.g., 80%) is achieved
+1. find plausible estimates of the population parameters
+2. specify the statistical model
+3. simulate data from this population
+4. compute the index of interest (e.g., the p-value) and store the results
+5. repeat steps 2) and 3) multiple times
+6. count how many samples would have detected the specified effect (i.e., compute the statistical power)
+7. vary your simulation parameters until the desired level of power (e.g., 80%) is achieved
 
 Therefore, we first draw on the Bergh et al (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. In order to be able to calculate with this variable, we first need to transform it into an integer variable, for instance coding male = 0 and female = 1. 
 
@@ -291,7 +291,7 @@ cov_mediation <- cov(cbind(gender, EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 
 ```
 
-TBD 
+Referring two step #2, now specify the statistical mediation model in lavaan. 
 
 ```{r specify mediation model}
 
@@ -320,7 +320,7 @@ model_mediation <- '
 
 ```
 
-TBD 
+To verify that this model syntax works properly, we can fit this model to the data set provided by Bergh et al. (2016).
 
 ```{r test mediation model with the pilot data}
 
@@ -332,7 +332,7 @@ summary(fit_mediation)
 
 ```
 
-TBD 
+Now, everything is set up to run the actual power analysis. In the following chunk, we repeatedly simulate data from the specified population and store the p-value of the indirect effect while varying the sample size in a range from 100 to 1500. 
 
 ```{r simulate data mediation, cache=TRUE}
   
@@ -379,6 +379,8 @@ Let's plot the results:
 ggplot(result_mediation, aes(x=n, y=power)) + geom_point() + geom_line() + scale_y_continuous(n.breaks = 10) + scale_x_continuous(n.breaks = 20) + geom_hline(yintercept= 0.8, color = "red")
 
 ```
+
+As shown, roughly 1,350 participants will be needed to obtain sufficient power under the assumptions we specified.
 
 # References
 
