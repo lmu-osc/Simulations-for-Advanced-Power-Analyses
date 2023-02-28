@@ -291,7 +291,7 @@ cov_mediation <- cov(cbind(gender, EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 
 ```
 
-Referring two step #2, now specify the statistical mediation model in lavaan. 
+Referring two step #2, now specify the statistical mediation model in `lavaan`. 
 
 ```{r specify mediation model}
 
@@ -381,6 +381,14 @@ ggplot(result_mediation, aes(x=n, y=power)) + geom_point() + geom_line() + scale
 ```
 
 As shown, roughly 1,350 participants will be needed to obtain sufficient power under the assumptions we specified.
+
+# ToDo1: Simulation with simsem or lavaan package
+
+# ToDo2: Add subchapter for SESOI instead of observed effect size
+
+# ToDo3: Add bonus chapter on optimizing fit indices in SEM
+
+# ToDo4: Link to Schoemann et al APP for mediation models
 
 # References
 
