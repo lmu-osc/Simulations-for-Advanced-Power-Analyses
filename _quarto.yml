@@ -16,8 +16,10 @@ website:
           - LMM.qmd
           - GLMM.qmd
           - SEM.qmd
-      - optimizing_code.qmd
-      - how_many_iterations.qmd
+      - section: "Bonuses"
+        contents:
+        - optimizing_code.qmd
+        - how_many_iterations.qmd
       - Resources.qmd
 
 format:
