@@ -3,6 +3,8 @@ project:
   output-dir: docs
 
 website:
+  repo-url: https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses
+  repo-actions: [edit, issue]
   sidebar:
     style: "docked"
     search: true
