@@ -4,6 +4,7 @@ format: html
 author: Moritz Fischer
 execute:
   cache: true
+project-type: website
 ---
 
 ```{r install packages, message=FALSE, warning=FALSE}

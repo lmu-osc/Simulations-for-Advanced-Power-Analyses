@@ -5,6 +5,7 @@ execute:
   cache: true
 html:
     code-tools: true  
+project-type: website
 ---
 
 Optimizing code for speed can be an art - and you get lost and spend/waste hours by micro-optimizing some milliseconds. But the Pareto principle applies here: with 20% effort, you can have quick and substantial gains.

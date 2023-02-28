@@ -3,6 +3,7 @@ title: "Bonus: How many Monte-Carlo iterations are necessary?"
 author: "Felix Schönbrodt"
 execute:
   cache: true
+project-type: website
 ---
 
 

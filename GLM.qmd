@@ -1,5 +1,6 @@
 ---
 title: "GLM"
+project-type: website
 ---
 
 Generalized Linear Models

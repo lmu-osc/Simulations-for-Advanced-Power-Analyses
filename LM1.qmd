@@ -3,6 +3,7 @@ title: "Linear Model I: a single dichotomous predictor"
 author: "Felix Schönbrodt"
 execute:
   cache: true
+project-type: website
 ---
 
 ```{r}

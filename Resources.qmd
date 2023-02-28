@@ -1,9 +1,4 @@
 ---
 title: "Resources"
+project-type: website
 ---
-
-Resources
-
-```{r}
-1 + 1
-```

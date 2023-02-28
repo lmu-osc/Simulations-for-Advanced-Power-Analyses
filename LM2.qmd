@@ -3,6 +3,7 @@ title: "Linear Model 2: Multiple predictors"
 author: "Felix Schönbrodt"
 execute:
   cache: true
+project-type: website
 ---
 
 ```{r}
