@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -154,7 +154,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Home</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Simulations for Advanced Power Analyses</a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -172,7 +172,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LM2.html" class="sidebar-item-text sidebar-link">Linear Model I: a single dichotomous predictor</a>
+  <a href="./LM2.html" class="sidebar-item-text sidebar-link">Linear Model 2: Multiple predictors</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -265,6 +265,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
   </div>
     
+  
     
   </div>
   
@@ -587,7 +588,8 @@ NOTE: n is number in *each* group</code></pre>
 </section>
 <section id="sensitivity-analyses" class="level1">
 <h1>Sensitivity analyses</h1>
-<p>When we entered the specific numbers into our equations, we used point estimates from a relatively small pilot sample. As there is considerable uncertainty around these estimates, the true population value could be much smaller or larger. Therefore, we will explore two other ways to set the effect size: <em>safeguard power analysis</em> and the <em>smallest effect size of interest (SESOI)</em>.</p>
+<p>Be aware that “pilot studies are next to worthless to estimate effect sizes” (see Brysbaert, 2019, which has a section with that title). When we entered the specific numbers into our equations, we used point estimates from a relatively small pilot sample. As there is considerable uncertainty around these estimates, the true population value could be much smaller or larger. Furthermore, if the very reason for running a study is a significant (exploratory) finding in a small pilot study, your effect size estimate is probably upward biased (because you would have ignored the pilot study if there hadn’t been a significant result).</p>
+<p>So, ideally, we base our power estimation on more reliable and/or more conservative prior information, or on theoretical considerations about the smallest effect size of interest. Therefore, we will explore two other ways to set the effect size: <em>safeguard power analysis</em> and the <em>smallest effect size of interest (SESOI)</em>.</p>
 <section id="safeguard-power-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="safeguard-power-analysis">Safeguard power analysis</h2>
 <p>As sensitivity analysis, we will apply a safeguard power analysis (Perugini et al., 2014) that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)</p>
@@ -619,9 +621,8 @@ $Upper.Conf.Limit.smd
 [1] -0.377061</code></pre>
 </div>
 </div>
-<p>However, in the simulated regression equation, we need the <em>raw</em> effect size - so we have to backtransform the standardized confidence limits into the original metric:</p>
+<p>However, in the simulated regression equation, we need the <em>raw</em> effect size - so we have to backtransform the standardized confidence limits into the original metric. As the assumed effect is negative, we aim for the <em>upper</em>, i.e., the more conservative limit. After backtransformation in the raw metric, it is considerably smaller, at -4.1:</p>
 <p><span class="math display">\[d = \frac{M_{diff}}{SD} \Rightarrow M_{diff} = d*SD = -0.377 * \sqrt{117} = -4.08\]</span></p>
-<p>As the assumed effect is negative, we aim for the <em>upper</em>, i.e., the more conservative limit. After backtransformation in the raw metric, it is considerably smaller, at -4.1.</p>
 <p>Now we can rerun the power simulation with this more conservative value (the only change to the code above is that we changed the treatment effect from -6 to -4.1).</p>
 <div class="cell" data-hash="LM1_cache/html/unnamed-chunk-17_911dc536843f67eafcd099d5e5a2d5bb">
 <details>
@@ -667,7 +668,7 @@ $Upper.Conf.Limit.smd
 </section>
 <section id="smallest-effect-size-of-interest-sesoi" class="level2">
 <h2 class="anchored" data-anchor-id="smallest-effect-size-of-interest-sesoi">Smallest effect size of interest (SESOI)</h2>
-<p>Many methodologists argue that we should not power for the <em>expected</em> effects size, but rather for the smallest effect size of interest (SESOI). In this case, a non-significant result can be interpreted as “We accept the <span class="math inline">\(H_0\)</span>, and even if a real effect existed, it most likely is too small to be relevant”.</p>
+<p>Many methodologists argue that we should not power for the <em>expected</em> effect size, but rather for the smallest effect size of interest (SESOI). In this case, a non-significant result can be interpreted as “We accept the <span class="math inline">\(H_0\)</span>, and even if a real effect existed, it most likely is too small to be relevant”.</p>
 <p>What change of BDI scores is perceived as “clinically important”? The hard part is to find a convincing theoretical or empirical argument for the chosen SESOI. In the case of the BDI, luckily someone else did that work.</p>
 <p>The <a href="https://www.nice.org.uk/guidance/qs8">NICE guidance</a> suggest that a change of &gt;=3 BDI-II points is clinically important.</p>
 <p>However, as you can expect, things are more complicated. Button et al.&nbsp;(2015) analyzed data sets where patients have been asked, after a treatment, whether they felt “better”, “the same” or “worse”. With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms were measurably reduced in the BDI, patients still might answer “feels the same”, which indicates that the reduction did not surpass a threshold of subjective relevant improvement. But the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need <em>more</em> reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are <em>higher</em> than the NICE guidelines, more in the range of -6 BDI points.</p>
@@ -792,6 +793,7 @@ $Upper.Conf.Limit.smd
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
+<p>Brysbaert, M. (2019). How many participants do we have to include in properly powered experiments? A tutorial of power analysis with reference tables. Journal of Cognition, 2(1), 16. DOI: http://doi.org/10.5334/joc.72</p>
 <p>Button, K. S., Kounali, D., Thomas, L., Wiles, N. J., Peters, T. J., Welton, N. J., Ades, A. E., &amp; Lewis, G. (2015). Minimal clinically important difference on the Beck Depression Inventory—II according to the patient’s perspective. Psychological Medicine, 45(15), 3269–3279. https://doi.org/10.1017/S0033291715001270</p>
 <p>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319–332. https://doi.org/10.1177/1745691614528519</p>
 
@@ -846,7 +848,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -882,24 +901,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
