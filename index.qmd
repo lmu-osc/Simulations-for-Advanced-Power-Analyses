@@ -1,42 +1,56 @@
 ---
-title: "Home"
+title: "Simulations for Advanced Power Analyses"
+format: html
 ---
 
-Now that you know how to simulate data and data analyses to
+## About this work
 
--   check alpha so your models don't yield more than 5% false-positive results
+This tutorial was created by **Felix Schönbrodt** and **Moritz Fischer**, with contributions from Malika Ihle, to be part of the training offering of the Ludwig-Maximilian University Open Science Center in Munich. It was initially commissioned and funded by the University of Hamburg, Faculty of Psychology and Movement Science.
 
--   check beta (power) for easy tests such as t-tests (where this isn't really needed)
+This book is still being developed. If you have comment to contribute to its improvement, you can submit pull requests in the respective .qmd file of the [source repository](https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses).
 
+It is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
+
+![](LMU-OSC_logo_small.jpg){fig-align="left" fig-alt="LMU-OSC green logo"}
+
+## Prerequisite
+
+This material follows up on the self-paced tutorial: [Introduction to simulation in R](https://malikaihle.github.io/Introduction-Simulations-in-R/) which teaches how to simulate data and data analyses by writing functions in R to e.g.
+
+-   check alpha so your statistical models don't yield more than 5% false-positive results
+-   check beta (power) for easy tests such as t-tests
 -   prepare a preregistration and make sure your code works
-
 -   check your understanding of statistics
 
-Let's dive deeper into power calculations for different complex models.
+## Introduction
 
-For each, we will follow the structure:
+### Comprehensive introduction to power analyses
 
-1.  **define** what type of data and variables need to be simulated, i.e. their **distribution**, their class (e.g. factor vs numerical value), **sample sizes** (within a dataset, and number of replicates), what will need to vary (e.g. the strength of relationship)
+Please read [Chapter 1 of the SuperpowerBook by Aaron R. Caldwell, Daniël Lakens, Chelsea M. Parlett-Pelleriti, Guy Prochilo, Frederik Aust](https://aaroncaldwell.us/SuperpowerBook/introduction-to-power-analysis.html).
 
-2.  **generate data**, random data or data including an effect (e.g. an imposed correlation between two variables)
+This introduction covers sample effect sizes vs population effect sizes, how to take into account the uncertainty of the sample effect size to create a safeguard effect size to be used in power analyses, why *post hoc* power analyses are pointless, and why it is better to calculate the minimal detectable effect instead.
 
-3.  **run the statistical test** you think is appropriate, and record the relevant statistic (e.g. p-value)
+The rest of the Superpower book teaches how to use the `superpower` R package to simulate factorial designs and calculate power, which may be of great interest to you! In our tutorial, we chose to teach how to write simulation 'by hand' so you can understand the concept and adapt it to any of your designs.
 
-4.  **replicate** step 2 and 3 to get the distribution of the statistic of interest
+### Tutorial structure
 
-5.  try out different parameter sets (**explore the parameter space** for which results are similar)
+Let's now start power calculations for different complex models. Here are the type of models we will cover, you can pick and choose what is relevant to you:
 
-6.  **analyze and interpret the combined results of many simulations** within each set of parameters. For instance, check that you only get a significant result in 5% of the simulations (if `alpha = 0.05`) when you simulated no effect; and that you get at a significant result in 80% of the simulations (if you targeted a `power` of 80%) when you simulated an effect
+-   [Linear Model I: a single dichotomous predictor](LM1.qmd)\
+-   [Linear Model 2: Multiple predictors](LM2.qmd)\
+-   #FIXME\
+-   [Structural Equation Modelling (SEM)](SEM.qmd)
 
-Here are the type of models we will cover, you can pick and choose what is relevant to you!
+For each model, we will follow the structure:
 
--   [LM](LM1.qmd)
+-   define what type of data and variables need to be simulated, i.e. their distribution, their class (e.g. factor vs numerical value)
+-   generate data based on the equation of the model (data = model + error)
+-   run the statistical test, and record the relevant statistic (e.g. p-value)
+-   replicate step 2 and 3 to get the distribution of the statistic of interest (e.g. p-value)
+-   analyze and interpret the combined results of many simulations i.e. check for which sample size you get at a significant result in 80% of the simulations
 
--   GLM
+### Settings
 
--   LMM
+The following packages and settings are necessary to reproduce the output of this tutorial.
 
--   GLMM
-
--   SEM
-
+#FIXME
