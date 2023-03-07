@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.1.251">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -236,7 +236,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#get-some-real-data-as-starting-point" id="toc-get-some-real-data-as-starting-point" class="nav-link" data-scroll-target="#get-some-real-data-as-starting-point">Get some real data as starting point</a></li>
   <li><a href="#doing-the-power-analysis" id="toc-doing-the-power-analysis" class="nav-link" data-scroll-target="#doing-the-power-analysis">Doing the power analysis</a></li>
   </ul></li>
-  <li><a href="#modeling-an-interaction" id="toc-modeling-an-interaction" class="nav-link" data-scroll-target="#modeling-an-interaction">Modeling an interaction</a></li>
+  <li><a href="#modeling-an-interaction" id="toc-modeling-an-interaction" class="nav-link" data-scroll-target="#modeling-an-interaction">Modeling an interaction</a>
+  <ul class="collapse">
+  <li><a href="#defining-the-interaction-effect-on-the-raw-scale" id="toc-defining-the-interaction-effect-on-the-raw-scale" class="nav-link" data-scroll-target="#defining-the-interaction-effect-on-the-raw-scale">Defining the interaction effect on the raw scale</a></li>
+  <li><a href="#alternative-approach-defining-the-interaction-effect-size-via-eplained-variance" id="toc-alternative-approach-defining-the-interaction-effect-size-via-eplained-variance" class="nav-link" data-scroll-target="#alternative-approach-defining-the-interaction-effect-size-via-eplained-variance">Alternative approach: Defining the interaction effect size via “eplained variance”</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses/edit/main/LM2.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -259,7 +264,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
   </div>
     
-  
     
   </div>
   
@@ -274,7 +278,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In the <a href="./LM1.html">first chapter on linear models</a>, we had the simplest possible linear model: a continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.</p>
 <section id="adding-a-continuous-predictor" class="level1">
 <h1>Adding a continuous predictor</h1>
-<p>We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are “their own control group” and we can explain a lot of (formerly) unexplained error variance by</p>
+<p>We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are “their own control group” and we can explain a lot of (formerly) unexplained error variance bym controlling for this between-person variance.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -285,23 +289,49 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate (https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-021-01323-9; Senn, S. (2006). Change from baseline and analysis of covariance revisited. Statistics in Medicine, 25(24), 4334–4344. https://doi.org/10.1002/sim.2682).</p>
+<p>As a side-note: Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate model (see, for example, Senn, 2006 or Wan, 2021).</p>
 </div>
 </div>
-<p>The raw effect size stays the same - the treatment still is expected to lead to a 6-point decrease in depression scores on average. But</p>
+<p>The raw effect size stays the same - the treatment still is expected to lead to a 6-point decrease in depression scores on average. But we expect that the residual (i.e., unexplained) variance in the model decreases by controlling for pre-treatment differences between participants. But how much will the residual variance be reduced? This depends on the pre-post-correlation.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you have absolutely no idea about the pre-post-correlation, a typical default value is <span class="math inline">\(r=.5\)</span>. But such defaults are always the very last resort - when you run a scientific study, we hope that you bring at least some domain knowledge 🤓</p>
+</div>
+</div>
 <section id="get-some-real-data-as-starting-point" class="level2">
 <h2 class="anchored" data-anchor-id="get-some-real-data-as-starting-point">Get some real data as starting point</h2>
-<p>The “Beat the blues” (<code>BtheB</code>) data set from the <code>HSAUR</code> R package contains pre-treatment baseline values (<code>bdi.pre</code>), along with multiple post-treatment values. Here we focus on the first post-treatment assessment, 2 months after the treatment (<code>bdi.2m</code>).</p>
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-2_52c03ef235720c8ffae05ed21ade43a3">
+<p>Instead of guessing the necessary quantities - in the current case, the pre-post-correlation - let’s look at real data. The “Beat the blues” (<code>BtheB</code>) data set from the <code>HSAUR</code> R package contains pre-treatment baseline values (<code>bdi.pre</code>), along with multiple post-treatment values. Here we focus on the first post-treatment assessment, 2 months after the treatment (<code>bdi.2m</code>).</p>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-2_be25cb43e474ce07c3c9011175de53b5">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"BtheB"</span>, <span class="at">package =</span> <span class="st">"HSAUR"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># center the BDI baseline </span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (for better interpretability of the coefficient)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>BtheB<span class="sc">$</span>bdi.pre.c <span class="ot">&lt;-</span> BtheB<span class="sc">$</span>bdi.pre <span class="sc">-</span> <span class="fu">mean</span>(BtheB<span class="sc">$</span>bdi.pre)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>l0 <span class="ot">&lt;-</span> <span class="fu">lm</span>(bdi<span class="fl">.2</span>m <span class="sc">~</span> treatment, <span class="at">data=</span>BtheB)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(l0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pre-post-correlation</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(BtheB<span class="sc">$</span>bdi.pre, BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m, <span class="at">use=</span><span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6142207</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cor_var = 0.614^2 = 38%</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We assume independence of both predictor variables. This is plausible, because the treatment was randomized. The pre-measurement explains <span class="math inline">\(0.614^2 = 37.7\%\)</span> of the variance in the post-measurement. As this variance is unrelated to the treatment factor, it reduces the variance of the error term (which was at 117) by 38%:</p>
+<p><span class="math inline">\(var_{err} = 117 * (1-0.377) = 72.9\)</span></p>
+<p>This is our new estimate of the error term.</p>
+<p>Let’s verify our computation by computing the new linear model in our pilot data:</p>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-3_7b0ae67c2276bf00868efef82bed4898">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># center the BDI baseline variable</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (for better interpretability of the coefficient)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>BtheB<span class="sc">$</span>bdi.pre.c <span class="ot">&lt;-</span> BtheB<span class="sc">$</span>bdi.pre <span class="sc">-</span> <span class="fu">mean</span>(BtheB<span class="sc">$</span>bdi.pre)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># the original model from Chapter 1, just comparing the post-measurements</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>l0 <span class="ot">&lt;-</span> <span class="fu">lm</span>(bdi<span class="fl">.2</span>m <span class="sc">~</span> treatment, <span class="at">data=</span>BtheB)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(l0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -323,10 +353,10 @@ Residual standard error: 10.57 on 95 degrees of freedom
 Multiple R-squared:  0.04884,   Adjusted R-squared:  0.03882 
 F-statistic: 4.878 on 1 and 95 DF,  p-value: 0.02961</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># res_var = 10.57^2 = 112</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>l1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(bdi<span class="fl">.2</span>m <span class="sc">~</span> bdi.pre.c <span class="sc">+</span> treatment, <span class="at">data=</span>BtheB)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(l1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># res_var = 10.57^2 = 112</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>l1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(bdi<span class="fl">.2</span>m <span class="sc">~</span> bdi.pre.c <span class="sc">+</span> treatment, <span class="at">data=</span>BtheB)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(l1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -349,84 +379,148 @@ Residual standard error: 8.366 on 94 degrees of freedom
 Multiple R-squared:  0.4109,    Adjusted R-squared:  0.3984 
 F-statistic: 32.78 on 2 and 94 DF,  p-value: 1.579e-11</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># res_var = 8.366^2 = 70</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(BtheB<span class="sc">$</span>bdi.pre, BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m, <span class="at">use=</span><span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># res_var = 8.366^2 = 70</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(BtheB<span class="sc">$</span>bdi.pre, BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m, <span class="at">use=</span><span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.6142207</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(BtheB<span class="sc">$</span>bdi.pre, BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m, <span class="at">use=</span><span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(BtheB<span class="sc">$</span>bdi.pre, BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m, <span class="at">use=</span><span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 71.4608</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cor_var = 0.614^2 = 38%</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cor_var = 0.614^2 = 38%</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>TODO: Explain how we got to the reduction of the error term!</p>
-<p>We assume (a) independence of both predictor variables. This is plausible, because the treatment was randomized. The pre-measurement explains 38% of the variance in the post-measurement. As this variane is unrelated to the treatment factor, it reduces the error term by 38%:</p>
-<p><span class="math inline">\(var_{err} = 117 * (1-0.38) = 72.54\)</span></p>
-<p>This is our new estimate of the error term.</p>
+<p>You can see the error variance at the bottom of each <code>lm</code> output: “Residual standard error: 10.57”. By squaring this value the estimated variance of the erorr term is obtained: <span class="math inline">\(10.57^2 = 112\)</span>, close to our assumed error variance of 117.</p>
+<p>In model <code>l1</code>, which includes the pre-measurement, the estimated error variance is reduced to <span class="math inline">\(8.366^2 = 70\)</span> - very close to the value we computed above! 🥳</p>
 </section>
 <section id="doing-the-power-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="doing-the-power-analysis">Doing the power analysis</h2>
+<p>Now we build this knowledge into our <code>sim()</code> function. Recall that we operate on the raw BDI metric; so we need to add a regression weight for the newly included baseline predictor. Luckily, this value is totally irrelevant for our power analysis: The only relevant action was the <em>reduction of the error term</em> - and that depends on the pre-post-correlation. In order to obtain realistic simulated values, we simply enter the estimate from our pilot study, <span class="math inline">\(0.6\)</span> (see model output from <code>l1</code> above):</p>
+<p><span class="math display">\[\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre} - 6*\text{treatment} + e\]</span> <span class="math display">\[e \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=73)\]</span></p>
+<p>(You can try it: Change the regression coefficient to any other value - even zero - and you will get identical results for the power analysis <em>that targets the treatment effect</em>.)</p>
 <p>We again use the <code>replicate</code> function to repeatedly call the <code>sim</code> function for 1000 iterations.</p>
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-3_0495fd3fd49653c3d21ed86f1e7295c8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>, <span class="at">prepost_effect =</span> <span class="fl">0.6</span>) {</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># define/simulate all predictor variables</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  BDI_pre.c <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">23</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGEs (compared to chapter 1):</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># - Add the covariate as continuous predictor</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># - Reduce the SD of the error term from sqrt(117) to sqrt(72)</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  BDI_post <span class="ot">&lt;-</span> </span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="dv">23</span> <span class="sc">+</span>                          <span class="co"># intercept</span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    prepost_effect<span class="sc">*</span>BDI_pre.c <span class="sc">+</span>    <span class="co"># covariate (baseline)</span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    treatment_effect<span class="sc">*</span>treatment <span class="sc">+</span>  <span class="co"># treatment effect</span></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">72</span>)) <span class="co"># error term</span></span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI_post <span class="sc">~</span> BDI_pre.c <span class="sc">+</span> treatment)</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_value)</span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">90</span>, <span class="dv">130</span>, <span class="at">by=</span><span class="dv">4</span>) <span class="co"># ns are already adjusted to the relevant range</span></span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {  <span class="co"># loop through elements of the vector "ns"</span></span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim</span>(<span class="at">n=</span>n))</span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations</span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-4_3ee0846cf63bfd14e194ca4b333c58df">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># err_var is the error variance before controlling for the baseline values</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># print = TRUE prints the model summary</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>, <span class="at">pre_post_cor =</span> <span class="fl">0.614</span>, <span class="at">err_var =</span> <span class="dv">117</span>, <span class="at">pre_post_effect =</span> <span class="fl">0.6</span>, <span class="at">print=</span><span class="cn">TRUE</span>) {</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># define/simulate all predictor variables</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># simulate </span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  BDI_pre.c <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">23</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(err_var))</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGES (compared to chapter 1):</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># - Add the covariate as continuous predictor</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># - Reduce the SD of the error term from sqrt(117) to sqrt(72)</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  BDI_post <span class="ot">&lt;-</span> </span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="dv">23</span> <span class="sc">+</span>                          <span class="co"># intercept</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    pre_post_effect<span class="sc">*</span>BDI_pre.c <span class="sc">+</span>    <span class="co"># covariate (baseline)</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    treatment_effect<span class="sc">*</span>treatment <span class="sc">+</span>  <span class="co"># treatment effect</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(err_var <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>pre_post_cor<span class="sc">^</span><span class="dv">2</span>))) <span class="co"># error term</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI_post <span class="sc">~</span> BDI_pre.c <span class="sc">+</span> treatment)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print<span class="sc">==</span><span class="cn">TRUE</span>) <span class="fu">print</span>(<span class="fu">summary</span>(res))</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_value)</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">90</span>, <span class="dv">180</span>, <span class="at">by=</span><span class="dv">10</span>) <span class="co"># ns are already adjusted to cover the relevant range</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {  <span class="co"># loop through elements of the vector "ns"</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim</span>(<span class="at">n=</span>n))</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>In the original analysis, we needed n=180 (90 in each group) for 80% power. Including the baseline covariate (which explains <span class="math inline">\(r^2 = .61^2 = 37%\)</span> of the variance in post scores) reduces that number to n=112.</p>
+<p>In the original analysis, we needed n=180 (90 in each group) for 80% power. Including the baseline covariate (which explains <span class="math inline">\(r^2 = 0.614^2 = 38\%\)</span> of the variance in post scores) reduces that number to around n=110.</p>
 <p>Let’s check the plausibility of our power simulation. Borm et al (<a href="http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf">2007</a>, p.&nbsp;1237) propose a simple method how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:</p>
 <blockquote class="blockquote">
-<p>“We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r2) and add one extra subject per group.</p>
+<p>“We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group.</p>
 </blockquote>
-<p>When we enter our assumed pre-post-correlation into that formula, we arrive a n=115 - very close to our value: <span class="math display">\[180 * (1 - .61^2) + 2 = 115\]</span></p>
+<p>When we enter our assumed pre-post-correlation into that formula, we arrive a n=114 - very close to our value: <span class="math display">\[180 * (1 - .614^2) + 2 = 114\]</span></p>
 </section>
 </section>
 <section id="modeling-an-interaction" class="level1">
 <h1>Modeling an interaction</h1>
+<p>We now include the interaction between the baseline score <span class="math inline">\(BDI_{pre}\)</span> and the treatment factor. Such an interaction would suggest that the treatment is more effective at a certain baseline severity. There is some evidence that depression treatment works better at higher baseline severity, compared to lower baseline severity<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>To this end, we add the interaction term to the equation:</p>
+<p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + b_2*\text{treatment} + b_3*\text{BDI}_{pre}*\text{treatment} + e\]</span> When we rearrange the equation by factoring out the <code>treatment</code> term, the interaction is easier to interpret:</p>
+<p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + (b_2 + b_3*\text{BDI}_{pre})*\text{treatment} + e\]</span> Hence, the size of the treatment effect is <span class="math inline">\(b_2 + b_3*\text{BDI}_{pre}\)</span>.</p>
+<p>As a reminder, the control group is defined as <code>treatment == 0</code>. Hence, the equation for the control group is:</p>
+<p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + b_2*\text{treatment} + b_3*\text{BDI}_{pre}*\text{treatment} + e\]</span></p>
+<section id="defining-the-interaction-effect-on-the-raw-scale" class="level2">
+<h2 class="anchored" data-anchor-id="defining-the-interaction-effect-on-the-raw-scale">Defining the interaction effect on the raw scale</h2>
+<p><span class="math display">\[\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre} - 6*\text{treatment} + e\]</span></p>
+</section>
+<section id="alternative-approach-defining-the-interaction-effect-size-via-eplained-variance" class="level2">
+<h2 class="anchored" data-anchor-id="alternative-approach-defining-the-interaction-effect-size-via-eplained-variance">Alternative approach: Defining the interaction effect size via “eplained variance”</h2>
+<p>We can approach this question by asking: How much <em>additional</em> variance (<span class="math inline">\(\Delta R^2\)</span>) does the interaction term explain beyond the two main effects?</p>
+<p>The explained variance in a linear model is defined as the proportion of the variance in the dependent variable that is explained by the independent variables in the model. We assumed that the (unconditional) variance of the dependent variable is 117; all unexplained variance is captured in the error term, which was 70 in the previous model <code>l1</code>. Hence, the explained variance of our assumed population model is:</p>
+<p><span class="math display">\[R^2 = \frac{117-72.9}{117} = 37.6\%\]</span> We can verify this computation by simulating a single data set with very large n - this gives us (close to) population estimates of these quantities:</p>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-5_9d741f1ee6021f6cd036f9c6ffd05d43">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sim</span>(<span class="at">n=</span><span class="dv">100000</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>, <span class="at">pre_post_cor =</span> <span class="fl">0.614</span>, <span class="at">err_var =</span> <span class="dv">117</span>, <span class="at">pre_post_effect =</span> <span class="fl">0.6</span>, <span class="at">print=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = BDI_post ~ BDI_pre.c + treatment)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-34.041  -5.785   0.039   5.741  35.780 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 22.993903   0.069148   332.5   &lt;2e-16 ***
+BDI_pre.c    0.601104   0.002501   240.3   &lt;2e-16 ***
+treatment   -5.976403   0.053928  -110.8   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 8.527 on 99997 degrees of freedom
+Multiple R-squared:  0.4131,    Adjusted R-squared:  0.4131 
+F-statistic: 3.519e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>b_1 is the predicted b_3 is the</p>
+</section>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p>Hieronymus, F., Lisinski, A., Nilsson, S., &amp; Eriksson, E. (2019). Influence of baseline severity on the effects of SSRIs in depression: An item-based, patient-level post-hoc analysis. The Lancet Psychiatry, 6(9), 745–752. https://doi.org/10.1016/S2215-0366(19)30216-0</p>
+<p>Senn, S. (2006). Change from baseline and analysis of covariance revisited. Statistics in Medicine, 25(24), 4334–4344. https://doi.org/10.1002/sim.2682</p>
+<p>Wan, F. (2021). Statistical analysis of two arm randomized pre-post designs with one post-treatment measurement. BMC Medical Research Methodology, 21(1), 150. https://doi.org/10.1186/s12874-021-01323-9</p>
 
 
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Although this might be due to a floor effect of the measurement instrument: If an item is already at the lowest possible value at mild depression, there is no more room for improvement (Hieronymus et al., 2019).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -468,24 +562,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
     setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -521,42 +598,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
       });
-    }
+      return popup.innerHTML;
+    });
   }
 });
 </script>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.1.251">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -249,9 +249,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#smallest-effect-size-of-interest-sesoi" id="toc-smallest-effect-size-of-interest-sesoi" class="nav-link" data-scroll-target="#smallest-effect-size-of-interest-sesoi">Smallest effect size of interest (SESOI)</a></li>
   </ul></li>
   <li><a href="#recap-what-did-we-do" id="toc-recap-what-did-we-do" class="nav-link" data-scroll-target="#recap-what-did-we-do">Recap: What did we do?</a></li>
-  <li><a href="#bonus-1-beyond-power-general-design-analysis" id="toc-bonus-1-beyond-power-general-design-analysis" class="nav-link" data-scroll-target="#bonus-1-beyond-power-general-design-analysis">Bonus 1: Beyond power: General design analysis</a></li>
-  <li><a href="#bonus-2-optimizing-your-code-for-speed" id="toc-bonus-2-optimizing-your-code-for-speed" class="nav-link" data-scroll-target="#bonus-2-optimizing-your-code-for-speed">Bonus 2: Optimizing your code for speed</a></li>
-  <li><a href="#bonus-3-the-quick-solution-sampling-from-pilot-samples" id="toc-bonus-3-the-quick-solution-sampling-from-pilot-samples" class="nav-link" data-scroll-target="#bonus-3-the-quick-solution-sampling-from-pilot-samples">Bonus 3: The quick solution: sampling from pilot samples</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses/edit/main/LM1.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -275,7 +272,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
   </div>
     
-  
     
   </div>
   
@@ -393,7 +389,7 @@ Note
 <pre><code>[1] 16.91753</code></pre>
 </div>
 </div>
-<p>So, the average reduction across both treatments is <span class="math inline">\(17-23=6\)</span>.</p>
+<p>So, the average reduction across both treatments is <span class="math inline">\(17-23=6\)</span>. In the following scripts, we’ll use that value as our assumed treatment effect.</p>
 </section>
 <section id="enter-specific-values-for-the-model-parameters" class="level2">
 <h2 class="anchored" data-anchor-id="enter-specific-values-for-the-model-parameters">Enter specific values for the model parameters</h2>
@@ -411,24 +407,12 @@ Note
 <p>As a final step, we add the random noise to the model, based on the variance in the pilot data:</p>
 <p><span class="math display">\[\text{BDI} = 23 - 6*treatment + e; e \sim N(0, var=117) \]</span></p>
 <p>That’s our final equation with assumed population parameters! With that equation, we assume a certain state of reality and can sample “virtual participants”.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Working on the raw scale of variables
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Researchers often have been trained to think in standardized effect sizes, such as Cohen’s <span class="math inline">\(d\)</span>, correlations <span class="math inline">\(r\)</span>, or other indices such as <span class="math inline">\(f^2\)</span>, <span class="math inline">\(partial \eta^2\)</span>. In the simulation approach, we typical work on the raw scale of variables. That means, you should bring some domain knowledge, for example: How much do patients that seek depression treatment vary? How many of them have a moderate depression, how many a mild? What is a typical treatment effect (in absolute terms)? How many participants have basically no symptoms after treatment (i.e., a BDI score &lt;= 13)? These questions typically relate to mean values, variances, and correlations of your measured variables. If this is an unacquainted way of thinking about your key variables, see it as an opportunity to gain another type of domain knowledge within your field of expertise!</p>
-</div>
-</div>
 </section>
 <section id="what-is-the-effect-size-in-the-model" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-the-effect-size-in-the-model">What is the effect size in the model?</h2>
+<p>Researchers often have been trained to think in standardized effect sizes, such as Cohen’s <span class="math inline">\(d\)</span>, a correlation <span class="math inline">\(r\)</span>, or other indices such as <span class="math inline">\(f^2\)</span> or partial <span class="math inline">\(\eta^2\)</span>. In the simulation approach, we typical work on the raw scale of variables.</p>
 <p>The <em>raw</em> effect size is simply the treatment effect on the original BDI scale (i.e., the group difference in the outcome variable). In our case we assume that the treatment lowers the BDI score by 6 points, on average. Defining the raw effect requires some domain knowledge - you need to know your measurement scale, and you need to know what the values (and differences between values) mean. In our example, a reduction of 6 BDI points means that the average patient moves from a moderate depression (23 points) to a mild depression (17 points). Working with raw effect sizes forces you to think about your actual data (instead of plugging in content-free default standardized effect sizes), and enables you to do plausibility checks on your simulation.</p>
-<p>The <em>standardized</em> effect size relates the raw effect size to the variability. In the two-group example, this can be expressed as Cohen’s <em>d</em>, which is the mean difference divided by the standard deviation (SD):</p>
+<p>The <em>standardized</em> effect size relates the raw effect size to the unexplained error variance. In the two-group example, this can be expressed as Cohen’s <em>d</em>, which is the mean difference divided by the standard deviation (SD):</p>
 <p><span class="math display">\[d = \frac{M_{treat} - M_{control}}{SD} = \frac{17 - 23}{\sqrt{117}} = -0.55\]</span></p>
 <p>The standardized effect size always relates two components: The raw effect size (here: 6 points difference) and the error variance. Hence, you can increase the standardized effect size by (a) increasing the raw treatment effect, or (b) reducing the error variance.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -787,7 +771,7 @@ $Upper.Conf.Limit.smd
 <ol type="1">
 <li><strong>Define the statistical model that you will use to analyze your data</strong> (<em>in our case: a linear regression</em>). This sometimes is called the <em>data generating mechanism</em> or the <em>data generating model</em>.</li>
 <li><strong>Find empirical information about the parameters in the model.</strong> These are typically mean values, variances, group differences, regression coefficients, or correlations (<em>in our case: a mean value (before treatment), a group difference, and an error variance</em>). These numbers define the assumed state of the population.</li>
-<li><strong>Program your equation</strong>, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.</li>
+<li><strong>Program your regression equation</strong>, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.</li>
 <li><strong>Do the simulation</strong>:
 <ol type="a">
 <li>Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same)</li>
@@ -800,22 +784,7 @@ $Upper.Conf.Limit.smd
 <ul>
 <li>Increase the reliability of a measurement instrument (which will be reflected in a smaller error variance) until desired power is achieved. (This could relate to a trade-off: Do you invest more effort and time in better measurement, or do you keep an unreliable measure and collect more participants?)</li>
 <li>Compare a within- and a between-design in simulations</li>
-<li>TODO</li>
 </ul>
-</section>
-<section id="bonus-1-beyond-power-general-design-analysis" class="level1">
-<h1>Bonus 1: Beyond power: General design analysis</h1>
-<p>In a typical power analysis, you analyse the distribution of resulting p-values and ask “How many of my analyses result in a p-value &lt; .005”. However, in your simulation you can target any other quantity of interest. For example, you want to ensure a certain width of the confidence interval around the treatment effect, and optimize the sample size for that.</p>
-<p>TODO</p>
-</section>
-<section id="bonus-2-optimizing-your-code-for-speed" class="level1">
-<h1>Bonus 2: Optimizing your code for speed</h1>
-<p>Generally, you can start with few iterations for a fast exploration of the parameter space. When you found the relevant range (e.g., the necessary sample size to achieve a power between 70% and 90 %), you can restrict the parameter space to that range and increase the number of iterations to get more precise results.</p>
-</section>
-<section id="bonus-3-the-quick-solution-sampling-from-pilot-samples" class="level1">
-<h1>Bonus 3: The quick solution: sampling from pilot samples</h1>
-<p>If your pilot study has exactly the same data structure as the study you are planning for you can take the resulting <code>lm</code> object and directly sample from that.</p>
-<p>With that procedure, however, you assume that the pilot study perfectly hit the true effect size (and all other parameters of the model)</p>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
@@ -874,24 +843,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
     setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -927,42 +879,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
       });
-    }
+      return popup.innerHTML;
+    });
   }
 });
 </script>
