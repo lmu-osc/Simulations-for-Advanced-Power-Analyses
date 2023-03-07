@@ -12,7 +12,7 @@ project-type: website
 #install.packages(c("ggplot2", "ggdist", "pwr", "MBESS"))
 ```
 
-We start with the simplest possible linear model: (a) a continuous outcome variable is predicted by a single dichotomous predictor. This model actually rephrases a t-test as a linear model! Then we build up increasingly complex models: (b) a single continuous predictor and (c) multiple continuous predictors (i.e., multiple regression).
+We start with the simplest possible linear model: (a) a continuous outcome variable is predicted by a single dichotomous predictor. This model actually [rephrases a t-test as a linear model](https://lindeloev.github.io/tests-as-linear/)! Then we build up increasingly complex models: (b) a single continuous predictor and (c) multiple continuous predictors (i.e., multiple regression).
 
 # Data = Model + Error
 
@@ -110,7 +110,7 @@ For our purpose, we compute the average treatment effect combined for both treat
 mean(BtheB$bdi.2m, na.rm=TRUE)
 ```
 
-So, the average reduction across both treatments is $17-23=6$.
+So, the average reduction across both treatments is $17-23=6$. In the following scripts, we'll use that value as our assumed treatment effect.
 
 ## Enter specific values for the model parameters
 
@@ -142,11 +142,18 @@ $$\text{BDI} = 23 - 6*treatment + e; e \sim N(0, var=117) $$
 
 That's our final equation with assumed population parameters! With that equation, we assume a certain state of reality and can sample "virtual participants".
 
+
 ## What is the effect size in the model?
 
-The *raw* effect size is simply the treatment effect on the original BDI scale (i.e., the group difference in the outcome variable). In our case we assume that the treatment lowers the BDI score by 6 points, on average. The *standardized* effect size relates the raw effect size to the variability. In the two-group example, this can be expressed as Cohen's *d*, which is the mean difference divided by the standard deviation (SD):
+Researchers often have been trained to think in standardized effect sizes, such as Cohen's $d$, a correlation $r$, or other indices such as $f^2$ or partial $\eta^2$. In the simulation approach, we typical work on the raw scale of variables.
+
+The *raw* effect size is simply the treatment effect on the original BDI scale (i.e., the group difference in the outcome variable). In our case we assume that the treatment lowers the BDI score by 6 points, on average. Defining the raw effect requires some domain knowledge - you need to know your measurement scale, and you need to know what the values (and differences between values) mean. In our example, a reduction of 6 BDI points means that the average patient moves from a moderate depression (23 points) to a mild depression (17 points). Working with raw effect sizes forces you to think about your actual data (instead of plugging in content-free default standardized effect sizes), and enables you to do plausibility checks on your simulation.
+
+The *standardized* effect size relates the raw effect size to the unexplained error variance. In the two-group example, this can be expressed as Cohen's *d*, which is the mean difference divided by the standard deviation (SD):
 
 $$d = \frac{M_{treat} - M_{control}}{SD} = \frac{17 - 23}{\sqrt{117}} = -0.55$$
+
+The standardized effect size always relates two components: The raw effect size (here: 6 points difference) and the error variance. Hence, you can increase the standardized effect size by (a) increasing the raw treatment effect, or (b) reducing the error variance.
 
 ::: {.callout-note}
 If you look up the formula of Cohen's *d*, it typically uses the *pooled* SD from both groups. As we assumed that both groups have the same SD, we simply took that value.
@@ -231,6 +238,9 @@ n <- 100 # the size of our simulated sample
 sim <- function(n=100, treatment_effect=-6) {
   treatment <- c(rep(0, n/2), rep(1, n/2))
   BDI <- 23 + treatment_effect*treatment + rnorm(n, mean=0, sd=sqrt(117))
+  
+  # this lm() call should be exactly the function that you use
+  # to analyse your real data set
   res <- lm(BDI ~ treatment)
   p_value <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
   return(p_value)
@@ -452,7 +462,7 @@ These are the steps we did in this part of the tutorial:
 
 1. **Define the statistical model that you will use to analyze your data** (*in our case: a linear regression*). This sometimes is called the *data generating mechanism* or the *data generating model*.
 2. **Find empirical information about the parameters in the model.** These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define the assumed state of the population.
-3. **Program your equation**, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.
+3. **Program your regression equation**, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.
 4. **Do the simulation**:
     a) Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same)
     b) Compute the index of interest (typically: the p-value of a focal effect)
@@ -464,24 +474,7 @@ Concerning step 4d, the typical scenario is that you increase sample size until 
 
 * Increase the reliability of a measurement instrument (which will be reflected in a smaller error variance) until desired power is achieved. (This could relate to a trade-off: Do you invest more effort and time in better measurement, or do you keep an unreliable measure and collect more participants?)
 * Compare a within- and a between-design in simulations
-* TODO
 
-# Bonus 1: Beyond power: General design analysis
-
-TBD:
-
-* Compute another quantity of interest (e.g., the width of a CI), and optimize the sample size for that.
-
-# Bonus 2: Optimizing your code for speed
-
-Generally, you can start with few iterations for a fast exploration of the parameter space. When you found the relevant range (e.g., the necessary sample size to achieve a power between 70% and 90 %), you can restrict the parameter space to that range and increase the number of iterations to get more precise results.
-
-
-# Bonus 3: The quick solution: sampling from pilot samples
-
-If your pilot study has exactly the same data structure as the study you are planning for you can take the resulting `lm` object and directly sample from that.
-
-With that procedure, however, you assume that the pilot study perfectly hit the true effect size (and all other parameters of the model)
 
 # References
 

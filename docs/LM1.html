@@ -287,7 +287,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(c("ggplot2", "ggdist", "pwr", "MBESS"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We start with the simplest possible linear model: (a) a continuous outcome variable is predicted by a single dichotomous predictor. This model actually rephrases a t-test as a linear model! Then we build up increasingly complex models: (b) a single continuous predictor and (c) multiple continuous predictors (i.e., multiple regression).</p>
+<p>We start with the simplest possible linear model: (a) a continuous outcome variable is predicted by a single dichotomous predictor. This model actually <a href="https://lindeloev.github.io/tests-as-linear/">rephrases a t-test as a linear model</a>! Then we build up increasingly complex models: (b) a single continuous predictor and (c) multiple continuous predictors (i.e., multiple regression).</p>
 <section id="data-model-error" class="level1">
 <h1>Data = Model + Error</h1>
 <p>The general equation for a linear model is:</p>
@@ -411,11 +411,26 @@ Note
 <p>As a final step, we add the random noise to the model, based on the variance in the pilot data:</p>
 <p><span class="math display">\[\text{BDI} = 23 - 6*treatment + e; e \sim N(0, var=117) \]</span></p>
 <p>That’s our final equation with assumed population parameters! With that equation, we assume a certain state of reality and can sample “virtual participants”.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Working on the raw scale of variables
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Researchers often have been trained to think in standardized effect sizes, such as Cohen’s <span class="math inline">\(d\)</span>, correlations <span class="math inline">\(r\)</span>, or other indices such as <span class="math inline">\(f^2\)</span>, <span class="math inline">\(partial \eta^2\)</span>. In the simulation approach, we typical work on the raw scale of variables. That means, you should bring some domain knowledge, for example: How much do patients that seek depression treatment vary? How many of them have a moderate depression, how many a mild? What is a typical treatment effect (in absolute terms)? How many participants have basically no symptoms after treatment (i.e., a BDI score &lt;= 13)? These questions typically relate to mean values, variances, and correlations of your measured variables. If this is an unacquainted way of thinking about your key variables, see it as an opportunity to gain another type of domain knowledge within your field of expertise!</p>
+</div>
+</div>
 </section>
 <section id="what-is-the-effect-size-in-the-model" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-the-effect-size-in-the-model">What is the effect size in the model?</h2>
-<p>The <em>raw</em> effect size is simply the treatment effect on the original BDI scale (i.e., the group difference in the outcome variable). In our case we assume that the treatment lowers the BDI score by 6 points, on average. The <em>standardized</em> effect size relates the raw effect size to the variability. In the two-group example, this can be expressed as Cohen’s <em>d</em>, which is the mean difference divided by the standard deviation (SD):</p>
+<p>The <em>raw</em> effect size is simply the treatment effect on the original BDI scale (i.e., the group difference in the outcome variable). In our case we assume that the treatment lowers the BDI score by 6 points, on average. Defining the raw effect requires some domain knowledge - you need to know your measurement scale, and you need to know what the values (and differences between values) mean. In our example, a reduction of 6 BDI points means that the average patient moves from a moderate depression (23 points) to a mild depression (17 points). Working with raw effect sizes forces you to think about your actual data (instead of plugging in content-free default standardized effect sizes), and enables you to do plausibility checks on your simulation.</p>
+<p>The <em>standardized</em> effect size relates the raw effect size to the variability. In the two-group example, this can be expressed as Cohen’s <em>d</em>, which is the mean difference divided by the standard deviation (SD):</p>
 <p><span class="math display">\[d = \frac{M_{treat} - M_{control}}{SD} = \frac{17 - 23}{\sqrt{117}} = -0.55\]</span></p>
+<p>The standardized effect size always relates two components: The raw effect size (here: 6 points difference) and the error variance. Hence, you can increase the standardized effect size by (a) increasing the raw treatment effect, or (b) reducing the error variance.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -514,7 +529,7 @@ F-statistic: 5.643 on 1 and 48 DF,  p-value: 0.02156</code></pre>
 <li><code>treatment_effect</code> defines the treatment effect in the raw scale (i.e., reduction in BDI points)</li>
 </ul>
 <p>We then use the <code>replicate</code> function to repeatedly call the <code>sim</code> function for 1000 iterations.</p>
-<div class="cell" data-hash="LM1_cache/html/unnamed-chunk-11_f3123f8b12c1ecceee3d2597eb5c3fe1">
+<div class="cell" data-hash="LM1_cache/html/unnamed-chunk-11_ab04a5582ce6dccf827752355ac37aeb">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># the number of Monte Carlo repetitions</span></span>
@@ -523,13 +538,16 @@ F-statistic: 5.643 on 1 and 48 DF,  p-value: 0.02156</code></pre>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>) {</span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">+</span> treatment_effect<span class="sc">*</span>treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI <span class="sc">~</span> treatment)</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_value)</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co"># now run the sim() function a 1000 times and store the p-values in a vector:</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim</span>(<span class="at">n=</span><span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this lm() call should be exactly the function that you use</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to analyse your real data set</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI <span class="sc">~</span> treatment)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_value)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co"># now run the sim() function a 1000 times and store the p-values in a vector:</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim</span>(<span class="at">n=</span><span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>How many of our 1000 virtual samples would have found the effect?</p>
 <div class="cell" data-hash="LM1_cache/html/unnamed-chunk-12_2a372e209b054068e2fc099c421db0fc">
@@ -787,10 +805,8 @@ $Upper.Conf.Limit.smd
 </section>
 <section id="bonus-1-beyond-power-general-design-analysis" class="level1">
 <h1>Bonus 1: Beyond power: General design analysis</h1>
-<p>TBD:</p>
-<ul>
-<li>Compute another quantity of interest (e.g., the width of a CI), and optimize the sample size for that.</li>
-</ul>
+<p>In a typical power analysis, you analyse the distribution of resulting p-values and ask “How many of my analyses result in a p-value &lt; .005”. However, in your simulation you can target any other quantity of interest. For example, you want to ensure a certain width of the confidence interval around the treatment effect, and optimize the sample size for that.</p>
+<p>TODO</p>
 </section>
 <section id="bonus-2-optimizing-your-code-for-speed" class="level1">
 <h1>Bonus 2: Optimizing your code for speed</h1>

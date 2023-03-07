@@ -16,26 +16,45 @@ In the [first chapter on linear models](LM1.qmd), we had the simplest possible l
 
 # Adding a continuous predictor
 
-We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are "their own control group" and we can explain a lot of (formerly) unexplained error variance by
+We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are "their own control group" and we can explain a lot of (formerly) unexplained error variance bym controlling for this between-person variance.
 
 ::: {.callout-note}
-Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate (https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-021-01323-9; Senn, S. (2006). Change from baseline and analysis of covariance revisited. Statistics in Medicine, 25(24), 4334–4344. https://doi.org/10.1002/sim.2682).
+As a side-note: Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate model (see, for example, Senn, 2006 or Wan, 2021).
 :::
 
-The raw effect size stays the same - the treatment still is expected to lead to a 6-point decrease in depression scores on average. But 
+The raw effect size stays the same - the treatment still is expected to lead to a 6-point decrease in depression scores on average. But we expect that the residual (i.e., unexplained) variance in the model decreases by controlling for pre-treatment differences between participants. But how much will the residual variance be reduced? This depends on the pre-post-correlation.
+
+::: {.callout-note}
+If you have absolutely no idea about the pre-post-correlation, a typical default value is $r=.5$. But such defaults are always the very last resort - when you run a scientific study, we hope that you bring at least some domain knowledge 🤓
+:::
 
 ## Get some real data as starting point
 
-The "Beat the blues" (`BtheB`) data set from the `HSAUR` R package contains pre-treatment baseline values (`bdi.pre`), along with multiple post-treatment values. Here we focus on the first post-treatment assessment, 2 months after the treatment (`bdi.2m`).
+Instead of guessing the necessary quantities - in the current case, the pre-post-correlation - let's look at real data. The "Beat the blues" (`BtheB`) data set from the `HSAUR` R package contains pre-treatment baseline values (`bdi.pre`), along with multiple post-treatment values. Here we focus on the first post-treatment assessment, 2 months after the treatment (`bdi.2m`).
 
 ```{r}
 # load the data
 data("BtheB", package = "HSAUR")
 
-# center the BDI baseline 
+# pre-post-correlation
+cor(BtheB$bdi.pre, BtheB$bdi.2m, use="p")
+# cor_var = 0.614^2 = 38%
+```
+
+We assume independence of both predictor variables. This is plausible, because the treatment was randomized. The pre-measurement explains $0.614^2 = 37.7\%$ of the variance in the post-measurement. As this variance is unrelated to the treatment factor, it reduces the variance of the error term (which was at 117) by 38%:
+
+$var_{err} = 117 * (1-0.377) = 72.9$
+
+This is our new estimate of the error term.
+
+Let's verify our computation by computing the new linear model in our pilot data:
+
+```{r}
+# center the BDI baseline variable
 # (for better interpretability of the coefficient)
 BtheB$bdi.pre.c <- BtheB$bdi.pre - mean(BtheB$bdi.pre)
 
+# the original model from Chapter 1, just comparing the post-measurements
 l0 <- lm(bdi.2m ~ treatment, data=BtheB)
 summary(l0)
 # res_var = 10.57^2 = 112
@@ -49,16 +68,20 @@ cov(BtheB$bdi.pre, BtheB$bdi.2m, use="p")
 # cor_var = 0.614^2 = 38%
 ```
 
-TODO: Explain how we got to the reduction of the error term!
 
-We assume (a) independence of both predictor variables. This is plausible, because the treatment was randomized.
-The pre-measurement explains 38% of the variance in the post-measurement. As this variane is unrelated to the treatment factor, it reduces the error term by 38%:
+You can see the error variance at the bottom of each `lm` output: "Residual standard error: 10.57". By squaring this value the estimated variance of the erorr term is obtained: $10.57^2 = 112$, close to our assumed error variance of 117.
 
-$var_{err} = 117 * (1-0.38) = 72.54$
-
-This is our new estimate of the error term.
+In model `l1`, which includes the pre-measurement, the estimated error variance is reduced to $8.366^2 = 70$ - very close to the value we computed above! 🥳
 
 ## Doing the power analysis
+
+Now we build this knowledge into our `sim()` function. Recall that we operate on the raw BDI metric; so we need to add a regression weight for the newly included baseline predictor. Luckily, this value is totally irrelevant for our power analysis: The only relevant action was the *reduction of the error term* - and that depends on the pre-post-correlation. In order to obtain realistic simulated values, we simply enter the estimate from our pilot study, $0.6$ (see model output from `l1` above):
+
+$$\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre} - 6*\text{treatment} + e$$
+$$e \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=73)$$
+
+(You can try it: Change the regression coefficient to any other value - even zero - and you will get identical results for the power analysis *that targets the treatment effect*.)
+
 
 We again use the `replicate` function to repeatedly call the `sim` function for 1000 iterations.
 
@@ -68,30 +91,37 @@ We again use the `replicate` function to repeatedly call the `sim` function for 
 
 set.seed(0xBEEF)
 
-sim <- function(n=100, treatment_effect=-6, prepost_effect = 0.6) {
+# err_var is the error variance before controlling for the baseline values
+# print = TRUE prints the model summary
+sim <- function(n=100, treatment_effect=-6, pre_post_cor = 0.614, err_var = 117, pre_post_effect = 0.6, print=TRUE) {
   
   # define/simulate all predictor variables
   treatment <- c(rep(0, n/2), rep(1, n/2))
-  BDI_pre.c <- rnorm(n, mean=23, sd=sqrt(117))
   
-  # CHANGEs (compared to chapter 1):
+  # simulate 
+  BDI_pre.c <- rnorm(n, mean=23, sd=sqrt(err_var))
+  
+  # CHANGES (compared to chapter 1):
   # - Add the covariate as continuous predictor
   # - Reduce the SD of the error term from sqrt(117) to sqrt(72)
   BDI_post <- 
     23 +                          # intercept
-    prepost_effect*BDI_pre.c +    # covariate (baseline)
+    pre_post_effect*BDI_pre.c +    # covariate (baseline)
     treatment_effect*treatment +  # treatment effect
-    rnorm(n, mean=0, sd=sqrt(72)) # error term
+    rnorm(n, mean=0, sd=sqrt(err_var * (1-pre_post_cor^2))) # error term
   
   res <- lm(BDI_post ~ BDI_pre.c + treatment)
   p_value <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
+  
+  if (print==TRUE) print(summary(res))
+  
   return(p_value)
 }
 
 
 # define all predictor and simulation variables.
 iterations <- 2000
-ns <- seq(90, 130, by=4) # ns are already adjusted to the relevant range
+ns <- seq(90, 180, by=10) # ns are already adjusted to cover the relevant range
 
 result <- data.frame()
 
@@ -109,14 +139,63 @@ for (n in ns) {  # loop through elements of the vector "ns"
 }
 ```
 
-In the original analysis, we needed n=180 (90 in each group) for 80% power. Including the baseline covariate (which explains $r^2 = .61^2 = 37%$ of the variance in post scores) reduces that number to n=112.
+In the original analysis, we needed n=180 (90 in each group) for 80% power. Including the baseline covariate (which explains $r^2 = 0.614^2 = 38\%$ of the variance in post scores) reduces that number to around n=110.
 
 Let's check the plausibility of our power simulation. Borm et al ([2007](http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf), p. 1237) propose a simple method how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:
 
-> "We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r2) and add one extra subject per group.
+> "We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group.
 
-When we enter our assumed pre-post-correlation into that formula, we arrive a n=115 - very close to our value:
-$$180 * (1 - .61^2) + 2 = 115$$
+When we enter our assumed pre-post-correlation into that formula, we arrive a n=114 - very close to our value:
+$$180 * (1 - .614^2) + 2 = 114$$
 
 # Modeling an interaction
+
+We now include the interaction between the baseline score $BDI_{pre}$ and the treatment factor. Such an interaction would suggest that the treatment is more effective at a certain baseline severity. There is some evidence that depression treatment works better at higher baseline severity, compared to lower baseline severity[^1].
+
+[^1]: Although this might be due to a floor effect of the measurement instrument: If an item is already at the lowest possible value at mild depression, there is no more room for improvement (Hieronymus et al., 2019).
+
+To this end, we add the interaction term to the equation:
+
+$$\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + b_2*\text{treatment} + b_3*\text{BDI}_{pre}*\text{treatment} + e$$
+When we rearrange the equation by factoring out the `treatment` term, the interaction is easier to interpret:
+
+$$\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + (b_2 + b_3*\text{BDI}_{pre})*\text{treatment} + e$$
+Hence, the size of the treatment effect is $b_2 + b_3*\text{BDI}_{pre}$.
+
+As a reminder, the control group is defined as `treatment == 0`. Hence, the equation for the control group is:
+
+$$\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + b_2*\text{treatment} + b_3*\text{BDI}_{pre}*\text{treatment} + e$$
+
+
+## Defining the interaction effect on the raw scale
+
+
+$$\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre} - 6*\text{treatment} + e$$
+
+## Alternative approach: Defining the interaction effect size via "eplained variance"
+
+We can approach this question by asking: How much *additional* variance ($\Delta R^2$) does the interaction term explain beyond the two main effects?
+
+The explained variance in a linear model is defined as the proportion of the variance in the dependent variable that is explained by the independent variables in the model. We assumed that the (unconditional) variance of the dependent variable is 117; all unexplained variance is captured in the error term, which was 70 in the previous model `l1`. Hence, the explained variance of our assumed population model is:
+
+$$R^2 = \frac{117-72.9}{117} = 37.6\%$$
+We can verify this computation by simulating a single data set with very large n - this gives us (close to) population estimates of these quantities:
+
+```{r}
+sim(n=100000, treatment_effect=-6, pre_post_cor = 0.614, err_var = 117, pre_post_effect = 0.6, print=TRUE)
+```
+
+
+b_1 is the predicted
+b_3 is the 
+
+
+# References
+
+Hieronymus, F., Lisinski, A., Nilsson, S., & Eriksson, E. (2019). Influence of baseline severity on the effects of SSRIs in depression: An item-based, patient-level post-hoc analysis. The Lancet Psychiatry, 6(9), 745–752. https://doi.org/10.1016/S2215-0366(19)30216-0
+
+
+Senn, S. (2006). Change from baseline and analysis of covariance revisited. Statistics in Medicine, 25(24), 4334–4344. https://doi.org/10.1002/sim.2682
+
+Wan, F. (2021). Statistical analysis of two arm randomized pre-post designs with one post-treatment measurement. BMC Medical Research Methodology, 21(1), 150. https://doi.org/10.1186/s12874-021-01323-9
 
