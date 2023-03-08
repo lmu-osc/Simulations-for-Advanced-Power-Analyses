@@ -217,8 +217,8 @@ But how many observations do we need to find the presumed effect with a power of
 
 ```{r power analysis SEM, warning=FALSE, cache=TRUE}
 
-#test ns between 50 and 200
-ns_sem <- seq(50, 200, by=10) 
+#test ns between 30 and 200
+ns_sem <- seq(30, 200, by=10) 
 
 #prepare empty vector to store results
 result_sem <- data.frame()
@@ -255,11 +255,112 @@ Let's plot the results:
 
 ```{r plot power curve SEM}
 
-ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_continuous(n.breaks = 10) + geom_hline(yintercept= 0.8, color = "red")
+ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_continuous(n.breaks = 18, limits = c(30,200)) + scale_y_continuous(n.breaks = 10, limits = c(0,1)) + geom_hline(yintercept= 0.8, color = "red")
 
 ```
 
-This graph suggests that we need a sample size of approximately 58 to reach a power of 80% with the given population estimates. 
+This graph suggests that we need a sample size of approximately 58 to reach a power of 80% with the given population estimates. That's all it takes to run a power analysis for a SEM! 
+
+In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to show how we can use a "smallest effect size of interest" (SESOI) instead of an expected effect size. Second, we would like to present an alternative way to simulate data for SEMs, simply by using a built-in function in the `lavaan` package.  
+
+## Using the lavaan syntax to simualte data
+
+In our opening example in this chapter, we used the `mvrnorm` function from the `MASS`package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the `lavaan` package, that is, the `simulateData()` function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data. 
+
+More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al. Let's again take a look at the results of our SEM when applying it to this data set.
+
+```{r}
+
+#fit the SEM to the simulated data set
+fit_bergh <- sem(model_sem, data = Bergh)
+
+#display the results
+summary(fit_bergh)
+
+```
+
+In order to use the `simulateData()` function, we can take the estimates from this previous study and plug them into the lavaan syntax in the following chunk. We will round the parameter estimates generously again...  
+
+```{r}
+
+#specify SEM
+model_fully_specified <- 
+
+"generalized_prejudice =~ 1*EP + 0.7*DP + 0.9*SP + 1*HP
+openness =~ 1*O1 + 0.9*O2 + 1.1*O3
+generalized_prejudice ~ -0.8*openness
+
+
+generalized_prejudice ~~ 0.2*generalized_prejudice
+openness ~~ 0.2*openness
+EP ~~ 0.2*EP
+DP ~~ 0.1*DP
+SP ~~ 0.2*SP
+HP ~~ 2.1*HP
+O1 ~~ 0.1*O1
+O2 ~~ 0.1*O2
+O3 ~~ 0.1*O3
+
+"
+
+#lets try this
+sim_lavaan <- simulateData(model_fully_specified, sample.nobs=100)
+head(sim_lavaan)
+
+
+```
+
+The next step is to simply integrate this code into our first simulation-based power analysis in this chapter, that is, to replace the data simulation process using XX with this new method using `simulateData()` from the `lavaan` package. To this end, I am copying most of the `power analysis SEM` chunk and simply replace the simulation method as described.
+
+```{r simulateData, warning=FALSE}
+
+#test ns between 30 and 200
+ns_sem <- seq(30, 200, by=10) 
+
+#prepare empty vector to store results
+result_sem <- data.frame()
+
+#set number of iterations
+iterations_sem <- 1000
+
+#write function
+sim_sem <- function(n, model) {
+  
+  
+  sim_lavaan <- simulateData(model = model, sample.nobs=n)
+  fit_sem_simulated <- sem(model_sem, data = sim_lavaan)
+  p_value_sem <- parameterestimates(fit_sem_simulated)[8,]$pvalue
+  return(p_value_sem)
+  
+}
+
+
+#replicate function with varying ns
+for (n in ns_sem) {  
+  
+  p_values_sem <- replicate(iterations_sem, sim_sem(n = n, model = model_fully_specified))  
+  result_sem <- rbind(result_sem, data.frame(
+    n = n,
+    power = sum(p_values_sem < .005)/iterations_sem)
+  )
+}
+
+
+```
+
+Let's plot this again. 
+
+```{r plot power curve SEM lavaan}
+
+ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_continuous(n.breaks = 18, limits = c(30,200)) + scale_y_continuous(n.breaks = 10, limits = c(0,1)) + geom_hline(yintercept= 0.8, color = "red")
+
+```
+
+::: {.callout-tip}
+
+Wang and Rhemtulla (2021) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: yilinandrewang.shinyapps.io/pwrSEM/ 
+
+:::
 
 # A simulation-based power analysis for a mediation model with latent variables
 
@@ -291,6 +392,13 @@ cov_mediation <- cov(cbind(gender, EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 
 
 ```
+
+::: {.callout-tip}
+
+If we were  interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al. (2017), which can be accessed via https://schoemanna.shinyapps.io/mc_power_med/. This app currently enables power analyses for some manifest mediation models: Mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, (iv) and three parallel mediators. But as we want to incorporate `generalized prejudice`  and `openness to experience` as latent variables, we need to write a simulation-based power analyses ourselves.   
+
+:::
+
 
 Referring two step #2, now specify the statistical mediation model in `lavaan`. 
 
@@ -383,17 +491,11 @@ ggplot(result_mediation, aes(x=n, y=power)) + geom_point() + geom_line() + scale
 
 As shown, roughly 1,350 participants will be needed to obtain sufficient power under the assumptions we specified.
 
-# ToDo1: Simulation with simsem or lavaan package
-
-# ToDo2: Add subchapter for SESOI instead of observed effect size
-
-# ToDo3: Add bonus chapter on optimizing fit indices in SEM
-
-# ToDo4: Link to Schoemann et al APP for mediation models
-
 # References
 
 Bergh, R., Akrami, N., Sidanius, J., & Sibley, C. G. (2016). Is group membership necessary for understanding generalized prejudice? A re-evaluation of why prejudices are interrelated. Journal of Personality and Social Psychology, 111(3), 367–395. https://doi.org/10.1037/pspi0000064
+
+Schoemann, A. M., Boulton, A. J., & Short, S. D. (2017). Determining power and sample size for simple and complex mediation models. Social Psychological and Personality Science, 8(4), 379–386. https://doi.org/10.1177/1948550617715068
 
 Wang, Y. A., & Rhemtulla, M. (2021). Power analysis for parameter estimation in structural equation modeling: A discussion and tutorial. Advances in Methods and Practices in Psychological Science, 4(1), 1–17. https://doi.org/10.1177/2515245920918253
 
