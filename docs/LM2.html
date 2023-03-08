@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.0.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,15 +12,10 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
-  vertical-align: middle;
-}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -59,7 +54,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
+code span.bu { } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -72,7 +67,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.im { } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -227,7 +222,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -397,7 +392,8 @@ F-statistic: 32.78 on 2 and 94 DF,  p-value: 1.579e-11</code></pre>
 <section id="doing-the-power-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="doing-the-power-analysis">Doing the power analysis</h2>
 <p>Now we build this knowledge into our <code>sim()</code> function. Recall that we operate on the raw BDI metric; so we need to add a regression weight for the newly included baseline predictor. Luckily, this value is totally irrelevant for our power analysis: The only relevant action was the <em>reduction of the error term</em> - and that depends on the pre-post-correlation. In order to obtain realistic simulated values, we simply enter the estimate from our pilot study, <span class="math inline">\(0.6\)</span> (see model output from <code>l1</code> above):</p>
-<p><span class="math display">\[\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre} - 6*\text{treatment} + e\]</span> <span class="math display">\[e \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=73)\]</span></p>
+<p><span class="math display">\[\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre} - 6*\text{treatment} + e\]</span></p>
+<p><span class="math display">\[e \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=73)\]</span></p>
 <p>(You can try it: Change the regression coefficient to any other value - even zero - and you will get identical results for the power analysis <em>that targets the treatment effect</em>.)</p>
 <p>We again use the <code>replicate</code> function to repeatedly call the <code>sim</code> function for 1000 iterations.</p>
 <div class="cell" data-hash="LM2_cache/html/unnamed-chunk-4_3ee0846cf63bfd14e194ca4b333c58df">
@@ -455,15 +451,18 @@ F-statistic: 32.78 on 2 and 94 DF,  p-value: 1.579e-11</code></pre>
 <blockquote class="blockquote">
 <p>“We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group.</p>
 </blockquote>
-<p>When we enter our assumed pre-post-correlation into that formula, we arrive a n=114 - very close to our value: <span class="math display">\[180 * (1 - .614^2) + 2 = 114\]</span></p>
+<p>When we enter our assumed pre-post-correlation into that formula, we arrive a n=114 - very close to our value:</p>
+<p><span class="math display">\[180 * (1 - .614^2) + 2 = 114\]</span></p>
 </section>
 </section>
 <section id="modeling-an-interaction" class="level1">
 <h1>Modeling an interaction</h1>
 <p>We now include the interaction between the baseline score <span class="math inline">\(BDI_{pre}\)</span> and the treatment factor. Such an interaction would suggest that the treatment is more effective at a certain baseline severity. There is some evidence that depression treatment works better at higher baseline severity, compared to lower baseline severity<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>To this end, we add the interaction term to the equation:</p>
-<p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + b_2*\text{treatment} + b_3*\text{BDI}_{pre}*\text{treatment} + e\]</span> When we rearrange the equation by factoring out the <code>treatment</code> term, the interaction is easier to interpret:</p>
-<p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + (b_2 + b_3*\text{BDI}_{pre})*\text{treatment} + e\]</span> Hence, the size of the treatment effect is <span class="math inline">\(b_2 + b_3*\text{BDI}_{pre}\)</span>.</p>
+<p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + b_2*\text{treatment} + b_3*\text{BDI}_{pre}*\text{treatment} + e\]</span></p>
+<p>When we rearrange the equation by factoring out the <code>treatment</code> term, the interaction is easier to interpret:</p>
+<p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + (b_2 + b_3*\text{BDI}_{pre})*\text{treatment} + e\]</span></p>
+<p>Hence, the size of the treatment effect is <span class="math inline">\(b_2 + b_3*\text{BDI}_{pre}\)</span>.</p>
 <p>As a reminder, the control group is defined as <code>treatment == 0</code>. Hence, the equation for the control group is:</p>
 <p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre} + b_2*\text{treatment} + b_3*\text{BDI}_{pre}*\text{treatment} + e\]</span></p>
 <section id="defining-the-interaction-effect-on-the-raw-scale" class="level2">
@@ -474,7 +473,8 @@ F-statistic: 32.78 on 2 and 94 DF,  p-value: 1.579e-11</code></pre>
 <h2 class="anchored" data-anchor-id="alternative-approach-defining-the-interaction-effect-size-via-eplained-variance">Alternative approach: Defining the interaction effect size via “eplained variance”</h2>
 <p>We can approach this question by asking: How much <em>additional</em> variance (<span class="math inline">\(\Delta R^2\)</span>) does the interaction term explain beyond the two main effects?</p>
 <p>The explained variance in a linear model is defined as the proportion of the variance in the dependent variable that is explained by the independent variables in the model. We assumed that the (unconditional) variance of the dependent variable is 117; all unexplained variance is captured in the error term, which was 70 in the previous model <code>l1</code>. Hence, the explained variance of our assumed population model is:</p>
-<p><span class="math display">\[R^2 = \frac{117-72.9}{117} = 37.6\%\]</span> We can verify this computation by simulating a single data set with very large n - this gives us (close to) population estimates of these quantities:</p>
+<p><span class="math display">\[R^2 = \frac{117-72.9}{117} = 37.6\%\]</span></p>
+<p>We can verify this computation by simulating a single data set with very large n - this gives us (close to) population estimates of these quantities:</p>
 <div class="cell" data-hash="LM2_cache/html/unnamed-chunk-5_9d741f1ee6021f6cd036f9c6ffd05d43">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sim</span>(<span class="at">n=</span><span class="dv">100000</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>, <span class="at">pre_post_cor =</span> <span class="fl">0.614</span>, <span class="at">err_var =</span> <span class="dv">117</span>, <span class="at">pre_post_effect =</span> <span class="fl">0.6</span>, <span class="at">print=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -515,10 +515,10 @@ F-statistic: 3.519e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<div id="quarto-appendix" class="default"><section class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Although this might be due to a floor effect of the measurement instrument: If an item is already at the lowest possible value at mild depression, there is no more room for improvement (Hieronymus et al., 2019).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1" role="doc-endnote"><p>Although this might be due to a floor effect of the measurement instrument: If an item is already at the lowest possible value at mild depression, there is no more room for improvement (Hieronymus et al., 2019).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -590,8 +590,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      let href = ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
