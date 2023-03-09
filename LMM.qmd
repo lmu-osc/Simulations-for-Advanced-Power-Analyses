@@ -1,9 +1,12 @@
 ---
-title: "LMM"
+title: "Linear Mixed Models"
+author: "Felix Schönbrodt"
+execute:
+  cache: true
+project-type: website
 ---
 
-Linear Mixed Effect Models
+In order to keep this chapter at a reasonable length, we focus on how to simulate the mixed effects/multi-level model and spend less time discussing how to arrive at plausible parameter values. Please read Chapters [1](LM1.qmd) and [2](LM2.qmd) for multiple examples where the parameter values are derived from (a) the literature (e.g., bias-corrected meta-analyses), (b) pilot data, or (c) plausibility constraints.
 
-```{r}
-1 + 1
-```
+Furthermore, we'll use the techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd). If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!
+

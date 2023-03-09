@@ -43,6 +43,8 @@ Let's now start power calculations for different complex models. Here are the ty
 -   #FIXME\
 -   [Structural Equation Modelling (SEM)](SEM.qmd)
 
+The three chapters on linear models should be worked through in this order, as they build upon each other.
+
 For each model, we will follow the structure:
 
 -   define what type of data and variables need to be simulated, i.e. their distribution, their class (e.g. factor vs numerical value)

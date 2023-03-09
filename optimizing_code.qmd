@@ -236,9 +236,14 @@ timings
 This step only gave a minor `r round(timings$rel_diff[5]*100)`% relative increase in speed - but as a bonus, it made our code much easier to read and shorter.
 
 
-# Preparation: Wrap the simulation in a function #FIXME perhaps it could under under rule 5: Wrap up in a function and go parallel, with A and B section, because the title 'preparation' got me a bit confused at first
+# Rule 5: Go parallel
 
-The next step does not really change a lot: We put the simulation code into a separate function that returns the quantity of interest (in our case: the focal p-value). Different settings of the simulation parameters, such as the sample size or the effect size, can be defined as parameters of the function. 
+By default, R runs single-threaded. That means, a single CPU core works off all lines of code sequentially. When you optimized this single thread performance, the only way to gain more speed (except buying a faster computer) is to distribute the workload to multiple CPU cores that work in parallel. Every modern CPU comes with multiple cores (also called "workers" in the code); typically 4 to 8 on local computers and laptops. 
+
+
+## Preparation: Wrap the simulation in a function
+
+The first step does not really change a lot: We put the simulation code into a separate function that returns the quantity of interest (in our case: the focal p-value). Different settings of the simulation parameters, such as the sample size or the effect size, can be defined as parameters of the function. 
 
 Every single function call `sim()` now gives you one simulated p-value - try it out!
 
@@ -283,10 +288,7 @@ timings
 ```
 While this refactoring actually slightly increased computation time, we need this for the last, final optimization where we reap the benefits.
 
-
-# Rule 5: Go parallel
-
-By default, R runs single-threaded. That means, a single CPU core works off all lines of code sequentially. When you optimized this single thread performance, the only way to gain more speed (except buying a faster computer) is to distribute the workload to multiple CPU cores that work in parallel. Every modern CPU comes with multiple cores (also called "workers" in the code); typically 4 to 8 on local computers and laptops. 
+## Run on multiple cores
 
 With the use of the `replicate` function in the previous step, we prepared everything for an easy switch to multi-core processing. You only need to load the `future.apply` package, start a multi-core session with the `plan` command, and replace the `replicate` function call with `future_replicate`.
 
@@ -323,7 +325,7 @@ timings
 The speed improvement seems only small - with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take *longer*. 
 
 ::: {.callout-note}
-To improve the benefits of parallel processing, make sure that each single parallel process runs as long (i.e., in an uninterrupted way) as possible. In the current example, we loop through the different n's, and at every n, 4 parallel processes are spawned. A more efficient way would be to distribute the levels of n to separated workers which then do all replications in a row. #FIXME I am not sure I understand this paragraph
+To improve the benefits of parallel processing, make sure that each single parallel process runs as long (i.e., in an uninterrupted way) as possible.
 :::
 
 

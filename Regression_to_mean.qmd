@@ -1,0 +1,71 @@
+---
+title: "Regression to the mean in pre-post-designs"
+---
+
+
+
+Assumption: In a pre-post-treatment-control design, I would assume that the regression weight from Pre -> Post is 1: 
+
+$$BDI_{post} = b_0 + 1*BDI_{pre} + e$$
+
+$$BDI_{post} = b_0 + b_1*BDI_{pre} + b_2*treatment + e$$
+
+Hence, the pre value simply is carried forward to the post value. 
+We add random error, as participants of course go somewhat up and down, but there is no systematic trend.
+
+```{r}
+  library(Rfast)
+  n <- 10000
+  pre_post_cor <- 0.9
+  mu <- c(23, 23)
+  sigma <- matrix(c(117, pre_post_cor*sqrt(117)*sqrt(117), pre_post_cor*sqrt(117)*sqrt(117), 117), nrow=2, byrow=TRUE)
+  BDI <- rmvnorm(n, mu, sigma) |> data.frame()
+  
+  
+  xi <- rnorm(n, mean=23, sd=sqrt(117))
+  pre <-  1*xi + rnorm(n, mean=0, sd=2)
+  post <- 1*xi + rnorm(n, mean=0, sd=2)
+  
+  cor(pre, post)
+  
+  
+  colMeans(BDI)
+  var(BDI)
+  
+  names(BDI) <- c("pre", "post")
+  BDI$id <- 1:nrow(BDI)
+  summary(lm(post~pre, BDI))
+  
+  library(tidyr)
+  library(ggplot2)
+  BDI_long <- pivot_longer(BDI, c(pre, post), names_to = "time")
+  ggplot(BDI_long, aes(x=time, y=value, group=id)) + geom_line()
+  
+  # typically RTM pattern: The pre-post difference is
+  BDI$diff <- BDI$post-BDI$pre
+  BDI$absdiff <- abs(BDI$post-BDI$pre)
+  hist(BDI$diff)
+  mean(BDI$diff)
+  summary(lm(diff~pre, BDI))
+  ggplot(BDI, aes(x=pre, y=absdiff)) + geom_point() + geom_smooth()
+  
+  ggplot(BDI, aes(x=pre, y=post)) + geom_point() + geom_smooth()
+  
+  BDI$predicted <- predict(lm(post~pre, BDI))
+  mean(BDI$predicted)
+  var(BDI$predicted)
+  
+  # The predicted values have the same mean (so no systematic treatment effect, as expected)
+  # but much smaller variance:
+  
+  BDI_long2 <- pivot_longer(BDI, c(pre, post, predicted), names_to = "cat")
+  
+  library(ggplot2)
+ggplot(BDI_long2, aes(x=as.factor(cat), y=value)) + 
+  ggdist::stat_halfeye(adjust = .5, width = .3, .width = 0, justification = -.3, point_colour = NA) + 
+  geom_boxplot(width = .1, outlier.shape = NA) +
+  gghalves::geom_half_point(side = "l", range_scale = .4, alpha = .5)
+```
+
+Assumed that we use the predicted scores at t2 (post) and predict the next scores at t3 - will it shrink ever more, until all data points are at the mean?
+But this is not substantively reflected in the raw scores. Is it an artifact of regression?

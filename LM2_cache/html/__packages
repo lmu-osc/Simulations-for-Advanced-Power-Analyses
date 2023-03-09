@@ -1,5 +1,5 @@
 colorDF
 prettycode
-ggplot2
-pwr
-MBESS
+Rcpp
+RcppZiggurat
+Rfast

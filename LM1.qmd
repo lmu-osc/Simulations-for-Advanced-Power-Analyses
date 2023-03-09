@@ -1,5 +1,5 @@
 ---
-title: "Linear Model I: a single dichotomous predictor"
+title: "Linear Model 1: A single dichotomous predictor"
 author: "Felix Schönbrodt"
 execute:
   cache: true
@@ -26,7 +26,7 @@ $$e \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\sigma^2)$$
 
 This assumption of the distribution of the errors is important for our simulations, as we will simulate the error according to that assumption. In an actual statistical analysis, the variance of the errors, $\sigma^2$, is estimated from the data.
 
-"i.i.d" means that the error of each observation is independent from all other observations. This assumption is violated, for example, when we look at romantic couples. If one partner is exceptionally disstressed, then the other partner presumably will also have higher stress levels. In this case, the errors of both partners are correlated, and not independent any more. (See the section on modelling multilevel data for a statistical way of handling such interdependences).
+"i.i.d" means that the error of each observation is independent from all other observations. This assumption is violated, for example, when we look at romantic couples. If one partner is exceptionally distressed, then the other partner presumably will also have higher stress levels. In this case, the errors of both partners are correlated, and not independent any more. (See the section on [modelling multilevel data](LMM.qmd) for a statistical way of handling such interdependences).
 
 # A concrete example
 
@@ -219,7 +219,7 @@ Here, and in the entire tutorial, we assume an $\alpha$-level of .005 (Benjamin 
 
 ## Doing the power analysis
 
-Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a function called `sim` that returns the focal p-value. This function takes two parameters:
+Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a function called `sim`. We coded the function to either return the focal p-value (as default) or to print a model summary (helpful for debugging and testing the function). This function takes two parameters:
 
 * `n` defines the required sample size
 * `treatment_effect` defines the treatment effect in the raw scale (i.e., reduction in BDI points)
@@ -235,7 +235,7 @@ set.seed(0xBEEF)
 iterations <- 1000 # the number of Monte Carlo repetitions
 n <- 100 # the size of our simulated sample
 
-sim <- function(n=100, treatment_effect=-6) {
+sim1 <- function(n=100, treatment_effect=-6, print=FALSE) {
   treatment <- c(rep(0, n/2), rep(1, n/2))
   BDI <- 23 + treatment_effect*treatment + rnorm(n, mean=0, sd=sqrt(117))
   
@@ -243,11 +243,13 @@ sim <- function(n=100, treatment_effect=-6) {
   # to analyse your real data set
   res <- lm(BDI ~ treatment)
   p_value <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
-  return(p_value)
+  
+  if (print==TRUE) print(summary(res))
+  else return(p_value)
 }
 
 # now run the sim() function a 1000 times and store the p-values in a vector:
-p_values <- replicate(iterations, sim(n=100))
+p_values <- replicate(iterations, sim1(n=100))
 ```
 
 How many of our 1000 virtual samples would have found the effect?
@@ -277,7 +279,7 @@ ns <- seq(100, 300, by=20) # test ns between 100 and 400
 result <- data.frame()
 
 for (n in ns) {  # loop through elements of the vector "ns"
-  p_values <- replicate(iterations, sim(n=n))
+  p_values <- replicate(iterations, sim1(n=n))
   
   result <- rbind(result, data.frame(
     n = n,
@@ -348,7 +350,7 @@ ns <- seq(200, 400, by=20) # test ns between 100 and 400
 result <- data.frame()
 
 for (n in ns) {  # loop through elements of the vector "ns"
-  p_values <- replicate(iterations, sim(n=n, treatment_effect = -4.1))
+  p_values <- replicate(iterations, sim1(n=n, treatment_effect = -4.1))
   
   result <- rbind(result, data.frame(
     n = n,
@@ -398,7 +400,7 @@ ns <- seq(600, 800, by=20)
 result <- data.frame()
 
 for (n in ns) {
-  p_values <- replicate(iterations, sim(n=n, treatment_effect = -3))
+  p_values <- replicate(iterations, sim1(n=n, treatment_effect = -3))
   
   result <- rbind(result, data.frame(
     n = n,
@@ -436,7 +438,7 @@ ns <- seq(640, 740, by=20)
 result <- data.frame()
 
 for (n in ns) {
-  p_values <- replicate(iterations, sim(n=n, treatment_effect = -3))
+  p_values <- replicate(iterations, sim1(n=n, treatment_effect = -3))
   
   result <- rbind(result, data.frame(
     n = n,
