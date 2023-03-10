@@ -2,3 +2,6 @@
 title: "Resources"
 project-type: website
 ---
+
+* https://julianquandt.com/post/power-analysis-by-data-simulation-in-r-part-i/ (see Parts I to IV)
+* "Simulation-based power analysis for regression" by Andrew Hales ([Youtube video](https://www.youtube.com/watch?v=x2hhc5KYw-c), [OSF Material](https://osf.io/e42mg/))
