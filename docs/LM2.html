@@ -177,7 +177,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./GLM.html" class="sidebar-item-text sidebar-link">GLM</a>
+  <a href="./GLM.html" class="sidebar-item-text sidebar-link">Generalized Linear Models</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -271,10 +271,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-1_b453b4e3896df3cd0853d98ec55dced4">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: collect the installation of all necessary packages in one place at the beginning of the tutorial</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(c("ggplot2", "ggdist", "pwr", "MBESS", "Rfast"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="LM2_cache/html/setup_e933b5d2a7774ae54d28b76c449e5556">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparation: Install and load all necessary packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(c("ggplot2", "Rfast"))</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rfast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Rcpp</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: RcppZiggurat</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In the <a href="./LM1.html">first chapter on linear models</a>, we had the simplest possible linear model: a continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.</p>
 <section id="adding-a-continuous-predictor" class="level1">
@@ -310,12 +319,12 @@ Note
 <section id="get-some-real-data-as-starting-point" class="level2">
 <h2 class="anchored" data-anchor-id="get-some-real-data-as-starting-point">Get some real data as starting point</h2>
 <p>Instead of guessing the necessary quantities - in the current case, the pre-post-correlation - let’s look at real data. The “Beat the blues” (<code>BtheB</code>) data set from the <code>HSAUR</code> R package contains pre-treatment baseline values (<code>bdi.pre</code>), along with multiple post-treatment values. Here we focus on the first post-treatment assessment, 2 months after the treatment (<code>bdi.2m</code>).</p>
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-2_d45cacbd128d363127c68950d9316e28">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"BtheB"</span>, <span class="at">package =</span> <span class="st">"HSAUR"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pre-post-correlation</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(BtheB<span class="sc">$</span>bdi.pre, BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m, <span class="at">use=</span><span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-1_0de77885296cb729e205f4767e49ec89">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"BtheB"</span>, <span class="at">package =</span> <span class="st">"HSAUR"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pre-post-correlation</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(BtheB<span class="sc">$</span>bdi.pre, BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m, <span class="at">use=</span><span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.6142207</code></pre>
 </div>
@@ -325,50 +334,114 @@ Note
 <section id="update-the-sim-function" class="level2">
 <h2 class="anchored" data-anchor-id="update-the-sim-function">Update the sim() function</h2>
 <p>Now we add the continuous predictor into our <code>sim()</code> function. In order to simulate a correlated variable, we need to slightly change the workflow in our simulation.</p>
+<p>We use the <code>rmvnorm</code> function from the <code>Rfast</code> package to create correlated, normally distributed variables. It takes three parameters:</p>
 <ul>
-<li>TODO: Introduce mvnorm; explain why we do not build up the regression equation as we did before.</li>
-<li>The intercept is encoded in the mean value of both BDI scores.</li>
-<li>We center the <span class="math inline">\(\text{BDI}_{pre}\)</span> value for better interpretability (this will be relevant in the next section on interaction effects).</li>
+<li><code>n</code>: The number of random observations</li>
+<li><code>mu</code>: A vector of mean values (one for each random variable)</li>
+<li><code>sigma</code>: The variance-covariance-matrix of the random variables.</li>
 </ul>
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-3_15407e82a9383235eb05e5a50894af81">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># err_var is the error variance before controlling for the baseline values</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># print = TRUE prints the model summary</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>sim2 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>, <span class="at">pre_post_cor =</span> <span class="fl">0.6</span>, <span class="at">err_var =</span> <span class="dv">117</span>, <span class="at">print=</span><span class="cn">FALSE</span>) {</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(Rfast)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">23</span>, <span class="dv">23</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">117</span>, pre_post_cor<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">117</span>)<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">117</span>), pre_post_cor<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">117</span>)<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">117</span>), <span class="dv">117</span>), <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(n, mu, sigma) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"BDI_pre"</span>, <span class="st">"BDI_post0"</span>)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add treatment predictor variables</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># center the BDI_pre value for better interpretability</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># </span><span class="al">TODO</span><span class="co">: no need to</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI_pre.c <span class="ot">&lt;-</span> df<span class="sc">$</span>BDI_pre <span class="sc">-</span> <span class="fu">mean</span>(df<span class="sc">$</span>BDI_pre)</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add the treatment effect to the BDI_post variable</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI_post <span class="ot">&lt;-</span> df<span class="sc">$</span>BDI_post0 <span class="sc">+</span> df<span class="sc">$</span>treatment<span class="sc">*</span>treatment_effect</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI_post <span class="sc">~</span> BDI_pre.c <span class="sc">+</span> treatment, <span class="at">data=</span>df)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(res)</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print<span class="sc">==</span><span class="cn">TRUE</span>) <span class="fu">print</span>(<span class="fu">summary</span>(res))</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">return</span>(p_value) </span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For <code>mu</code>, we use the value 23 for both the pre and the post value. You can imagine that we only look at the control group: The mean value is not supposed to change systematically from pre to post (although each individual person can go somewhat up or down).</p>
+<p>The variance-covariance-matrix defines two properties at once: The variance of each variable, and the covariance to all other variables. In the two-variable case, the general matrix looks like:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+var_x &amp; cov_{xy}\\
+cov_{xy} &amp; var_y
+\end{bmatrix}
+\]</span> Note that the covariance in the diagonal has the same values, as <span class="math inline">\(cov_{xy} = cov_{yx}\)</span>. As we need to enter the covariance into <code>sigma</code>, we need to convert the correlation into a covariance. Here’s the formula:</p>
+<p><span class="math display">\[cor_{xy} = \frac{cov_{xy}}{\sigma_X\sigma_y}\]</span> (Note: The denominator contains the standard deviation, not the variance.) Solved for the covariance yields:</p>
+<p><span class="math display">\[cov_{xy} = cor_{xy}\sigma_X\sigma_y = 0.6 * \sqrt{117} * \sqrt{117} = 70.2\]</span></p>
+<p>Hence, the specific variance-covariance-matrix <code>sigma</code> is in our case (generously rounded):</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+117 &amp; 70\\
+70 &amp; 117
+\end{bmatrix}
+\]</span> Put it all together:</p>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-2_ddb8899cd7258f11b72664372719f02f">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rfast)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">23</span>, <span class="dv">23</span>) <span class="co"># the mean values of both variables</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">117</span> , <span class="dv">70</span>, </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>       <span class="dv">70</span>, <span class="dv">117</span>), <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(<span class="at">n=</span><span class="dv">10000</span>, <span class="at">mu=</span>mu, <span class="at">sigma=</span>sigma) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"BDI_pre"</span>, <span class="st">"BDI_post0"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check: in a large sample the correlation should be close to .6</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            BDI_pre BDI_post0
+BDI_pre   1.0000000 0.5978088
+BDI_post0 0.5978088 1.0000000</code></pre>
 </div>
-<p>Let’s test the plausibility of the new <code>sim()</code> function by simulating a very large sample - this should give estimates close to the true values. We also vary the assumed pre-post-correlation. When this is 0, the results should be identical to the simpler model from <a href="./LM1.html">Chapter 1</a> (except one <em>df</em> that we lost due to the additional predictor). When the pre-post-correlation is &gt; 0, the error variance should be reduced (see <code>Residual standard error</code> at the bottom of each <code>lm</code> output).</p>
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-4_63f9aab651d76d2abc2b8a99d184f671">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># without pre_post_cor, the result should be the same</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sim2</span>(<span class="at">n=</span><span class="dv">100000</span>, <span class="at">pre_post_cor=</span><span class="dv">0</span>,   <span class="at">print=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: Rcpp</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: RcppZiggurat</code></pre>
+<p>We now have the correlated <span class="math inline">\(BDI_{pre}\)</span> and <span class="math inline">\(BDI_{post}\)</span> scores. Finally, we have to impose the treatment effect onto the post variable: In the control group, the mean value stays constant at 23 (what we already have simulated), in the treatment group, the BDI is 6 points lower:</p>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-3_facc6608f96a5502ceeb85edacb60f70">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add treatment predictor variables</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">times=</span><span class="fu">nrow</span>(df)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># add the treatment effect to the BDI_post0 variable</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>BDI_post <span class="ot">&lt;-</span> df<span class="sc">$</span>BDI_post0 <span class="sc">+</span> <span class="sc">-</span><span class="dv">6</span><span class="sc">*</span>df<span class="sc">$</span>treatment</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>We do not need to add an explicit intercept, as this is already encoded in the mean value of the simulated variables. (Alternatively, we could have simulated them centered on zero and then explicitly add the intercept in the model equation).</p>
+<p>Let’s make a plausibility check by plotting the simulated variables. We first have to convert them into long format for a nicer plot:</p>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-4_a7771d1d2e1e72603ad214979a49ac89">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># reduce to 100 cases for plotting; define factors</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[<span class="dv">1</span><span class="sc">:</span><span class="dv">400</span>, ]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>id <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>BDI_post0 <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(df, <span class="at">cols=</span><span class="fu">c</span>(BDI_pre, BDI_post), <span class="at">names_to=</span><span class="st">"time"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>df_long<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_long<span class="sc">$</span>time, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">"BDI_pre"</span>, <span class="st">"BDI_post"</span>))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>df_long<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_long<span class="sc">$</span>treatment, <span class="at">levels=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Treatment"</span>))</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_long, <span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>value, <span class="at">group=</span>id)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>treatment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="LM2_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_long, <span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>value, <span class="at">group=</span>time)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>treatment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="LM2_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Looks good - reasonable BDI values, same means in control group, same variance. The treatment effect of -6 is visible.</p>
+<p>Let’s put that together in the new <code>sim</code> function:</p>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-5_a1cccc8dcde701f71db0c557e56aa08f">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sim2 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>, <span class="at">pre_post_cor =</span> <span class="fl">0.6</span>, <span class="at">err_var =</span> <span class="dv">117</span>, <span class="at">print=</span><span class="cn">FALSE</span>) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(Rfast)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Here we simulate correlated BDI pre and post scores</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">23</span>, <span class="dv">23</span>) <span class="co"># the mean values of both variables</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(err_var, pre_post_cor<span class="sc">*</span><span class="fu">sqrt</span>(err_var)<span class="sc">*</span><span class="fu">sqrt</span>(err_var), </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>      pre_post_cor<span class="sc">*</span><span class="fu">sqrt</span>(err_var)<span class="sc">*</span><span class="fu">sqrt</span>(err_var), err_var), </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(n, mu, sigma) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"BDI_pre"</span>, <span class="st">"BDI_post0"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add treatment predictor variables</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># center the BDI_pre value for better interpretability</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI_pre.c <span class="ot">&lt;-</span> df<span class="sc">$</span>BDI_pre <span class="sc">-</span> <span class="fu">mean</span>(df<span class="sc">$</span>BDI_pre)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add the treatment effect to the BDI_post0 variable</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We do not need to add an intercept, as this is already encoded</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># in the mean value of the simulated variables.</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI_post <span class="ot">&lt;-</span> df<span class="sc">$</span>BDI_post0 <span class="sc">+</span> df<span class="sc">$</span>treatment<span class="sc">*</span>treatment_effect</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fit the model</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI_post <span class="sc">~</span> BDI_pre.c <span class="sc">+</span> treatment, <span class="at">data=</span>df)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(res)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print<span class="sc">==</span><span class="cn">TRUE</span>) <span class="fu">print</span>(<span class="fu">summary</span>(res))</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">return</span>(p_value) </span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s test the plausibility of the new <code>sim2()</code> function by simulating a very large sample - this should give estimates close to the true values. We also vary the assumed pre-post-correlation. When this is 0, the results should be identical to the simpler model from <a href="./LM1.html">Chapter 1</a> (except one <em>df</em> that we lost due to the additional predictor). When the pre-post-correlation is &gt; 0, the error variance should be reduced (see <code>Residual standard error</code> at the bottom of each <code>lm</code> output).</p>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-6_42c345e23fd20547e789d7293cdf882b">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># without pre_post_cor, the result should be the same</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sim2</span>(<span class="at">n=</span><span class="dv">100000</span>, <span class="at">pre_post_cor=</span><span class="dv">0</span>, <span class="at">print=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -376,22 +449,22 @@ lm(formula = BDI_post ~ BDI_pre.c + treatment, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--50.416  -7.348   0.034   7.357  47.662 
+-50.580  -7.401   0.021   7.381  47.636 
 
 Coefficients:
              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 22.995259   0.048661 472.560   &lt;2e-16 ***
-BDI_pre.c    0.004731   0.003170   1.492    0.136    
-treatment   -6.078869   0.068817 -88.334   &lt;2e-16 ***
+(Intercept) 23.039486   0.048743 472.676   &lt;2e-16 ***
+BDI_pre.c   -0.002105   0.003178  -0.662    0.508    
+treatment   -6.091742   0.068933 -88.372   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 10.88 on 99997 degrees of freedom
-Multiple R-squared:  0.0724,    Adjusted R-squared:  0.07238 
-F-statistic:  3902 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 10.9 on 99997 degrees of freedom
+Multiple R-squared:  0.07244,   Adjusted R-squared:  0.07242 
+F-statistic:  3905 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># with pre_post_cor, the residual error should be reduced</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sim2</span>(<span class="at">n=</span><span class="dv">100000</span>, <span class="at">pre_post_cor=</span><span class="fl">0.6</span>, <span class="at">print=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># with pre_post_cor, the residual error should be reduced</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sim2</span>(<span class="at">n=</span><span class="dv">100000</span>, <span class="at">pre_post_cor=</span><span class="fl">0.6</span>, <span class="at">print=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -399,19 +472,19 @@ lm(formula = BDI_post ~ BDI_pre.c + treatment, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--35.893  -5.850   0.005   5.791  35.436 
+-35.915  -5.846   0.005   5.807  35.457 
 
 Coefficients:
              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 22.981551   0.038745   593.2   &lt;2e-16 ***
-BDI_pre.c    0.597736   0.002529   236.4   &lt;2e-16 ***
-treatment   -6.015040   0.054793  -109.8   &lt;2e-16 ***
+(Intercept) 22.942640   0.038783   591.6   &lt;2e-16 ***
+BDI_pre.c    0.597809   0.002538   235.5   &lt;2e-16 ***
+treatment   -5.956531   0.054847  -108.6   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 8.664 on 99997 degrees of freedom
-Multiple R-squared:  0.4047,    Adjusted R-squared:  0.4047 
-F-statistic: 3.399e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 8.672 on 99997 degrees of freedom
+Multiple R-squared:  0.4017,    Adjusted R-squared:  0.4017 
+F-statistic: 3.357e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>Indeed, with <code>pre_post_cor = 0</code> the parameter estimates are identical, and with non-zero pre-post-correlation the error term gets reduced.</p>
@@ -437,44 +510,44 @@ An additional plausibility check (advanced)
 <section id="do-the-power-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="do-the-power-analysis">Do the power analysis</h2>
 <p>The next step is the same as always: use the <code>replicate</code> function to repeatedly call the <code>sim</code> function for many iterations, and increase the simulated sample size until the desired power level is achieved.</p>
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-5_ed11ef5a405d6e0222ecc8d0b5b6dcca">
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-7_8330318ffdf43a8327660c478461cfb4">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">90</span>, <span class="dv">180</span>, <span class="at">by=</span><span class="dv">10</span>) <span class="co"># ns are already adjusted to cover the relevant range</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {  <span class="co"># loop through elements of the vector "ns"</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim2</span>(<span class="at">n=</span>n, <span class="at">pre_post_cor =</span> <span class="fl">0.6</span>))</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">90</span>, <span class="dv">180</span>, <span class="at">by=</span><span class="dv">10</span>) <span class="co"># ns are already adjusted to cover the relevant range</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {  <span class="co"># loop through elements of the vector "ns"</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim2</span>(<span class="at">n=</span>n, <span class="at">pre_post_cor =</span> <span class="fl">0.6</span>))</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-6_06981ba4d863e9ea02b8c8e6808665fc">
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-8_6459c16d784248d70166d10e76ed9127">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n  power
-1   90 0.6720
-2  100 0.7225
-3  110 0.7595
-4  120 0.8220
-5  130 0.8695
-6  140 0.8920
-7  150 0.9150
-8  160 0.9350
-9  170 0.9655
-10 180 0.9650</code></pre>
+1   90 0.6690
+2  100 0.7245
+3  110 0.7705
+4  120 0.8185
+5  130 0.8765
+6  140 0.8890
+7  150 0.9335
+8  160 0.9335
+9  170 0.9465
+10 180 0.9675</code></pre>
 </div>
 </div>
 <p>In the original analysis, we needed n=180 (90 in each group) for 80% power. Including the baseline covariate (which explains <span class="math inline">\(r^2 = .6^2 = 36\%\)</span> of the variance in post scores) reduces that number to around n=115.</p>
@@ -488,46 +561,49 @@ An additional plausibility check (advanced)
 <section id="modeling-an-interaction" class="level1">
 <h1>Modeling an interaction</h1>
 <p>We now include the interaction between the baseline score <span class="math inline">\(\text{BDI}_{pre}\)</span> and the <span class="math inline">\(\text{treatment}\)</span> factor. Such an interaction would suggest that the treatment is more effective at a certain baseline severity. There is some evidence that depression treatment works better at higher baseline severity, compared to lower baseline severity<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<p>To this end, we add the interaction term to the equation:</p>
+<p>To this end, we add the interaction term to the equation. We use the centered baseline value <span class="math inline">\(\text{BDI}_{pre.c}\)</span> for better interpretability:</p>
 <p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + b_2*\text{treatment} + b_3*\text{BDI}_{pre.c}*\text{treatment} + e\]</span> When we rearrange the equation by factoring out the <code>treatment</code> term, the interaction is easier to interpret:</p>
 <p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + (b_2 + b_3*\text{BDI}_{pre.c})*\text{treatment} + e\]</span> Hence, the size of the treatment effect is <span class="math inline">\(b_2 + b_3*\text{BDI}_{pre}\)</span>. Remember that we centered <span class="math inline">\(BDI_{pre}\)</span> for better interpretability - this is the place where it gets relevant: When we enter the value 0 for <span class="math inline">\(BDI_{pre.c}\)</span> (which corresponds to a typical pre-treatment depression score of around 23), the treatment effect equals the main effect <span class="math inline">\(b_2\)</span>. This conditional treatment effect gets larger or smaller, depending on the value of <span class="math inline">\(BDI_{pre.c}\)</span> and the regression weight <span class="math inline">\(b_3\)</span>. The meaning of <span class="math inline">\(b_3\)</span> is: How much does the treatment effect increase for every 1 unit increase in <span class="math inline">\(BDI_{pre.c}\)</span>?</p>
 <p>What are plausible values for <span class="math inline">\(b_3\)</span>? First, we need to decide on the sign. We expect that the treatment effect gets more <em>negative</em> (as we expect a decrease in BDI scores) with increasing baseline severity, so the coefficient must be negative. For the moment, let’s assume that the treatment effect gets 0.4 more negative for every unit increase in <span class="math inline">\(BDI_{pre.c}\)</span>:</p>
 <p><span class="math display">\[\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre.c} - 6*\text{treatment} - 0.4*\text{BDI}_{pre.c}*\text{treatment} + e\]</span> We can plot the predicted values of that equation as two separate regression lines: simply enter either 0 or 1 for <code>treatment</code>:</p>
 <p><span class="math display">\[\text{Control group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*0 - 0.4*\text{BDI}_{pre.c}*0 = 23 + 0.6*\text{BDI}_{pre.c}\]</span></p>
 <p><span class="math display">\[\text{Treatment group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*1 - 0.4*\text{BDI}_{pre.c}*1 = 17 + 0.2*\text{BDI}_{pre.c}\]</span> In the following plot, the limits of the x-axis are chosen to reflect the possible range of the <span class="math inline">\(BDI_{pre}\)</span> score: It can go from 0 to 63, which corresponds to -23 to 40 on the centered scale. The actual maximum in our pilot data was 49 (i.e., 26 on the centered scale), marked with a dashed line.</p>
-<div class="cell" data-hash="LM2_cache/html/interaction_plot_87c333506be1900a95c5553385d81848">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">2</span>) <span class="sc">+</span> <span class="fl">0.1</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">23</span>, <span class="dv">40</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">63</span>), <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">"BDI_post"</span>, <span class="at">main=</span><span class="st">"An implausible interaction effect"</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a=</span><span class="dv">23</span>, <span class="at">b=</span><span class="fl">0.6</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a=</span><span class="dv">17</span>, <span class="at">b=</span><span class="fl">0.2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">26</span>, <span class="at">lty=</span><span class="st">"dotted"</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Control group"</span>, <span class="st">"Treatment group"</span>), </span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">cex=</span>.<span class="dv">8</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># secondary axis with non-centered BDI scores</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="at">xlab =</span> <span class="st">"BDI_pre.c (upper axis), BDI_pre (lower axis)"</span>, <span class="at">line =</span> <span class="dv">2</span>) </span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">23</span>, <span class="dv">40</span>, <span class="at">by=</span><span class="dv">5</span>), <span class="at">labels=</span><span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">63</span>, <span class="at">by=</span><span class="dv">5</span>), <span class="at">line =</span> <span class="fl">3.5</span>)</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># treatment effect at average baseline value</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0=</span><span class="dv">0</span>, <span class="at">y0=</span><span class="dv">23</span>, <span class="at">x1=</span><span class="dv">0</span>, <span class="at">y1=</span><span class="dv">17</span>, <span class="at">col=</span><span class="st">"darkgreen"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co"># treatment effect at smallest possible value (a person with BDI_pre=0)</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0=</span><span class="sc">-</span><span class="dv">23</span>, <span class="at">y0=</span><span class="fl">9.2</span>, <span class="at">x1=</span><span class="sc">-</span><span class="dv">23</span>, <span class="at">y1=</span><span class="fl">12.4</span>, <span class="at">col=</span><span class="st">"darkgreen"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co"># treatment effect at smallest possible value (a person with BDI_pre=0)</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0=</span><span class="dv">26</span>, <span class="at">y0=</span><span class="fl">38.6</span>, <span class="at">x1=</span><span class="dv">26</span>, <span class="at">y1=</span><span class="fl">22.2</span>, <span class="at">col=</span><span class="st">"darkgreen"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="LM2_cache/html/interaction_plot_c19859404e1642ac7215a4d83f1f89ed">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">2</span>) <span class="sc">+</span> <span class="fl">0.1</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="cn">NA</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">23</span>, <span class="dv">40</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">63</span>), <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">"BDI_post"</span>, <span class="at">main=</span><span class="st">"An implausible interaction effect"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a=</span><span class="dv">23</span>, <span class="at">b=</span><span class="fl">0.6</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a=</span><span class="dv">17</span>, <span class="at">b=</span><span class="fl">0.2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">26</span>, <span class="at">lty=</span><span class="st">"dotted"</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Control group"</span>, <span class="st">"Treatment group"</span>), </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">cex=</span>.<span class="dv">8</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># secondary axis with non-centered BDI scores</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="at">xlab =</span> <span class="st">"BDI_pre.c (upper axis), BDI_pre (lower axis)"</span>, <span class="at">line =</span> <span class="dv">2</span>) </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">23</span>, <span class="dv">40</span>, <span class="at">by=</span><span class="dv">5</span>), <span class="at">labels=</span><span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">63</span>, <span class="at">by=</span><span class="dv">5</span>), <span class="at">line =</span> <span class="fl">3.5</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># treatment effect at average baseline value</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0=</span><span class="dv">0</span>, <span class="at">y0=</span><span class="dv">23</span>, <span class="at">x1=</span><span class="dv">0</span>, <span class="at">y1=</span><span class="dv">17</span>, <span class="at">col=</span><span class="st">"darkgreen"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co"># treatment effect at smallest possible value (a person with BDI_pre=0)</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0=</span><span class="sc">-</span><span class="dv">23</span>, <span class="at">y0=</span><span class="fl">9.2</span>, <span class="at">x1=</span><span class="sc">-</span><span class="dv">23</span>, <span class="at">y1=</span><span class="fl">12.4</span>, <span class="at">col=</span><span class="st">"darkgreen"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co"># treatment effect at smallest possible value (a person with BDI_pre=0)</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0=</span><span class="dv">26</span>, <span class="at">y0=</span><span class="fl">38.6</span>, <span class="at">x1=</span><span class="dv">26</span>, <span class="at">y1=</span><span class="fl">22.2</span>, <span class="at">col=</span><span class="st">"darkgreen"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="LM2_files/figure-html/interaction_plot-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>With that strenth of the interaction effect, the predicted treatment effect of a person with the highest observed <span class="math inline">\(\text{BDI}_{pre}\)</span> score of 49 would be 16.4, nearly three times as large as the treatment effect at average baseline severity (see the long green line in the plot). While this seems quite high, it might still be plausible.</p>
 <p>However, the interaction creates an implausible situation at the lower end of baseline severity. The red and the blue line cross at a <span class="math inline">\(BDI_{pre}\)</span> value of around 8: For such persons with a minimal depression, it makes zero difference whether they are in the control or the treatment group. But the effect even <em>reverses</em> for patients with very low BDI values below 8: For them, the treatment leads to worse outcomes than being in the control group.</p>
-<p>As this is implausible, we want to calibrate the interaction effect in a way that, as a boundary case, the treatment …</p>
+<p>As this is implausible, we want to calibrate the interaction effect in a way that the treatment …</p>
 <ul>
 <li>makes no difference for the lowest <span class="math inline">\(\text{BDI}_{pre}\)</span> values, and</li>
 <li>reduces the BDI by 6 points for average depression scores.</li>
 </ul>
-<p>(Alternatively, we have to give up the assumption of a <em>linear</em> interaction effect and create a non-linear interaction model).</p>
+<p>(Alternatively, we have to give up the assumption of a <em>linear</em> interaction effect and create a non-linear interaction model. But you don’t want to go that route …).</p>
 <p>By setting the interaction effect to -0.2, we achieve a plausible interaction plot:</p>
 <div class="cell" data-hash="LM2_cache/html/interaction_plot2_8ba5a8c6c8403fcaa5f4edba2c854265">
 <div class="cell-output-display">
@@ -535,96 +611,99 @@ An additional plausibility check (advanced)
 </div>
 </div>
 <p>Now the treatment makes no difference for persons who are not depressed anyway; and for highly depressed persons the treatment effect is -11.2, roughly double the size of a typical treatment effect.</p>
-<p>We calibrated the interaction effect size by looking at boundary cases. We’d consider this interaction effect to be an <em>upper limit</em> (larger interactions make no sense), but the true interaction effect could be smaller of course.</p>
+<p>We calibrated the interaction effect size by looking at a boundary case. We’d consider this interaction effect to be an <em>upper limit</em> (larger interactions make no sense), but the true interaction effect could be smaller of course.</p>
 <section id="thinking-visually" class="level2">
 <h2 class="anchored" data-anchor-id="thinking-visually">Thinking visually</h2>
 <p>Arriving at plausible guesses for interaction effects can be tricky. We strongly recommend to <strong>visualize</strong> your assumed interaction effect in a plot - first drawn by hand: Do you expect a disordinal (i.e., cross-over) interaction, or an ordinal one where the effect is amplified (but not reversed) by the moderating variable?</p>
-<p>Look at the boundaries of your variables - how large would you expect the effect to be there?</p>
-<p>Evaluate the effect size in subgroups: For example, imagine a group of really severely depressed patients. And then assume that the therapy works exceptionally well for them - what would be a realistic outcome for them? Would you expect them all to be at BDI&lt;10? Probably not. Or would a very good outcome simply be that they move to a “moderate depression”? This gives you an estimate of the upper limit of your effect size. Starting from there, you can ask: What effect size would be plausible, given your background knowledge of typical effects in your field?</p>
+<p>Look at a reasonable maximum and minimum of your variables - how large would you expect the effect to be there?</p>
+<p>Evaluate the effect size in subgroups: For example, imagine a group of really severely depressed patients. And then assume that the therapy works exceptionally well for them - what would be a realistic outcome for them? Would you expect them all to be at BDI&lt;10? Probably not. Or would a very good outcome simply be that they move from a “severe depression” to a “moderate depression”? This gives you an estimate of the upper limit of your effect size. After defining upper limits, you should ask: What effect size would be plausible, given your background knowledge of typical effects in your field?</p>
 <p>Only when you have drawn a reasonable plot by hand (and validated that with colleagues), start to work out the parameter values that you need to enter in the regression equations in order to arrive at the desired interaction plot.</p>
 </section>
 <section id="do-the-power-analysis-1" class="level2">
 <h2 class="anchored" data-anchor-id="do-the-power-analysis-1">Do the power analysis</h2>
 <p>Now that we have our desired parameter values, we update our <code>sim()</code> function by:</p>
 <ul>
-<li>imposing the interaction effect onto our dependent variable</li>
+<li>Imposing the interaction effect onto our dependent variable</li>
 <li>Adding the interaction effect to our <code>lm</code> analysis model</li>
 <li>Extracting two p-values: We now want to compute the power both for the treatment main effect and for the interaction term.</li>
 </ul>
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-7_d398f895902f70eebc256b5d747c4569">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHANGE: Add interaction_effect</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sim3 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>, <span class="at">pre_post_cor =</span> <span class="fl">0.6</span>, <span class="at">interaction_effect =</span> <span class="sc">-</span>.<span class="dv">2</span>, <span class="at">err_var =</span> <span class="dv">117</span>, <span class="at">print=</span><span class="cn">FALSE</span>) {</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(Rfast)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">23</span>, <span class="dv">23</span>)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">117</span>, pre_post_cor<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">117</span>)<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">117</span>), pre_post_cor<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">117</span>)<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">117</span>), <span class="dv">117</span>), <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(n, mu, sigma) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"BDI_pre"</span>, <span class="st">"BDI_post0"</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add treatment predictor variables</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># center the BDI_pre value for better interpretability</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI_pre.c <span class="ot">&lt;-</span> df<span class="sc">$</span>BDI_pre <span class="sc">-</span> <span class="fu">mean</span>(df<span class="sc">$</span>BDI_pre)</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGE: add the treatment main effect and the interaction to the BDI_post variable</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI_post <span class="ot">&lt;-</span> df<span class="sc">$</span>BDI_post0 <span class="sc">+</span> treatment_effect<span class="sc">*</span>df<span class="sc">$</span>treatment <span class="sc">+</span> interaction_effect<span class="sc">*</span>df<span class="sc">$</span>treatment<span class="sc">*</span>df<span class="sc">$</span>BDI_pre.c</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGE: Add interaction effect to analysis model</span></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI_post <span class="sc">~</span> BDI_pre.c <span class="sc">*</span> treatment, <span class="at">data=</span>df)</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGE: extract both focal p-values</span></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"BDI_pre.c:treatment"</span>), <span class="st">"Pr(&gt;|t|)"</span>]</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print<span class="sc">==</span><span class="cn">TRUE</span>) <span class="fu">print</span>(<span class="fu">summary</span>(res))</span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">return</span>(p_values) </span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-9_5ad1e7004ac659885f50492906a6328e">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHANGE: Add interaction_effect</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>sim3 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>, <span class="at">pre_post_cor =</span> <span class="fl">0.6</span>, <span class="at">interaction_effect =</span> <span class="sc">-</span>.<span class="dv">2</span>, <span class="at">err_var =</span> <span class="dv">117</span>, <span class="at">print=</span><span class="cn">FALSE</span>) {</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(Rfast)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">23</span>, <span class="dv">23</span>) <span class="co"># the mean values of both variables</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(err_var, pre_post_cor<span class="sc">*</span><span class="fu">sqrt</span>(err_var)<span class="sc">*</span><span class="fu">sqrt</span>(err_var), </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>      pre_post_cor<span class="sc">*</span><span class="fu">sqrt</span>(err_var)<span class="sc">*</span><span class="fu">sqrt</span>(err_var), err_var), </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(n, mu, sigma) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"BDI_pre"</span>, <span class="st">"BDI_post0"</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add treatment predictor variables</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># center the BDI_pre value for better interpretability</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI_pre.c <span class="ot">&lt;-</span> df<span class="sc">$</span>BDI_pre <span class="sc">-</span> <span class="fu">mean</span>(df<span class="sc">$</span>BDI_pre)</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGE: add the treatment main effect and the interaction to the BDI_post variable</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI_post <span class="ot">&lt;-</span> df<span class="sc">$</span>BDI_post0 <span class="sc">+</span> treatment_effect<span class="sc">*</span>df<span class="sc">$</span>treatment <span class="sc">+</span> interaction_effect<span class="sc">*</span>df<span class="sc">$</span>treatment<span class="sc">*</span>df<span class="sc">$</span>BDI_pre.c</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGE: Add interaction effect to analysis model</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI_post <span class="sc">~</span> BDI_pre.c <span class="sc">*</span> treatment, <span class="at">data=</span>df)</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGE: extract both focal p-values</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"BDI_pre.c:treatment"</span>), <span class="st">"Pr(&gt;|t|)"</span>]</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print<span class="sc">==</span><span class="cn">TRUE</span>) <span class="fu">print</span>(<span class="fu">summary</span>(res))</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">return</span>(p_values) </span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-8_6d5eb2a2f83a355a8bb93ae5e8a28b6b">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">400</span>, <span class="at">by=</span><span class="dv">20</span>)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {  <span class="co"># loop through elements of the vector "ns"</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim3</span>(<span class="at">n=</span>n, <span class="at">pre_post_cor =</span> <span class="fl">0.6</span>, <span class="at">interaction_effect =</span> <span class="sc">-</span>.<span class="dv">2</span>))</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGE: Analyze both sets of p-values separately</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The p-values for the main effect are stored in the first row,</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the p-values for the interaction effect are stored in the 2nd row</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">power_treatment =</span> <span class="fu">sum</span>(p_values[<span class="dv">1</span>, ] <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations,</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">power_interaction =</span> <span class="fu">sum</span>(p_values[<span class="dv">2</span>, ] <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-10_2702d68aa9a6a7c541e6ebbb3eb64d79">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">400</span>, <span class="at">by=</span><span class="dv">20</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {  <span class="co"># loop through elements of the vector "ns"</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim3</span>(<span class="at">n=</span>n, <span class="at">pre_post_cor =</span> <span class="fl">0.6</span>, <span class="at">interaction_effect =</span> <span class="sc">-</span>.<span class="dv">2</span>))</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># CHANGE: Analyze both sets of p-values separately</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The p-values for the main effect are stored in the first row,</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the p-values for the interaction effect are stored in the 2nd row</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">power_treatment =</span> <span class="fu">sum</span>(p_values[<span class="dv">1</span>, ] <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations,</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">power_interaction =</span> <span class="fu">sum</span>(p_values[<span class="dv">2</span>, ] <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-9_4b47e52e1d541810ecdf5ad1e55c4752">
+<div class="cell" data-hash="LM2_cache/html/unnamed-chunk-11_eadffe51d3d97b6d64649f7777f858c9">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n power_treatment power_interaction
-1  100           0.704             0.060
-2  120           0.825             0.071
-3  140           0.899             0.077
-4  160           0.925             0.118
-5  180           0.954             0.095
-6  200           0.989             0.129
-7  220           0.993             0.162
-8  240           0.991             0.161
-9  260           0.995             0.200
-10 280           1.000             0.229
-11 300           0.999             0.227
-12 320           1.000             0.281
-13 340           1.000             0.308
-14 360           1.000             0.354
-15 380           1.000             0.324
-16 400           1.000             0.372</code></pre>
+1  100           0.709             0.058
+2  120           0.830             0.069
+3  140           0.900             0.084
+4  160           0.932             0.118
+5  180           0.962             0.122
+6  200           0.991             0.129
+7  220           0.987             0.158
+8  240           0.997             0.210
+9  260           0.996             0.189
+10 280           0.999             0.212
+11 300           0.999             0.262
+12 320           1.000             0.257
+13 340           0.998             0.293
+14 360           1.000             0.338
+15 380           1.000             0.385
+16 400           1.000             0.370</code></pre>
 </div>
 </div>
 <p>While the power for detecting the main effect quickly approaches 100%, even 400 participants are by far not enough to detect the interaction effect reliably. (In particular when you recall that we set the assumed interaction effect to the largest plausible value).</p>
