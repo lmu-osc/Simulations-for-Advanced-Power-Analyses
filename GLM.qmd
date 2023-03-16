@@ -210,7 +210,7 @@ This plot shows that we need approx. 220 participants to achieve 80% under the g
 
 ## Verification with the pwr2ppl package
 
-Luckily, there are also R packages that can perform these kinds of power analyses, for example the `pwr2ppl` package (Aberson, 2019). We can use this package to verify our results. Does the `pwr2ppl` package yield the same result? Note that you will need to install this package if you haven`t used it before.
+Luckily, there are also R packages that can perform these kinds of power analyses, for example the `pwr2ppl` package (Aberson, 2019). We can use this package to verify our results. Does the `pwr2ppl` package yield the same result? Note that you will need to install this package if you haven't used it before.
 
 ```{r pwr2ppl}
 
