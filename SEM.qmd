@@ -8,14 +8,20 @@ project-type: website
 ---
 
 ```{r install packages, message=FALSE, warning=FALSE}
-#install.packages(c("lavaan", "ggplot2", "MASS", "apaTables", "MBESS"), dependencies = TRUE)
+#install.packages(c("lavaan", "ggplot2", "MASS", "apaTables", "MBESS", "future.apply"), dependencies = TRUE)
 
 library("lavaan")
 library("MASS")
 library("ggplot2")
 library("dplyr")
 library("MBESS")
+library(future.apply)
+plan(multisession)
 ```
+
+::: {.callout-note}
+In this chapter, we'll use the parallelization techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd), otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!
+:::
 
 In this chapter, we will focus on a few rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, RMSEA, etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we  only focus on the latter, that is, power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled "XXX" if you're interested in power analyses for fit indices.
 
@@ -241,7 +247,7 @@ sim_sem <- function(n, model, mu, Sigma) {
 #replicate function with varying ns
 for (n in ns_sem) {  
   
-p_values_sem <- replicate(iterations_sem, sim_sem(n = n, model = model_mediation, mu = means_vector, Sigma = cov_mat))  
+p_values_sem <- future_replicate(iterations_sem, sim_sem(n = n, model = model_mediation, mu = means_vector, Sigma = cov_mat), future.seed=TRUE)  
 result_sem <- rbind(result_sem, data.frame(
     n = n,
     power = sum(p_values_sem < .005)/iterations_sem)
@@ -338,7 +344,7 @@ sim_sem <- function(n, model) {
 #replicate function with varying ns
 for (n in ns_sem) {  
   
-  p_values_sem <- replicate(iterations_sem, sim_sem(n = n, model = model_fully_specified))  
+  p_values_sem <- future_replicate(iterations_sem, sim_sem(n = n, model = model_fully_specified), future.seed=TRUE)  
   result_sem <- rbind(result_sem, data.frame(
     n = n,
     power = sum(p_values_sem < .005)/iterations_sem)
@@ -472,7 +478,7 @@ sim_mediation <- function(n, model, mu, Sigma) {
 #replicate function with varying ns
 for (n in ns_mediation) {  
   
-p_values_mediation <- replicate(iterations_mediation, sim_mediation(n = n, model = model_mediation, mu = means_mediation, Sigma = cov_mediation))  
+p_values_mediation <- future_replicate(iterations_mediation, sim_mediation(n = n, model = model_mediation, mu = means_mediation, Sigma = cov_mediation), future.seed=TRUE)  
 result_mediation <- rbind(result_mediation, data.frame(
     n = n,
     power = sum(p_values_mediation < .005)/iterations_mediation)
