@@ -334,7 +334,7 @@ So, ideally, we base our power estimation on more reliable and/or more conservat
 As sensitivity analysis, we will apply a safeguard power analysis (Perugini et al., 2014) that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)
 
 ::: {.callout-note}
-If you assume publication bias, another heuristic for aiming at a more realistic population effect size is the "divide-by-2" heuristic. (TODO: Link to kickoff presentation)
+If you assume publication bias, another heuristic for aiming at a more realistic population effect size is the "divide-by-2" heuristic. (see [kickoff presentation](https://osf.io/bzxnj))
 :::
 
 We can use the `ci.smd` function from the `MBESS` package to compute a CI around Cohen's $d$ that we computed for our treatment effect:
