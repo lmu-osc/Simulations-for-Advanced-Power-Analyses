@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: _site
+  output-dir: docs
 
 website:
   repo-url: https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses
