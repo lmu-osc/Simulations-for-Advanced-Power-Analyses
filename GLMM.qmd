@@ -1,9 +1,0 @@
----
-title: "GLMM"
----
-
-Generalized Linear Mixed Effect Models
-
-```{r}
-1 + 1
-```

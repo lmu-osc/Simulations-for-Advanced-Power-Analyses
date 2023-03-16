@@ -13,7 +13,7 @@ This book is still being developed. If you have comment to contribute to its imp
 
 It is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
 
-![](LMU-OSC_logo_small.jpg){fig-align="left" fig-alt="LMU-OSC green logo"}
+![](images/LMU-OSC_logo_small.jpg){fig-align="left" fig-alt="LMU-OSC green logo"}
 
 ## Prerequisite
 
@@ -40,10 +40,11 @@ Let's now start power calculations for different complex models. Here are the ty
 
 -   [Linear Model I: a single dichotomous predictor](LM1.qmd)\
 -   [Linear Model 2: Multiple predictors](LM2.qmd)\
--   #FIXME\
+-   [Generalized Linear Models](GLM.qmd)\
+-   [Linear Mixed Models](LMM.qmd)\
 -   [Structural Equation Modelling (SEM)](SEM.qmd)
 
-The three chapters on linear models should be worked through in this order, as they build upon each other.
+The chapters on linear models should be worked through in this order, as they build upon each other.
 
 For each model, we will follow the structure:
 

@@ -6,10 +6,19 @@ execute:
 project-type: website
 ---
 
-```{r}
-# TODO: collect the installation of all necessary packages in one place at the beginning of the tutorial
+*Reading/working time: ~50 min.*
 
-#install.packages(c("ggplot2", "ggdist", "pwr", "MBESS"))
+```{r}
+#| output: false
+# Preparation: Install and load all necessary packages
+
+#install.packages(c("ggplot2", "ggdist", "gghalves", "pwr", "MBESS"))
+
+library(ggplot2)
+library(ggdist)
+library(gghalves)
+library(pwr)
+library(MBESS)
 ```
 
 We start with the simplest possible linear model: (a) a continuous outcome variable is predicted by a single dichotomous predictor. This model actually [rephrases a t-test as a linear model](https://lindeloev.github.io/tests-as-linear/)! Then we build up increasingly complex models: (b) a single continuous predictor and (c) multiple continuous predictors (i.e., multiple regression).
@@ -18,7 +27,7 @@ We start with the simplest possible linear model: (a) a continuous outcome varia
 
 The general equation for a linear model is:
 
-$$y = b_0 + b_1*x_1 + b_2*x_2 + ... + e$$ {#eq-1}
+$$y = b_0 + b_1*x_1 + b_2*x_2 + ... + e$$
 
 where $y$ is the continuous outcome variable, $b_0$ is the intercept, $x_1$ is the first predictor variable with its associated regression weight $b_1$, etc. Finally, $e$ is the error term which captures all variability in the outcome that is not explained by the predictor variables in the model. It is assumed that the error term is independently and identically distributed (iid) following a normal distribution with a mean of zero and a variance of $\sigma^2$:
 
@@ -30,12 +39,12 @@ This assumption of the distribution of the errors is important for our simulatio
 
 # A concrete example
 
-Let's fill the abstract symbols of @eq-1 with some concrete content. Assume that we want to analyze the treatment effect of an intervention supposed to reduce depressive symptoms. In the study, a sample of participants with a diagnosed depression are randomized to either a control group or the treatment group.
+Let's fill the abstract symbols of Eq. 1 with some concrete content. Assume that we want to analyze the treatment effect of an intervention supposed to reduce depressive symptoms. In the study, a sample of participants with a diagnosed depression are randomized to either a control group or the treatment group.
 
 We have the following two variables in our data set:
 
 -   `BDI` is the continuous outcome variable representing the severity of depressive symptoms after the treatment, assessed with the BDI-II inventory (higher values mean higher depression scores).
--   `treatment` is our dichotomous predictor defining the random group assignment. We assign the following numbers: 0 = control group (e.g., an active control group), 1 = treatment group.
+-   `treatment` is our dichotomous predictor defining the random group assignment. We assign the following numbers: 0 = control group (e.g., a waiting list group), 1 = treatment group.
 
 This is an opportunity to think about the actual scale of our variables. At the end, when we simulate data we need to insert concrete numbers into our equations:
 
@@ -52,6 +61,10 @@ The creators of this tutorial are no experts in clinical psychology; we opportun
 :::
 
 The R package `HSAUR` contains open data on 100 depressive patients, where 50 received treatment-as-usual (`TAU`) and 50 received a new treatment ("Beat the blues"; `BtheB`). Data was collected in a pre-post-design with several follow-up measurements. For the moment, we focus on the pre-treatment baseline value (`bdi.pre`) and the first post-treatment value (`bdi.2m`). We will use that data set as a "pilot study"  for our power analysis.
+
+Note that this pilot data does *not* contain an inactive control group, such as the waiting list group that we assume for our planned study. Both the `BtheB` and the `TAU` group are active treatment groups. Nonetheless, we will be able to infer our treatment effect (vs. an inactive control group) from that data by looking at the pre-treatment data.
+
+
 
 ```{r}
 # the data can be found in the HSAUR package, must be installed first
@@ -110,13 +123,13 @@ For our purpose, we compute the average treatment effect combined for both treat
 mean(BtheB$bdi.2m, na.rm=TRUE)
 ```
 
-So, the average reduction across both treatments is $17-23=6$. In the following scripts, we'll use that value as our assumed treatment effect.
+So, the average reduction across both treatments is $23-17=6$. In the following scripts, we'll use that value as our assumed treatment effect.
 
 ## Enter specific values for the model parameters
 
 Let's rewrite the abstract equation with the specific variable names. We first write the equation for the systematic part (without the error term). This also represents the predicted value:
 
-$$\widehat{\text{BDI}} = b_0 + b_1*\text{treatment}$$ {#eq-2}
+$$\widehat{\text{BDI}} = b_0 + b_1*\text{treatment}$$
 
 We use the notation $\widehat{\text{BDI}}$ (with a hat) to denote the predicted BDI score.
 
@@ -134,7 +147,7 @@ $$\widehat{\text{BDI}} = 23 - 6*treatment$$
 
 Hence, the predicted value is $23 - 6*0 = 23$ for the control group, and $23 - 6*1 = 17$ for the treatment group.
 
-With the current model, all persons in the control group have the same predicted value (23), as do all persons in the treatment group (17). 
+With the current model, all participants in the control group have the same predicted value (23), as do all participants in the treatment group (17). 
 
 As a final step, we add the random noise to the model, based on the variance in the pilot data:
 
@@ -198,11 +211,12 @@ Let's plot the simulated data with raincloud plots (see [here](https://z3tt.gith
 
 ```{r}
 #| warning: false
-library(ggplot2)
 ggplot(df, aes(x=as.factor(treatment), y=BDI)) + 
-  ggdist::stat_halfeye(adjust = .5, width = .3, .width = 0, justification = -.3, point_colour = NA) + 
+  ggdist::stat_halfeye(adjust = .5, width = .3, .width = 0, 
+        justification = -.3, point_colour = NA) + 
   geom_boxplot(width = .1, outlier.shape = NA) +
-  gghalves::geom_half_point(side = "l", range_scale = .4, alpha = .5)
+  gghalves::geom_half_point(side = "l", range_scale = .4, 
+        alpha = .5)
 ```
 
 This graph gives us an impression of the plausibility of our simulation: In the control group, we have a median BDI score of 26, and 50% of participants, represented by the box of the boxplot, are roughly between 18 and 32 points (i.e., in the range of a moderate depression). After the simulated treatment, the median BDI score is at 18 (mild depression).
@@ -304,7 +318,6 @@ Hence, with n=180 (90 in each group), we have a 80% chance to detect the effect.
 For these simple models, we can also compute analytic solutions. Let's verify our results with the `pwr` package - a linear regression with a single dichotomous predictor is equivalent to a t-test:
 
 ```{r}
-library(pwr)
 pwr.t.test(d = 0.55, sig.level = 0.005, power = .80)
 ```
 
@@ -327,7 +340,6 @@ If you assume publication bias, another heuristic for aiming at a more realistic
 We can use the `ci.smd` function from the `MBESS` package to compute a CI around Cohen's $d$ that we computed for our treatment effect:
 
 ```{r}
-library(MBESS)
 ci.smd(smd=-0.55, n.1=50, n.2=50, conf.level=.60)
 ```
 However, in the simulated regression equation, we need the *raw* effect size - so we have to backtransform the standardized confidence limits into the original metric. As the assumed effect is negative, we aim for the *upper*, i.e., the more conservative limit. After backtransformation in the raw metric, it is considerably smaller, at -4.1:
@@ -479,6 +491,9 @@ Concerning step 4d, the typical scenario is that you increase sample size until 
 
 
 # References
+
+Benjamin, D. J. et al. (2018). Redefine statistical significance. Nature Human Behaviour, 2(1), 6–10. https://doi.org/10.1038/s41562-017-0189-z
+
 
 Brysbaert, M. (2019). How many participants do we have to include in properly powered experiments? A tutorial of power analysis with reference tables. Journal of Cognition, 2(1), 16. DOI: http://doi.org/10.5334/joc.72
 

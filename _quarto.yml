@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: docs
+  output-dir: _site
 
 website:
   repo-url: https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses
@@ -16,7 +16,6 @@ website:
           - LM2.qmd
           - GLM.qmd
           - LMM.qmd
-          - GLMM.qmd
           - SEM.qmd
       - section: "Bonuses"
         contents:
@@ -29,6 +28,7 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+    html-math-method: katex
 
 execute:
   cache: true

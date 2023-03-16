@@ -3,6 +3,8 @@ prettycode
 lavaan
 MASS
 ggplot2
+dplyr
 MBESS
 MPsychoR
-dplyr
+future
+future.apply

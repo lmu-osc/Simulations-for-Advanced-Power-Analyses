@@ -1,5 +1,12 @@
+base
+methods
 colorDF
 prettycode
+datasets
+utils
+grDevices
+graphics
+stats
 Rcpp
 RcppZiggurat
 Rfast

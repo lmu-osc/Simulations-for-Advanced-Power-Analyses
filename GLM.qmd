@@ -1,7 +1,6 @@
 ---
 title: "Generalized Linear Models"
 project-type: website
-format: html
 author: Moritz Fischer
 execute:
   cache: true

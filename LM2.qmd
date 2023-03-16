@@ -6,14 +6,16 @@ execute:
 project-type: website
 ---
 
+*Reading/working time: ~50 min.*
+
 ```{r setup}
+#| output: false
 # Preparation: Install and load all necessary packages
 #install.packages(c("ggplot2", "Rfast"))
 
 library(Rfast)
 library(ggplot2)
 library(tidyr)
-
 ```
 
 In the [first chapter on linear models](LM1.qmd), we had the simplest possible linear model: a continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.
@@ -36,7 +38,7 @@ If you have absolutely no idea about the pre-post-correlation, a typical default
 
 Instead of guessing the necessary quantities - in the current case, the pre-post-correlation - let's look at real data. The "Beat the blues" (`BtheB`) data set from the `HSAUR` R package contains pre-treatment baseline values (`bdi.pre`), along with multiple post-treatment values. Here we focus on the first post-treatment assessment, 2 months after the treatment (`bdi.2m`).
 
-```{r}
+```{r load_data}
 # load the data
 data("BtheB", package = "HSAUR")
 
@@ -85,8 +87,7 @@ $$
 $$
 Put it all together:
 
-```{r}
-library(Rfast)
+```{r rmvnorm}
 mu <- c(23, 23) # the mean values of both variables
 sigma <- matrix(
     c(117 , 70, 
@@ -98,9 +99,13 @@ names(df) <- c("BDI_pre", "BDI_post0")
 cor(df)
 ```
 
+::: {.callout-note}
+A very nice and user-friendly alternative for simulating correlated variables is the [`rnorm_multi`](https://debruine.github.io/faux/articles/rnorm_multi.html) function from the `faux` package.
+:::
+
 We now have the correlated $BDI_{pre}$ and $BDI_{post}$ scores. Finally, we have to impose the treatment effect onto the post variable: In the control group, the mean value stays constant at 23 (what we already have simulated), in the treatment group, the BDI is 6 points lower:
 
-```{r}
+```{r treatment_effect}
 # add treatment predictor variables
 df$treatment <- rep(c(0, 1), times=nrow(df)/2)
   
@@ -113,13 +118,13 @@ We do not need to add an explicit intercept, as this is already encoded in the m
 
 Let's make a plausibility check by plotting the simulated variables. We first have to convert them into long format for a nicer plot:
 
-```{r}
+```{r plot}
 # reduce to 100 cases for plotting; define factors
-df <- df[1:400, ]
-df$id <- 1:nrow(df)
-df$BDI_post0 <- NULL
+df2 <- df[1:400, ]
+df2$id <- 1:nrow(df2)
+df2$BDI_post0 <- NULL
 
-df_long <- pivot_longer(df, cols=c(BDI_pre, BDI_post), names_to="time")
+df_long <- pivot_longer(df2, cols=c(BDI_pre, BDI_post), names_to="time")
 df_long$time <- factor(df_long$time, levels=c("BDI_pre", "BDI_post"))
 df_long$treatment <- factor(df_long$treatment, levels=c(0, 1), labels=c("Control", "Treatment"))
 
@@ -230,7 +235,7 @@ print(result)
 
 In the original analysis, we needed n=180 (90 in each group) for 80% power. Including the baseline covariate (which explains $r^2 = .6^2 = 36\%$ of the variance in post scores) reduces that number to around n=115.
 
-Let's check the plausibility of our power simulation. Borm et al ([2007](http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf), p. 1237) propose a simple method how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:
+Let's check the plausibility of our power simulation. Borm et al ([2007](http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf), p. 1237) propose a simple method on how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:
 
 > "We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group.
 
@@ -301,7 +306,7 @@ By setting the interaction effect to -0.2, we achieve a plausible interaction pl
 
 
 ```{r interaction_plot2}
-#| echo: false
+#| code-fold: true
 par(mar = c(7, 4, 4, 2) + 0.1)
 plot(NA, xlim=c(-23, 40), ylim=c(0, 63), xlab="", ylab="BDI_post", main="An implausible interaction effect")
 abline(a=23, b=0.6, col="red")
@@ -345,12 +350,13 @@ Now that we have our desired parameter values, we update our `sim()` function by
 * Adding the interaction effect to our `lm` analysis model
 * Extracting two p-values: We now want to compute the power both for the treatment main effect and for the interaction term.
 
-```{r}
+```{r sim}
 #| echo: true
 #| results: hide
 
 # CHANGE: Add interaction_effect
-sim3 <- function(n=100, treatment_effect=-6, pre_post_cor = 0.6, interaction_effect = -.2, err_var = 117, print=FALSE) {
+sim3 <- function(n=100, treatment_effect=-6, pre_post_cor = 0.6, 
+                 interaction_effect = -.2, err_var = 117, print=FALSE) {
   library(Rfast)
   mu <- c(23, 23) # the mean values of both variables
   sigma <- matrix(
@@ -381,7 +387,7 @@ sim3 <- function(n=100, treatment_effect=-6, pre_post_cor = 0.6, interaction_eff
 ```
 
 
-```{r}
+```{r power_analysis_LM2}
 #| echo: true
 #| results: hide
 

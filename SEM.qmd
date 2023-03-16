@@ -269,7 +269,7 @@ This graph suggests that we need a sample size of approximately 58 to reach a po
 
 In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to show how we can use a "smallest effect size of interest" (SESOI) instead of an expected effect size. Second, we would like to present an alternative way to simulate data for SEMs, simply by using a built-in function in the `lavaan` package.  
 
-## Using the lavaan syntax to simualte data
+## Using the lavaan syntax to simulate data
 
 In our opening example in this chapter, we used the `mvrnorm` function from the `MASS`package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the `lavaan` package, that is, the `simulateData()` function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data. 
 

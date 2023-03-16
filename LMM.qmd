@@ -1,12 +1,400 @@
 ---
-title: "Linear Mixed Models"
+title: "Linear Mixed Models / Multilevel models"
 author: "Felix Schönbrodt"
 execute:
   cache: true
 project-type: website
 ---
 
+```{r setup}
+#| output: false
+# Preparation: Install and load all necessary packages
+# install.packages(c("lme4", "lmerTest", "ggplot2", "tidyr", "Rfast", "future.apply"))
+
+library(lme4)
+library(lmerTest)
+library(ggplot2)
+library(tidyr)
+library(Rfast)
+library(future.apply)
+plan(multisession)
+```
+
 In order to keep this chapter at a reasonable length, we focus on how to simulate the mixed effects/multi-level model and spend less time discussing how to arrive at plausible parameter values. Please read Chapters [1](LM1.qmd) and [2](LM2.qmd) for multiple examples where the parameter values are derived from (a) the literature (e.g., bias-corrected meta-analyses), (b) pilot data, or (c) plausibility constraints.
 
 Furthermore, we'll use the techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd), otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!
+
+We continue to work with the "Beat the blues" (`BtheB`) data set from the `HSAUR` R package. As there are multiple post-treatment measurements (after 2, 3, 6, and 8 months) we can create a nice longitudinal multilevel data set, with measurement points on Level 1 (L1) and persons on L2. We will work with the `lme4` package.
+
+For that, we first have to transform the pilot data set into the long format:
+
+```{r}
+# load the data
+data("BtheB", package = "HSAUR")
+BtheB$person_id <- 1:nrow(BtheB)
+
+BtheB_long <- pivot_longer(BtheB, cols=matches("^bdi\\.\\d"), values_to = "BDI", names_to = "variable")
+BtheB_long$time <- substr(BtheB_long$variable, 5, 5) |> as.integer()
+```
+
+Here we plot the trajectory of the first 20 participants. As you can see, there are missing values; not all participants have all follow-up values:
+
+```{r}
+#| warning: false
+ggplot(BtheB_long[BtheB_long$person_id <=20, ], aes(x=time, y=BDI, group=person_id)) + geom_point() + geom_line() +
+  facet_wrap(~person_id)
+```
+
+# A random-intercept, fixed-slope model
+
+We start with a simple model and analyze the trajectory of the BDI score across time (we ignore the treatment factor for the moment). Hence, the question for this model is: Is there a trend over time in BDI scores?
+
+## The formulas
+
+* i = index for time points
+* j = index for persons
+
+Level 1 equation:
+$$
+\text{BDI}_{ij} = \beta_{0j} + \beta_{1j} time_{ij} + e_{ij}
+$$
+Level 2 equation:
+$$
+\beta_{0j} = \gamma_{00} + u_{0j}\\
+\beta_{1j} = \gamma_{10}
+$$
+Combined equation:
+$$
+\text{BDI}_{ij} = \gamma_{00} + \gamma_{10} time_{ij}  + u_{0j} + e_{ij} \\
+\\
+e_{ij} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\sigma^2) \\
+u_{0j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{00})
+$$
+
+## Analysis in pilot data
+First, let's run the analysis model in the pilot data. To make the intercept more interpretable, we center it on the first post-measurement.
+
+```{r}
+BtheB_long$time.c <- BtheB_long$time - 2
+
+l0 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=BtheB_long)
+summary(l0)
+```
+
+Hence, in the pilot data there is a significant negative trend - with each month, participants have a decrease of 0.7 BFI points. But remember that in this data set *all* of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy).
+
+## Let's simulate
+
+The next script shows how to simulate multilevel data with a random intercept. We first create a L2 data set (where each row is once participant). This contains a person id (which is necessary to merge the L1 and the L2 data set) and the random intercepts (i.e., the random deviations of persons from the fixed intercept). In more complex models, this also contains all L2 predictors.
+
+Next we create a L1 data set, and then merge both into one long format data set.
+We closely simulate the situation of the pilot data: All participants are treated and show a negative trend.
+
+```{r sim}
+#------  Setting the model parameters ---------------
+# between-person random intercept variance: var(u_0j) = tau_00
+tau_00 <- 100
+
+gamma_00 <- 17    # the grand (fixed) intercept
+gamma_10 <- -0.7  # the fixed slope for time
+residual_var <- 25
+
+n_persons <- 100
+
+# Create a L2 (person-level) data set; each row is one person
+df_L2 <- data.frame(
+  person_id = 1:n_persons,
+  u_0j = rnorm(n_persons, mean=0, sd=sqrt(tau_00))
+)
+
+# Create a L1 (measurement-point-level) data set; each row is one measurement
+df_L1 <- data.frame(
+  person_id = rep(1:n_persons, each=4),  # create 4 rows for each person (as we have 4 measurements)  
+  time.c = rep(c(0, 2, 4, 6), times=n_persons)  
+)
+
+# combine to a long format data set  
+df_long <- merge(df_L1, df_L2, by="person_id")
+  
+# compute the DV by writing down the combined equation
+df_long <- within(df_long, {
+  BDI = gamma_00 + gamma_10*time.c + u_0j + rnorm(n_persons*4, mean=0, sd=sqrt(residual_var))
+})
+
+l1 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=df_long)
+summary(l1)
+```
+
+Now we put this data generating script into a function, and run our power analysis:
+
+```{r power_analysis_LMM_simple}
+#| results: hide
+
+# Note: This code could be more optimized for speed, but this way it's more easy to understand
+sim4 <- function(n_persons = 100, tau_00 = 100, gamma_00 = 17, gamma_10 = -0.7, 
+                 residual_var = 25, print=FALSE) {
+
+  df_L1 <- data.frame(
+    person_id = 1:n_persons,
+    u_0j = rnorm(n_persons, mean=0, sd=sqrt(tau_00))
+  )
+  
+  df_L2 <- data.frame(
+    person_id = rep(1:n_persons, each=4),  # create 4 rows for each person (as we have 4 measurements)
+    time.c = rep(c(0, 2, 4, 6), times=n_persons)  
+  )
+  
+  # combine to a long format data set  
+  df_long <- merge(df_L1, df_L2, by="person_id")
+  
+  # simulate response variable, based on combined equation  
+  df_long <- within(df_long, {
+    BDI = gamma_00 + gamma_10*time.c + u_0j + rnorm(n_persons*4, mean=0, sd=sqrt(residual_var))
+  })
+  
+  # compute p-values
+  # these options might speed up code execution a little bit:
+  # , control=lmerControl(optimizer="bobyqa", calc.derivs = FALSE)
+  l1 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=df_long)
+  
+  if (print==TRUE) print(summary(l1))
+  else return(summary(l1)$coefficients[, "Pr(>|t|)"])
+}
+
+
+set.seed(0xBEEF)
+iterations <- 1000
+ns <- seq(30, 50, by=5)
+
+result <- data.frame()
+
+for (n_persons in ns) {
+  system.time({
+    p_values <- future_replicate(iterations, sim4(n_persons=n_persons), future.seed = TRUE)
+  })
+  
+  result <- rbind(result, data.frame(
+      n = n_persons,
+      power_intercept = sum(p_values[1, ] < .005)/iterations,
+      power_time.c    = sum(p_values[2, ] < .005)/iterations
+    )
+  )
+  
+  # show the result after each run (not shown here in the tutorial)
+  print(result)
+}
+```
+```{r}
+#| echo: false
+print(result)
+```
+
+Hence, we need around 36 persons to achieve a power of 80% to detect this slope.
+
+## Comparison with other approaches
+
+Murayama and colleagues (2022) recently released an approximate but easy approach for LMM power analysis based on pilot data.
+They also provide an interactive [Shiny app](https://koumurayama.shinyapps.io/summary_statistics_based_power/).
+
+Go to the tab "Level-1 predictor -> Planning L2 sample size only" and enter the values from the pilot study into the fields in the left panel:
+
+* (Absolute) t value of the focal level-1 predictor = 4.623
+* Level-2 sample size = 97
+* Number of cross-level interactions related to the focal level-1 predictor = 0
+
+This approximation yields very close values to our simulation:
+
+![Screenshot from Murayama app](images/LMM_Murayama_app_example.png)
+
+Another option is the app "[PowerAnalysisIL](https://github.com/ginettelafit/PowerAnalysisIL)" by Lafit (2021). In that app you would need to choose "Model 4: Effect of a level-1 continuous predictor (fixed slope)" and set "Autocorrelation of level-1 errors" to zero to estimate an equivalent model to ours. This app, however, is much slower than our own simulations, and cannot perfectly mirror our model, as the continuous L1 predictor cannot be defined exactly as we need it.
+
+Nonetheless, the estimates are not far away from ours:
+
+![Screenshot from Lafit app](images/LMM_Lafit_example.png)
+
+
+# A random-intercept, random-slope model with cross-level interaction
+
+We now make the model more complex by (a) adding a L2 predictor (treatment vs. control), (b) allowing random slopes for the time effect, and (c) model a cross-level interaction (i.e., does the slope differ between treatment and control group?).
+
+The main effect for `treatment` reveals group differences when the other predictor, `time`, is zero (i.e., at the first post-treatment measurement). The main effect for `time` now is a *conditional* effect, as it models the time trend for the control group (i.e., when `treatment` is zero).
+
+## The formulas
+
+* i = index for time points
+* j = index for persons
+
+Level 1 equation:
+$$
+\text{BDI}_{ij} = \beta_{0j} + \beta_{1j} time_{ij} + e_{ij}
+$$
+Level 2 equations:
+$$
+\beta_{0j} = \gamma_{00} + \gamma_{01} \text{treatment}_j + u_{0j}\\
+\beta_{1j} = \gamma_{10} + \gamma_{11} \text{treatment}_j + u_{1j}
+$$
+Combined equation:
+$$
+\text{BDI}_{ij} = \gamma_{00} + \gamma_{01} \text{treatment}_j + \gamma_{10} time_{ij} +  \gamma_{11} \text{treatment}_j time_{ij} + u_{1j} time_{ij} + u_{0j} + e_{ij} \\
+\\
+e_{ij} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\sigma^2) \\
+u_{0j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{00}) \\
+u_{1j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{11}) \\
+cov(u_{0j}, u_{1j}) = \tau_{01}
+$$
+
+## Setting the population parameter values
+
+We need to assume four additional population values, namely: $\tau_{11}$ (the variance of random slopes), $\tau_{01}$ (the intercept-slope-covariance), $\gamma_{01}$ (the treatment main effect), and $\gamma_{11}$ (the interaction effect).
+
+*Fixed effects:* 
+
+* The grand intercept $\gamma_{00}$ now is set to 23.
+* The treatment effect $\gamma_{01}$ is set to -6 (as before). In this more complex model, the treatment effect refers to a difference between treatment and control group directly after treatment. 
+* As mentioned above, it is reasonable to assume that there should be no marked trend in a passive control group. Therefore, we set the conditional main effect for time, $\gamma_{10}$ to 0. 
+* For the interaction effect, we expect a steeper decline in the treatment group (e.g., because the treatment "unfolds" its effect over time). If we set the interaction effect to -0.7, this translates to a predicted slope of -0.7 in the treatment group: $\gamma_{10} time_{ij} +  \gamma_{11} \text{treatment}_j time_{ij} =  (\gamma_{10} +  \gamma_{11} \text{treatment}_j) time_{ij}$. 
+
+Is this slope of -0.7, estimated from the pilot data, reasonable?
+Let's extrapolate the trend: Treated patients have an average BDI score of 17 (directly after treatment). If they decline 0.7 points per month, they would have a BDI difference of $12*-0.7 = -8.4$ after one year, and are at around 9 BDI points. With that decline, they would have moved from a mild depression to a minimal depression. This seems plausible.
+
+*Random terms:* 
+
+* Assume that ~95% of slopes in the treatment group lie between -0.7 ± 0.3 (i.e., between -0.4 and -1). This corresponds to a standard deviation of 0.15, and consequently a variance of $\tau_{11} = 0.15^2 = 0.0225$. 
+* We assume no random effect correlation, so $\tau_{01} = 0$. 
+
+As recommended in the last chapter, we visualize this assumed interaction effect by a hand drawing:
+
+![hand-drawn interaction plot](images/BDI-interaction-2.jpg)
+Looks good!
+
+
+## Let's simulate
+
+```{r power_analysis_LMM}
+#| warnings: false
+#| echo: true
+#| results: false
+#| output: false
+#| error: false
+
+sim5 <- function(n_persons = 100, tau_00 = 100, tau_11 = 0.0225, tau_01 = 0, 
+                 gamma_00 = 23, gamma_01 = -6, gamma_10 = 0, gamma_11 = -0.7, 
+                 residual_var = 25, print=FALSE) {
+
+  # create (correlated) random effect structure
+  mu <- c(0 ,0)
+  sigma <- matrix(
+    c(tau_00, tau_01, 
+      tau_01, tau_11), nrow=2, byrow=TRUE)
+  RE <- rmvnorm(n=n_persons, mu=mu, sigma=sigma) |> data.frame()
+  names(RE) <- c("u_0j", "u_1j")
+  
+  df_L1 <- data.frame(
+    person_id = 1:n_persons,
+    u_0j = RE$u_0j,
+    u_1j = RE$u_1j,
+    treatment = rep(c(0, 1), times=n_persons/2)
+  )
+  
+  df_L2 <- data.frame(
+    person_id = rep(1:n_persons, each=4),  # create 4 rows for each person (as we have 4 measurements)
+    time.c = rep(c(0, 2, 4, 6), times=n_persons)  
+  )
+  
+  # combine to a long format data set  
+  df_long <- merge(df_L1, df_L2, by="person_id")
+  
+  # simulate response variable, based on combined equation  
+  df_long <- within(df_long, {
+      BDI = gamma_00 + # intercept
+      gamma_10*time.c + gamma_01*treatment + gamma_11*time.c*treatment +  # fixed terms
+      u_0j + u_1j*time.c + rnorm(n_persons*4, mean=0, sd=sqrt(residual_var))  # random terms
+  })
+  
+  # for debugging: plot some simulated participants
+  #ggplot(df_long[df_long$person_id <=20, ], aes(x=time.c, y=BDI, color=factor(treatment), group=person_id)) +
+  # geom_point() + geom_line() + facet_wrap(~person_id)
+  
+  # ggplot(df_long, aes(x=time.c, y=BDI, color=factor(treatment))) +
+  # stat_summary(fun.data=mean_cl_normal, geom = "pointrange")
+  
+  # compute p-values
+  # these options might speed up code execution a little bit:
+  # , control=lmerControl(optimizer="bobyqa", calc.derivs = FALSE)
+  l1 <- lmer(BDI ~ 1 + time.c*treatment + (1 + time.c|person_id), data=df_long)
+  
+  if (print==TRUE) print(summary(l1))
+  else return(summary(l1)$coefficients[, "Pr(>|t|)"])
+}
+
+
+set.seed(0xBEEF)
+iterations <- 1000
+ns <- seq(60, 200, by=10) # must be dividable by 2
+
+result <- data.frame()
+
+for (n_persons in ns) {
+  system.time({
+    p_values <- future_replicate(iterations, sim5(n_persons=n_persons), future.seed = TRUE)
+  })
+  
+  result <- rbind(result, data.frame(
+      n = n_persons,
+      power_intercept = sum(p_values[1, ] < .005)/iterations,
+      power_time.c    = sum(p_values[2, ] < .005)/iterations,
+      power_treatment = sum(p_values[3, ] < .005)/iterations,
+      power_IA        = sum(p_values[4, ] < .005)/iterations
+    )
+  )
+  
+  # show the result after each run (not shown here in the tutorial)
+  print(result)
+}
+```
+
+```{r}
+#| echo: false
+
+# show the results
+print(result)
+```
+
+You will see a lot of warnings about `boundary (singular) fit` - you can generally ignore these; they typically occur when one of the random variances is exactly zero; but the fixed effect estimates (which are our focus here) are still valid. You will also see some rare warnings about `Model failed to converge with max|grad|`. In this case, the optimizer did not converge with the required precision, but typically still is very close. Finally, there are some warnings `Model failed to converge with 1 negative eigenvalue`. These instances give wrong results. However, if in our thousands of simulations some very few models did not converge, this makes no noticeable difference. If, however, the majority of your models does not converge this is a hint that your simulation has some errors.
+
+Concerning the computed power, we see that we need around 180 participants for the treatment main effect (which mirrors the result from Chapter 1), and around 140 participants for detecting the interaction effect. As there is no main effect for `time.c` (it has been simulated as zero), the power stays always around the $\alpha$-level.
+
+# Ways forward
+
+While this power analysis could be approximated with existing apps, there are many useful extensions of the simulations that will not be possible in existing apps. For example, we know from the pilot data that there is a lot of drop-out. We could easily simulate that drop-out (e.g., missing completely at random, MCAR) by setting, say, 10% of all BDI values to `NA` from $t_2$ on, additional 10% from $t_3$ on, etc.
+Furthermore, we could simulate floor effects: Currently, the simulated BDI scores can drop below zero. A more realistic data generating model would cap these values at zero. This restricts the range, diminishes the mean difference, and therefore lowers the power.
+
+
+# Other packages
+
+The `faux` package offers an elegant interface to [simulate multilevel data](https://debruine.github.io/faux/articles/sim_mixed.html#building-multilevel-designs):
+
+```{r}
+#| eval: false
+
+library(faux)
+sim_faux <- function(n_persons=100, print=FALSE) {
+  df <- add_random(person_id = n_persons)  %>%
+    add_within("person_id", time.c = 0:3) %>% 
+    add_between("person_id", group = c("treatment", "control")) %>% 
+    add_recode("group", "condition", control = 0, treatment = 1) %>%
+    add_ranef("person_id", u0j = sqrt(100)) %>% 
+    add_ranef(sigma = sqrt(25))
+  
+  df$time.c <- as.integer(as.character(df$time.c))*2
+  
+  # compute DV
+  df$BDI = 17 - 0.7*df$time.c + df$u0j + df$sigma
+  
+  l1 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=df)
+  
+  if (print==TRUE) print(summary(l1))
+  else return(summary(l1)$coefficients[, "Pr(>|t|)"])
+}
+```
 
