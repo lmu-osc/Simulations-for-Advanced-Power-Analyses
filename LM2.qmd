@@ -308,7 +308,7 @@ By setting the interaction effect to -0.2, we achieve a plausible interaction pl
 ```{r interaction_plot2}
 #| code-fold: true
 par(mar = c(7, 4, 4, 2) + 0.1)
-plot(NA, xlim=c(-23, 40), ylim=c(0, 63), xlab="", ylab="BDI_post", main="An implausible interaction effect")
+plot(NA, xlim=c(-23, 40), ylim=c(0, 63), xlab="", ylab="BDI_post", main="A plausible interaction effect")
 abline(a=23, b=0.6, col="red")
 abline(a=17, b=0.4, col="blue")
 abline(v=26, lty="dotted")
