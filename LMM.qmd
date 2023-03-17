@@ -136,7 +136,7 @@ Now we put this data generating script into a function, and run our power analys
 ```{r power_analysis_LMM_simple}
 #| results: hide
 
-# Note: This code could be more optimized for speed, but this way it's more easy to understand
+# Note: This code could be more optimized for speed, but this way is easier to understand
 sim4 <- function(n_persons = 100, tau_00 = 100, gamma_00 = 17, gamma_10 = -0.7, 
                  residual_var = 25, print=FALSE) {
 
@@ -271,6 +271,7 @@ Let's extrapolate the trend: Treated patients have an average BDI score of 17 (d
 As recommended in the last chapter, we visualize this assumed interaction effect by a hand drawing:
 
 ![hand-drawn interaction plot](images/BDI-interaction-2.jpg)
+
 Looks good!
 
 
