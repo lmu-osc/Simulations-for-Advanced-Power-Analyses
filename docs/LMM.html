@@ -301,7 +301,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>In order to keep this chapter at a reasonable length, we focus on how to simulate the mixed effects/multi-level model and spend less time discussing how to arrive at plausible parameter values. Please read Chapters <a href="./LM1.html">1</a> and <a href="./LM2.html">2</a> for multiple examples where the parameter values are derived from (a) the literature (e.g., bias-corrected meta-analyses), (b) pilot data, or (c) plausibility constraints.</p>
 <p>Furthermore, we’ll use the techniques described in the Chapter <a href="./optimizing_code.html">“Bonus: Optimizing R code for speed”</a>, otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!</p>
-<p>We continue to work with the “Beat the blues” (<code>BtheB</code>) data set from the <code>HSAUR</code> R package. As there are multiple post-treatment measurements (after 2, 3, 6, and 8 months) we can create a nice longitudinal multilevel data set, with measurement points on Level 1 (L1) and persons on L2. We will work with the <code>lme4</code> package.</p>
+<p>We continue to work with the “Beat the blues” (<code>BtheB</code>) data set from the <code>HSAUR</code> R package. As there are multiple post-treatment measurements (after 2, 3, 6, and 8 months) we can create a nice longitudinal multilevel data set, with measurement points on level 1 (L1) and persons on level 2 (L2). We will work with the <code>lme4</code> package to run the mixed-effect models.</p>
 <p>For that, we first have to transform the pilot data set into the long format:</p>
 <div class="cell" data-hash="LMM_cache/html/unnamed-chunk-1_551adcd25a47f5bd5e1fa21d6ecf4555">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data</span></span>
@@ -450,8 +450,8 @@ time.c -0.259</code></pre>
 </div>
 </div>
 <p>Now we put this data generating script into a function, and run our power analysis:</p>
-<div class="cell" data-hash="LMM_cache/html/power_analysis_LMM_simple_5f6cc2dcb93a16608be54d3091259f02">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: This code could be more optimized for speed, but this way it's more easy to understand</span></span>
+<div class="cell" data-hash="LMM_cache/html/power_analysis_LMM_simple_3c102b5dd5f3c1909eaf40c77b97f5d0">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: This code could be more optimized for speed, but this way is easier to understand</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sim4 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n_persons =</span> <span class="dv">100</span>, <span class="at">tau_00 =</span> <span class="dv">100</span>, <span class="at">gamma_00 =</span> <span class="dv">17</span>, <span class="at">gamma_10 =</span> <span class="sc">-</span><span class="fl">0.7</span>, </span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">residual_var =</span> <span class="dv">25</span>, <span class="at">print=</span><span class="cn">FALSE</span>) {</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -584,7 +584,13 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 <li>We assume no random effect correlation, so <span class="math inline">\tau_{01} = 0</span>.</li>
 </ul>
 <p>As recommended in the last chapter, we visualize this assumed interaction effect by a hand drawing:</p>
-<p><img src="images/BDI-interaction-2.jpg" class="img-fluid" alt="hand-drawn interaction plot"> Looks good!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/BDI-interaction-2.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">hand-drawn interaction plot</figcaption><p></p>
+</figure>
+</div>
+<p>Looks good!</p>
 </section>
 <section id="lets-simulate-1" class="level2">
 <h2 class="anchored" data-anchor-id="lets-simulate-1">Let’s simulate</h2>
