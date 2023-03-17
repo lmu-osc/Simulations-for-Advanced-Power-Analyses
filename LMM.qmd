@@ -47,7 +47,7 @@ ggplot(BtheB_long[BtheB_long$person_id <=20, ], aes(x=time, y=BDI, group=person_
 
 # A random-intercept, fixed-slope model
 
-We start with a simple model and analyze the trajectory of the BDI score across time (we ignore the treatment factor for the moment). Hence, the question for this model is: Is there a trend over time in BDI scores?
+We start with a simple model and analyze the trajectory of the BDI score across time (we ignore the treatment factor for the moment). Hence, the question for this model is: Is there a linear trend over time in BDI scores?
 
 ## The formulas
 
@@ -72,7 +72,7 @@ u_{0j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{00})
 $$
 
 ## Analysis in pilot data
-First, let's run the analysis model in the pilot data. To make the intercept more interpretable, we center it on the first post-measurement.
+First, let's run the analysis model in the pilot data. To make the intercept more interpretable, we center it on the first post-measurement by subtracting 2 (i.e., month "2" becomes month "0" etc.).
 
 ```{r}
 BtheB_long$time.c <- BtheB_long$time - 2
@@ -82,6 +82,10 @@ summary(l0)
 ```
 
 Hence, in the pilot data there is a significant negative trend - with each month, participants have a decrease of 0.7 BFI points. But remember that in this data set *all* of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy).
+
+The grand intercept $\gamma_{00}$ is 17. This is also the average post-treatment value that we assumed in our previous models in Chapters 1 and 2.
+
+For the random intercept variance and the residual variance, we take generously rounded estimates from the pilot data: $\tau_{00} = 100$ and $\sigma^2 = 25$.
 
 ## Let's simulate
 
