@@ -40,7 +40,7 @@ Please note that the predictions used as examples in this chapter are not necess
 
 ## Let's get some real data as starting point
 
-Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let's assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al (2016) and the corresponding data set which has been made accessible as part of the `MPsychoR` package. Let's take a look at this data set.
+Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let's assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al ([2016](https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated)) and the corresponding data set which has been made accessible as part of the `MPsychoR` package. Let's take a look at this data set.
 
 
 ```{r load data, message=FALSE}
@@ -366,7 +366,7 @@ ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_con
 
 ::: {.callout-tip}
 
-Wang and Rhemtulla (2021) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: [https://yilinandrewang.shinyapps.io/pwrSEM/](https://yilinandrewang.shinyapps.io/pwrSEM/) 
+Wang and Rhemtulla ([2021](https://doi.org/10.1177/2515245920918253)) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: [https://yilinandrewang.shinyapps.io/pwrSEM/](https://yilinandrewang.shinyapps.io/pwrSEM/) 
 
 :::
 
@@ -501,9 +501,9 @@ This shows that roughly 1,350 participants will be needed to obtain sufficient p
 
 # References
 
-Bergh, R., Akrami, N., Sidanius, J., & Sibley, C. G. (2016). Is group membership necessary for understanding generalized prejudice? A re-evaluation of why prejudices are interrelated. Journal of Personality and Social Psychology, 111(3), 367–395. https://doi.org/10.1037/pspi0000064
+Bergh, R., Akrami, N., Sidanius, J., & Sibley, C. G. (2016). Is group membership necessary for understanding generalized prejudice? A re-evaluation of why prejudices are interrelated. Journal of Personality and Social Psychology, 111(3), 367–395. [https://doi.org/10.1037/pspi0000064](https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated)
 
-Schoemann, A. M., Boulton, A. J., & Short, S. D. (2017). Determining power and sample size for simple and complex mediation models. Social Psychological and Personality Science, 8(4), 379–386. https://doi.org/10.1177/1948550617715068
+Schoemann, A. M., Boulton, A. J., & Short, S. D. (2017). Determining power and sample size for simple and complex mediation models. Social Psychological and Personality Science, 8(4), 379–386. [https://doi.org/10.1177/1948550617715068](https://www.researchgate.net/publication/317631067_Determining_Power_and_Sample_Size_for_Simple_and_Complex_Mediation_Models)
 
-Wang, Y. A., & Rhemtulla, M. (2021). Power analysis for parameter estimation in structural equation modeling: A discussion and tutorial. Advances in Methods and Practices in Psychological Science, 4(1), 1–17. https://doi.org/10.1177/2515245920918253
+Wang, Y. A., & Rhemtulla, M. (2021). Power analysis for parameter estimation in structural equation modeling: A discussion and tutorial. Advances in Methods and Practices in Psychological Science, 4(1), 1–17. [https://doi.org/10.1177/2515245920918253](https://doi.org/10.1177/2515245920918253)
 
