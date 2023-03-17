@@ -16,7 +16,9 @@ library("ggplot2")
 library("dplyr")
 library("MBESS")
 library(future.apply)
-plan(multisession) # this initializes parallel processing, for faster code execution
+# this initializes parallel processing, for faster code execution
+# By default, it uses all available cores
+plan(multisession)
 ```
 
 ::: {.callout-note}

@@ -201,9 +201,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
 </li>
           <li class="sidebar-item">
-  GLMM.qmd
-  </li>
-          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./SEM.html" class="sidebar-item-text sidebar-link active">Structural Equation Models (SEM)</a>
   </div>
@@ -248,7 +245,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#lets-get-some-real-data-as-starting-point" id="toc-lets-get-some-real-data-as-starting-point" class="nav-link" data-scroll-target="#lets-get-some-real-data-as-starting-point">Let’s get some real data as starting point</a></li>
   <li><a href="#sample-size-planning-find-the-necessary-sample-size" id="toc-sample-size-planning-find-the-necessary-sample-size" class="nav-link" data-scroll-target="#sample-size-planning-find-the-necessary-sample-size">Sample size planning: Find the necessary sample size</a></li>
-  <li><a href="#using-the-lavaan-syntax-to-simualte-data" id="toc-using-the-lavaan-syntax-to-simualte-data" class="nav-link" data-scroll-target="#using-the-lavaan-syntax-to-simualte-data">Using the lavaan syntax to simualte data</a></li>
+  <li><a href="#using-the-lavaan-syntax-to-simulate-data" id="toc-using-the-lavaan-syntax-to-simulate-data" class="nav-link" data-scroll-target="#using-the-lavaan-syntax-to-simulate-data">Using the lavaan syntax to simulate data</a></li>
   </ul></li>
   <li><a href="#a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables" id="toc-a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables" class="nav-link" data-scroll-target="#a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables">A simulation-based power analysis for a mediation model with latent variables</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
@@ -281,7 +278,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<div class="cell" data-hash="SEM_cache/html/install packages_bec7ff2ed13056bddf8f17f2763d4db9">
+<div class="cell" data-hash="SEM_cache/html/install packages_d1a9b415748faa1ffaad275941131b9c">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(c("lavaan", "ggplot2", "MASS", "apaTables", "MBESS", "future.apply"), dependencies = TRUE)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"lavaan"</span>)</span>
@@ -290,7 +287,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"dplyr"</span>)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"MBESS"</span>)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future.apply)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># this initializes parallel processing, for faster code execution</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># By default, it uses all available cores</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -693,8 +692,8 @@ FALSE  TRUE
 <p>This graph suggests that we need a sample size of approximately 58 to reach a power of 80% with the given population estimates. That’s all it takes to run a power analysis for a SEM!</p>
 <p>In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to show how we can use a “smallest effect size of interest” (SESOI) instead of an expected effect size. Second, we would like to present an alternative way to simulate data for SEMs, simply by using a built-in function in the <code>lavaan</code> package.</p>
 </section>
-<section id="using-the-lavaan-syntax-to-simualte-data" class="level2">
-<h2 class="anchored" data-anchor-id="using-the-lavaan-syntax-to-simualte-data">Using the lavaan syntax to simualte data</h2>
+<section id="using-the-lavaan-syntax-to-simulate-data" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-lavaan-syntax-to-simulate-data">Using the lavaan syntax to simulate data</h2>
 <p>In our opening example in this chapter, we used the <code>mvrnorm</code> function from the <code>MASS</code>package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the <code>lavaan</code> package, that is, the <code>simulateData()</code> function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data.</p>
 <p>More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al.&nbsp;Let’s again take a look at the results of our SEM when applying it to this data set.</p>
 <div class="cell" data-hash="SEM_cache/html/unnamed-chunk-1_38060c5515d5e9f9bd4e2e18a20920c4">

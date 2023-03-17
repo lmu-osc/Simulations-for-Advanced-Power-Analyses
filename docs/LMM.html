@@ -201,9 +201,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
 </li>
           <li class="sidebar-item">
-  GLMM.qmd
-  </li>
-          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./SEM.html" class="sidebar-item-text sidebar-link">Structural Equation Models (SEM)</a>
   </div>
@@ -251,7 +248,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#lets-simulate" id="toc-lets-simulate" class="nav-link" data-scroll-target="#lets-simulate">Let’s simulate</a></li>
   <li><a href="#comparison-with-other-approaches" id="toc-comparison-with-other-approaches" class="nav-link" data-scroll-target="#comparison-with-other-approaches">Comparison with other approaches</a></li>
   </ul></li>
-  <li><a href="#the-random-intercept-random-slope-model-with-cross-level-interaction" id="toc-the-random-intercept-random-slope-model-with-cross-level-interaction" class="nav-link" data-scroll-target="#the-random-intercept-random-slope-model-with-cross-level-interaction">The random-intercept, random-slope model with cross-level interaction</a>
+  <li><a href="#a-random-intercept-random-slope-model-with-cross-level-interaction" id="toc-a-random-intercept-random-slope-model-with-cross-level-interaction" class="nav-link" data-scroll-target="#a-random-intercept-random-slope-model-with-cross-level-interaction">A random-intercept, random-slope model with cross-level interaction</a>
   <ul class="collapse">
   <li><a href="#the-formulas-1" id="toc-the-formulas-1" class="nav-link" data-scroll-target="#the-formulas-1">The formulas</a></li>
   <li><a href="#setting-the-population-parameter-values" id="toc-setting-the-population-parameter-values" class="nav-link" data-scroll-target="#setting-the-population-parameter-values">Setting the population parameter values</a></li>
@@ -288,7 +285,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<div class="cell" data-hash="LMM_cache/html/setup_bd88928749dfa3a4af3ab3979457c93b">
+<div class="cell" data-hash="LMM_cache/html/setup_e5cf48c5a2ac0f64d1463e48b5bf482d">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparation: Install and load all necessary packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(c("lme4", "lmerTest", "ggplot2", "tidyr", "Rfast", "future.apply"))</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -298,7 +295,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rfast)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future.apply)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># this initializes parallel processing, for faster code execution</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># By default, it uses all available cores</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In order to keep this chapter at a reasonable length, we focus on how to simulate the mixed effects/multi-level model and spend less time discussing how to arrive at plausible parameter values. Please read Chapters <a href="./LM1.html">1</a> and <a href="./LM2.html">2</a> for multiple examples where the parameter values are derived from (a) the literature (e.g., bias-corrected meta-analyses), (b) pilot data, or (c) plausibility constraints.</p>
 <p>Furthermore, we’ll use the techniques described in the Chapter <a href="./optimizing_code.html">“Bonus: Optimizing R code for speed”</a>, otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!</p>
@@ -322,7 +321,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="a-random-intercept-fixed-slope-model" class="level1">
 <h1>A random-intercept, fixed-slope model</h1>
-<p>We start with a simple model and analyze the trajectory of the BDI score across time (we ignore the treatment factor for the moment). Hence, the question for this model is: Is there a trend over time in BDI scores?</p>
+<p>We start with a simple model and analyze the trajectory of the BDI score across time (we ignore the treatment factor for the moment). Hence, the question for this model is: Is there a linear trend over time in BDI scores?</p>
 <section id="the-formulas" class="level2">
 <h2 class="anchored" data-anchor-id="the-formulas">The formulas</h2>
 <ul>
@@ -343,7 +342,7 @@ u_{0j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{00})
 </section>
 <section id="analysis-in-pilot-data" class="level2">
 <h2 class="anchored" data-anchor-id="analysis-in-pilot-data">Analysis in pilot data</h2>
-<p>First, let’s run the analysis model in the pilot data. To make the intercept more interpretable, we center it on the first post-measurement.</p>
+<p>First, let’s run the analysis model in the pilot data. To make the intercept more interpretable, we center it on the first post-measurement by subtracting 2 (i.e., month “2” becomes month “0” etc.).</p>
 <div class="cell" data-hash="LMM_cache/html/unnamed-chunk-3_b397a5e4e6a5d5b4a44c21c9b0d42564">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>BtheB_long<span class="sc">$</span>time.c <span class="ot">&lt;-</span> BtheB_long<span class="sc">$</span>time <span class="sc">-</span> <span class="dv">2</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -380,6 +379,8 @@ time.c -0.267</code></pre>
 </div>
 </div>
 <p>Hence, in the pilot data there is a significant negative trend - with each month, participants have a decrease of 0.7 BFI points. But remember that in this data set <em>all</em> of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy).</p>
+<p>The grand intercept <span class="math inline">\gamma_{00}</span> is 17. This is also the average post-treatment value that we assumed in our previous models in Chapters 1 and 2.</p>
+<p>For the random intercept variance and the residual variance, we take generously rounded estimates from the pilot data: <span class="math inline">\tau_{00} = 100</span> and <span class="math inline">\sigma^2 = 25</span>.</p>
 </section>
 <section id="lets-simulate" class="level2">
 <h2 class="anchored" data-anchor-id="lets-simulate">Let’s simulate</h2>
@@ -542,8 +543,8 @@ time.c -0.259</code></pre>
 </div>
 </section>
 </section>
-<section id="the-random-intercept-random-slope-model-with-cross-level-interaction" class="level1">
-<h1>The random-intercept, random-slope model with cross-level interaction</h1>
+<section id="a-random-intercept-random-slope-model-with-cross-level-interaction" class="level1">
+<h1>A random-intercept, random-slope model with cross-level interaction</h1>
 <p>We now make the model more complex by (a) adding a L2 predictor (treatment vs.&nbsp;control), (b) allowing random slopes for the time effect, and (c) model a cross-level interaction (i.e., does the slope differ between treatment and control group?).</p>
 <p>The main effect for <code>treatment</code> reveals group differences when the other predictor, <code>time</code>, is zero (i.e., at the first post-treatment measurement). The main effect for <code>time</code> now is a <em>conditional</em> effect, as it models the time trend for the control group (i.e., when <code>treatment</code> is zero).</p>
 <section id="the-formulas-1" class="level2">
