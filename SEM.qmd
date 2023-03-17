@@ -382,7 +382,7 @@ Sometimes, researchers not only wish to investigate whether and how two (latent)
 6. count how many samples would have detected the specified effect (i.e., compute the statistical power)
 7. vary your simulation parameters until the desired level of power (e.g., 80%) is achieved
 
-Therefore, we first draw on the Bergh et al (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. In order to be able to calculate with this variable, we first need to transform it into an integer variable, for instance coding male = 0 and female = 1. 
+We first draw on the Bergh et al (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding male = 0 and female = 1. 
 
 ```{r means and cov mediation}
 
@@ -403,12 +403,12 @@ cov_mediation <- cov(cbind(gender, EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 
 ::: {.callout-tip}
 
-If we were  interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al. (2017), which can be accessed via https://schoemanna.shinyapps.io/mc_power_med/. This app currently enables power analyses for some manifest mediation models: Mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, (iv) and three parallel mediators. But as we want to incorporate `generalized prejudice`  and `openness to experience` as latent variables, we need to write a simulation-based power analyses ourselves.   
+If we were  interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al. (2017), which can be accessed via [https://schoemanna.shinyapps.io/mc_power_med/](https://schoemanna.shinyapps.io/mc_power_med/). This app currently enables power analyses for some manifest mediation models: Mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, (iv) and three parallel mediators. But as we want to incorporate `generalized prejudice`  and `openness to experience` as latent variables, we need to write a simulation-based power analyses ourselves.   
 
 :::
 
 
-Referring two step #2, now specify the statistical mediation model in `lavaan`. 
+Now, we specify the statistical mediation model in `lavaan`. 
 
 ```{r specify mediation model}
 
@@ -497,7 +497,7 @@ ggplot(result_mediation, aes(x=n, y=power)) + geom_point() + geom_line() + scale
 
 ```
 
-As shown, roughly 1,350 participants will be needed to obtain sufficient power under the assumptions we specified.
+This shows that roughly 1,350 participants will be needed to obtain sufficient power under the assumptions we specified.
 
 # References
 
