@@ -293,6 +293,7 @@ While this refactoring actually slightly increased computation time, we need thi
 With the use of the `replicate` function in the previous step, we prepared everything for an easy switch to multi-core processing. You only need to load the `future.apply` package, start a multi-core session with the `plan` command, and replace the `replicate` function call with `future_replicate`.
 
 ```{r}
+#| output: false
 library(RcppArmadillo)
 library(future.apply)
 
