@@ -25,7 +25,7 @@ plan(multisession)
 In this chapter, we'll use the parallelization techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd), otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!
 :::
 
-In this chapter, we will focus on a few rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, RMSEA, etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we  only focus on the latter, that is, power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled "XXX" if you're interested in power analyses for fit indices.
+In this chapter, we will focus on some rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, RMSEA, etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we  only focus on the latter, that is, power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled "XXX" if you're interested in power analyses for fit indices.
 
 # A simulation-based power analysis for a single regression coefficient between latent variables
 
@@ -106,7 +106,7 @@ detach(Bergh)
 
 ```
 
-This works well as long as we have a data set (e.g., from a pilot study or published work) to estimate the variances and covariances. In other cases, however, we might not have access to such a data set. In this case, we might only have a correlation table that was provided in a published paper. But that's no problem either, we can simply transform the correlations and standard deviations of the variables of interest into a variance-covariance matrix. The following chunk shows how this works by using the `cor2cov` function from the `MBESS` package. 
+This works well as long as we have a data set (e.g., from a pilot study or published work) to estimate the variances and covariances. In other cases, however, we might not have access to such a data set. In this case, we might only have a correlation table that was provided in a published paper. But that's no problem either, as we can transform the correlations and standard deviations of the variables of interest into a variance-covariance matrix. The following chunk shows how this works by using the `cor2cov` function from the `MBESS` package. 
 
 ```{r sd vector and correlations SEM}
 
@@ -151,7 +151,7 @@ head(my_first_simulated_data)
 
 ```
 
-We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an $\alpha$-level of .005.
+We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an $\alpha$-level of .005. We will work with the `lavan` package to fit SEMs.
 
 ```{r analyze data SEM}
 
@@ -166,7 +166,7 @@ fit_sem <- sem(model_sem, data = my_first_simulated_data)
 #display the results
 summary(fit_sem)
 
-# TODO: How can we enter stnadardized regression coefficients?
+# TODO: How can we enter standardized regression coefficients?
 #model_sem_stand <- "generalized_prejudice =~ EP + DP + SP + HP
 #                  agreeableness =~ A1 + A2 + A3
 #                  generalized_prejudice ~ agreeableness
@@ -220,7 +220,7 @@ Only `r round(sum(p_values < .005)*100/iterations)`% of samples with the same si
 
 ## Sample size planning: Find the necessary sample size
 
-But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 50 to 200. Running these simulations typically requires quite some time for your computer.
+But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 50 to 200. Running these simulations typically requires quite some computing time.
 
 
 ```{r power analysis SEM, warning=FALSE, cache=TRUE}
@@ -269,7 +269,7 @@ ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_con
 
 This graph suggests that we need a sample size of approximately 58 to reach a power of 80% with the given population estimates. That's all it takes to run a power analysis for a SEM! 
 
-In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to show how we can use a "smallest effect size of interest" (SESOI) instead of an expected effect size. Second, we would like to present an alternative way to simulate data for SEMs, simply by using a built-in function in the `lavaan` package.  
+In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to show how we can use a "smallest effect size of interest" (SESOI) instead of an expected effect size. Second, we would like to present an alternative way to simulate data for SEMs, i.e. by using a built-in function in the `lavaan` package.  
 
 ## Using the lavaan syntax to simulate data
 
@@ -318,7 +318,7 @@ head(sim_lavaan)
 
 ```
 
-The next step is to simply integrate this code into our first simulation-based power analysis in this chapter, that is, to replace the data simulation process using XX with this new method using `simulateData()` from the `lavaan` package. To this end, I am copying most of the `power analysis SEM` chunk and simply replace the simulation method as described.
+The next step is to integrate this code into our first simulation-based power analysis in this chapter, that is, to replace the data simulation process using XX with this new method using `simulateData()` from the `lavaan` package. To this end, I am copying most of the `power analysis SEM` chunk and replacing it in the simulation method as described.
 
 ```{r simulateData, warning=FALSE}
 
@@ -366,7 +366,7 @@ ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_con
 
 ::: {.callout-tip}
 
-Wang and Rhemtulla (2021) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: yilinandrewang.shinyapps.io/pwrSEM/ 
+Wang and Rhemtulla (2021) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: [https://yilinandrewang.shinyapps.io/pwrSEM/](https://yilinandrewang.shinyapps.io/pwrSEM/) 
 
 :::
 
