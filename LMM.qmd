@@ -17,7 +17,7 @@ library(ggplot2)
 library(tidyr)
 library(Rfast)
 library(future.apply)
-plan(multisession)
+plan(multisession) # this initializes parallel processing, for faster code execution
 ```
 
 In order to keep this chapter at a reasonable length, we focus on how to simulate the mixed effects/multi-level model and spend less time discussing how to arrive at plausible parameter values. Please read Chapters [1](LM1.qmd) and [2](LM2.qmd) for multiple examples where the parameter values are derived from (a) the literature (e.g., bias-corrected meta-analyses), (b) pilot data, or (c) plausibility constraints.
