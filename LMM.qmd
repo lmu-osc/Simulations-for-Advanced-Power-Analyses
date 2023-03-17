@@ -24,7 +24,7 @@ In order to keep this chapter at a reasonable length, we focus on how to simulat
 
 Furthermore, we'll use the techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd), otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!
 
-We continue to work with the "Beat the blues" (`BtheB`) data set from the `HSAUR` R package. As there are multiple post-treatment measurements (after 2, 3, 6, and 8 months) we can create a nice longitudinal multilevel data set, with measurement points on Level 1 (L1) and persons on L2. We will work with the `lme4` package.
+We continue to work with the "Beat the blues" (`BtheB`) data set from the `HSAUR` R package. As there are multiple post-treatment measurements (after 2, 3, 6, and 8 months) we can create a nice longitudinal multilevel data set, with measurement points on level 1 (L1) and persons on level 2 (L2). We will work with the `lme4` package to run the mixed-effect models.
 
 For that, we first have to transform the pilot data set into the long format:
 
