@@ -82,7 +82,7 @@ for (n in ns) {
 # Combine the different timings in a data frame
 timings <- rbind(t0[3], t1[3]) |> data.frame()
 
-# compute the absolute and relativ difference of consecutive rows:
+# compute the absolute and relative difference of consecutive rows:
 timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
 timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
 
@@ -310,7 +310,7 @@ ns <- seq(300, 500, by=50)
 result <- data.frame()
 
 for (n in ns) {
-  # future.seed = TRUE is needed to set seeds in all parallel processes. Then the computation is reprpducible.
+  # future.seed = TRUE is needed to set seeds in all parallel processes. Then the computation is reproducible.
   p_values <- future_replicate(n=iterations, sim(n=n), future.seed = TRUE)
   result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
 }
