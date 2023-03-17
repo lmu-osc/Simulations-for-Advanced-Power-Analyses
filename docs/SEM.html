@@ -304,7 +304,7 @@ Note
 <p>In this chapter, we’ll use the parallelization techniques described in the Chapter <a href="./optimizing_code.html">“Bonus: Optimizing R code for speed”</a>, otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!</p>
 </div>
 </div>
-<p>In this chapter, we will focus on a few rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, RMSEA, etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we only focus on the latter, that is, power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled “XXX” if you’re interested in power analyses for fit indices.</p>
+<p>In this chapter, we will focus on some rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, RMSEA, etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we only focus on the latter, that is, power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled “XXX” if you’re interested in power analyses for fit indices.</p>
 <section id="a-simulation-based-power-analysis-for-a-single-regression-coefficient-between-latent-variables" class="level1">
 <h1>A simulation-based power analysis for a single regression coefficient between latent variables</h1>
 <p>Let’s consider the following example: We are planning to conduct a study investigating whether openness to experience (as conceptualized in the big five) relates negatively to generalized prejudice, that is a latent variable comprising prejudice towards different social groups (e.g., women, foreigners, homosexuals, disabled people). We could plan to scrutinize this prediction with a SEM in which both openness to experience and generalized prejudice are modelled as latent variables.</p>
@@ -470,7 +470,7 @@ O3 -0.15 -0.12 -0.23 -0.09  0.18  0.17  0.26</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(Bergh)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This works well as long as we have a data set (e.g., from a pilot study or published work) to estimate the variances and covariances. In other cases, however, we might not have access to such a data set. In this case, we might only have a correlation table that was provided in a published paper. But that’s no problem either, we can simply transform the correlations and standard deviations of the variables of interest into a variance-covariance matrix. The following chunk shows how this works by using the <code>cor2cov</code> function from the <code>MBESS</code> package.</p>
+<p>This works well as long as we have a data set (e.g., from a pilot study or published work) to estimate the variances and covariances. In other cases, however, we might not have access to such a data set. In this case, we might only have a correlation table that was provided in a published paper. But that’s no problem either, as we can transform the correlations and standard deviations of the variables of interest into a variance-covariance matrix. The following chunk shows how this works by using the <code>cor2cov</code> function from the <code>MBESS</code> package.</p>
 <div class="cell" data-hash="SEM_cache/html/sd vector and correlations SEM_d2a3169acc47ba71b56dc0ec4c361293">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Bergh)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -531,8 +531,8 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 6 0.8686341 1.3846010 -1.0421778 1.2171192 3.422034 4.440827 4.070752</code></pre>
 </div>
 </div>
-<p>We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an <span class="math inline">\alpha</span>-level of .005.</p>
-<div class="cell" data-hash="SEM_cache/html/analyze data SEM_95a8ce373d6e8f823b3b2a6911f850fa">
+<p>We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an <span class="math inline">\alpha</span>-level of .005. We will work with the <code>lavan</code> package to fit SEMs.</p>
+<div class="cell" data-hash="SEM_cache/html/analyze data SEM_7a39ec2850f2536ee41cf0139322c6a7">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>model_sem <span class="ot">&lt;-</span> <span class="st">"generalized_prejudice =~ EP + DP + SP + HP</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="st">              openness =~ O1 + O2 + O3</span></span>
@@ -593,7 +593,7 @@ Variances:
    .generlzd_prjdc    0.209    0.082    2.557    0.011
     openness          0.114    0.034    3.310    0.001</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: How can we enter stnadardized regression coefficients?</span></span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: How can we enter standardized regression coefficients?</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#model_sem_stand &lt;- "generalized_prejudice =~ EP + DP + SP + HP</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                  agreeableness =~ A1 + A2 + A3</span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                  generalized_prejudice ~ agreeableness</span></span>
@@ -642,7 +642,7 @@ FALSE  TRUE
 </section>
 <section id="sample-size-planning-find-the-necessary-sample-size" class="level2">
 <h2 class="anchored" data-anchor-id="sample-size-planning-find-the-necessary-sample-size">Sample size planning: Find the necessary sample size</h2>
-<p>But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 50 to 200. Running these simulations typically requires quite some time for your computer.</p>
+<p>But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 50 to 200. Running these simulations typically requires quite some computing time.</p>
 <div class="cell" data-hash="SEM_cache/html/power analysis SEM_4b1bd4616de3f0726424574a790520ec">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 30 and 200</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>ns_sem <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">200</span>, <span class="at">by=</span><span class="dv">10</span>) </span>
@@ -690,7 +690,7 @@ FALSE  TRUE
 </div>
 </div>
 <p>This graph suggests that we need a sample size of approximately 58 to reach a power of 80% with the given population estimates. That’s all it takes to run a power analysis for a SEM!</p>
-<p>In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to show how we can use a “smallest effect size of interest” (SESOI) instead of an expected effect size. Second, we would like to present an alternative way to simulate data for SEMs, simply by using a built-in function in the <code>lavaan</code> package.</p>
+<p>In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to show how we can use a “smallest effect size of interest” (SESOI) instead of an expected effect size. Second, we would like to present an alternative way to simulate data for SEMs, i.e.&nbsp;by using a built-in function in the <code>lavaan</code> package.</p>
 </section>
 <section id="using-the-lavaan-syntax-to-simulate-data" class="level2">
 <h2 class="anchored" data-anchor-id="using-the-lavaan-syntax-to-simulate-data">Using the lavaan syntax to simulate data</h2>
@@ -795,7 +795,7 @@ Variances:
 6 -0.2717786</code></pre>
 </div>
 </div>
-<p>The next step is to simply integrate this code into our first simulation-based power analysis in this chapter, that is, to replace the data simulation process using XX with this new method using <code>simulateData()</code> from the <code>lavaan</code> package. To this end, I am copying most of the <code>power analysis SEM</code> chunk and simply replace the simulation method as described.</p>
+<p>The next step is to integrate this code into our first simulation-based power analysis in this chapter, that is, to replace the data simulation process using XX with this new method using <code>simulateData()</code> from the <code>lavaan</code> package. To this end, I am copying most of the <code>power analysis SEM</code> chunk and replacing it in the simulation method as described.</p>
 <div class="cell" data-hash="SEM_cache/html/simulateData_d72c954ece08bce16ef8dcd5728c072e">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 30 and 200</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>ns_sem <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">200</span>, <span class="at">by=</span><span class="dv">10</span>) </span>
@@ -851,7 +851,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Wang and Rhemtulla (2021) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: yilinandrewang.shinyapps.io/pwrSEM/</p>
+<p>Wang and Rhemtulla (2021) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: <a href="https://yilinandrewang.shinyapps.io/pwrSEM/">https://yilinandrewang.shinyapps.io/pwrSEM/</a></p>
 </div>
 </div>
 </section>
@@ -868,7 +868,7 @@ Tip
 <li>count how many samples would have detected the specified effect (i.e., compute the statistical power)</li>
 <li>vary your simulation parameters until the desired level of power (e.g., 80%) is achieved</li>
 </ol>
-<p>Therefore, we first draw on the Bergh et al (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. In order to be able to calculate with this variable, we first need to transform it into an integer variable, for instance coding male = 0 and female = 1.</p>
+<p>We first draw on the Bergh et al (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding male = 0 and female = 1.</p>
 <div class="cell" data-hash="SEM_cache/html/means and cov mediation_2eae4eb2e6f723c35cf1dcbd4fd7b2cc">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>Bergh_int <span class="ot">&lt;-</span> Bergh </span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>Bergh_int<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Bergh_int<span class="sc">$</span>gender <span class="sc">==</span> <span class="st">"male"</span>, <span class="dv">0</span>, <span class="fu">ifelse</span>(Bergh_int<span class="sc">$</span>gender <span class="sc">==</span> <span class="st">"female"</span>, <span class="dv">1</span>, <span class="cn">NA</span>))</span>
@@ -892,10 +892,10 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If we were interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al.&nbsp;(2017), which can be accessed via https://schoemanna.shinyapps.io/mc_power_med/. This app currently enables power analyses for some manifest mediation models: Mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, (iv) and three parallel mediators. But as we want to incorporate <code>generalized prejudice</code> and <code>openness to experience</code> as latent variables, we need to write a simulation-based power analyses ourselves.</p>
+<p>If we were interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al.&nbsp;(2017), which can be accessed via <a href="https://schoemanna.shinyapps.io/mc_power_med/">https://schoemanna.shinyapps.io/mc_power_med/</a>. This app currently enables power analyses for some manifest mediation models: Mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, (iv) and three parallel mediators. But as we want to incorporate <code>generalized prejudice</code> and <code>openness to experience</code> as latent variables, we need to write a simulation-based power analyses ourselves.</p>
 </div>
 </div>
-<p>Referring two step #2, now specify the statistical mediation model in <code>lavaan</code>.</p>
+<p>Now, we specify the statistical mediation model in <code>lavaan</code>.</p>
 <div class="cell" data-hash="SEM_cache/html/specify mediation model_5ed110da39703cf137831f36ab75838d">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#specify mediation model</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>model_mediation <span class="ot">&lt;-</span> <span class="st">'</span></span>
@@ -1037,7 +1037,7 @@ variances are negative</code></pre>
 <p><img src="SEM_files/figure-html/plot power curve mediation-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>As shown, roughly 1,350 participants will be needed to obtain sufficient power under the assumptions we specified.</p>
+<p>This shows that roughly 1,350 participants will be needed to obtain sufficient power under the assumptions we specified.</p>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
