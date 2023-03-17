@@ -6,7 +6,7 @@ execute:
 project-type: website
 ---
 
-*Reading/working time: ~50 min.*
+*Reading/working time: \~50 min.*
 
 ```{r}
 #| output: false
@@ -48,23 +48,21 @@ We have the following two variables in our data set:
 
 This is an opportunity to think about the actual scale of our variables. At the end, when we simulate data we need to insert concrete numbers into our equations:
 
-* What BDI values would we expect on average in our sample (before treatment)?
-* What variability would we expect in our sample?
-* What average treatment effect would we expect?
+-   What BDI values would we expect on average in our sample (before treatment)?
+-   What variability would we expect in our sample?
+-   What average treatment effect would we expect?
 
 All of these values are needed to be able to simulate data, and the chosen numbers imply a certain effect size.
 
 ## Get some real data as starting point
 
-::: {.callout-note}
+::: callout-note
 The creators of this tutorial are no experts in clinical psychology; we opportunistically selected open data sets based on their availability. Usually, we would look for meta-analyses - ideally bias-corrected - for more comprehensive evidence.
 :::
 
-The R package `HSAUR` contains open data on 100 depressive patients, where 50 received treatment-as-usual (`TAU`) and 50 received a new treatment ("Beat the blues"; `BtheB`). Data was collected in a pre-post-design with several follow-up measurements. For the moment, we focus on the pre-treatment baseline value (`bdi.pre`) and the first post-treatment value (`bdi.2m`). We will use that data set as a "pilot study"  for our power analysis.
+The R package `HSAUR` contains open data on 100 depressive patients, where 50 received treatment-as-usual (`TAU`) and 50 received a new treatment ("Beat the blues"; `BtheB`). Data was collected in a pre-post-design with several follow-up measurements. For the moment, we focus on the pre-treatment baseline value (`bdi.pre`) and the first post-treatment value (`bdi.2m`). We will use that data set as a "pilot study" for our power analysis.
 
 Note that this pilot data does *not* contain an inactive control group, such as the waiting list group that we assume for our planned study. Both the `BtheB` and the `TAU` group are active treatment groups. Nonetheless, we will be able to infer our treatment effect (vs. an inactive control group) from that data by looking at the pre-treatment data.
-
-
 
 ```{r}
 # the data can be found in the HSAUR package, must be installed first
@@ -147,14 +145,13 @@ $$\widehat{\text{BDI}} = 23 - 6*treatment$$
 
 Hence, the predicted value is $23 - 6*0 = 23$ for the control group, and $23 - 6*1 = 17$ for the treatment group.
 
-With the current model, all participants in the control group have the same predicted value (23), as do all participants in the treatment group (17). 
+With the current model, all participants in the control group have the same predicted value (23), as do all participants in the treatment group (17).
 
 As a final step, we add the random noise to the model, based on the variance in the pilot data:
 
-$$\text{BDI} = 23 - 6*treatment + e; e \sim N(0, var=117) $$ 
+$$\text{BDI} = 23 - 6*treatment + e; e \sim N(0, var=117) $$
 
 That's our final equation with assumed population parameters! With that equation, we assume a certain state of reality and can sample "virtual participants".
-
 
 ## What is the effect size in the model?
 
@@ -168,7 +165,7 @@ $$d = \frac{M_{treat} - M_{control}}{SD} = \frac{17 - 23}{\sqrt{117}} = -0.55$$
 
 The standardized effect size always relates two components: The raw effect size (here: 6 points difference) and the error variance. Hence, you can increase the standardized effect size by (a) increasing the raw treatment effect, or (b) reducing the error variance.
 
-::: {.callout-note}
+::: callout-note
 If you look up the formula of Cohen's *d*, it typically uses the *pooled* SD from both groups. As we assumed that both groups have the same SD, we simply took that value.
 :::
 
@@ -221,7 +218,7 @@ ggplot(df, aes(x=as.factor(treatment), y=BDI)) +
 
 This graph gives us an impression of the plausibility of our simulation: In the control group, we have a median BDI score of 26, and 50% of participants, represented by the box of the boxplot, are roughly between 18 and 32 points (i.e., in the range of a moderate depression). After the simulated treatment, the median BDI score is at 18 (mild depression).
 
-The plot also highlights an unrealistic aspect of our simulations: In reality, the BDI score is bounded to be >=0; but our random data (sampled from a normal distribution) can generate values below zero. For our current power simulations this can be neglected (as negative values are quite rare), but in real data collection such floor or ceiling effects can impose a range restriction that might lower the statistical power.
+The plot also highlights an unrealistic aspect of our simulations: In reality, the BDI score is bounded to be \>=0; but our random data (sampled from a normal distribution) can generate values below zero. For our current power simulations this can be neglected (as negative values are quite rare), but in real data collection such floor or ceiling effects can impose a range restriction that might lower the statistical power.
 
 Let's assume that we collected and analyzed this specific sample - what would have been the results?
 
@@ -229,14 +226,14 @@ Let's assume that we collected and analyzed this specific sample - what would ha
 summary(lm(BDI ~ treatment, data=df))
 ```
 
-Here, and in the entire tutorial, we assume an $\alpha$-level of .005 (Benjamin et al., 2018). As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p > .02). But how likely are we to detect an effect with a sample of this size?
+Here, and in the entire tutorial, we assume an $\alpha$-level of .005 (Benjamin et al., [2018](https://doi.org/10.1038/s41562-017-0189-z)). As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p \> .02). But how likely are we to detect an effect with a sample of this size?
 
 ## Doing the power analysis
 
 Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a function called `sim`. We coded the function to either return the focal p-value (as default) or to print a model summary (helpful for debugging and testing the function). This function takes two parameters:
 
-* `n` defines the required sample size
-* `treatment_effect` defines the treatment effect in the raw scale (i.e., reduction in BDI points)
+-   `n` defines the required sample size
+-   `treatment_effect` defines the treatment effect in the raw scale (i.e., reduction in BDI points)
 
 We then use the `replicate` function to repeatedly call the `sim` function for 1000 iterations.
 
@@ -325,15 +322,15 @@ Exactly the same result - phew 😅
 
 # Sensitivity analyses
 
-Be aware that "pilot studies are next to worthless to estimate effect sizes" (see Brysbaert, 2019, which has a section with that title). When we entered the specific numbers into our equations, we used point estimates from a relatively small pilot sample. As there is considerable uncertainty around these estimates, the true population value could be much smaller or larger. Furthermore, if the very reason for running a study is a significant (exploratory) finding in a small pilot study, your effect size estimate is probably upward biased (because you would have ignored the pilot study if there hadn't been a significant result).
+Be aware that "pilot studies are next to worthless to estimate effect sizes" (see Brysbaert, [2019](http://doi.org/10.5334/joc.72), which has a section with that title). When we entered the specific numbers into our equations, we used point estimates from a relatively small pilot sample. As there is considerable uncertainty around these estimates, the true population value could be much smaller or larger. Furthermore, if the very reason for running a study is a significant (exploratory) finding in a small pilot study, your effect size estimate is probably upward biased (because you would have ignored the pilot study if there hadn't been a significant result).
 
 So, ideally, we base our power estimation on more reliable and/or more conservative prior information, or on theoretical considerations about the smallest effect size of interest. Therefore, we will explore two other ways to set the effect size: *safeguard power analysis* and the *smallest effect size of interest (SESOI)*.
 
 ## Safeguard power analysis
 
-As sensitivity analysis, we will apply a safeguard power analysis (Perugini et al., 2014) that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)
+As sensitivity analysis, we will apply a safeguard power analysis (Perugini et al., [2014](https://doi.org/10.1177/1745691614528519)) that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)
 
-::: {.callout-note}
+::: callout-note
 If you assume publication bias, another heuristic for aiming at a more realistic population effect size is the "divide-by-2" heuristic. (see [kickoff presentation](https://osf.io/bzxnj))
 :::
 
@@ -342,6 +339,7 @@ We can use the `ci.smd` function from the `MBESS` package to compute a CI around
 ```{r}
 ci.smd(smd=-0.55, n.1=50, n.2=50, conf.level=.60)
 ```
+
 However, in the simulated regression equation, we need the *raw* effect size - so we have to backtransform the standardized confidence limits into the original metric. As the assumed effect is negative, we aim for the *upper*, i.e., the more conservative limit. After backtransformation in the raw metric, it is considerably smaller, at -4.1:
 
 $$d = \frac{M_{diff}}{SD} \Rightarrow M_{diff} = d*SD = -0.377 * \sqrt{117} = -4.08$$
@@ -379,22 +377,19 @@ for (n in ns) {  # loop through elements of the vector "ns"
 print(result)
 ```
 
-
 With that more conservative effect size assumption, we would need around 380 participants, i.e. 190 per group.
 
 ## Smallest effect size of interest (SESOI)
 
 Many methodologists argue that we should not power for the *expected* effect size, but rather for the smallest effect size of interest (SESOI). In this case, a non-significant result can be interpreted as "We accept the $H_0$, and even if a real effect existed, it most likely is too small to be relevant".
 
-What change of BDI scores is perceived as "clinically important"? The hard part is to find a convincing theoretical or empirical argument for the chosen SESOI. In the case of the BDI, luckily someone else did that work. 
+What change of BDI scores is perceived as "clinically important"? The hard part is to find a convincing theoretical or empirical argument for the chosen SESOI. In the case of the BDI, luckily someone else did that work.
 
-The [NICE guidance](https://www.nice.org.uk/guidance/qs8) suggest that a change of >=3 BDI-II points is clinically important.
+The [NICE guidance](https://www.nice.org.uk/guidance/qs8) suggest that a change of \>=3 BDI-II points is clinically important.
 
-However, as you can expect, things are more complicated. Button et al. (2015) analyzed data sets where patients have been asked, after a treatment, whether they felt "better", "the same" or "worse". With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms were measurably reduced in the BDI, patients still might answer "feels the same", which indicates that the reduction did not surpass a threshold of subjective relevant improvement.
-But the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need *more* reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are *higher* than the NICE guidelines, more in the range of -6 BDI points.
+However, as you can expect, things are more complicated. Button et al. ([2015](https://doi.org/10.1017/S0033291715001270)) analyzed data sets where patients have been asked, after a treatment, whether they felt "better", "the same" or "worse". With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms were measurably reduced in the BDI, patients still might answer "feels the same", which indicates that the reduction did not surpass a threshold of subjective relevant improvement. But the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need *more* reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are *higher* than the NICE guidelines, more in the range of -6 BDI points.
 
 For our example, let's use the NICE recommendation of -3 BDI points as a lower threshold for our power analysis (anything larger than that will be covered anyway).
-
 
 ```{r}
 #| results: hide
@@ -430,11 +425,9 @@ for (n in ns) {
 print(result)
 ```
 
-
 Hence, we need around 700 participants to reliably detect this smallest effect size of interest.
 
-Did you spot the strange pattern in the result? At n=720, the power is 83%, but only 82% with n=740?
-This is not possible, as power monotonically increases with sample size. It suggests that this is simply Monte Carlo sampling error - 1000 iterations are not enough to get precise estimates. When we increase iterations to 10,000, it takes much longer, but gives more precise results:
+Did you spot the strange pattern in the result? At n=720, the power is 83%, but only 82% with n=740? This is not possible, as power monotonically increases with sample size. It suggests that this is simply Monte Carlo sampling error - 1000 iterations are not enough to get precise estimates. When we increase iterations to 10,000, it takes much longer, but gives more precise results:
 
 ```{r}
 #| results: hide
@@ -468,37 +461,33 @@ for (n in ns) {
 print(result)
 ```
 
-Now power increases monotonically with sample size, as expected.  
+Now power increases monotonically with sample size, as expected.\
 To explore how many Monte-Carlo iterations are necessary to get stable computational results, see the bonus page [Bonus: How many Monte-Carlo iterations are necessary?](https://malikaihle.github.io/Simulations-for-Advanced-Power-Analyses/how_many_iterations.html)
 
 # Recap: What did we do?
 
 These are the steps we did in this part of the tutorial:
 
-1. **Define the statistical model that you will use to analyze your data** (*in our case: a linear regression*). This sometimes is called the *data generating mechanism* or the *data generating model*.
-2. **Find empirical information about the parameters in the model.** These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define the assumed state of the population.
-3. **Program your regression equation**, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.
-4. **Do the simulation**:
-    a) Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same)
-    b) Compute the index of interest (typically: the p-value of a focal effect)
-    c) Count how many samples would have detected the effect (i.e., the statistical power)
-    d) Tune your simulation parameters until the desired level of power is achieved.
-
+1.  **Define the statistical model that you will use to analyze your data** (*in our case: a linear regression*). This sometimes is called the *data generating mechanism* or the *data generating model*.
+2.  **Find empirical information about the parameters in the model.** These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define the assumed state of the population.
+3.  **Program your regression equation**, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.
+4.  **Do the simulation**:
+    a)  Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same)
+    b)  Compute the index of interest (typically: the p-value of a focal effect)
+    c)  Count how many samples would have detected the effect (i.e., the statistical power)
+    d)  Tune your simulation parameters until the desired level of power is achieved.
 
 Concerning step 4d, the typical scenario is that you increase sample size until your desired level of power is achieved. But you could imagine other ways to increase power, e.g.:
 
-* Increase the reliability of a measurement instrument (which will be reflected in a smaller error variance) until desired power is achieved. (This could relate to a trade-off: Do you invest more effort and time in better measurement, or do you keep an unreliable measure and collect more participants?)
-* Compare a within- and a between-design in simulations
-
+-   Increase the reliability of a measurement instrument (which will be reflected in a smaller error variance) until desired power is achieved. (This could relate to a trade-off: Do you invest more effort and time in better measurement, or do you keep an unreliable measure and collect more participants?)
+-   Compare a within- and a between-design in simulations
 
 # References
 
-Benjamin, D. J. et al. (2018). Redefine statistical significance. Nature Human Behaviour, 2(1), 6–10. https://doi.org/10.1038/s41562-017-0189-z
+Benjamin, D. J. et al. (2018). Redefine statistical significance. Nature Human Behaviour, 2(1), 6--10. <https://doi.org/10.1038/s41562-017-0189-z>
 
+Brysbaert, M. (2019). How many participants do we have to include in properly powered experiments? A tutorial of power analysis with reference tables. Journal of Cognition, 2(1), 16. DOI: <http://doi.org/10.5334/joc.72>
 
-Brysbaert, M. (2019). How many participants do we have to include in properly powered experiments? A tutorial of power analysis with reference tables. Journal of Cognition, 2(1), 16. DOI: http://doi.org/10.5334/joc.72
+Button, K. S., Kounali, D., Thomas, L., Wiles, N. J., Peters, T. J., Welton, N. J., Ades, A. E., & Lewis, G. (2015). Minimal clinically important difference on the Beck Depression Inventory---II according to the patient's perspective. Psychological Medicine, 45(15), 3269--3279. <https://doi.org/10.1017/S0033291715001270>
 
-Button, K. S., Kounali, D., Thomas, L., Wiles, N. J., Peters, T. J., Welton, N. J., Ades, A. E., & Lewis, G. (2015). Minimal clinically important difference on the Beck Depression Inventory—II according to the patient’s perspective. Psychological Medicine, 45(15), 3269–3279. https://doi.org/10.1017/S0033291715001270
-
-Perugini, M., Gallucci, M., & Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319–332. https://doi.org/10.1177/1745691614528519
-
+Perugini, M., Gallucci, M., & Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. <https://doi.org/10.1177/1745691614528519>
