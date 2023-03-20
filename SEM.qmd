@@ -23,11 +23,11 @@ library(future.apply)
 plan(multisession)
 ```
 
-::: {.callout-note}
-In this chapter, we'll use the parallelization techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd), otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code! But, nonetheless, running some of the chunks in this chapter while require quite some time. 
-:::
+In this chapter, we will focus on some rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, Root Mean Square Error of Approximation, etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we only focus on the latter, that is power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled "Power analysis for fit indices in SEM" if you're interested in power analyses for fit indices.
 
-In this chapter, we will focus on some rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, Root Mean Square Error of Approximation , etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we  only focus on the latter, that is, power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled "Power analysis for fit indices in SEM" if you're interested in power analyses for fit indices.
+::: {.callout-note}
+In this chapter, we'll use the parallelization techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd), otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code! But nonetheless, running some of the chunks in this chapter will require quite some time. 
+:::
 
 # A simulation-based power analysis for a single regression coefficient between latent variables
 
@@ -157,7 +157,7 @@ summary(fit_sem)
 
 ```
 
-The results show that in this case, the regression coefficient is `r lavaan::parameterestimates(fit_sem)[8,]$est |> round(2)` which is significant with p = `r lavaan::parameterestimates(fit_sem)[8,]$pvalue |> round(3)`. But, actually, it is not our primary interest to see whether this particular simulated data set results in an acceptable model fit. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of this parameter. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called `p_values`. 
+The results show that in this case, the regression coefficient is `r lavaan::parameterestimates(fit_sem)[8,]$est |> round(2)` which is significant with p = `r lavaan::parameterestimates(fit_sem)[8,]$pvalue |> round(3)`. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called `p_values`. 
 
 ```{r multiple iterations SEM, warning=FALSE}
 
@@ -195,7 +195,7 @@ sum(p_values < .005)/iterations*100
 
 ```
 
-Only `r round(sum(p_values < .005)*100/iterations)`% of samples with the same size of $n=50$ result in a significant p-value. We conclude that $n=50$ observations seems to be insufficient, as the power with these parameters is lower than 80%. 
+Only `r round((sum(p_values < .005)*100/iterations),2)`% of samples with the same size of $n=50$ result in a significant p-value. We conclude that $n=50$ observations seems to be insufficient, as the power with these parameters is lower than 80%. 
 
 ## Sample size planning: Find the necessary sample size
 
@@ -254,7 +254,7 @@ In the following two sub-paragraphs, we would like to present two alternatives a
 
 In our opening example in this chapter, we used the `rmvnorm` function from the `Rfast`package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the `lavaan` package, that is, the `simulateData()` function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data. 
 
-More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al. Let's again take a look at the results of our SEM when applying it to this data set.
+More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al (2016). Let's again take a look at the results of our SEM when applying it to this data set.
 
 ```{r}
 
@@ -302,7 +302,7 @@ The next step is to integrate this code into our first simulation-based power an
 ```{r simulateData, warning=FALSE}
 
 #Set seed to make results reproducible
-set.seed(2134)
+set.seed(21354)
 
 #test ns between 30 and 200
 ns_sem <- seq(30, 200, by=10) 
@@ -331,7 +331,7 @@ for (n in ns_sem) {
   p_values_sem <- future_replicate(iterations_sem, sim_sem(n = n, model = model_fully_specified), future.seed=TRUE)  
   result_sem <- rbind(result_sem, data.frame(
     n = n,
-    power = sum(p_values_sem < .005)/iterations_sem)
+    power = sum(p_values_sem < .005, na.rm = TRUE)/iterations_sem)
   )
 }
 
@@ -346,7 +346,7 @@ ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_con
 
 ```
 
-Here, we conclude that approx. 60 participants would be needed to achieve 80% power. The slight difference compared to the previous power analysis should be explained by the fact that we rounded the numbers that define our statistical populations and that we only used 1,000 Monte Carlo iterations -- these differences should decrease with an increasing number of iterations.  
+Here, we conclude that approx. 50 participants would be needed to achieve 80% power. The slight difference compared to the previous power analysis should be explained by the fact that we rounded the numbers that define our statistical populations and that we only used 1,000 Monte Carlo iterations -- these differences should decrease with an increasing number of iterations.  
 
 ::: {.callout-tip}
 
@@ -356,7 +356,7 @@ Wang and Rhemtulla ([2021](https://doi.org/10.1177/2515245920918253)) developed 
 
 ## A safeguard power approach for SEMs
 
-Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al. (2016) data set as an estimate of the "true" effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., [2014](https://doi.org/10.1177/1745691614528519)), which we have already applied in Chapter 1 [Linear Model I: a single dichotomous predictor](LM1.qmd).
+Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al. (2016) data set as an estimate of the "true" effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., [2014](https://doi.org/10.1177/1745691614528519)), which we have already applied in Chapter 1 ([Linear Model I: a single dichotomous predictor](LM1.qmd)).
 
 Basically, all need to do in order to account for variability of observed effect sizes is to calculate a 60%-confidence interval around the point estimate of the observed effect size from our pilot data and to use the more conservative bound of this confidence interval (here: the upper bound) as our new effect size estimate. This can be easily done with the `parameterestimates` function from the `lavaan` package which takes the level of the confidence interval as an input parameter. Let's use this function on our object `fit_bergh` which stores the results of our SEM in the `Bergh` data set.  
 
@@ -410,7 +410,7 @@ for (n in ns_sem) {
   p_values_sem_safeguard <- future_replicate(iterations_sem, sim_sem(n = n, model = model_fully_specified_safeguard), future.seed=TRUE)  
   result_sem_safeguard <- rbind(result_sem_safeguard, data.frame(
     n = n,
-    power = sum(p_values_sem_safeguard < .005)/iterations_sem)
+    power = sum(p_values_sem_safeguard < .005, na.rm = TRUE)/iterations_sem)
   )
 }
 
@@ -421,7 +421,7 @@ This safeguard power analysis yields a required sample size of 62 participants.
 
 ::: {.callout-note}
 
-In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by Bergh et al (2016) were only vaguely reported in their manuscript, thereby making it difficult to derive a SESOI. We therefore only report a safeguard approach but no SESOI approach here.
+In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by Bergh et al (2016) were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.
 
 :::
 
