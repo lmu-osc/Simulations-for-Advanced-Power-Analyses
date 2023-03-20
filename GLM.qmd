@@ -6,6 +6,8 @@ execute:
   cache: true
 ---
 
+*Reading/working time: ~35 min.*
+
 In the previous chapters, we have learned how to conduct simulation-based power analyses for linear regressions with categorical and/or continuous predictor variables. In this chapter, we will turn to generalized linear models, which constitute a generalization of regular linear regressions. This class of statistical models additionally comprise more complex models such as logistic regression and poisson regression. However, as covering all of variants of the generalized linear models would exceed the scope of this workshop, we will only learn how to conduct a simulation-based power analysis for a logistic regression. Recall that a logistic regression is suitable for designs in which you predict a dichotomous outcome with a set of (continuous or categorical) predictors.
 
 ```{r install packages, message=FALSE, warning=FALSE}
@@ -231,7 +233,9 @@ Of note, our effect size estimates (i.e, the estimates of the probabilities of n
 Let's assume that we view the probability of not having a moderate/severe depression after the `TAU` treatment to be probably accurate, but that we want to account for uncertainty in the estimation of the probability of not having a moderate/severe depression after the `BtheB` treatment. We then simply calculate the 60% confidence interval around this effect size. We can use the `BinomCI` function from the `DescTools` package to do this. We need to provide this function with the number of successes (here: 37, see table above) and the number of observations (here: 52, see above).
 
 ```{r safeguard estimation}
-BinomCI(37, 52, conf.level = 0.60)
+
+DescTools::BinomCI(37, 52, conf.level = 0.60)
+
 ```
 
 This gives us an estimate of `r round(DescTools::BinomCI(37, 52, conf.level = 0.60)[2],2)` for the lower bound of the 60% confidence interval of the probability of not having a moderate/severe depression after the `BtheB` treatment, while the point estimate for this effect size was `r prob_btheb`. We can now redo our power analysis from above with this new effect size estimation. I am copying the chunk from above, while replacing the `prob_btheb` value with `r round(DescTools::BinomCI(37, 52, conf.level = 0.60)[2],2)`.

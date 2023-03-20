@@ -1,5 +1,5 @@
 ---
-title: "Ch. 5: Structural Equation Models (SEM)"
+title: "Ch. 5: Structural Equation Models"
 format: html
 author: Moritz Fischer
 execute:
@@ -7,11 +7,13 @@ execute:
 project-type: website
 ---
 
+*Reading/working time: ~50 min.*
+
 ```{r install packages, message=FALSE, warning=FALSE}
-#install.packages(c("lavaan", "ggplot2", "MASS", "apaTables", "MBESS", "future.apply"), dependencies = TRUE)
+#install.packages(c("lavaan", "ggplot2", "Rfast", "apaTables", "MBESS", "future.apply"), dependencies = TRUE)
 
 library("lavaan")
-library("MASS")
+library("Rfast")
 library("ggplot2")
 library("dplyr")
 library("MBESS")
@@ -22,18 +24,18 @@ plan(multisession)
 ```
 
 ::: {.callout-note}
-In this chapter, we'll use the parallelization techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd), otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!
+In this chapter, we'll use the parallelization techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd), otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code! But, nonetheless, running some of the chunks in this chapter while require quite some time. 
 :::
 
-In this chapter, we will focus on some rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, RMSEA, etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we  only focus on the latter, that is, power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled "XXX" if you're interested in power analyses for fit indices.
+In this chapter, we will focus on some rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, Root Mean Square Error of Approximation , etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we  only focus on the latter, that is, power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled "Power analysis for fit indices in SEM" if you're interested in power analyses for fit indices.
 
 # A simulation-based power analysis for a single regression coefficient between latent variables
 
-Let's consider the following example: We are planning to conduct a study investigating whether openness to experience (as conceptualized in the big five) relates negatively to generalized prejudice, that is a latent variable comprising prejudice towards different social groups (e.g., women, foreigners, homosexuals, disabled people). We could plan to scrutinize this prediction with a SEM in which both openness to experience and generalized prejudice are modelled as latent variables. 
+Let's consider the following example: We are planning to conduct a study investigating whether people's openness to experience (as conceptualized in the big five personality traits) relates negatively to generalized prejudice, that is a latent variable comprising prejudice towards different social groups (e.g., women, foreigners, homosexuals, disabled people). We could plan to scrutinize this prediction with a SEM in which both openness to experience and generalized prejudice are modeled as latent variables. 
 
 ::: {.callout-note}
 
-Please note that the predictions used as examples in this chapter are not necessarily theoretically meaningful hypotheses. They were also not formulated a-priori. We merely use them to illustrate the mechanics of simulation-based power analyses in the context of SEM.
+Please note that the predictions used as examples in this chapter are not necessarily theoretically meaningful hypotheses, we merely use them to illustrate the mechanics of simulation-based power analyses in the context of SEM.
 
 :::
 
@@ -48,6 +50,7 @@ Just like for any other simulation-based power analysis, we first need to come u
 #install.packages("MPsychoR")
 library(MPsychoR)
 data("Bergh")
+attach(Bergh)
 
 #let's take a look
 head(Bergh)
@@ -60,25 +63,21 @@ This data set comprises `r ncol(Bergh)` variables measured in `r nrow(Bergh)` pa
 -   `EP` is a continuous variable measuring ethnic prejudice. 
 -   `SP` is a continuous variable measuring sexism. 
 -   `HP` is a continuous variable measuring sexual prejudice towards gays and lesbians. 
--   `DP` is a continuous variable measuring prejudice toward mentally people with disabilities. 
+-   `DP` is a continuous variable measuring prejudice toward people with disabilities. 
 -   `O1`, `O2`, and `O3` are three items measuring openness to experience.
 
 To get an impression of this data, we can inspect means, standard deviations, and correlations of 
-the variables we're interested in. I am using the `attach` function which makes it easier to access variables of this data set throughout this tutorial without specifying the data set containing this variable again and again. 
+the variables we're interested in.
 
 ```{r correlations SEM}
 
-attach(Bergh)
 apaTables::apa.cor.table(cbind(EP, SP, HP, DP, O1, O2, O3))
-detach(Bergh)
 
 ```
 
-As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. With these population parameters, we can then simulate data, for example using the `mrvnorm` function from the `MASS` package. In our example, we can estimate the population parameters from the study by Bergh et al. (2016). We start by calculating the means of the  variables, rounding them generously, and storing them in a vector called `means_vector`. 
+As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by Bergh et al. (2016). We start by calculating the means of the  variables, rounding them generously, and storing them in a vector called `means_vector`. 
 
 ```{r mean vector SEM}
-
-attach(Bergh)
 
 #store means
 means_vector <- c(mean(EP), mean(SP), mean(HP), mean(DP), mean(O1), mean(O2), mean(O3)) |> round(2)
@@ -86,15 +85,11 @@ means_vector <- c(mean(EP), mean(SP), mean(HP), mean(DP), mean(O1), mean(O2), me
 #Let's take a look
 means_vector
 
-detach(Bergh)
-
 ```
 
 We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the Bergh et al. data as well. There are two ways to do this. First, we can use the `cov` function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal, and the covariances in the remaining cells. 
 
 ```{r cov matrix SEM}
-
-attach(Bergh)
 
 #store covariances
 cov_mat <- cov(cbind(EP, SP, HP, DP, O1, O2, O3)) |> round(2)
@@ -102,15 +97,11 @@ cov_mat <- cov(cbind(EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 #Let's take a look
 cov_mat
 
-detach(Bergh)
-
 ```
 
 This works well as long as we have a data set (e.g., from a pilot study or published work) to estimate the variances and covariances. In other cases, however, we might not have access to such a data set. In this case, we might only have a correlation table that was provided in a published paper. But that's no problem either, as we can transform the correlations and standard deviations of the variables of interest into a variance-covariance matrix. The following chunk shows how this works by using the `cor2cov` function from the `MBESS` package. 
 
 ```{r sd vector and correlations SEM}
-
-attach(Bergh)
 
 #store correlation matrix 
 cor_mat <- cor(cbind(EP, SP, HP, DP, O1, O2, O3)) 
@@ -124,8 +115,6 @@ cov_mat2 <- MBESS::cor2cov(cor.mat = cor_mat, sd = sd_vector) |> as.data.frame()
 #Let's take a look
 cov_mat2
 
-detach(Bergh)
-
 ```
 
 Let's do a plausibility check: Did the two ways to estimate the variance-covariance matrix lead to the same results?
@@ -136,7 +125,7 @@ cov_mat == cov_mat2
 
 ```
 
-Indeed, this worked! Both procedures lead to the exact same variance-covariance matrix. Now that we have an approximation of the variance-covariance matrix, we use the `mvrnorm` function from the `MASS` package to simulate data from a multivariate normal distribution. The following code simulates `n = 50` observations from the specified population. 
+Indeed, this worked! Both procedures lead to the exact same variance-covariance matrix. Now that we have an approximation of the variance-covariance matrix, we use the `rmvnorm` function from the `Rfast` package to simulate data from a multivariate normal distribution. The following code simulates `n = 50` observations from the specified population. 
 
 ```{r simulate data SEM}
 
@@ -144,7 +133,7 @@ Indeed, this worked! Both procedures lead to the exact same variance-covariance 
 set.seed(21364)
 
 #simulate data
-my_first_simulated_data <- MASS::mvrnorm(n = 50, mu=means_vector, Sigma = cov_mat) |> as.data.frame()
+my_first_simulated_data <- Rfast::rmvnorm(n = 50, mu=means_vector, sigma = cov_mat) |> as.data.frame()
 
 #Let's take a look
 head(my_first_simulated_data)
@@ -166,16 +155,6 @@ fit_sem <- sem(model_sem, data = my_first_simulated_data)
 #display the results
 summary(fit_sem)
 
-# TODO: How can we enter standardized regression coefficients?
-#model_sem_stand <- "generalized_prejudice =~ EP + DP + SP + HP
-#                  agreeableness =~ A1 + A2 + A3
-#                  generalized_prejudice ~ agreeableness
-#              "
-#fit_sem_stand <- cfa(model_sem_stand, data = Bergh, std.lv=TRUE)
-#summary(fit_sem_stand, standardized=TRUE)
-
-
-
 ```
 
 The results show that in this case, the regression coefficient is `r lavaan::parameterestimates(fit_sem)[8,]$est |> round(2)` which is significant with p = `r lavaan::parameterestimates(fit_sem)[8,]$pvalue |> round(3)`. But, actually, it is not our primary interest to see whether this particular simulated data set results in an acceptable model fit. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of this parameter. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called `p_values`. 
@@ -195,7 +174,7 @@ n <- 50
 #simulate data
 for(i in 1:iterations){
 
-  simulated_data <- MASS::mvrnorm(n = n, mu = means_vector, Sigma = cov_mat) |> as.data.frame()
+  simulated_data <- Rfast::rmvnorm(n = n, mu = means_vector, sigma = cov_mat) |> as.data.frame()
   fit_sem_simulated <- sem(model_sem, data = simulated_data)
   
   p_values[i] <- parameterestimates(fit_sem_simulated)[8,]$pvalue
@@ -235,10 +214,10 @@ result_sem <- data.frame()
 iterations_sem <- 1000
 
 #write function
-sim_sem <- function(n, model, mu, Sigma) {
+sim_sem <- function(n, model, mu, sigma) {
   
 
-  simulated_data <- MASS::mvrnorm(n = n, mu = mu, Sigma = Sigma) |> as.data.frame()
+  simulated_data <- Rfast::rmvnorm(n = n, mu = mu, sigma = sigma) |> as.data.frame()
   fit_sem_simulated <- sem(model_sem, data = simulated_data)
   p_value_sem <- parameterestimates(fit_sem_simulated)[8,]$pvalue
   return(p_value_sem)
@@ -249,7 +228,7 @@ sim_sem <- function(n, model, mu, Sigma) {
 #replicate function with varying ns
 for (n in ns_sem) {  
   
-p_values_sem <- future_replicate(iterations_sem, sim_sem(n = n, model = model_mediation, mu = means_vector, Sigma = cov_mat), future.seed=TRUE)  
+p_values_sem <- future_replicate(iterations_sem, sim_sem(n = n, model = model_mediation, mu = means_vector, sigma = cov_mat), future.seed=TRUE)  
 result_sem <- rbind(result_sem, data.frame(
     n = n,
     power = sum(p_values_sem < .005)/iterations_sem)
@@ -261,7 +240,7 @@ result_sem <- rbind(result_sem, data.frame(
 
 Let's plot the results:
 
-```{r plot power curve SEM}
+```{r plot power curve SEM, warning=FALSE}
 
 ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_continuous(n.breaks = 18, limits = c(30,200)) + scale_y_continuous(n.breaks = 10, limits = c(0,1)) + geom_hline(yintercept= 0.8, color = "red")
 
@@ -269,17 +248,17 @@ ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_con
 
 This graph suggests that we need a sample size of approximately 58 to reach a power of 80% with the given population estimates. That's all it takes to run a power analysis for a SEM! 
 
-In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to show how we can use a "smallest effect size of interest" (SESOI) instead of an expected effect size. Second, we would like to present an alternative way to simulate data for SEMs, i.e. by using a built-in function in the `lavaan` package.  
+In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to present an alternative way to simulate data for SEMs, i.e. by using a built-in function in the `lavaan` package. Second, we would like to show how a "safeguard" approach to power analysis can be used within the context of SEM.
 
 ## Using the lavaan syntax to simulate data
 
-In our opening example in this chapter, we used the `mvrnorm` function from the `MASS`package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the `lavaan` package, that is, the `simulateData()` function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data. 
+In our opening example in this chapter, we used the `rmvnorm` function from the `Rfast`package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the `lavaan` package, that is, the `simulateData()` function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data. 
 
 More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al. Let's again take a look at the results of our SEM when applying it to this data set.
 
 ```{r}
 
-#fit the SEM to the simulated data set
+#fit the SEM to the pilot data set
 fit_bergh <- sem(model_sem, data = Bergh)
 
 #display the results
@@ -287,27 +266,27 @@ summary(fit_bergh)
 
 ```
 
-In order to use the `simulateData()` function, we can take the estimates from this previous study and plug them into the lavaan syntax in the following chunk. We will round the parameter estimates generously again...  
+In order to use the `simulateData()` function, we can take the estimates from this previous study and plug them into the lavaan syntax in the following chunk. 
 
 ```{r}
 
 #specify SEM
 model_fully_specified <- 
 
-"generalized_prejudice =~ 1*EP + 0.7*DP + 0.9*SP + 1*HP
-openness =~ 1*O1 + 0.9*O2 + 1.1*O3
-generalized_prejudice ~ -0.8*openness
+"generalized_prejudice =~ 1*EP + 0.71*DP + 0.91*SP + 1*HP
+openness =~ 1*O1 + 0.93*O2 + 1.14*O3
+generalized_prejudice ~ -0.77*openness
 
 
-generalized_prejudice ~~ 0.2*generalized_prejudice
-openness ~~ 0.2*openness
-EP ~~ 0.2*EP
-DP ~~ 0.1*DP
-SP ~~ 0.2*SP
-HP ~~ 2.1*HP
-O1 ~~ 0.1*O1
-O2 ~~ 0.1*O2
-O3 ~~ 0.1*O3
+generalized_prejudice ~~ 0.19*generalized_prejudice
+openness ~~ 0.16*openness
+EP ~~ 0.21*EP
+DP ~~ 0.14*DP
+SP ~~ 0.23*SP
+HP ~~ 2.12*HP
+O1 ~~ 0.07*O1
+O2 ~~ 0.08*O2
+O3 ~~ 0.05*O3
 
 "
 
@@ -318,9 +297,12 @@ head(sim_lavaan)
 
 ```
 
-The next step is to integrate this code into our first simulation-based power analysis in this chapter, that is, to replace the data simulation process using XX with this new method using `simulateData()` from the `lavaan` package. To this end, I am copying most of the `power analysis SEM` chunk and replacing it in the simulation method as described.
+The next step is to integrate this code into our first simulation-based power analysis in this chapter, that is, to replace the data simulation process using the `rmvnorm` function from the `Rfast` package with this new method using `simulateData()` from the `lavaan` package. To this end, I am adapting the `power analysis SEM` chunk from above accordingly.
 
 ```{r simulateData, warning=FALSE}
+
+#Set seed to make results reproducible
+set.seed(2134)
 
 #test ns between 30 and 200
 ns_sem <- seq(30, 200, by=10) 
@@ -358,11 +340,13 @@ for (n in ns_sem) {
 
 Let's plot this again. 
 
-```{r plot power curve SEM lavaan}
+```{r plot power curve SEM lavaan, warning=FALSE}
 
 ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_continuous(n.breaks = 18, limits = c(30,200)) + scale_y_continuous(n.breaks = 10, limits = c(0,1)) + geom_hline(yintercept= 0.8, color = "red")
 
 ```
+
+Here, we conclude that approx. 60 participants would be needed to achieve 80% power. The slight difference compared to the previous power analysis should be explained by the fact that we rounded the numbers that define our statistical populations and that we only used 1,000 Monte Carlo iterations -- these differences should decrease with an increasing number of iterations.  
 
 ::: {.callout-tip}
 
@@ -370,9 +354,80 @@ Wang and Rhemtulla ([2021](https://doi.org/10.1177/2515245920918253)) developed 
 
 :::
 
+## A safeguard power approach for SEMs
+
+Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al. (2016) data set as an estimate of the "true" effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., [2014](https://doi.org/10.1177/1745691614528519)), which we have already applied in Chapter 1 [Linear Model I: a single dichotomous predictor](LM1.qmd).
+
+Basically, all need to do in order to account for variability of observed effect sizes is to calculate a 60%-confidence interval around the point estimate of the observed effect size from our pilot data and to use the more conservative bound of this confidence interval (here: the upper bound) as our new effect size estimate. This can be easily done with the `parameterestimates` function from the `lavaan` package which takes the level of the confidence interval as an input parameter. Let's use this function on our object `fit_bergh` which stores the results of our SEM in the `Bergh` data set.  
+
+```{r safeguard estimation}
+
+parameterestimates(fit_bergh, level = .60)
+
+```
+
+This output shows that the upper bound of the 60% confidence interval around the focal regression coefficient is `r lavaan::parameterestimates(fit_bergh, level = .60)[8,]$ci.upper |> round(2)`. We can now use this as our new and more conservative effect size estimate. We can for example insert this value into our simulation using the lavaan syntax. For this purpose, we copy the chunk from above and simply replace the previous effect size estimate (`r lavaan::parameterestimates(fit_bergh)[8,]$est |> round(2)`) with the new estimate (`r lavaan::parameterestimates(fit_bergh, level = .60)[8,]$ci.upper |> round(2)`), while keeping all other parameters that define this data set. 
+
+
+```{r lavaan model safeguard power}
+
+#specify SEM
+model_fully_specified_safeguard <- 
+
+"generalized_prejudice =~ 1*EP + 0.71*DP + 0.91*SP + 1*HP
+openness =~ 1*O1 + 0.93*O2 + 1.14*O3
+generalized_prejudice ~ -0.72*openness
+
+
+generalized_prejudice ~~ 0.19*generalized_prejudice
+openness ~~ 0.16*openness
+EP ~~ 0.21*EP
+DP ~~ 0.14*DP
+SP ~~ 0.23*SP
+HP ~~ 2.12*HP
+O1 ~~ 0.07*O1
+O2 ~~ 0.08*O2
+O3 ~~ 0.05*O3
+
+"
+
+#lets try this
+sim_lavaan_safeguard <- simulateData(model_fully_specified_safeguard, sample.nobs=100)
+head(sim_lavaan_safeguard)
+
+```
+
+Now, everything is ready for the actual safeguard power analysis. We can re-use the `sim_sem` function we have defined above. Let's see what we get here! 
+
+```{r safeguard power analysis, warning=FALSE}
+
+#prepare empty vector to store results
+result_sem_safeguard <- data.frame()
+
+#replicate function with varying ns
+for (n in ns_sem) {  
+  
+  p_values_sem_safeguard <- future_replicate(iterations_sem, sim_sem(n = n, model = model_fully_specified_safeguard), future.seed=TRUE)  
+  result_sem_safeguard <- rbind(result_sem_safeguard, data.frame(
+    n = n,
+    power = sum(p_values_sem_safeguard < .005)/iterations_sem)
+  )
+}
+
+ggplot(result_sem_safeguard, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_continuous(n.breaks = 18, limits = c(30,200)) + scale_y_continuous(n.breaks = 10, limits = c(0,1)) + geom_hline(yintercept= 0.8, color = "red")
+
+```
+This safeguard power analysis yields a required sample size of 62 participants.
+
+::: {.callout-note}
+
+In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by Bergh et al (2016) were only vaguely reported in their manuscript, thereby making it difficult to derive a SESOI. We therefore only report a safeguard approach but no SESOI approach here.
+
+:::
+
 # A simulation-based power analysis for a mediation model with latent variables
 
-Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but rather whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model in the following. To this end, we assume that we were interested in whether a potential effect of gender on generalized prejudice is (fully or partially) mediated by openness to experience. Fortunately, the data set by Bergh et al (2016) also contains a gender variable. We can therefore repeat the same steps as in our previous power analysis, but only incorporate gender into our analysis. Specifically, this means that we will follow these steps:
+Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the Bergh et al (2016) dataset as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:
 
 1. find plausible estimates of the population parameters
 2. specify the statistical model
@@ -384,11 +439,10 @@ Sometimes, researchers not only wish to investigate whether and how two (latent)
 
 We first draw on the Bergh et al (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding male = 0 and female = 1. 
 
-```{r means and cov mediation}
+```{r means and cov mediation, include = FALSE}
 
 Bergh_int <- Bergh 
 Bergh_int$gender <- ifelse(Bergh_int$gender == "male", 0, ifelse(Bergh_int$gender == "female", 1, NA))
-
 
 attach(Bergh_int)
 
@@ -451,7 +505,7 @@ summary(fit_mediation)
 
 Now, everything is set up to run the actual power analysis. In the following chunk, we repeatedly simulate data from the specified population and store the p-value of the indirect effect while varying the sample size in a range from 100 to 1500. 
 
-```{r simulate data mediation, cache=TRUE}
+```{r simulate data mediation, cache=TRUE, warning=FALSE}
   
 #set seed
 set.seed(56465)
@@ -466,10 +520,10 @@ result_mediation <- data.frame()
 iterations_mediation <- 1000
 
 #write function
-sim_mediation <- function(n, model, mu, Sigma) {
+sim_mediation <- function(n, model, mu, sigma) {
   
 
-      simulated_data_mediation <- MASS::mvrnorm(n = n, mu = mu, Sigma = Sigma) |> as.data.frame()
+      simulated_data_mediation <- Rfast::rmvnorm(n = n, mu = mu, sigma = sigma) |> as.data.frame()
       fit_mediation_simulated <- sem(model_mediation, data = simulated_data_mediation)
   
       p_value_mediation <- parameterestimates(fit_mediation_simulated)[21,]$pvalue
@@ -480,7 +534,7 @@ sim_mediation <- function(n, model, mu, Sigma) {
 #replicate function with varying ns
 for (n in ns_mediation) {  
   
-p_values_mediation <- future_replicate(iterations_mediation, sim_mediation(n = n, model = model_mediation, mu = means_mediation, Sigma = cov_mediation), future.seed=TRUE)  
+p_values_mediation <- future_replicate(iterations_mediation, sim_mediation(n = n, model = model_mediation, mu = means_mediation, sigma = cov_mediation), future.seed=TRUE)  
 result_mediation <- rbind(result_mediation, data.frame(
     n = n,
     power = sum(p_values_mediation < .005)/iterations_mediation)
@@ -502,6 +556,8 @@ This shows that roughly 1,350 participants will be needed to obtain sufficient p
 # References
 
 Bergh, R., Akrami, N., Sidanius, J., & Sibley, C. G. (2016). Is group membership necessary for understanding generalized prejudice? A re-evaluation of why prejudices are interrelated. Journal of Personality and Social Psychology, 111(3), 367–395. [https://doi.org/10.1037/pspi0000064](https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated)
+
+Perugini, M., Gallucci, M., & Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. <https://doi.org/10.1177/1745691614528519>
 
 Schoemann, A. M., Boulton, A. J., & Short, S. D. (2017). Determining power and sample size for simple and complex mediation models. Social Psychological and Personality Science, 8(4), 379–386. [https://doi.org/10.1177/1948550617715068](https://www.researchgate.net/publication/317631067_Determining_Power_and_Sample_Size_for_Simple_and_Complex_Mediation_Models)
 

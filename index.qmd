@@ -54,8 +54,27 @@ For each model, we will follow the structure:
 -   replicate step 2 and 3 to get the distribution of the statistic of interest (e.g. p-value)
 -   analyze and interpret the combined results of many simulations i.e. check for which sample size you get at a significant result in 80% of the simulations
 
-### Settings
+### Install all packages
 
-The following packages and settings are necessary to reproduce the output of this tutorial.
+The following packages are necessary to reproduce the output of this tutorial. We recommend installing all of them before you dive into the individual chapters.
 
-#FIXME
+```{r install all packages}
+
+install.packages(c(
+              "ggplot2", 
+              "ggdist", 
+              "gghalves", 
+              "pwr", 
+              "MBESS", 
+              "Rfast", 
+              "DescTools", 
+              "lme4", 
+              "lmerTest", 
+              "tidyr", 
+              "Rfast", 
+              "future.apply", 
+              "lavaan", 
+              "MASS", 
+              "apaTables"), dependencies = TRUE, repos = "https://cran.rstudio.com/")
+
+```
