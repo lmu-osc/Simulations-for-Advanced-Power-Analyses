@@ -8,7 +8,7 @@
 
 <meta name="author" content="Moritz Fischer">
 
-<title>Structural Equation Models (SEM)</title>
+<title>Ch. 5: Structural Equation Models (SEM)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -149,7 +149,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Structural Equation Models (SEM)</h1>
+      <h1 class="quarto-secondary-nav-title">Ch. 5: Structural Equation Models (SEM)</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -182,27 +182,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LM1.html" class="sidebar-item-text sidebar-link">Linear Model 1: A single dichotomous predictor</a>
+  <a href="./LM1.html" class="sidebar-item-text sidebar-link">Ch. 1: Linear Model 1: A single dichotomous predictor</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LM2.html" class="sidebar-item-text sidebar-link">Linear Model 2: Multiple predictors</a>
+  <a href="./LM2.html" class="sidebar-item-text sidebar-link">Ch. 2: Linear Model 2: Multiple predictors</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./GLM.html" class="sidebar-item-text sidebar-link">Generalized Linear Models</a>
+  <a href="./GLM.html" class="sidebar-item-text sidebar-link">Ch. 3: Generalized Linear Models</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LMM.html" class="sidebar-item-text sidebar-link">Linear Mixed Models / Multilevel models</a>
+  <a href="./LMM.html" class="sidebar-item-text sidebar-link">Ch. 4: Linear Mixed Models / Multilevel models</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./SEM.html" class="sidebar-item-text sidebar-link active">Structural Equation Models (SEM)</a>
+  <a href="./SEM.html" class="sidebar-item-text sidebar-link active">Ch. 5: Structural Equation Models (SEM)</a>
   </div>
 </li>
       </ul>
@@ -257,7 +257,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Structural Equation Models (SEM)</h1>
+<h1 class="title d-none d-lg-block">Ch. 5: Structural Equation Models (SEM)</h1>
 </div>
 
 
@@ -323,7 +323,7 @@ Note
 </div>
 <section id="lets-get-some-real-data-as-starting-point" class="level2">
 <h2 class="anchored" data-anchor-id="lets-get-some-real-data-as-starting-point">Let’s get some real data as starting point</h2>
-<p>Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let’s assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al (2016) and the corresponding data set which has been made accessible as part of the <code>MPsychoR</code> package. Let’s take a look at this data set.</p>
+<p>Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let’s assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al (<a href="https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated">2016</a>) and the corresponding data set which has been made accessible as part of the <code>MPsychoR</code> package. Let’s take a look at this data set.</p>
 <div class="cell" data-hash="SEM_cache/html/load data_28969aa84159f9b6264a03fc7599a960">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("MPsychoR")</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MPsychoR)</span>
@@ -531,7 +531,7 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 6 0.8686341 1.3846010 -1.0421778 1.2171192 3.422034 4.440827 4.070752</code></pre>
 </div>
 </div>
-<p>We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an <span class="math inline">\alpha</span>-level of .005. We will work with the <code>lavan</code> package to fit SEMs.</p>
+<p>We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an <span class="math inline">\alpha</span>-level of .005. We will work with the <code>lavaan</code> package to fit SEMs.</p>
 <div class="cell" data-hash="SEM_cache/html/analyze data SEM_7a39ec2850f2536ee41cf0139322c6a7">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>model_sem <span class="ot">&lt;-</span> <span class="st">"generalized_prejudice =~ EP + DP + SP + HP</span></span>
@@ -851,7 +851,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Wang and Rhemtulla (2021) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: <a href="https://yilinandrewang.shinyapps.io/pwrSEM/">https://yilinandrewang.shinyapps.io/pwrSEM/</a></p>
+<p>Wang and Rhemtulla (<a href="https://doi.org/10.1177/2515245920918253">2021</a>) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: <a href="https://yilinandrewang.shinyapps.io/pwrSEM/">https://yilinandrewang.shinyapps.io/pwrSEM/</a></p>
 </div>
 </div>
 </section>
@@ -1041,9 +1041,9 @@ variances are negative</code></pre>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
-<p>Bergh, R., Akrami, N., Sidanius, J., &amp; Sibley, C. G. (2016). Is group membership necessary for understanding generalized prejudice? A re-evaluation of why prejudices are interrelated. Journal of Personality and Social Psychology, 111(3), 367–395. https://doi.org/10.1037/pspi0000064</p>
-<p>Schoemann, A. M., Boulton, A. J., &amp; Short, S. D. (2017). Determining power and sample size for simple and complex mediation models. Social Psychological and Personality Science, 8(4), 379–386. https://doi.org/10.1177/1948550617715068</p>
-<p>Wang, Y. A., &amp; Rhemtulla, M. (2021). Power analysis for parameter estimation in structural equation modeling: A discussion and tutorial. Advances in Methods and Practices in Psychological Science, 4(1), 1–17. https://doi.org/10.1177/2515245920918253</p>
+<p>Bergh, R., Akrami, N., Sidanius, J., &amp; Sibley, C. G. (2016). Is group membership necessary for understanding generalized prejudice? A re-evaluation of why prejudices are interrelated. Journal of Personality and Social Psychology, 111(3), 367–395. <a href="https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated">https://doi.org/10.1037/pspi0000064</a></p>
+<p>Schoemann, A. M., Boulton, A. J., &amp; Short, S. D. (2017). Determining power and sample size for simple and complex mediation models. Social Psychological and Personality Science, 8(4), 379–386. <a href="https://www.researchgate.net/publication/317631067_Determining_Power_and_Sample_Size_for_Simple_and_Complex_Mediation_Models">https://doi.org/10.1177/1948550617715068</a></p>
+<p>Wang, Y. A., &amp; Rhemtulla, M. (2021). Power analysis for parameter estimation in structural equation modeling: A discussion and tutorial. Advances in Methods and Practices in Psychological Science, 4(1), 1–17. <a href="https://doi.org/10.1177/2515245920918253">https://doi.org/10.1177/2515245920918253</a></p>
 
 
 </section>

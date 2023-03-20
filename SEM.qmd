@@ -1,5 +1,5 @@
 ---
-title: "Structural Equation Models (SEM)"
+title: "Ch. 5: Structural Equation Models (SEM)"
 format: html
 author: Moritz Fischer
 execute:
@@ -151,7 +151,7 @@ head(my_first_simulated_data)
 
 ```
 
-We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an $\alpha$-level of .005. We will work with the `lavan` package to fit SEMs.
+We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an $\alpha$-level of .005. We will work with the `lavaan` package to fit SEMs.
 
 ```{r analyze data SEM}
 

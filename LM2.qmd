@@ -1,5 +1,5 @@
 ---
-title: "Linear Model 2: Multiple predictors"
+title: "Ch. 2: Linear Model 2: Multiple predictors"
 author: "Felix Schönbrodt"
 execute:
   cache: true

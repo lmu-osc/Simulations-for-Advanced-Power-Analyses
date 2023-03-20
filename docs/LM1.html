@@ -8,7 +8,7 @@
 
 <meta name="author" content="Felix Schönbrodt">
 
-<title>Linear Model 1: A single dichotomous predictor</title>
+<title>Ch. 1: Linear Model 1: A single dichotomous predictor</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -149,7 +149,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Linear Model 1: A single dichotomous predictor</h1>
+      <h1 class="quarto-secondary-nav-title">Ch. 1: Linear Model 1: A single dichotomous predictor</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -182,27 +182,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LM1.html" class="sidebar-item-text sidebar-link active">Linear Model 1: A single dichotomous predictor</a>
+  <a href="./LM1.html" class="sidebar-item-text sidebar-link active">Ch. 1: Linear Model 1: A single dichotomous predictor</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LM2.html" class="sidebar-item-text sidebar-link">Linear Model 2: Multiple predictors</a>
+  <a href="./LM2.html" class="sidebar-item-text sidebar-link">Ch. 2: Linear Model 2: Multiple predictors</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./GLM.html" class="sidebar-item-text sidebar-link">Generalized Linear Models</a>
+  <a href="./GLM.html" class="sidebar-item-text sidebar-link">Ch. 3: Generalized Linear Models</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LMM.html" class="sidebar-item-text sidebar-link">Linear Mixed Models / Multilevel models</a>
+  <a href="./LMM.html" class="sidebar-item-text sidebar-link">Ch. 4: Linear Mixed Models / Multilevel models</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./SEM.html" class="sidebar-item-text sidebar-link">Structural Equation Models (SEM)</a>
+  <a href="./SEM.html" class="sidebar-item-text sidebar-link">Ch. 5: Structural Equation Models (SEM)</a>
   </div>
 </li>
       </ul>
@@ -268,7 +268,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Linear Model 1: A single dichotomous predictor</h1>
+<h1 class="title d-none d-lg-block">Ch. 1: Linear Model 1: A single dichotomous predictor</h1>
 </div>
 
 
@@ -524,7 +524,8 @@ Multiple R-squared:  0.1052,    Adjusted R-squared:  0.08656
 F-statistic: 5.643 on 1 and 48 DF,  p-value: 0.02156</code></pre>
 </div>
 </div>
-<p>Here, and in the entire tutorial, we assume an <span class="math inline">\alpha</span>-level of .005 (Benjamin et al., 2018). As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p &gt; .02). But how likely are we to detect an effect with a sample of this size?</p>
+<p>Here, and in the entire tutorial, we assume an <span class="math inline">\alpha</span>-level of .005, as this provides more reasonable false positive rates and stronger evidence for new claims (Benjamin et al., <a href="https://doi.org/10.1038/s41562-017-0189-z">2018</a>).</p>
+<p>As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p &gt; .02). But how likely are we to detect an effect with a sample of this size?</p>
 <section id="doing-the-power-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="doing-the-power-analysis">Doing the power analysis</h2>
 <p>Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a function called <code>sim</code>. We coded the function to either return the focal p-value (as default) or to print a model summary (helpful for debugging and testing the function). This function takes two parameters:</p>
@@ -621,11 +622,11 @@ NOTE: n is number in *each* group</code></pre>
 </section>
 <section id="sensitivity-analyses" class="level1">
 <h1>Sensitivity analyses</h1>
-<p>Be aware that “pilot studies are next to worthless to estimate effect sizes” (see Brysbaert, 2019, which has a section with that title). When we entered the specific numbers into our equations, we used point estimates from a relatively small pilot sample. As there is considerable uncertainty around these estimates, the true population value could be much smaller or larger. Furthermore, if the very reason for running a study is a significant (exploratory) finding in a small pilot study, your effect size estimate is probably upward biased (because you would have ignored the pilot study if there hadn’t been a significant result).</p>
+<p>Be aware that “pilot studies are next to worthless to estimate effect sizes” (see Brysbaert, <a href="http://doi.org/10.5334/joc.72">2019</a>, which has a section with that title). When we entered the specific numbers into our equations, we used point estimates from a relatively small pilot sample. As there is considerable uncertainty around these estimates, the true population value could be much smaller or larger. Furthermore, if the very reason for running a study is a significant (exploratory) finding in a small pilot study, your effect size estimate is probably upward biased (because you would have ignored the pilot study if there hadn’t been a significant result).</p>
 <p>So, ideally, we base our power estimation on more reliable and/or more conservative prior information, or on theoretical considerations about the smallest effect size of interest. Therefore, we will explore two other ways to set the effect size: <em>safeguard power analysis</em> and the <em>smallest effect size of interest (SESOI)</em>.</p>
 <section id="safeguard-power-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="safeguard-power-analysis">Safeguard power analysis</h2>
-<p>As sensitivity analysis, we will apply a safeguard power analysis (Perugini et al., 2014) that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)</p>
+<p>As sensitivity analysis, we will apply a safeguard power analysis (Perugini et al., <a href="https://doi.org/10.1177/1745691614528519">2014</a>) that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -703,7 +704,7 @@ $Upper.Conf.Limit.smd
 <p>Many methodologists argue that we should not power for the <em>expected</em> effect size, but rather for the smallest effect size of interest (SESOI). In this case, a non-significant result can be interpreted as “We accept the <span class="math inline">H_0</span>, and even if a real effect existed, it most likely is too small to be relevant”.</p>
 <p>What change of BDI scores is perceived as “clinically important”? The hard part is to find a convincing theoretical or empirical argument for the chosen SESOI. In the case of the BDI, luckily someone else did that work.</p>
 <p>The <a href="https://www.nice.org.uk/guidance/qs8">NICE guidance</a> suggest that a change of &gt;=3 BDI-II points is clinically important.</p>
-<p>However, as you can expect, things are more complicated. Button et al.&nbsp;(2015) analyzed data sets where patients have been asked, after a treatment, whether they felt “better”, “the same” or “worse”. With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms were measurably reduced in the BDI, patients still might answer “feels the same”, which indicates that the reduction did not surpass a threshold of subjective relevant improvement. But the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need <em>more</em> reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are <em>higher</em> than the NICE guidelines, more in the range of -6 BDI points.</p>
+<p>However, as you can expect, things are more complicated. Button et al.&nbsp;(<a href="https://doi.org/10.1017/S0033291715001270">2015</a>) analyzed data sets where patients have been asked, after a treatment, whether they felt “better”, “the same” or “worse”. With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms were measurably reduced in the BDI, patients still might answer “feels the same”, which indicates that the reduction did not surpass a threshold of subjective relevant improvement. But the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need <em>more</em> reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are <em>higher</em> than the NICE guidelines, more in the range of -6 BDI points.</p>
 <p>For our example, let’s use the NICE recommendation of -3 BDI points as a lower threshold for our power analysis (anything larger than that will be covered anyway).</p>
 <div class="cell" data-hash="LM1_cache/html/unnamed-chunk-19_103cbf44403df7f5a487feb8874401b7">
 <details>
@@ -809,10 +810,10 @@ To explore how many Monte-Carlo iterations are necessary to get stable computati
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
-<p>Benjamin, D. J. et al.&nbsp;(2018). Redefine statistical significance. Nature Human Behaviour, 2(1), 6–10. https://doi.org/10.1038/s41562-017-0189-z</p>
-<p>Brysbaert, M. (2019). How many participants do we have to include in properly powered experiments? A tutorial of power analysis with reference tables. Journal of Cognition, 2(1), 16. DOI: http://doi.org/10.5334/joc.72</p>
-<p>Button, K. S., Kounali, D., Thomas, L., Wiles, N. J., Peters, T. J., Welton, N. J., Ades, A. E., &amp; Lewis, G. (2015). Minimal clinically important difference on the Beck Depression Inventory—II according to the patient’s perspective. Psychological Medicine, 45(15), 3269–3279. https://doi.org/10.1017/S0033291715001270</p>
-<p>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319–332. https://doi.org/10.1177/1745691614528519</p>
+<p>Benjamin, D. J. et al.&nbsp;(2018). Redefine statistical significance. Nature Human Behaviour, 2(1), 6–10. <a href="https://doi.org/10.1038/s41562-017-0189-z" class="uri">https://doi.org/10.1038/s41562-017-0189-z</a></p>
+<p>Brysbaert, M. (2019). How many participants do we have to include in properly powered experiments? A tutorial of power analysis with reference tables. Journal of Cognition, 2(1), 16. DOI: <a href="http://doi.org/10.5334/joc.72" class="uri">http://doi.org/10.5334/joc.72</a></p>
+<p>Button, K. S., Kounali, D., Thomas, L., Wiles, N. J., Peters, T. J., Welton, N. J., Ades, A. E., &amp; Lewis, G. (2015). Minimal clinically important difference on the Beck Depression Inventory—II according to the patient’s perspective. Psychological Medicine, 45(15), 3269–3279. <a href="https://doi.org/10.1017/S0033291715001270" class="uri">https://doi.org/10.1017/S0033291715001270</a></p>
+<p>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319–332. <a href="https://doi.org/10.1177/1745691614528519" class="uri">https://doi.org/10.1177/1745691614528519</a></p>
 
 
 </section>

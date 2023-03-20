@@ -38,13 +38,13 @@ The rest of the Superpower book teaches how to use the `superpower` R package to
 
 Let's now start power calculations for different complex models. Here are the type of models we will cover, you can pick and choose what is relevant to you:
 
--   [Linear Model I: a single dichotomous predictor](LM1.qmd)\
--   [Linear Model 2: Multiple predictors](LM2.qmd)\
--   [Generalized Linear Models](GLM.qmd)\
--   [Linear Mixed Models](LMM.qmd)\
--   [Structural Equation Modelling (SEM)](SEM.qmd)
+-   Ch. 1: [Linear Model I: a single dichotomous predictor](LM1.qmd)\
+-   Ch. 2: [Linear Model 2: Multiple predictors](LM2.qmd)\
+-   Ch. 3: [Generalized Linear Models](GLM.qmd)\
+-   Ch. 4: [Linear Mixed Models](LMM.qmd)\
+-   Ch. 5: [Structural Equation Modelling (SEM)](SEM.qmd)
 
-The chapters on linear models should be worked through in this order, as they build upon each other.
+**We recommend that everybody works through chapters 1 and 2, and then dive into the other chapters that are relevant.**
 
 For each model, we will follow the structure:
 

@@ -8,7 +8,7 @@
 
 <meta name="author" content="Moritz Fischer">
 
-<title>Generalized Linear Models</title>
+<title>Ch. 3: Generalized Linear Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Generalized Linear Models</h1>
+      <h1 class="quarto-secondary-nav-title">Ch. 3: Generalized Linear Models</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -166,27 +166,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LM1.html" class="sidebar-item-text sidebar-link">Linear Model 1: A single dichotomous predictor</a>
+  <a href="./LM1.html" class="sidebar-item-text sidebar-link">Ch. 1: Linear Model 1: A single dichotomous predictor</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LM2.html" class="sidebar-item-text sidebar-link">Linear Model 2: Multiple predictors</a>
+  <a href="./LM2.html" class="sidebar-item-text sidebar-link">Ch. 2: Linear Model 2: Multiple predictors</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./GLM.html" class="sidebar-item-text sidebar-link active">Generalized Linear Models</a>
+  <a href="./GLM.html" class="sidebar-item-text sidebar-link active">Ch. 3: Generalized Linear Models</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LMM.html" class="sidebar-item-text sidebar-link">Linear Mixed Models / Multilevel models</a>
+  <a href="./LMM.html" class="sidebar-item-text sidebar-link">Ch. 4: Linear Mixed Models / Multilevel models</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./SEM.html" class="sidebar-item-text sidebar-link">Structural Equation Models (SEM)</a>
+  <a href="./SEM.html" class="sidebar-item-text sidebar-link">Ch. 5: Structural Equation Models (SEM)</a>
   </div>
 </li>
       </ul>
@@ -242,7 +242,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Generalized Linear Models</h1>
+<h1 class="title d-none d-lg-block">Ch. 3: Generalized Linear Models</h1>
 </div>
 
 
@@ -292,7 +292,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  $ bdi.8m   : num  NA 20 NA 9 NA 0 7 13 11 12 ...</code></pre>
 </div>
 </div>
-<p>This data set compares the effects of two interventions for depression, that is a so-called “Beat the blues” intervention (<code>BtheB</code>) and a “treatment-as-usual” intervention (<code>TAU</code>). Unfortunately, this data set does not include any dichotomous variable we could use as an outcome measure. Therefore, we simply dichotomize one of the continuous outcome variables to create a categorical outcome artificially. More specifically, we will dichotomize the <code>bdi.2m</code> variable which contains a follow-up depression measure (i.e., the Beck Depression Inventory score) two months after the intervention.</p>
+<p>This data set compares the effects of two interventions for depression, that is a so-called “Beat the blues” intervention (<code>BtheB</code>) and a “treatment-as-usual” intervention (<code>TAU</code>). Note that in this chapter we will compare two active treatment conditions with each other - in the other chapters on linear models, we compare an active treatment with a passive waiting group.</p>
+<p>Unfortunately, this data set does not include any dichotomous variable we could use as an outcome measure. Therefore, we simply dichotomize one of the continuous outcome variables to create a categorical outcome artificially. More specifically, we will dichotomize the <code>bdi.2m</code> variable which contains a follow-up depression measure (i.e., the Beck Depression Inventory score) two months after the intervention.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -303,7 +304,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Please note that we dichotomize this variable for didactic reasons only. From a statistical point of view, it is preferable to treat a continuous variable as such because dichotomizing leads to a loss of statistical information.</p>
+<p>Please note that we dichotomize this variable for didactic reasons only. From a statistical point of view, it is preferable to treat a continuous variable as such because dichotomizing leads to a loss of statistical information (Royston et al., 2006).</p>
 </div>
 </div>
 <p>Let’s start by dichotomizing the <code>bdi.2m</code> variable and storing the result in a new variable which we label <code>bdi.2m.dicho</code>. Here, we take 20 as our cut-off value, as BDIs of 20 or more refer to a moderate or severe depression. BDI values lower than 20, in turn, reflect a minimal or mild depression (see <a href="./LM1.html">first chapter on linear models</a> for more info). In our new <code>bdi.2m.dicho</code> variable, we code minimal/mild depression as “0” and moderate/severe depression as “1”.</p>
@@ -496,11 +497,10 @@ Number of Fisher Scoring iterations: 4</code></pre>
 </section>
 <section id="using-a-safeguard-power-approach" class="level2">
 <h2 class="anchored" data-anchor-id="using-a-safeguard-power-approach">Using a safeguard power approach</h2>
-<p>Of note, our effect size estimates (i.e, the estimates of the probabilities of not having a moderate/severe depression two months after the <code>BtheB</code> or the <code>TAU</code> treatment) were so far based on a pilot study. However, this pilot study might not have yielded a precise estimate of these effect sizes. Thus, in order to consider uncertainty in these effect size estimates, it has been suggested to perform a safeguard power analysis (see chapter <a href="./LM1.html">first chapter on linear models</a> for more info) instead of a power analysis using the observed effect size. The main idea behind the safeguard power analysis is to compute a 60% confidence interval around the observed effect size, and to take the lower bound of this confidence interval as an effect size estimate (see Perugini et al., 2014). Let’s try this here.</p>
+<p>Of note, our effect size estimates (i.e, the estimates of the probabilities of not having a moderate/severe depression two months after the <code>BtheB</code> or the <code>TAU</code> treatment) were so far based on a pilot study. However, this pilot study might not have yielded a precise estimate of these effect sizes. Thus, in order to consider uncertainty in these effect size estimates, it has been suggested to perform a safeguard power analysis (see chapter <a href="./LM1.html">first chapter on linear models</a> for more info) instead of a power analysis using the observed effect size. The main idea behind the safeguard power analysis is to compute a 60% confidence interval around the observed effect size, and to take the lower bound of this confidence interval as an effect size estimate (see Perugini et al., <a href="https://journals.sagepub.com/doi/10.1177/1745691614528519">2014</a>). Let’s try this here.</p>
 <p>Let’s assume that we view the probability of not having a moderate/severe depression after the <code>TAU</code> treatment to be probably accurate, but that we want to account for uncertainty in the estimation of the probability of not having a moderate/severe depression after the <code>BtheB</code> treatment. We then simply calculate the 60% confidence interval around this effect size. We can use the <code>BinomCI</code> function from the <code>DescTools</code> package to do this. We need to provide this function with the number of successes (here: 37, see table above) and the number of observations (here: 52, see above).</p>
-<div class="cell" data-hash="GLM_cache/html/safeguard estimation_90c5fad6f1a3fc77a518d224d87cb7ad">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BinomCI</span>(<span class="dv">37</span>, <span class="dv">52</span>,</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">conf.level =</span> <span class="fl">0.60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="GLM_cache/html/safeguard estimation_54b2c286b690f8b577d1e873851dd4e1">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BinomCI</span>(<span class="dv">37</span>, <span class="dv">52</span>, <span class="at">conf.level =</span> <span class="fl">0.60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           est    lwr.ci   upr.ci
 [1,] 0.7115385 0.6560993 0.761292</code></pre>
@@ -542,7 +542,8 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <section id="references" class="level1">
 <h1>References</h1>
 <p>Aberson, C. L. (2019). Applied power analysis for the behavioral sciences. Routledge.</p>
-<p>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319-332.</p>
+<p>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319-332. <a href="https://journals.sagepub.com/doi/10.1177/1745691614528519">https://journals.sagepub.com/doi/10.1177/1745691614528519</a></p>
+<p>Royston, P., Altman, D. G., &amp; Sauerbrei, W. (2006). Dichotomizing continuous predictors in multiple regression: A bad idea. Statistics in Medicine, 25(1), 127–141. <a href="https://doi.org/10.1002/sim.2331">https://doi.org/10.1002/sim.2331</a></p>
 
 
 </section>

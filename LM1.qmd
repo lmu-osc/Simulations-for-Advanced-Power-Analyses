@@ -1,5 +1,5 @@
 ---
-title: "Linear Model 1: A single dichotomous predictor"
+title: "Ch. 1: Linear Model 1: A single dichotomous predictor"
 author: "Felix Schönbrodt"
 execute:
   cache: true
