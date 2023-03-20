@@ -226,7 +226,9 @@ Let's assume that we collected and analyzed this specific sample - what would ha
 summary(lm(BDI ~ treatment, data=df))
 ```
 
-Here, and in the entire tutorial, we assume an $\alpha$-level of .005 (Benjamin et al., [2018](https://doi.org/10.1038/s41562-017-0189-z)). As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p \> .02). But how likely are we to detect an effect with a sample of this size?
+Here, and in the entire tutorial, we assume an $\alpha$-level of .005, as this provides more reasonable false positive rates and stronger evidence for new claims (Benjamin et al., [2018](https://doi.org/10.1038/s41562-017-0189-z)).
+
+As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p \> .02). But how likely are we to detect an effect with a sample of this size?
 
 ## Doing the power analysis
 

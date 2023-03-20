@@ -6,12 +6,27 @@ execute:
 project-type: website
 ---
 
+*Reading/working time: ~25 min.*
 
-#FIXME I couldn't jump right into this page and understand what is iteration, repetition and n were. one or two lines could be added at the top, something like:
+```{r setup}
+#| output: false
+# Preparation: Install and load all necessary packages
+# install.packages(c("RcppArmadillo", "ggplot2", "patchwork", "pwr"))
 
-To find the sample size needed for a study, we have previsouly use e.g. 1000 iterations of data simulation and analysis, and varied the sample size from e.g. 100 to 1000, every 50, to find where the e.g. 80% power threshold was crossed (see e.g. https://shiny.psy.lmu.de/r-tutorials/powersim/LM.html#sample-size-planning-find-the-necessary-sample-size #FIXME relative link). But is 1000 iterations giving a precise enough result?
+library(ggplot2)         # for plotting
+library(RcppArmadillo)   # for fast LMs
+library(patchwork)       # for arranging multiple ggplots
+library(pwr)             # for analytical power analysis
+```
 
-Using the [optimized code](optimizing_code.qmd), we can explore how many Monte-Carlo iterations are necessary to get stable computational results: we can re-run the same simulation with the same sample size!
+
+To find the sample size needed for a study, we have previously use, say, 1000 iterations of data simulation and analysis, and varied the sample size *n* from, say, 100 to 1000, every 50, to find where the 80% power threshold was crossed (see  [LM1.qmd#sample-size-planning-find-the-necessary-sample-size](Chapter 1)). But is 1000 iterations giving a precise enough result?
+
+Using the [optimized code](optimizing_code.qmd), we can explore how many Monte-Carlo iterations are necessary to get stable computational results: we can re-run the same simulation with the same sample size and see how much random variation is between results!
+
+::: {.callout-note}
+Monte Carlo methods, or Monte Carlo experiments, are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. The underlying concept is to use randomness to solve problems that might be deterministic in principle. They are often used in physical and mathematical problems and are most useful when it is difficult or impossible to use other approaches. Monte Carlo methods are mainly used in three problem classes: optimization, numerical integration, and generating draws from a probability distribution.
+:::
 
 Let's start with 1000 iterations (at n = 100, and 10 repetitions of the same power analysis):
 ```{r}
@@ -52,17 +67,16 @@ As you can see, the power estimates show some variance, ranging from `r min(resu
 sd(result$power) |> round(4)
 ```
 
-We only computed 10 repetitions of our power estimate, hence the MCE estimate is quite unstable. In the next computation, we will compute 100 repetitions of each power estimate.
+We only computed 10 repetitions of our power estimate, hence the MCE estimate is quite unstable. In the next computation, we will compute 100 repetitions of each power estimate (all with the same simulated sample size).
 
 How much do we have to increase the `iterations` to achieve a MCE smaller than, say, 0.005 (i.e, an SD of +/- 0.5% of the power estimate)?
 
 Let's loop through increasing iterations (this takes a few minutes):
 
 ```{r}
-library(RcppArmadillo)
 iterations <- seq(1000, 6000, by=1000)
 
-# let's have 100 iterations to get sufficiently stable MCE estimates
+# let's have 100 repetitions to get sufficiently stable MCE estimates
 ns <- rep(100, 100)
 result <- data.frame()
 
@@ -91,10 +105,6 @@ for (it in iterations) {
     result <- rbind(result, data.frame(iterations = it, n = n, power = sum(p_values < .005)/it))
   }
 }
-
-library(ggplot2)
-library(patchwork)
-library(pwr)
 
 # We can compute the exact power with the analytical solution:
 exact_power <- pwr.t.test(d = 3 / sqrt(117), sig.level = 0.005, n = 50)

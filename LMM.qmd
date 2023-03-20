@@ -6,18 +6,22 @@ execute:
 project-type: website
 ---
 
+*Reading/working time: ~60 min.*
+
 ```{r setup}
 #| output: false
 # Preparation: Install and load all necessary packages
 # install.packages(c("lme4", "lmerTest", "ggplot2", "tidyr", "Rfast", "future.apply"))
 
-library(lme4)
-library(lmerTest)
-library(ggplot2)
-library(tidyr)
-library(Rfast)
-library(future.apply)
-# this initializes parallel processing, for faster code execution
+library(lme4)          # for estimating LMMs
+library(lmerTest)      # to get p-values for lme4
+library(ggplot2)       # for plotting
+library(tidyr)         # for reshaping data from wide to long
+library(Rfast)         # fast creation of correlated variables
+library(future.apply)  # for parallel processing
+
+# plan() initializes parallel processing, 
+# for faster code execution
 # By default, it uses all available cores
 plan(multisession)
 ```
@@ -405,3 +409,4 @@ sim_faux <- function(n_persons=100, print=FALSE) {
 }
 ```
 
+When you plug this simulation function into our power analysis loop, you will get the same results.
