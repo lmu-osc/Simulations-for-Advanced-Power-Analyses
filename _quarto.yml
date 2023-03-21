@@ -21,6 +21,7 @@ website:
         contents:
         - optimizing_code.qmd
         - how_many_iterations.qmd
+        - SEM_fit_index.qmd
       - Resources.qmd
 
 format:
