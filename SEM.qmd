@@ -439,7 +439,7 @@ Sometimes, researchers not only wish to investigate whether and how two (latent)
 
 We first draw on the Bergh et al (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding male = 0 and female = 1. 
 
-```{r means and cov mediation, include = FALSE}
+```{r means and cov mediation}
 
 Bergh_int <- Bergh 
 Bergh_int$gender <- ifelse(Bergh_int$gender == "male", 0, ifelse(Bergh_int$gender == "female", 1, NA))

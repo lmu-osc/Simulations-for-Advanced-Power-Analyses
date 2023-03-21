@@ -58,7 +58,7 @@ For each model, we will follow the structure:
 
 The following packages are necessary to reproduce the output of this tutorial. We recommend installing all of them before you dive into the individual chapters.
 
-```{r install all packages, warning=FALSE, include=FALSE}
+```{r install all packages, warning=FALSE}
 
 install.packages(c(
               "ggplot2", 
