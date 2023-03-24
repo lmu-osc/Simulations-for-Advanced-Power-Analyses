@@ -25,7 +25,7 @@ In the [first chapter on linear models](LM1.qmd), we had the simplest possible l
 We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are "their own control group" and we can explain a lot of (formerly) unexplained error variance by controlling for this between-person variance.
 
 ::: {.callout-note}
-As a side-note: Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate model (see, for example, Senn, [2006](https://doi.org/10.1002/sim.2682) or Wan, [2021](https://doi.org/10.1186/s12874-021-01323-9)).
+As a side-note: Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate model (see, for example, Senn, [2006](http://misc.biblio.s3.amazonaws.com/Senn06Change+from+baseline+and+analysis+of+covariance.pdf) or Wan, [2021](https://doi.org/10.1186/s12874-021-01323-9)).
 :::
 
 The raw effect size stays the same - the treatment still is expected to lead to a 6-point decrease in depression scores on average. But we expect that the residual (i.e., unexplained) variance in the model decreases by controlling for pre-treatment differences between participants. But how much will the residual variance be reduced? This depends on the pre-post-correlation.
@@ -430,7 +430,7 @@ While the power for detecting the main effect quickly approaches 100%, even 400 
 Hieronymus, F., Lisinski, A., Nilsson, S., & Eriksson, E. (2019). Influence of baseline severity on the effects of SSRIs in depression: An item-based, patient-level post-hoc analysis. The Lancet Psychiatry, 6(9), 745–752. [https://doi.org/10.1016/S2215-0366(19)30216-0](https://doi.org/10.1016/S2215-0366(19)30216-0)
 
 
-Senn, S. (2006). Change from baseline and analysis of covariance revisited. Statistics in Medicine, 25(24), 4334–4344. [https://doi.org/10.1002/sim.2682](https://doi.org/10.1002/sim.2682)
+Senn, S. (2006). Change from baseline and analysis of covariance revisited. Statistics in Medicine, 25(24), 4334–4344. [https://doi.org/10.1002/sim.2682](http://misc.biblio.s3.amazonaws.com/Senn06Change+from+baseline+and+analysis+of+covariance.pdf)
 
 Wan, F. (2021). Statistical analysis of two arm randomized pre-post designs with one post-treatment measurement. BMC Medical Research Methodology, 21(1), 150. [https://doi.org/10.1186/s12874-021-01323-9](https://doi.org/10.1186/s12874-021-01323-9)
 
