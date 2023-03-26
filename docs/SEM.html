@@ -325,14 +325,15 @@ Note
 <section id="lets-get-some-real-data-as-starting-point" class="level2">
 <h2 class="anchored" data-anchor-id="lets-get-some-real-data-as-starting-point">Let’s get some real data as starting point</h2>
 <p>Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let’s assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al (<a href="https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated">2016</a>) and the corresponding data set which has been made accessible as part of the <code>MPsychoR</code> package. Let’s take a look at this data set.</p>
-<div class="cell" data-hash="SEM_cache/html/load data_a40c23b4e5c3dfd97623849ba72a5dd3">
+<div class="cell" data-hash="SEM_cache/html/load data_cc0422a3291a8777e36159fc8ad18d71">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("MPsychoR")</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MPsychoR)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"Bergh"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Bergh)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#let's take a look</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Bergh)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"Bergh"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Bergh)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#let's take a look</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Bergh)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        EP    SP  HP       DP     A1       A2       A3     O1       O2       O3
 1 2.666667 3.125 1.4 2.818182 3.4375 3.600000 3.352941 2.8750 3.400000 3.176471
@@ -376,17 +377,17 @@ Note
 <li><code>O1</code>, <code>O2</code>, and <code>O3</code> are three items measuring openness to experience.</li>
 </ul>
 <p>To get an impression of this data, we look at the correlations of the variables we’re interested in.</p>
-<div class="cell" data-hash="SEM_cache/html/correlations SEM_ba2a87d352e65c5f1e2313d7f56aff4f">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">cbind</span>(EP, SP, HP, DP, O1, O2, O3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="SEM_cache/html/correlations SEM_80bd27f354f7f9f600ed79bbb5f0bc68">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">cbind</span>(EP, SP, HP, DP, O1, O2, O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           EP         SP         HP         DP         O1         O2         O3
-EP  1.0000000  0.5328577  0.2545270  0.5314828 -0.3543605 -0.3622272 -0.4089230
-SP  0.5328577  1.0000000  0.2219292  0.5252140 -0.3317130 -0.3127873 -0.3300734
-HP  0.2545270  0.2219292  1.0000000  0.2415626 -0.2332906 -0.2972669 -0.2930209
-DP  0.5314828  0.5252140  0.2415626  1.0000000 -0.2994080 -0.3327277 -0.3407396
-O1 -0.3543605 -0.3317130 -0.2332906 -0.2994080  1.0000000  0.6624692  0.7444363
-O2 -0.3622272 -0.3127873 -0.2972669 -0.3327277  0.6624692  1.0000000  0.7140617
-O3 -0.4089230 -0.3300734 -0.2930209 -0.3407396  0.7444363  0.7140617  1.0000000</code></pre>
+<pre><code>      EP    SP    HP    DP    O1    O2    O3
+EP  1.00  0.53  0.25  0.53 -0.35 -0.36 -0.41
+SP  0.53  1.00  0.22  0.53 -0.33 -0.31 -0.33
+HP  0.25  0.22  1.00  0.24 -0.23 -0.30 -0.29
+DP  0.53  0.53  0.24  1.00 -0.30 -0.33 -0.34
+O1 -0.35 -0.33 -0.23 -0.30  1.00  0.66  0.74
+O2 -0.36 -0.31 -0.30 -0.33  0.66  1.00  0.71
+O3 -0.41 -0.33 -0.29 -0.34  0.74  0.71  1.00</code></pre>
 </div>
 </div>
 <p>As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by Bergh et al.&nbsp;(2016). We start by calculating the means of the variables, rounding them generously, and storing them in a vector called <code>means_vector</code>.</p>

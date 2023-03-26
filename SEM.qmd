@@ -49,6 +49,7 @@ Just like for any other simulation-based power analysis, we first need to come u
 
 #install.packages("MPsychoR")
 library(MPsychoR)
+
 data("Bergh")
 attach(Bergh)
 
@@ -70,7 +71,7 @@ To get an impression of this data, we look at the correlations of the variables 
 
 ```{r correlations SEM}
 
-cor(cbind(EP, SP, HP, DP, O1, O2, O3))
+cor(cbind(EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 
 ```
 
