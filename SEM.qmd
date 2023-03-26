@@ -56,7 +56,6 @@ attach(Bergh)
 head(Bergh)
 tail(Bergh)
 
-
 ```
 
 This data set comprises `r ncol(Bergh)` variables measured in `r nrow(Bergh)` participants. For now, we will focus on the following measured variables: 
@@ -71,8 +70,7 @@ To get an impression of this data, we look at the correlations of the variables 
 
 ```{r correlations SEM}
 
-vars <- cbind(EP, SP, HP, DP, O1, O2, O3)
-cor(vars)
+cor(cbind(EP, SP, HP, DP, O1, O2, O3))
 
 ```
 
