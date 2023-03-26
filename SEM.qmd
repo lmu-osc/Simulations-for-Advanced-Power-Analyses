@@ -10,7 +10,7 @@ project-type: website
 *Reading/working time: ~50 min.*
 
 ```{r install packages, message=FALSE, warning=FALSE}
-#install.packages(c("lavaan", "ggplot2", "Rfast", "apaTables", "MBESS", "future.apply"), dependencies = TRUE)
+#install.packages(c("lavaan", "ggplot2", "Rfast", "MBESS", "future.apply"), dependencies = TRUE)
 
 library("lavaan")
 library("Rfast")
@@ -56,6 +56,7 @@ attach(Bergh)
 head(Bergh)
 tail(Bergh)
 
+
 ```
 
 This data set comprises `r ncol(Bergh)` variables measured in `r nrow(Bergh)` participants. For now, we will focus on the following measured variables: 
@@ -66,12 +67,12 @@ This data set comprises `r ncol(Bergh)` variables measured in `r nrow(Bergh)` pa
 -   `DP` is a continuous variable measuring prejudice toward people with disabilities. 
 -   `O1`, `O2`, and `O3` are three items measuring openness to experience.
 
-To get an impression of this data, we can inspect means, standard deviations, and correlations of 
-the variables we're interested in.
+To get an impression of this data, we look at the correlations of the variables we're interested in.
 
 ```{r correlations SEM}
 
-apaTables::apa.cor.table(cbind(EP, SP, HP, DP, O1, O2, O3))
+vars <- cbind(EP, SP, HP, DP, O1, O2, O3)
+cor(vars)
 
 ```
 

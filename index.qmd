@@ -74,7 +74,6 @@ install.packages(c(
               "Rfast", 
               "future.apply", 
               "lavaan", 
-              "MASS", 
-              "apaTables"), dependencies = TRUE, repos = "https://cran.rstudio.com/")
+              "MASS"), dependencies = TRUE, repos = "https://cran.rstudio.com/")
 
 ```

@@ -279,8 +279,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <p><em>Reading/working time: ~50 min.</em></p>
-<div class="cell" data-hash="SEM_cache/html/install packages_6e6324f99871b9e541caed11b71e6499">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(c("lavaan", "ggplot2", "Rfast", "apaTables", "MBESS", "future.apply"), dependencies = TRUE)</span></span>
+<div class="cell" data-hash="SEM_cache/html/install packages_9b87e864766a9dd9a77f541effbca817">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(c("lavaan", "ggplot2", "Rfast", "MBESS", "future.apply"), dependencies = TRUE)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"lavaan"</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"Rfast"</span>)</span>
@@ -325,7 +325,7 @@ Note
 <section id="lets-get-some-real-data-as-starting-point" class="level2">
 <h2 class="anchored" data-anchor-id="lets-get-some-real-data-as-starting-point">Let’s get some real data as starting point</h2>
 <p>Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let’s assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al (<a href="https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated">2016</a>) and the corresponding data set which has been made accessible as part of the <code>MPsychoR</code> package. Let’s take a look at this data set.</p>
-<div class="cell" data-hash="SEM_cache/html/load data_a40c23b4e5c3dfd97623849ba72a5dd3">
+<div class="cell" data-hash="SEM_cache/html/load data_ac74dd560b24fd0ee5da82ddda1a1653">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("MPsychoR")</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MPsychoR)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"Bergh"</span>)</span>
@@ -375,64 +375,19 @@ Note
 <li><code>DP</code> is a continuous variable measuring prejudice toward people with disabilities.</li>
 <li><code>O1</code>, <code>O2</code>, and <code>O3</code> are three items measuring openness to experience.</li>
 </ul>
-<p>To get an impression of this data, we can inspect means, standard deviations, and correlations of the variables we’re interested in.</p>
-<div class="cell" data-hash="SEM_cache/html/correlations SEM_ebaca493cd76aca4dffcbe3f79914589">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>apaTables<span class="sc">::</span><span class="fu">apa.cor.table</span>(<span class="fu">cbind</span>(EP, SP, HP, DP, O1, O2, O3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To get an impression of this data, we look at the correlations of the variables we’re interested in.</p>
+<div class="cell" data-hash="SEM_cache/html/correlations SEM_9138f4365809577308df0b48219b55f1">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">cbind</span>(EP, SP, HP, DP, O1, O2, O3)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(vars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-
-Means, standard deviations, and correlations with confidence intervals
- 
-
-  Variable M    SD   1            2            3            4           
-  1. EP    1.99 0.71                                                    
-                                                                        
-  2. SP    2.11 0.68 .53**                                              
-                     [.48, .58]                                         
-                                                                        
-  3. HP    1.22 1.56 .25**        .22**                                 
-                     [.19, .32]   [.16, .28]                            
-                                                                        
-  4. DP    2.06 0.53 .53**        .53**        .24**                    
-                     [.48, .58]   [.48, .57]   [.18, .30]               
-                                                                        
-  5. O1    3.55 0.48 -.35**       -.33**       -.23**       -.30**      
-                     [-.41, -.29] [-.39, -.27] [-.30, -.17] [-.36, -.24]
-                                                                        
-  6. O2    3.49 0.47 -.36**       -.31**       -.30**       -.33**      
-                     [-.42, -.30] [-.37, -.25] [-.36, -.24] [-.39, -.27]
-                                                                        
-  7. O3    3.61 0.51 -.41**       -.33**       -.29**       -.34**      
-                     [-.46, -.35] [-.39, -.27] [-.35, -.23] [-.40, -.28]
-                                                                        
-  5          6         
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-  .66**                
-  [.62, .70]           
-                       
-  .74**      .71**     
-  [.71, .77] [.68, .75]
-                       
-
-Note. M and SD are used to represent mean and standard deviation, respectively.
-Values in square brackets indicate the 95% confidence interval.
-The confidence interval is a plausible range of population correlations 
-that could have caused the sample correlation (Cumming, 2014).
- * indicates p &lt; .05. ** indicates p &lt; .01.
- </code></pre>
+<pre><code>           EP         SP         HP         DP         O1         O2         O3
+EP  1.0000000  0.5328577  0.2545270  0.5314828 -0.3543605 -0.3622272 -0.4089230
+SP  0.5328577  1.0000000  0.2219292  0.5252140 -0.3317130 -0.3127873 -0.3300734
+HP  0.2545270  0.2219292  1.0000000  0.2415626 -0.2332906 -0.2972669 -0.2930209
+DP  0.5314828  0.5252140  0.2415626  1.0000000 -0.2994080 -0.3327277 -0.3407396
+O1 -0.3543605 -0.3317130 -0.2332906 -0.2994080  1.0000000  0.6624692  0.7444363
+O2 -0.3622272 -0.3127873 -0.2972669 -0.3327277  0.6624692  1.0000000  0.7140617
+O3 -0.4089230 -0.3300734 -0.2930209 -0.3407396  0.7444363  0.7140617  1.0000000</code></pre>
 </div>
 </div>
 <p>As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by Bergh et al.&nbsp;(2016). We start by calculating the means of the variables, rounding them generously, and storing them in a vector called <code>means_vector</code>.</p>
