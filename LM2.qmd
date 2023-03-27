@@ -71,7 +71,7 @@ $$
 Note that the covariance in the diagonal has the same values, as $cov_{xy} = cov_{yx}$.
 As we need to enter the covariance into `sigma`, we need to convert the correlation into a covariance. Here's the formula:
 
-$$cor_{xy} = \frac{cov_{xy}}{\sigma_X\sigma_y}$$
+$$cor_{xy} = \frac{cov_{xy}}{\sigma_x\sigma_y}$$
 (Note: The denominator contains the standard deviation, not the variance.)
 Solved for the covariance yields:
 

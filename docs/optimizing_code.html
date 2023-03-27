@@ -144,6 +144,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./images/LMU-OSC_logo_small.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
       <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
@@ -617,37 +622,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>timings<span class="sc">$</span>rel_diff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, timings[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(timings), <span class="st">"diff"</span>]<span class="sc">/</span>timings[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(timings)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">1</span>]) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span>
 <span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>timings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-7_84676012e2272139bfba02e616530ffa">
+<div class="cell-output cell-output-stdout">
+<pre><code>  elapsed   diff rel_diff
+1   9.888     NA       NA
+2  10.579  0.691     0.07
+3   7.384 -3.195    -0.30
+4   0.793 -6.591    -0.89
+5   0.764 -0.029    -0.04
+6   0.935  0.171     0.22
+7   0.788 -0.147    -0.16</code></pre>
+</div>
+</div>
 <p>The speed improvement seems only small - with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take <em>longer</em>.</p>
 </section>
 </section>
 <section id="the-final-speed-test-burn-your-machine" class="level1">
 <h1>The final speed test: Burn your machine 🔥</h1>
 <p>Let’s see if parallel processing has an advantage when we have longer computations. We now expand the simulation by exploring a broad parameter range (n ranging from 100 to 1000) and increasing the iterations to 20,000 for more stable results. (See also: “<a href="./how_many_iterations.html">Bonus: How many Monte-Carlo iterations are necessary?</a>”)</p>
-<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-7_da800dfdfd773b72186547953a8f8a0d">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">1000</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>result_single <span class="ot">&lt;-</span> result_parallel <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># single core</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>t_single <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n=</span>iterations, <span class="fu">sim</span>(<span class="at">n=</span>n))</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    result_single <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_single, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># multi-core</span></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>t_parallel <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    p_values <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(<span class="at">n=</span>iterations, <span class="fu">sim</span>(<span class="at">n=</span>n), <span class="at">future.seed =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    result_parallel <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_parallel, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="co"># compare results</span></span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(result_single, <span class="at">power.parallel =</span> result_parallel[, <span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-8_1dc0e9f5a17e9845a4ec965b8641f6a6">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">1000</span>, <span class="at">by=</span><span class="dv">50</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>result_single <span class="ot">&lt;-</span> result_parallel <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># single core</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>t_single <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n=</span>iterations, <span class="fu">sim</span>(<span class="at">n=</span>n))</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    result_single <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_single, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co"># multi-core</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>t_parallel <span class="ot">&lt;-</span> <span class="fu">system.time</span>({</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    p_values <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(<span class="at">n=</span>iterations, <span class="fu">sim</span>(<span class="at">n=</span>n), <span class="at">future.seed =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    result_parallel <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_parallel, <span class="fu">data.frame</span>(<span class="at">n =</span> n, <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations))</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="co"># compare results</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(result_single, <span class="at">power.parallel =</span> result_parallel[, <span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      n   power power.parallel
 1   100 0.07075        0.07395
@@ -670,18 +687,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 18  950 0.92700        0.93055
 19 1000 0.94025        0.94065</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(t_single, t_parallel) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(t_single, t_parallel) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           user.self sys.self elapsed user.child sys.child
-t_single      16.979    0.789  18.147          0         0
-t_parallel     1.181    0.077   7.652          0         0</code></pre>
+t_single      15.613    0.784  16.446          0         0
+t_parallel     1.071    0.064   6.622          0         0</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-8_79e2eef8fd27f66e8c10cfbbce6b340f">
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-9_18779fe4b0a27b68f36f69958705c566">
 
 </div>
-<p>With this optimized setup, we are running 380000 simulations in just 7.652 seconds. If you try this with the first code version, it takes 168.566 seconds.</p>
-<p><strong>With the final, parallelized version we have a 22x speed gain relative to the first version!</strong></p>
+<p>With this optimized setup, we are running 380000 simulations in just 6.622 seconds. If you try this with the first code version, it takes 165.732 seconds.</p>
+<p><strong>With the final, parallelized version we have a 25x speed gain relative to the first version!</strong></p>
 </section>
 <section id="recap" class="level1">
 <h1>Recap</h1>
@@ -717,8 +734,8 @@ But always remember:
 <section id="session-info" class="level1">
 <h1>Session Info</h1>
 <p>These speed measurements have been performed on a 2021 MacBook Pro with M1 processor.</p>
-<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-9_d465ac1e79e170a2cc9eb8d6e67babfd">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-10_394b43bebb072e92e25f4fd4a8d2073c">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.2.0 (2022-04-22)
 Platform: aarch64-apple-darwin20 (64-bit)
@@ -735,15 +752,15 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] future.apply_1.10.0      future_1.30.0            RcppArmadillo_0.11.4.3.1
+[1] future.apply_1.10.0      future_1.32.0            RcppArmadillo_0.12.0.1.0
 [4] prettycode_1.1.0         colorDF_0.1.7           
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.10       parallelly_1.34.0 knitr_1.42        magrittr_2.0.3   
- [5] rlang_1.1.0       fastmap_1.1.0     globals_0.16.2    tools_4.2.0      
- [9] parallel_4.2.0    xfun_0.36         cli_3.6.0         htmltools_0.5.4  
+ [1] Rcpp_1.0.10       parallelly_1.35.0 knitr_1.42        magrittr_2.0.3   
+ [5] rlang_1.1.0       fastmap_1.1.1     globals_0.16.2    tools_4.2.0      
+ [9] parallel_4.2.0    xfun_0.37         cli_3.6.1         htmltools_0.5.5  
 [13] yaml_2.3.7        digest_0.6.31     lifecycle_1.0.3   crayon_1.5.2     
-[17] purrr_1.0.1       htmlwidgets_1.6.1 vctrs_0.5.2       codetools_0.2-18 
+[17] purrr_1.0.1       htmlwidgets_1.6.2 vctrs_0.6.1       codetools_0.2-19 
 [21] evaluate_0.20     rmarkdown_2.20    compiler_4.2.0    jsonlite_1.8.4   
 [25] listenv_0.9.0    </code></pre>
 </div>

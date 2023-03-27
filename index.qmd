@@ -12,7 +12,6 @@ This tutorial was created by **Felix Schönbrodt** and **Moritz Fischer**, with 
 This book is still being developed. If you have comment to contribute to its improvement, you can submit pull requests in the respective .qmd file of the [source repository](https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses) by clicking on the 'Edit this page' and 'Report an issue' in the right navigation panel of each page.
 :::
 
-![](images/LMU-OSC_logo_small.jpg){fig-align="left" fig-alt="LMU-OSC green logo"}
 
 ## Structure of the tutorial
 
@@ -71,6 +70,7 @@ install.packages(c(
               "ggdist", 
               "gghalves", 
               "pwr", 
+              "faux",
               "MBESS", 
               "Rfast", 
               "DescTools", 

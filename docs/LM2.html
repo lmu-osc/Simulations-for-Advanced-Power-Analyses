@@ -160,6 +160,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./images/LMU-OSC_logo_small.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
       <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
@@ -359,7 +364,7 @@ var_x &amp; cov_{xy}\\
 cov_{xy} &amp; var_y
 \end{bmatrix}
 </span> Note that the covariance in the diagonal has the same values, as <span class="math inline">cov_{xy} = cov_{yx}</span>. As we need to enter the covariance into <code>sigma</code>, we need to convert the correlation into a covariance. Here’s the formula:</p>
-<p><span class="math display">cor_{xy} = \frac{cov_{xy}}{\sigma_X\sigma_y}</span> (Note: The denominator contains the standard deviation, not the variance.) Solved for the covariance yields:</p>
+<p><span class="math display">cor_{xy} = \frac{cov_{xy}}{\sigma_x\sigma_y}</span> (Note: The denominator contains the standard deviation, not the variance.) Solved for the covariance yields:</p>
 <p><span class="math display">cov_{xy} = cor_{xy}\sigma_X\sigma_y = 0.6 * \sqrt{117} * \sqrt{117} = 70.2</span></p>
 <p>Hence, the specific variance-covariance-matrix <code>sigma</code> is in our case (generously rounded):</p>
 <p><span class="math display">

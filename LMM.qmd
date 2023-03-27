@@ -64,7 +64,7 @@ Level 1 equation:
 $$
 \text{BDI}_{ij} = \beta_{0j} + \beta_{1j} time_{ij} + e_{ij}
 $$
-Level 2 equation:
+Level 2 equations:
 $$
 \beta_{0j} = \gamma_{00} + u_{0j}\\
 \beta_{1j} = \gamma_{10}
@@ -87,7 +87,7 @@ l0 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=BtheB_long)
 summary(l0)
 ```
 
-Hence, in the pilot data there is a significant negative trend - with each month, participants have a decrease of 0.7 BFI points. But remember that in this data set *all* of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy).
+Hence, in the pilot data there is a significant negative trend - with each month, participants have a decrease of 0.7 BDI points. But remember that in this data set *all* of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy).
 
 The grand intercept $\gamma_{00}$ is 17. This is also the average post-treatment value that we assumed in our previous models in Chapters 1 and 2.
 
@@ -388,7 +388,10 @@ The `faux` package offers an elegant interface to [simulate multilevel data](htt
 ```{r}
 #| eval: false
 
+# install.packages("devtools")
+# devtools::install_github("debruine/faux")
 library(faux)
+
 sim_faux <- function(n_persons=100, print=FALSE) {
   df <- add_random(person_id = n_persons)  %>%
     add_within("person_id", time.c = 0:3) %>% 

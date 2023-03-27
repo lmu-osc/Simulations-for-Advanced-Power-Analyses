@@ -333,6 +333,13 @@ timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1),
 timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3) |> round(2)
 timings
 ```
+
+```{r}
+#| echo: false
+timings
+```
+
+
 The speed improvement seems only small - with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take *longer*. 
 
 

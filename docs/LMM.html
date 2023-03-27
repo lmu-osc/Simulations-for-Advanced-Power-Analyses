@@ -160,6 +160,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./images/LMU-OSC_logo_small.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
       <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
@@ -338,7 +343,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>Level 1 equation: <span class="math display">
 \text{BDI}_{ij} = \beta_{0j} + \beta_{1j} time_{ij} + e_{ij}
-</span> Level 2 equation: <span class="math display">
+</span> Level 2 equations: <span class="math display">
 \beta_{0j} = \gamma_{00} + u_{0j}\\
 \beta_{1j} = \gamma_{10}
 </span> Combined equation: <span class="math display">
@@ -386,7 +391,7 @@ Correlation of Fixed Effects:
 time.c -0.267</code></pre>
 </div>
 </div>
-<p>Hence, in the pilot data there is a significant negative trend - with each month, participants have a decrease of 0.7 BFI points. But remember that in this data set <em>all</em> of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy).</p>
+<p>Hence, in the pilot data there is a significant negative trend - with each month, participants have a decrease of 0.7 BDI points. But remember that in this data set <em>all</em> of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy).</p>
 <p>The grand intercept <span class="math inline">\gamma_{00}</span> is 17. This is also the average post-treatment value that we assumed in our previous models in Chapters 1 and 2.</p>
 <p>For the random intercept variance and the residual variance, we take generously rounded estimates from the pilot data: <span class="math inline">\tau_{00} = 100</span> and <span class="math inline">\sigma^2 = 25</span>.</p>
 </section>
@@ -709,26 +714,29 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 <section id="other-packages" class="level1">
 <h1>Other packages</h1>
 <p>The <code>faux</code> package offers an elegant interface to <a href="https://debruine.github.io/faux/articles/sim_mixed.html#building-multilevel-designs">simulate multilevel data</a>:</p>
-<div class="cell" data-hash="LMM_cache/html/unnamed-chunk-6_4671c73caac6a2e533c3014808d20c0f">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(faux)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sim_faux <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n_persons=</span><span class="dv">100</span>, <span class="at">print=</span><span class="cn">FALSE</span>) {</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">add_random</span>(<span class="at">person_id =</span> n_persons)  <span class="sc">%&gt;%</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_within</span>(<span class="st">"person_id"</span>, <span class="at">time.c =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_between</span>(<span class="st">"person_id"</span>, <span class="at">group =</span> <span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"control"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_recode</span>(<span class="st">"group"</span>, <span class="st">"condition"</span>, <span class="at">control =</span> <span class="dv">0</span>, <span class="at">treatment =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_ranef</span>(<span class="st">"person_id"</span>, <span class="at">u0j =</span> <span class="fu">sqrt</span>(<span class="dv">100</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_ranef</span>(<span class="at">sigma =</span> <span class="fu">sqrt</span>(<span class="dv">25</span>))</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>time.c <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">as.character</span>(df<span class="sc">$</span>time.c))<span class="sc">*</span><span class="dv">2</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute DV</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI <span class="ot">=</span> <span class="dv">17</span> <span class="sc">-</span> <span class="fl">0.7</span><span class="sc">*</span>df<span class="sc">$</span>time.c <span class="sc">+</span> df<span class="sc">$</span>u0j <span class="sc">+</span> df<span class="sc">$</span>sigma</span>
+<div class="cell" data-hash="LMM_cache/html/unnamed-chunk-6_05fb5cf11557f8c774dbe899a2677478">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("devtools")</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_github("debruine/faux")</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(faux)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>sim_faux <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n_persons=</span><span class="dv">100</span>, <span class="at">print=</span><span class="cn">FALSE</span>) {</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">add_random</span>(<span class="at">person_id =</span> n_persons)  <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_within</span>(<span class="st">"person_id"</span>, <span class="at">time.c =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_between</span>(<span class="st">"person_id"</span>, <span class="at">group =</span> <span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"control"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_recode</span>(<span class="st">"group"</span>, <span class="st">"condition"</span>, <span class="at">control =</span> <span class="dv">0</span>, <span class="at">treatment =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_ranef</span>(<span class="st">"person_id"</span>, <span class="at">u0j =</span> <span class="fu">sqrt</span>(<span class="dv">100</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_ranef</span>(<span class="at">sigma =</span> <span class="fu">sqrt</span>(<span class="dv">25</span>))</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>time.c <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">as.character</span>(df<span class="sc">$</span>time.c))<span class="sc">*</span><span class="dv">2</span></span>
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  l1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(BDI <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> time.c <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>person_id), <span class="at">data=</span>df)</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print<span class="sc">==</span><span class="cn">TRUE</span>) <span class="fu">print</span>(<span class="fu">summary</span>(l1))</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">return</span>(<span class="fu">summary</span>(l1)<span class="sc">$</span>coefficients[, <span class="st">"Pr(&gt;|t|)"</span>])</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute DV</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI <span class="ot">=</span> <span class="dv">17</span> <span class="sc">-</span> <span class="fl">0.7</span><span class="sc">*</span>df<span class="sc">$</span>time.c <span class="sc">+</span> df<span class="sc">$</span>u0j <span class="sc">+</span> df<span class="sc">$</span>sigma</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  l1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(BDI <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> time.c <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>person_id), <span class="at">data=</span>df)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print<span class="sc">==</span><span class="cn">TRUE</span>) <span class="fu">print</span>(<span class="fu">summary</span>(l1))</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">return</span>(<span class="fu">summary</span>(l1)<span class="sc">$</span>coefficients[, <span class="st">"Pr(&gt;|t|)"</span>])</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>When you plug this simulation function into our power analysis loop, you will get the same results.</p>
 
