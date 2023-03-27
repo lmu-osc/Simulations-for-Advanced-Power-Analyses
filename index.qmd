@@ -6,25 +6,31 @@ project-type: website
 
 ## About this work
 
-This tutorial was created by **Felix Schönbrodt** and **Moritz Fischer**, with contributions from Malika Ihle, to be part of the training offering of the Ludwig-Maximilian University Open Science Center in Munich. It was initially commissioned and funded by the University of Hamburg, Faculty of Psychology and Movement Science.
+This tutorial was created by **Felix Schönbrodt** and **Moritz Fischer**, with contributions from Malika Ihle, to be part of the training offering of the Ludwig-Maximilian University Open Science Center in Munich.
 
+::: {.callout-note}
 This book is still being developed. If you have comment to contribute to its improvement, you can submit pull requests in the respective .qmd file of the [source repository](https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses) by clicking on the 'Edit this page' and 'Report an issue' in the right navigation panel of each page.
-
-
-It is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
+:::
 
 ![](images/LMU-OSC_logo_small.jpg){fig-align="left" fig-alt="LMU-OSC green logo"}
 
-## Prerequisite
+## Structure of the tutorial
 
-This material follows up on the self-paced tutorial: [Introduction to simulation in R](https://malikaihle.github.io/Introduction-Simulations-in-R/) which teaches how to simulate data and data analyses by writing functions in R to e.g.
+Depending on your prior knowledge, you can fast forward some steps:
+
+![](images/choose_your_level.png)
+
+### Acquire necessary basic coding skills in R
+
+You need to know **R programming basics**. If you are unfamiliar with R, you are advised to follow a self-paced basic tutorial prior to the workshop, e.g.: [https://www.tutorialspoint.com/r](https://www.tutorialspoint.com/r/index.htm) up to "data reshaping" (this tutorial, for example, takes around 2h and covers all necessary basics).
+
+For a higher-level introduction to R coding skills you can do the self-paced tutorial [Introduction to simulation in R](https://malikaihle.github.io/Introduction-Simulations-in-R/). This tutorial teaches how to simulate data and writing functions in R, with the goal to e.g.
 
 -   check alpha so your statistical models don't yield more than 5% false-positive results
 -   check beta (power) for easy tests such as t-tests
 -   prepare a preregistration and make sure your code works
--   check your understanding of statistics
+-   check your understanding of statistics.
 
-## Introduction
 
 ### Comprehensive introduction to power analyses
 
@@ -36,7 +42,7 @@ The rest of the Superpower book teaches how to use the `superpower` R package to
 
 ### Tutorial structure
 
-Let's now start power calculations for different complex models. Here are the type of models we will cover, you can pick and choose what is relevant to you:
+With these prerequisites, you can start to learn power calculations for different complex models. Here are the type of models we will cover, you can pick and choose what is relevant to you:
 
 -   Ch. 1: [Linear Model I: a single dichotomous predictor](LM1.qmd)\
 -   Ch. 2: [Linear Model 2: Multiple predictors](LM2.qmd)\
@@ -77,3 +83,9 @@ install.packages(c(
               "MASS"), dependencies = TRUE, repos = "https://cran.rstudio.com/")
 
 ```
+
+## License & Funding note
+
+This tutorial was initially commissioned and funded by the University of Hamburg, Faculty of Psychology and Movement Science.
+
+It is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
