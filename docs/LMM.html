@@ -463,17 +463,17 @@ time.c -0.259</code></pre>
 </div>
 </div>
 <p>Now we put this data generating script into a function, and run our power analysis:</p>
-<div class="cell" data-hash="LMM_cache/html/power_analysis_LMM_simple_3c102b5dd5f3c1909eaf40c77b97f5d0">
+<div class="cell" data-hash="LMM_cache/html/power_analysis_LMM_simple_e5fad475274bd20c80b4bb3fb17016ea">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: This code could be more optimized for speed, but this way is easier to understand</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sim4 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n_persons =</span> <span class="dv">100</span>, <span class="at">tau_00 =</span> <span class="dv">100</span>, <span class="at">gamma_00 =</span> <span class="dv">17</span>, <span class="at">gamma_10 =</span> <span class="sc">-</span><span class="fl">0.7</span>, </span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">residual_var =</span> <span class="dv">25</span>, <span class="at">print=</span><span class="cn">FALSE</span>) {</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  df_L1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  df_L2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">person_id =</span> <span class="dv">1</span><span class="sc">:</span>n_persons,</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">u_0j =</span> <span class="fu">rnorm</span>(n_persons, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(tau_00))</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  df_L2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  df_L1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">person_id =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_persons, <span class="at">each=</span><span class="dv">4</span>),  <span class="co"># create 4 rows for each person (as we have 4 measurements)</span></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">time.c =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="at">times=</span>n_persons)  </span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  )</span>
