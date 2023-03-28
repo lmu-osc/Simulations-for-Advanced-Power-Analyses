@@ -462,11 +462,11 @@ Note
 <section id="lets-simulate" class="level1">
 <h1>Let’s simulate!</h1>
 <p>Once we committed to an equation with concrete parameter values, we can simulate data for a sample of, say, <span class="math inline">n=100</span> participants. Simply write down the equation and add random normal noise with the <code>rnorm</code> function. Note that the <code>rnorm</code> function takes the standard deviation (not the variance). Finally, set a seed so that the generated random numbers are reproducible:</p>
-<div class="cell" data-hash="LM1_cache/html/unnamed-chunk-8_3fad02cda8ae64692d94652805552aa8">
+<div class="cell" data-hash="LM1_cache/html/unnamed-chunk-8_dace02d1462a67fc3ba6c9ec29397758">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define all simulation parameters and predictor variables:</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>)) <span class="co"># first 50 control, then 50 treatment</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Write down the equation</span></span>
@@ -487,13 +487,13 @@ Note
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   treatment       BDI
-45         1 25.871732
-46         1 27.744107
-47         1 20.749970
-48         1 40.275788
-49         1  2.981421
-50         1  8.151660</code></pre>
+<pre><code>    treatment      BDI
+95          1 22.14261
+96          1 25.40398
+97          1 15.76692
+98          1 21.04766
+99          1 20.15683
+100         1 20.68332</code></pre>
 </div>
 </div>
 <p>Let’s plot the simulated data with raincloud plots (see <a href="https://z3tt.github.io/Rainclouds/">here</a> for a tutorial):</p>

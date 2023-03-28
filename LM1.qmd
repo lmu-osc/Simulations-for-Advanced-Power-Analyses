@@ -191,7 +191,7 @@ Once we committed to an equation with concrete parameter values, we can simulate
 set.seed(0xBEEF)
 
 # define all simulation parameters and predictor variables:
-n <- 50
+n <- 100
 treatment <- c(rep(0, n/2), rep(1, n/2)) # first 50 control, then 50 treatment
 
 # Write down the equation
