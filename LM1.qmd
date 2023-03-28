@@ -287,7 +287,7 @@ set.seed(0xBEEF)
 
 # define all predictor and simulation variables.
 iterations <- 1000
-ns <- seq(100, 300, by=20) # test ns between 100 and 400
+ns <- seq(100, 300, by=20) # test ns between 100 and 300
 
 result <- data.frame()
 
@@ -357,7 +357,7 @@ set.seed(0xBEEF)
 
 # define all predictor and simulation variables.
 iterations <- 1000
-ns <- seq(200, 400, by=20) # test ns between 100 and 400
+ns <- seq(200, 400, by=20) # test ns between 200 and 400
 
 result <- data.frame()
 
