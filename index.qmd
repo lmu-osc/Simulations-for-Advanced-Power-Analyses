@@ -63,14 +63,13 @@ For each model, we will follow the structure:
 
 The following packages are necessary to reproduce the output of this tutorial. We recommend installing all of them before you dive into the individual chapters.
 
-```{r install all packages, message = FALSE, error = FALSE, warning=FALSE, echo=TRUE, results='hide'}
+```{r install all packages, message = FALSE, error = FALSE, warning=FALSE, echo=TRUE, results='hide', eval=FALSE}
 
 install.packages(c(
               "ggplot2", 
               "ggdist", 
               "gghalves", 
               "pwr", 
-              "faux",
               "MBESS", 
               "Rfast", 
               "DescTools", 
@@ -82,6 +81,8 @@ install.packages(c(
               "lavaan", 
               "MASS"), dependencies = TRUE, repos = "https://cran.rstudio.com/")
 
+install.packages("devtools")
+devtools::install_github("debruine/faux")
 ```
 
 ## License & Funding note
