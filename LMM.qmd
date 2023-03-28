@@ -144,12 +144,12 @@ Now we put this data generating script into a function, and run our power analys
 sim4 <- function(n_persons = 100, tau_00 = 100, gamma_00 = 17, gamma_10 = -0.7, 
                  residual_var = 25, print=FALSE) {
 
-  df_L1 <- data.frame(
+  df_L2 <- data.frame(
     person_id = 1:n_persons,
     u_0j = rnorm(n_persons, mean=0, sd=sqrt(tau_00))
   )
   
-  df_L2 <- data.frame(
+  df_L1 <- data.frame(
     person_id = rep(1:n_persons, each=4),  # create 4 rows for each person (as we have 4 measurements)
     time.c = rep(c(0, 2, 4, 6), times=n_persons)  
   )
