@@ -26,7 +26,7 @@ plan(multisession)
 In this chapter, we will focus on some rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, Root Mean Square Error of Approximation, etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we only focus on the latter, that is power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled "[Power analysis for fit indices in SEM](https://malikaihle.github.io/Simulations-for-Advanced-Power-Analyses/SEM_fit_index.html)" if you're interested in power analyses for fit indices.
 
 ::: {.callout-note}
-In this chapter, we'll use the parallelization techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd), otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code! But nonetheless, running some of the chunks in this chapter will require quite some time. 
+In this chapter, we'll use the parallelization techniques described in the Chapter ["Bonus: Optimizing R code for speed"](optimizing_code.qmd), otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code! But nonetheless, running some of the chunks in this chapter will require quite some time. We therefore decided to use 500 iterations per simulation only in this chapter; please keep in mind that you should use more iterations in order to obtain more precise estimates! 
 :::
 
 # A simulation-based power analysis for a single regression coefficient between latent variables
@@ -161,10 +161,13 @@ The results show that in this case, the regression coefficient is `r lavaan::par
 
 ```{r multiple iterations SEM, warning=FALSE}
 
-#let's do 1000 iterations
-iterations <- 1000
+#Set seed to make results reproducible
+set.seed(21364)
 
-#prepare an empty NA vector with 1000 slots
+#let's do 500 iterations
+iterations <- 500
+
+#prepare an empty NA vector with 500 slots
 p_values <- rep(NA, iterations)
 
 #sample size per iteration
@@ -183,7 +186,7 @@ for(i in 1:iterations){
 
 ```
 
-How many of our 1000 virtual samples would have found a significant p-value (i.e., p < .005)?
+How many of our 500 virtual samples would have found a significant p-value (i.e., p < .005)?
 
 ```{r results SEM}
 
@@ -199,10 +202,13 @@ Only `r round((sum(p_values < .005)*100/iterations),2)`% of samples with the sam
 
 ## Sample size planning: Find the necessary sample size
 
-But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 50 to 200. Running these simulations typically requires quite some computing time.
+But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 30 to 200. Running these simulations typically requires quite some computing time.
 
 
-```{r power analysis SEM, warning=FALSE, cache=TRUE}
+```{r power analysis SEM, warning=FALSE}
+
+#Set seed to make results reproducible
+set.seed(21364)
 
 #test ns between 30 and 200
 ns_sem <- seq(30, 200, by=10) 
@@ -211,14 +217,14 @@ ns_sem <- seq(30, 200, by=10)
 result_sem <- data.frame()
 
 #set number of iterations
-iterations_sem <- 1000
+iterations_sem <- 500
 
 #write function
 sim_sem <- function(n, model, mu, sigma) {
   
 
   simulated_data <- Rfast::rmvnorm(n = n, mu = mu, sigma = sigma) |> as.data.frame()
-  fit_sem_simulated <- sem(model_sem, data = simulated_data)
+  fit_sem_simulated <- sem(model, data = simulated_data)
   p_value_sem <- parameterestimates(fit_sem_simulated)[8,]$pvalue
   return(p_value_sem)
   
@@ -228,7 +234,7 @@ sim_sem <- function(n, model, mu, sigma) {
 #replicate function with varying ns
 for (n in ns_sem) {  
   
-p_values_sem <- future_replicate(iterations_sem, sim_sem(n = n, model = model_mediation, mu = means_vector, sigma = cov_mat), future.seed=TRUE)  
+p_values_sem <- future_replicate(iterations_sem, sim_sem(n = n, model = model_sem, mu = means_vector, sigma = cov_mat), future.seed=TRUE)  
 result_sem <- rbind(result_sem, data.frame(
     n = n,
     power = sum(p_values_sem < .005)/iterations_sem)
@@ -246,7 +252,7 @@ ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_con
 
 ```
 
-This graph suggests that we need a sample size of approximately 58 to reach a power of 80% with the given population estimates. That's all it takes to run a power analysis for a SEM! 
+This graph suggests that we need a sample size of approximately 50 participants to reach a power of 80% with the given population estimates. That's all it takes to run a power analysis for a SEM! 
 
 In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to present an alternative way to simulate data for SEMs, i.e. by using a built-in function in the `lavaan` package. Second, we would like to show how a "safeguard" approach to power analysis can be used within the context of SEM.
 
@@ -256,7 +262,7 @@ In our opening example in this chapter, we used the `rmvnorm` function from the 
 
 More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al (2016). Let's again take a look at the results of our SEM when applying it to this data set.
 
-```{r}
+```{r fit Bergh}
 
 #fit the SEM to the pilot data set
 fit_bergh <- sem(model_sem, data = Bergh)
@@ -268,7 +274,10 @@ summary(fit_bergh)
 
 In order to use the `simulateData()` function, we can take the estimates from this previous study and plug them into the lavaan syntax in the following chunk. 
 
-```{r}
+```{r specify lavaan syntax}
+
+#Set seed to make results reproducible
+set.seed(21364)
 
 #specify SEM
 model_fully_specified <- 
@@ -302,7 +311,7 @@ The next step is to integrate this code into our first simulation-based power an
 ```{r simulateData, warning=FALSE}
 
 #Set seed to make results reproducible
-set.seed(21354)
+set.seed(21364)
 
 #test ns between 30 and 200
 ns_sem <- seq(30, 200, by=10) 
@@ -311,10 +320,10 @@ ns_sem <- seq(30, 200, by=10)
 result_sem <- data.frame()
 
 #set number of iterations
-iterations_sem <- 1000
+iterations_sem <- 500
 
 #write function
-sim_sem <- function(n, model) {
+sim_sem_lavaan <- function(n, model) {
   
   
   sim_lavaan <- simulateData(model = model, sample.nobs=n)
@@ -328,7 +337,7 @@ sim_sem <- function(n, model) {
 #replicate function with varying ns
 for (n in ns_sem) {  
   
-  p_values_sem <- future_replicate(iterations_sem, sim_sem(n = n, model = model_fully_specified), future.seed=TRUE)  
+  p_values_sem <- future_replicate(iterations_sem, sim_sem_lavaan(n = n, model = model_fully_specified), future.seed=TRUE)  
   result_sem <- rbind(result_sem, data.frame(
     n = n,
     power = sum(p_values_sem < .005, na.rm = TRUE)/iterations_sem)
@@ -346,7 +355,7 @@ ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_con
 
 ```
 
-Here, we conclude that approx. 50 participants would be needed to achieve 80% power. The slight difference compared to the previous power analysis should be explained by the fact that we rounded the numbers that define our statistical populations and that we only used 1,000 Monte Carlo iterations -- these differences should decrease with an increasing number of iterations.  
+Here, we conclude that approx. 55 participants would be needed to achieve 80% power. The slight difference compared to the previous power analysis should be explained by the fact that we rounded the numbers that define our statistical populations and that we only used 500 Monte Carlo iterations -- these differences should decrease with an increasing number of iterations.  
 
 ::: {.callout-tip}
 
@@ -370,6 +379,9 @@ This output shows that the upper bound of the 60% confidence interval around the
 
 
 ```{r lavaan model safeguard power}
+
+#Set seed to make results reproducible
+set.seed(21364)
 
 #specify SEM
 model_fully_specified_safeguard <- 
@@ -397,9 +409,12 @@ head(sim_lavaan_safeguard)
 
 ```
 
-Now, everything is ready for the actual safeguard power analysis. We can re-use the `sim_sem` function we have defined above. Let's see what we get here! 
+Now, everything is ready for the actual safeguard power analysis. We can re-use the `sim_sem_lavaan` function we have defined above. Let's see what we get here! 
 
 ```{r safeguard power analysis, warning=FALSE}
+
+#Set seed to make results reproducible
+set.seed(21364)
 
 #prepare empty vector to store results
 result_sem_safeguard <- data.frame()
@@ -407,7 +422,7 @@ result_sem_safeguard <- data.frame()
 #replicate function with varying ns
 for (n in ns_sem) {  
   
-  p_values_sem_safeguard <- future_replicate(iterations_sem, sim_sem(n = n, model = model_fully_specified_safeguard), future.seed=TRUE)  
+  p_values_sem_safeguard <- future_replicate(iterations_sem, sim_sem_lavaan(n = n, model = model_fully_specified_safeguard), future.seed=TRUE)  
   result_sem_safeguard <- rbind(result_sem_safeguard, data.frame(
     n = n,
     power = sum(p_values_sem_safeguard < .005, na.rm = TRUE)/iterations_sem)
@@ -417,7 +432,7 @@ for (n in ns_sem) {
 ggplot(result_sem_safeguard, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_continuous(n.breaks = 18, limits = c(30,200)) + scale_y_continuous(n.breaks = 10, limits = c(0,1)) + geom_hline(yintercept= 0.8, color = "red")
 
 ```
-This safeguard power analysis yields a required sample size of 62 participants.
+This safeguard power analysis yields a required sample size of ca. 63 participants.
 
 ::: {.callout-note}
 
@@ -503,28 +518,28 @@ summary(fit_mediation)
 
 ```
 
-Now, everything is set up to run the actual power analysis. In the following chunk, we repeatedly simulate data from the specified population and store the p-value of the indirect effect while varying the sample size in a range from 100 to 1500. 
+Now, everything is set up to run the actual power analysis. In the following chunk, we repeatedly simulate data from the specified population and store the p-value of the indirect effect while varying the sample size in a range from 500 to 1500. 
 
 ```{r simulate data mediation, cache=TRUE, warning=FALSE}
   
-#set seed
-set.seed(56465)
+#Set seed to make results reproducible
+set.seed(21364)
 
 #test ns between 100 and 1500
-ns_mediation <- seq(100, 1500, by=20) 
+ns_mediation <- seq(500, 1500, by=50) 
 
 #prepare empty vector to store results
 result_mediation <- data.frame()
 
 #iterations
-iterations_mediation <- 1000
+iterations_mediation <- 500
 
 #write function
 sim_mediation <- function(n, model, mu, sigma) {
   
 
       simulated_data_mediation <- Rfast::rmvnorm(n = n, mu = mu, sigma = sigma) |> as.data.frame()
-      fit_mediation_simulated <- sem(model_mediation, data = simulated_data_mediation)
+      fit_mediation_simulated <- sem(model, data = simulated_data_mediation)
   
       p_value_mediation <- parameterestimates(fit_mediation_simulated)[21,]$pvalue
       return(p_value_mediation)
@@ -551,7 +566,7 @@ ggplot(result_mediation, aes(x=n, y=power)) + geom_point() + geom_line() + scale
 
 ```
 
-This shows that roughly 1,350 participants will be needed to obtain sufficient power under the assumptions we specified.
+This shows that roughly 1,300 to 1,400 participants will be needed to obtain sufficient power under the assumptions we specified. To achieve a more precise estimate, just increase the number of iterations (and get a cup of coffee while you wait for the results 😅) 
 
 # References
 

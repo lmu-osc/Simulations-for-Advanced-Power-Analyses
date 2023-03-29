@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.0.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,15 +12,10 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
-  vertical-align: middle;
-}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -59,7 +54,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
+code span.bu { } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -72,7 +67,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.im { } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -161,7 +156,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
+      <a href="./" class="sidebar-logo-link">
       <img src="./images/LMU-OSC_logo_small.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
       </a>
       </div>
@@ -247,7 +242,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -282,7 +277,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
   </div>
     
-  
     
   </div>
   
@@ -314,7 +308,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In this chapter, we’ll use the parallelization techniques described in the Chapter <a href="./optimizing_code.html">“Bonus: Optimizing R code for speed”</a>, otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code! But nonetheless, running some of the chunks in this chapter will require quite some time.</p>
+<p>In this chapter, we’ll use the parallelization techniques described in the Chapter <a href="./optimizing_code.html">“Bonus: Optimizing R code for speed”</a>, otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code! But nonetheless, running some of the chunks in this chapter will require quite some time. We therefore decided to use 500 iterations per simulation only in this chapter; please keep in mind that you should use more iterations in order to obtain more precise estimates!</p>
 </div>
 </div>
 <section id="a-simulation-based-power-analysis-for-a-single-regression-coefficient-between-latent-variables" class="level1">
@@ -501,7 +495,7 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#display the results</span></span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_sem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lavaan 0.6.15 ended normally after 35 iterations
+<pre><code>lavaan 0.6.15 ended normally after 36 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -511,9 +505,9 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 
 Model Test User Model:
                                                       
-  Test statistic                                13.671
+  Test statistic                                20.528
   Degrees of freedom                                13
-  P-value (Chi-square)                           0.397
+  P-value (Chi-square)                           0.083
 
 Parameter Estimates:
 
@@ -525,122 +519,128 @@ Latent Variables:
                            Estimate  Std.Err  z-value  P(&gt;|z|)
   generalized_prejudice =~                                    
     EP                        1.000                           
-    DP                        0.739    0.168    4.387    0.000
-    SP                        0.850    0.202    4.201    0.000
-    HP                        0.562    0.535    1.050    0.294
+    DP                        0.891    0.298    2.989    0.003
+    SP                        1.156    0.383    3.022    0.003
+    HP                        0.321    0.677    0.474    0.636
   openness =~                                                 
     O1                        1.000                           
-    O2                        1.214    0.206    5.907    0.000
-    O3                        1.326    0.184    7.196    0.000
+    O2                        0.857    0.155    5.544    0.000
+    O3                        1.370    0.225    6.086    0.000
 
 Regressions:
                           Estimate  Std.Err  z-value  P(&gt;|z|)
   generalized_prejudice ~                                    
-    openness                -0.916    0.280   -3.275    0.001
+    openness                -0.259    0.204   -1.270    0.204
 
 Variances:
                    Estimate  Std.Err  z-value  P(&gt;|z|)
-   .EP                0.237    0.072    3.288    0.001
-   .DP                0.123    0.038    3.207    0.001
-   .SP                0.231    0.062    3.750    0.000
-   .HP                3.394    0.684    4.965    0.000
-   .O1                0.061    0.016    3.851    0.000
-   .O2                0.135    0.031    4.344    0.000
-   .O3                0.014    0.018    0.763    0.445
-   .generlzd_prjdc    0.209    0.082    2.557    0.011
-    openness          0.114    0.034    3.310    0.001</code></pre>
+   .EP                0.352    0.082    4.277    0.000
+   .DP                0.084    0.037    2.292    0.022
+   .SP                0.165    0.064    2.577    0.010
+   .HP                2.475    0.496    4.990    0.000
+   .O1                0.065    0.019    3.433    0.001
+   .O2                0.067    0.017    3.996    0.000
+   .O3                0.045    0.027    1.655    0.098
+   .generlzd_prjdc    0.138    0.078    1.766    0.077
+    openness          0.116    0.036    3.182    0.001</code></pre>
 </div>
 </div>
-<p>The results show that in this case, the regression coefficient is -0.92 which is significant with p = 0.001. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <code>p_values</code>.</p>
-<div class="cell" data-hash="SEM_cache/html/multiple iterations SEM_4de45494d3a4de6efdf636b2503db09c">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#let's do 1000 iterations</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<p>The results show that in this case, the regression coefficient is -0.26 which is significant with p = 0.204. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <code>p_values</code>.</p>
+<div class="cell" data-hash="SEM_cache/html/multiple iterations SEM_64989f959b31778a09d73dbeab916ba2">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare an empty NA vector with 1000 slots</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#let's do 500 iterations</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">500</span></span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#sample size per iteration</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare an empty NA vector with 500 slots</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, iterations)</span>
 <span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#simulate data</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations){</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#sample size per iteration</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  simulated_data <span class="ot">&lt;-</span> Rfast<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> means_vector, <span class="at">sigma =</span> cov_mat) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  fit_sem_simulated <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_sem, <span class="at">data =</span> simulated_data)</span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  p_values[i] <span class="ot">&lt;-</span> <span class="fu">parameterestimates</span>(fit_sem_simulated)[<span class="dv">8</span>,]<span class="sc">$</span>pvalue</span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">#simulate data</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations){</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  simulated_data <span class="ot">&lt;-</span> Rfast<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> means_vector, <span class="at">sigma =</span> cov_mat) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  fit_sem_simulated <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_sem, <span class="at">data =</span> simulated_data)</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  p_values[i] <span class="ot">&lt;-</span> <span class="fu">parameterestimates</span>(fit_sem_simulated)[<span class="dv">8</span>,]<span class="sc">$</span>pvalue</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>How many of our 1000 virtual samples would have found a significant p-value (i.e., p &lt; .005)?</p>
+<p>How many of our 500 virtual samples would have found a significant p-value (i.e., p &lt; .005)?</p>
 <div class="cell" data-hash="SEM_cache/html/results SEM_b722f2f6682059f37021fa7e9eb37089">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#frequency table</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 FALSE  TRUE 
-  263   737 </code></pre>
+  144   356 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#percentage of significant results</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations<span class="sc">*</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 73.7</code></pre>
+<pre><code>[1] 71.2</code></pre>
 </div>
 </div>
-<p>Only 69.6% of samples with the same size of <span class="math inline">n=50</span> result in a significant p-value. We conclude that <span class="math inline">n=50</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
+<p>Only 71.2% of samples with the same size of <span class="math inline">n=50</span> result in a significant p-value. We conclude that <span class="math inline">n=50</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
 </section>
 <section id="sample-size-planning-find-the-necessary-sample-size" class="level2">
 <h2 class="anchored" data-anchor-id="sample-size-planning-find-the-necessary-sample-size">Sample size planning: Find the necessary sample size</h2>
-<p>But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 50 to 200. Running these simulations typically requires quite some computing time.</p>
-<div class="cell" data-hash="SEM_cache/html/power analysis SEM_1cfe57e0031c4dc814b1c631e172be3b">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 30 and 200</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ns_sem <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">200</span>, <span class="at">by=</span><span class="dv">10</span>) </span>
+<p>But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 30 to 200. Running these simulations typically requires quite some computing time.</p>
+<div class="cell" data-hash="SEM_cache/html/power analysis SEM_b49cdc0c6ff089b24f56f499f7629b9c">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>result_sem <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 30 and 200</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>ns_sem <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">200</span>, <span class="at">by=</span><span class="dv">10</span>) </span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co">#set number of iterations</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>iterations_sem <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>result_sem <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">#write function</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>sim_sem <span class="ot">&lt;-</span> <span class="cf">function</span>(n, model, mu, sigma) {</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  simulated_data <span class="ot">&lt;-</span> Rfast<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  fit_sem_simulated <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_sem, <span class="at">data =</span> simulated_data)</span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  p_value_sem <span class="ot">&lt;-</span> <span class="fu">parameterestimates</span>(fit_sem_simulated)[<span class="dv">8</span>,]<span class="sc">$</span>pvalue</span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_value_sem)</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_sem) {  </span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>p_values_sem <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_sem, <span class="fu">sim_sem</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_mediation, <span class="at">mu =</span> means_vector, <span class="at">sigma =</span> cov_mat), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>result_sem <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_sem, <span class="fu">data.frame</span>(</span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_sem <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations_sem)</span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">#set number of iterations</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>iterations_sem <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co">#write function</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>sim_sem <span class="ot">&lt;-</span> <span class="cf">function</span>(n, model, mu, sigma) {</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  simulated_data <span class="ot">&lt;-</span> Rfast<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  fit_sem_simulated <span class="ot">&lt;-</span> <span class="fu">sem</span>(model, <span class="at">data =</span> simulated_data)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  p_value_sem <span class="ot">&lt;-</span> <span class="fu">parameterestimates</span>(fit_sem_simulated)[<span class="dv">8</span>,]<span class="sc">$</span>pvalue</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_value_sem)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_sem) {  </span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>p_values_sem <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_sem, <span class="fu">sim_sem</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_sem, <span class="at">mu =</span> means_vector, <span class="at">sigma =</span> cov_mat), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>result_sem <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_sem, <span class="fu">data.frame</span>(</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_sem <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations_sem)</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s plot the results:</p>
 <div class="cell" data-hash="SEM_cache/html/plot power curve SEM_a4628ce36e73e1f25db4394c87681eb2">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_sem, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">18</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">200</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="SEM_files/figure-html/plot power curve SEM-1.png" class="img-fluid" width="672"></p>
+<p><img src="SEM_files/figure-html/plot%20power%20curve%20SEM-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>This graph suggests that we need a sample size of approximately 58 to reach a power of 80% with the given population estimates. That’s all it takes to run a power analysis for a SEM!</p>
+<p>This graph suggests that we need a sample size of approximately 50 participants to reach a power of 80% with the given population estimates. That’s all it takes to run a power analysis for a SEM!</p>
 <p>In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to present an alternative way to simulate data for SEMs, i.e.&nbsp;by using a built-in function in the <code>lavaan</code> package. Second, we would like to show how a “safeguard” approach to power analysis can be used within the context of SEM.</p>
 </section>
 <section id="using-the-lavaan-syntax-to-simulate-data" class="level2">
 <h2 class="anchored" data-anchor-id="using-the-lavaan-syntax-to-simulate-data">Using the lavaan syntax to simulate data</h2>
 <p>In our opening example in this chapter, we used the <code>rmvnorm</code> function from the <code>Rfast</code>package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the <code>lavaan</code> package, that is, the <code>simulateData()</code> function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data.</p>
 <p>More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al (2016). Let’s again take a look at the results of our SEM when applying it to this data set.</p>
-<div class="cell" data-hash="SEM_cache/html/unnamed-chunk-1_028ade036f5cf81a3ad8d15bc596e025">
+<div class="cell" data-hash="SEM_cache/html/fit Bergh_e1afb8caaa85093ec1f253febb6289a2">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the SEM to the pilot data set</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>fit_bergh <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_sem, <span class="at">data =</span> Bergh)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -698,51 +698,54 @@ Variances:
 </div>
 </div>
 <p>In order to use the <code>simulateData()</code> function, we can take the estimates from this previous study and plug them into the lavaan syntax in the following chunk.</p>
-<div class="cell" data-hash="SEM_cache/html/unnamed-chunk-2_6e521c3d4590efda91d8324033c215c4">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>model_fully_specified <span class="ot">&lt;-</span> </span>
+<div class="cell" data-hash="SEM_cache/html/specify lavaan syntax_30dad83cb832c6bbd2d9613262769dbe">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="st">"generalized_prejudice =~ 1*EP + 0.71*DP + 0.91*SP + 1*HP</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="st">openness =~ 1*O1 + 0.93*O2 + 1.14*O3</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~ -0.77*openness</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~~ 0.19*generalized_prejudice</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="st">openness ~~ 0.16*openness</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="st">EP ~~ 0.21*EP</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="st">DP ~~ 0.14*DP</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="st">SP ~~ 0.23*SP</span></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="st">HP ~~ 2.12*HP</span></span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="st">O1 ~~ 0.07*O1</span></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="st">O2 ~~ 0.08*O2</span></span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="st">O3 ~~ 0.05*O3</span></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="co">#lets try this</span></span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>sim_lavaan <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(model_fully_specified, <span class="at">sample.nobs=</span><span class="dv">100</span>)</span>
-<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_lavaan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>model_fully_specified <span class="ot">&lt;-</span> </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="st">"generalized_prejudice =~ 1*EP + 0.71*DP + 0.91*SP + 1*HP</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="st">openness =~ 1*O1 + 0.93*O2 + 1.14*O3</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~ -0.77*openness</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~~ 0.19*generalized_prejudice</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="st">openness ~~ 0.16*openness</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="st">EP ~~ 0.21*EP</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="st">DP ~~ 0.14*DP</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="st">SP ~~ 0.23*SP</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="st">HP ~~ 2.12*HP</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="st">O1 ~~ 0.07*O1</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="st">O2 ~~ 0.08*O2</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="st">O3 ~~ 0.05*O3</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="co">#lets try this</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>sim_lavaan <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(model_fully_specified, <span class="at">sample.nobs=</span><span class="dv">100</span>)</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_lavaan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>          EP          DP         SP          HP          O1            O2
-1 -0.5942360 -0.66305603 -0.4587724 -0.66923767 -0.12499922 -0.3187633634
-2  0.6898716  0.12032493  0.1547455  0.06701995 -0.14117103  0.2634804040
-3 -0.9008827 -0.40258036 -0.9544478 -1.71485077 -0.04406523 -0.0006498368
-4 -0.5201647 -0.57160867 -0.8482521 -0.47575105  0.87534205  0.7824580217
-5  0.3758517  0.95997822  0.7499091 -0.28842847 -0.23284002 -0.1553041066
-6  0.4032204  0.04479756  0.3681507 -0.17731577 -0.24411230 -0.2305494430
-          O3
-1 -0.3191302
-2  0.2737885
-3  0.1212679
-4  1.2230990
-5 -0.2120117
-6 -0.2043931</code></pre>
+<pre><code>            EP         DP          SP         HP          O1         O2
+1  0.009175975 -0.4818076 -0.29785829 -3.5273250 -0.02254289 -0.1394437
+2 -0.204483904 -0.4787598  0.15013918 -3.1894504 -0.56917823 -0.2076622
+3  0.456774325 -0.6544974  0.05802164 -2.3337546  0.26092341  0.7767911
+4 -1.153264826 -0.3216415 -0.91603659 -2.0334785 -0.16649019 -0.1387532
+5  0.512683482  0.3138148  0.28465681  0.1202821 -0.41602783 -0.2699893
+6 -1.064347791 -0.3287166 -0.62215235 -2.4007914  0.60927732 -0.1814121
+           O3
+1 -0.22583796
+2 -1.17504320
+3  0.11402119
+4  0.06726909
+5 -0.62531893
+6  0.13393737</code></pre>
 </div>
 </div>
 <p>The next step is to integrate this code into our first simulation-based power analysis in this chapter, that is, to replace the data simulation process using the <code>rmvnorm</code> function from the <code>Rfast</code> package with this new method using <code>simulateData()</code> from the <code>lavaan</code> package. To this end, I am adapting the <code>power analysis SEM</code> chunk from above accordingly.</p>
-<div class="cell" data-hash="SEM_cache/html/simulateData_87847a65b741ecc781ba1063cf945795">
+<div class="cell" data-hash="SEM_cache/html/simulateData_26e7c5197ca34b5083dd58933ee9261c">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21354</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 30 and 200</span></span>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>ns_sem <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">200</span>, <span class="at">by=</span><span class="dv">10</span>) </span>
@@ -751,10 +754,10 @@ Variances:
 <span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>result_sem <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co">#set number of iterations</span></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>iterations_sem <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>iterations_sem <span class="ot">&lt;-</span> <span class="dv">500</span></span>
 <span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="co">#write function</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>sim_sem <span class="ot">&lt;-</span> <span class="cf">function</span>(n, model) {</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>sim_sem_lavaan <span class="ot">&lt;-</span> <span class="cf">function</span>(n, model) {</span>
 <span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  sim_lavaan <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(<span class="at">model =</span> model, <span class="at">sample.nobs=</span>n)</span>
@@ -768,7 +771,7 @@ Variances:
 <span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
 <span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_sem) {  </span>
 <span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  p_values_sem <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_sem, <span class="fu">sim_sem</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_fully_specified), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  p_values_sem <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_sem, <span class="fu">sim_sem_lavaan</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_fully_specified), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
 <span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>  result_sem <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_sem, <span class="fu">data.frame</span>(</span>
 <span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
 <span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_sem <span class="sc">&lt;</span> .<span class="dv">005</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span>iterations_sem)</span>
@@ -779,10 +782,10 @@ Variances:
 <div class="cell" data-hash="SEM_cache/html/plot power curve SEM lavaan_41231634257cd8768d2ec016ee5bb896">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_sem, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">18</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">200</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="SEM_files/figure-html/plot power curve SEM lavaan-1.png" class="img-fluid" width="672"></p>
+<p><img src="SEM_files/figure-html/plot%20power%20curve%20SEM%20lavaan-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Here, we conclude that approx. 50 participants would be needed to achieve 80% power. The slight difference compared to the previous power analysis should be explained by the fact that we rounded the numbers that define our statistical populations and that we only used 1,000 Monte Carlo iterations – these differences should decrease with an increasing number of iterations.</p>
+<p>Here, we conclude that approx. 55 participants would be needed to achieve 80% power. The slight difference compared to the previous power analysis should be explained by the fact that we rounded the numbers that define our statistical populations and that we only used 500 Monte Carlo iterations – these differences should decrease with an increasing number of iterations.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -843,68 +846,74 @@ Tip
 </div>
 </div>
 <p>This output shows that the upper bound of the 60% confidence interval around the focal regression coefficient is -0.72. We can now use this as our new and more conservative effect size estimate. We can for example insert this value into our simulation using the lavaan syntax. For this purpose, we copy the chunk from above and simply replace the previous effect size estimate (-0.77) with the new estimate (-0.72), while keeping all other parameters that define this data set.</p>
-<div class="cell" data-hash="SEM_cache/html/lavaan model safeguard power_4c4a19c624ce14cfd14cc65951c2c271">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>model_fully_specified_safeguard <span class="ot">&lt;-</span> </span>
+<div class="cell" data-hash="SEM_cache/html/lavaan model safeguard power_551b7645b9ead06b3ed5f6de16c663c0">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="st">"generalized_prejudice =~ 1*EP + 0.71*DP + 0.91*SP + 1*HP</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="st">openness =~ 1*O1 + 0.93*O2 + 1.14*O3</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~ -0.72*openness</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~~ 0.19*generalized_prejudice</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="st">openness ~~ 0.16*openness</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="st">EP ~~ 0.21*EP</span></span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="st">DP ~~ 0.14*DP</span></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="st">SP ~~ 0.23*SP</span></span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="st">HP ~~ 2.12*HP</span></span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="st">O1 ~~ 0.07*O1</span></span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="st">O2 ~~ 0.08*O2</span></span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="st">O3 ~~ 0.05*O3</span></span>
-<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a><span class="co">#lets try this</span></span>
-<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>sim_lavaan_safeguard <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(model_fully_specified_safeguard, <span class="at">sample.nobs=</span><span class="dv">100</span>)</span>
-<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_lavaan_safeguard)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>model_fully_specified_safeguard <span class="ot">&lt;-</span> </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="st">"generalized_prejudice =~ 1*EP + 0.71*DP + 0.91*SP + 1*HP</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="st">openness =~ 1*O1 + 0.93*O2 + 1.14*O3</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~ -0.72*openness</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~~ 0.19*generalized_prejudice</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="st">openness ~~ 0.16*openness</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="st">EP ~~ 0.21*EP</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="st">DP ~~ 0.14*DP</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="st">SP ~~ 0.23*SP</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="st">HP ~~ 2.12*HP</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="st">O1 ~~ 0.07*O1</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="st">O2 ~~ 0.08*O2</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a><span class="st">O3 ~~ 0.05*O3</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="co">#lets try this</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>sim_lavaan_safeguard <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(model_fully_specified_safeguard, <span class="at">sample.nobs=</span><span class="dv">100</span>)</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_lavaan_safeguard)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           EP         DP         SP         HP          O1         O2
-1 0.008674179 -0.9829940  0.2085880  2.0192234  0.03000101  0.3589848
-2 0.186159546  1.0617388  0.2040395 -1.4863717 -0.10213215 -0.4030284
-3 0.126587792 -0.2761780 -0.6881661 -2.3959453  0.24284022  0.3153752
-4 0.286950956  0.2803286 -0.6046910 -1.1257368 -0.10919353 -0.6746742
-5 0.568284189 -0.2519002 -0.1902389  0.1885731  0.11495051  0.5811571
-6 0.606045677 -0.4725095 -0.3796678  1.4979594  0.25362934 -0.6973059
-          O3
-1  0.4210092
-2 -0.8238630
-3  0.7516726
-4  0.6328611
-5  0.2362783
-6  0.2030353</code></pre>
+1  0.03163582 -0.4674398 -0.2762416 -3.5075535 -0.04391145 -0.1593227
+2 -0.19674199 -0.4764434  0.1605740 -3.1573002 -0.58997086 -0.2268869
+3  0.48315832 -0.6351419  0.0799879 -2.3272372  0.25229795  0.7683784
+4 -1.13893054 -0.3131634 -0.9001980 -2.0386232 -0.18372798 -0.1543441
+5  0.49985196  0.3039113  0.2740270  0.1386227 -0.41638579 -0.2703941
+6 -1.04098556 -0.3130325 -0.5996895 -2.4067345  0.59293247 -0.1965773
+           O3
+1 -0.25024294
+2 -1.19986667
+3  0.10431698
+4  0.04700113
+5 -0.62587386
+6  0.11528181</code></pre>
 </div>
 </div>
-<p>Now, everything is ready for the actual safeguard power analysis. We can re-use the <code>sim_sem</code> function we have defined above. Let’s see what we get here!</p>
-<div class="cell" data-hash="SEM_cache/html/safeguard power analysis_9bbdcdbfec394289130c226e4afe5f51">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>result_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<p>Now, everything is ready for the actual safeguard power analysis. We can re-use the <code>sim_sem_lavaan</code> function we have defined above. Let’s see what we get here!</p>
+<div class="cell" data-hash="SEM_cache/html/safeguard power analysis_80f348421133c30f85899495e7f8bdd7">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_sem) {  </span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  p_values_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_sem, <span class="fu">sim_sem</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_fully_specified_safeguard), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  result_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_sem_safeguard, <span class="fu">data.frame</span>(</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_sem_safeguard <span class="sc">&lt;</span> .<span class="dv">005</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span>iterations_sem)</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_sem_safeguard, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">18</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">200</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>result_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_sem) {  </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  p_values_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_sem, <span class="fu">sim_sem_lavaan</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_fully_specified_safeguard), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  result_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_sem_safeguard, <span class="fu">data.frame</span>(</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_sem_safeguard <span class="sc">&lt;</span> .<span class="dv">005</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span>iterations_sem)</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_sem_safeguard, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">18</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">200</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="SEM_files/figure-html/safeguard power analysis-1.png" class="img-fluid" width="672"></p>
+<p><img src="SEM_files/figure-html/safeguard%20power%20analysis-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>This safeguard power analysis yields a required sample size of 62 participants.</p>
+<p>This safeguard power analysis yields a required sample size of ca. 63 participants.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -937,13 +946,17 @@ Note
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>Bergh_int <span class="ot">&lt;-</span> Bergh </span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>Bergh_int<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Bergh_int<span class="sc">$</span>gender <span class="sc">==</span> <span class="st">"male"</span>, <span class="dv">0</span>, <span class="fu">ifelse</span>(Bergh_int<span class="sc">$</span>gender <span class="sc">==</span> <span class="st">"female"</span>, <span class="dv">1</span>, <span class="cn">NA</span>))</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Bergh_int)</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co">#store means</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>means_mediation <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">mean</span>(gender), <span class="fu">mean</span>(EP), <span class="fu">mean</span>(SP), <span class="fu">mean</span>(HP), <span class="fu">mean</span>(DP), <span class="fu">mean</span>(O1), <span class="fu">mean</span>(O2), <span class="fu">mean</span>(O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co">#store covarainces</span></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>cov_mediation <span class="ot">&lt;-</span> <span class="fu">cov</span>(<span class="fu">cbind</span>(gender, EP, SP, HP, DP, O1, O2, O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Bergh_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Die folgenden Objekte sind maskiert von Bergh:
+
+    A1, A2, A3, DP, EP, gender, HP, O1, O2, O3, SP</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#store means</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>means_mediation <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">mean</span>(gender), <span class="fu">mean</span>(EP), <span class="fu">mean</span>(SP), <span class="fu">mean</span>(HP), <span class="fu">mean</span>(DP), <span class="fu">mean</span>(O1), <span class="fu">mean</span>(O2), <span class="fu">mean</span>(O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co">#store covarainces</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>cov_mediation <span class="ot">&lt;-</span> <span class="fu">cov</span>(<span class="fu">cbind</span>(gender, EP, SP, HP, DP, O1, O2, O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -960,37 +973,37 @@ Tip
 </div>
 <p>Now, we specify the statistical mediation model in <code>lavaan</code>.</p>
 <div class="cell" data-hash="SEM_cache/html/specify mediation model_5ed110da39703cf137831f36ab75838d">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#specify mediation model</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>model_mediation <span class="ot">&lt;-</span> <span class="st">'</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="st">              # measurement model</span></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice =~ EP + DP + SP + HP</span></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="st">              openness =~ O1 + O2 + O3</span></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="st">              </span></span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="st">              # direct effect</span></span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice ~ c*gender</span></span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="st">              </span></span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="st">              # mediator</span></span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a><span class="st">              openness ~ a*gender</span></span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice ~ b*openness</span></span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a><span class="st">              # indirect effect (a*b)</span></span>
-<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a><span class="st">              ab := a*b</span></span>
-<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a><span class="st">           </span></span>
-<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a><span class="st">              # total effect</span></span>
-<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a><span class="st">              total := c + (a*b)</span></span>
-<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#specify mediation model</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>model_mediation <span class="ot">&lt;-</span> <span class="st">'</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="st">              # measurement model</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice =~ EP + DP + SP + HP</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="st">              openness =~ O1 + O2 + O3</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="st">              </span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="st">              # direct effect</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice ~ c*gender</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="st">              </span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="st">              # mediator</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="st">              openness ~ a*gender</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice ~ b*openness</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="st">              # indirect effect (a*b)</span></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a><span class="st">              ab := a*b</span></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a><span class="st">           </span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a><span class="st">              # total effect</span></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="st">              total := c + (a*b)</span></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To verify that this model syntax works properly, we can fit this model to the data set provided by Bergh et al.&nbsp;(2016).</p>
 <div class="cell" data-hash="SEM_cache/html/test mediation model with the pilot data_bd58f05d7e2477cde53f0d854ce550c1">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the SEM to the simulated data set</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>fit_mediation <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_mediation, <span class="at">data =</span> Bergh_int)</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co">#display the results</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_mediation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the SEM to the simulated data set</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>fit_mediation <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_mediation, <span class="at">data =</span> Bergh_int)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co">#display the results</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_mediation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lavaan 0.6.13 ended normally after 39 iterations
+<pre><code>lavaan 0.6.15 ended normally after 39 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -1049,51 +1062,51 @@ Defined Parameters:
     total            -0.335    0.044   -7.552    0.000</code></pre>
 </div>
 </div>
-<p>Now, everything is set up to run the actual power analysis. In the following chunk, we repeatedly simulate data from the specified population and store the p-value of the indirect effect while varying the sample size in a range from 100 to 1500.</p>
-<div class="cell" data-hash="SEM_cache/html/simulate data mediation_df09b7242a135a51949092bc7a274a9e">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">56465</span>)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 100 and 1500</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>ns_mediation <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">1500</span>, <span class="at">by=</span><span class="dv">20</span>) </span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>result_mediation <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="co">#iterations</span></span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>iterations_mediation <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="co">#write function</span></span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>sim_mediation <span class="ot">&lt;-</span> <span class="cf">function</span>(n, model, mu, sigma) {</span>
-<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>      simulated_data_mediation <span class="ot">&lt;-</span> Rfast<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>      fit_mediation_simulated <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_mediation, <span class="at">data =</span> simulated_data_mediation)</span>
-<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>      p_value_mediation <span class="ot">&lt;-</span> <span class="fu">parameterestimates</span>(fit_mediation_simulated)[<span class="dv">21</span>,]<span class="sc">$</span>pvalue</span>
-<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(p_value_mediation)</span>
-<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
-<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_mediation) {  </span>
-<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>p_values_mediation <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_mediation, <span class="fu">sim_mediation</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_mediation, <span class="at">mu =</span> means_mediation, <span class="at">sigma =</span> cov_mediation), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
-<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>result_mediation <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_mediation, <span class="fu">data.frame</span>(</span>
-<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_mediation <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations_mediation)</span>
-<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, everything is set up to run the actual power analysis. In the following chunk, we repeatedly simulate data from the specified population and store the p-value of the indirect effect while varying the sample size in a range from 500 to 1500.</p>
+<div class="cell" data-hash="SEM_cache/html/simulate data mediation_fffdac65ae0d1593e2129a8637eec0ed">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 100 and 1500</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>ns_mediation <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">500</span>, <span class="dv">1500</span>, <span class="at">by=</span><span class="dv">50</span>) </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>result_mediation <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co">#iterations</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>iterations_mediation <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co">#write function</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>sim_mediation <span class="ot">&lt;-</span> <span class="cf">function</span>(n, model, mu, sigma) {</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>      simulated_data_mediation <span class="ot">&lt;-</span> Rfast<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>      fit_mediation_simulated <span class="ot">&lt;-</span> <span class="fu">sem</span>(model, <span class="at">data =</span> simulated_data_mediation)</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>      p_value_mediation <span class="ot">&lt;-</span> <span class="fu">parameterestimates</span>(fit_mediation_simulated)[<span class="dv">21</span>,]<span class="sc">$</span>pvalue</span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(p_value_mediation)</span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_mediation) {  </span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>p_values_mediation <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_mediation, <span class="fu">sim_mediation</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_mediation, <span class="at">mu =</span> means_mediation, <span class="at">sigma =</span> cov_mediation), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
+<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>result_mediation <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_mediation, <span class="fu">data.frame</span>(</span>
+<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
+<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_mediation <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations_mediation)</span>
+<span id="cb44-32"><a href="#cb44-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb44-33"><a href="#cb44-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-34"><a href="#cb44-34" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s plot the results:</p>
 <div class="cell" data-hash="SEM_cache/html/plot power curve mediation_033ccc00643f300d955b911fee594ae3">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_mediation, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">20</span>) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_mediation, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">20</span>) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="SEM_files/figure-html/plot power curve mediation-1.png" class="img-fluid" width="672"></p>
+<p><img src="SEM_files/figure-html/plot%20power%20curve%20mediation-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>This shows that roughly 1,350 participants will be needed to obtain sufficient power under the assumptions we specified.</p>
+<p>This shows that roughly 1,300 to 1,400 participants will be needed to obtain sufficient power under the assumptions we specified. To achieve a more precise estimate, just increase the number of iterations (and get a cup of coffee while you wait for the results 😅)</p>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
@@ -1147,24 +1160,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
     setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -1192,50 +1188,31 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      let href = ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
       });
-    }
+      return popup.innerHTML;
+    });
   }
 });
 </script>

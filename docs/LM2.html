@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.0.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,15 +12,10 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
-  vertical-align: middle;
-}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -59,7 +54,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
+code span.bu { } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -72,7 +67,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.im { } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -161,7 +156,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
+      <a href="./" class="sidebar-logo-link">
       <img src="./images/LMU-OSC_logo_small.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
       </a>
       </div>
@@ -247,7 +242,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -285,7 +280,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
   </div>
     
-  
     
   </div>
   
@@ -363,8 +357,10 @@ Note
 var_x &amp; cov_{xy}\\
 cov_{xy} &amp; var_y
 \end{bmatrix}
-</span> Note that the covariance in the diagonal has the same values, as <span class="math inline">cov_{xy} = cov_{yx}</span>. As we need to enter the covariance into <code>sigma</code>, we need to convert the correlation into a covariance. Here’s the formula:</p>
-<p><span class="math display">cor_{xy} = \frac{cov_{xy}}{\sigma_x\sigma_y}</span> (Note: The denominator contains the standard deviation, not the variance.) Solved for the covariance yields:</p>
+</span></p>
+<p>Note that the covariance in the diagonal has the same values, as <span class="math inline">cov_{xy} = cov_{yx}</span>. As we need to enter the covariance into <code>sigma</code>, we need to convert the correlation into a covariance. Here’s the formula:</p>
+<p><span class="math display">cor_{xy} = \frac{cov_{xy}}{\sigma_x\sigma_y}</span></p>
+<p>(Note: The denominator contains the standard deviation, not the variance.) Solved for the covariance yields:</p>
 <p><span class="math display">cov_{xy} = cor_{xy}\sigma_X\sigma_y = 0.6 * \sqrt{117} * \sqrt{117} = 70.2</span></p>
 <p>Hence, the specific variance-covariance-matrix <code>sigma</code> is in our case (generously rounded):</p>
 <p><span class="math display">
@@ -372,7 +368,8 @@ cov_{xy} &amp; var_y
 117 &amp; 70\\
 70 &amp; 117
 \end{bmatrix}
-</span> Put it all together:</p>
+</span></p>
+<p>Put it all together:</p>
 <div class="cell" data-hash="LM2_cache/html/rmvnorm_6e2ec02abfc990a85e82f28ad9996323">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">23</span>, <span class="dv">23</span>) <span class="co"># the mean values of both variables</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
@@ -583,19 +580,24 @@ An additional plausibility check (advanced)
 <blockquote class="blockquote">
 <p>“We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group.</p>
 </blockquote>
-<p>When we enter our assumed pre-post-correlation into that formula, we arrive a n=117 - very close to our value: <span class="math display">180 * (1 - .6^2) + 2 = 117</span></p>
+<p>When we enter our assumed pre-post-correlation into that formula, we arrive a n=117 - very close to our value:</p>
+<p><span class="math display">180 * (1 - .6^2) + 2 = 117</span></p>
 </section>
 </section>
 <section id="modeling-an-interaction" class="level1">
 <h1>Modeling an interaction</h1>
 <p>We now include the interaction between the baseline score <span class="math inline">\text{BDI}_{pre}</span> and the <span class="math inline">\text{treatment}</span> factor. Such an interaction would suggest that the treatment is more effective at a certain baseline severity. There is some evidence that depression treatment works better at higher baseline severity, compared to lower baseline severity<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>To this end, we add the interaction term to the equation. We use the centered baseline value <span class="math inline">\text{BDI}_{pre.c}</span> for better interpretability:</p>
-<p><span class="math display">\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + b_2*\text{treatment} + b_3*\text{BDI}_{pre.c}*\text{treatment} + e</span> When we rearrange the equation by factoring out the <code>treatment</code> term, the interaction is easier to interpret:</p>
-<p><span class="math display">\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + (b_2 + b_3*\text{BDI}_{pre.c})*\text{treatment} + e</span> Hence, the size of the treatment effect is <span class="math inline">b_2 + b_3*\text{BDI}_{pre}</span>. Remember that we centered <span class="math inline">BDI_{pre}</span> for better interpretability - this is the place where it gets relevant: When we enter the value 0 for <span class="math inline">BDI_{pre.c}</span> (which corresponds to a typical pre-treatment depression score of around 23), the treatment effect equals the main effect <span class="math inline">b_2</span>. This conditional treatment effect gets larger or smaller, depending on the value of <span class="math inline">BDI_{pre.c}</span> and the regression weight <span class="math inline">b_3</span>. The meaning of <span class="math inline">b_3</span> is: How much does the treatment effect increase for every 1 unit increase in <span class="math inline">BDI_{pre.c}</span>?</p>
+<p><span class="math display">\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + b_2*\text{treatment} + b_3*\text{BDI}_{pre.c}*\text{treatment} + e</span></p>
+<p>When we rearrange the equation by factoring out the <code>treatment</code> term, the interaction is easier to interpret:</p>
+<p><span class="math display">\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + (b_2 + b_3*\text{BDI}_{pre.c})*\text{treatment} + e</span></p>
+<p>Hence, the size of the treatment effect is <span class="math inline">b_2 + b_3*\text{BDI}_{pre}</span>. Remember that we centered <span class="math inline">BDI_{pre}</span> for better interpretability - this is the place where it gets relevant: When we enter the value 0 for <span class="math inline">BDI_{pre.c}</span> (which corresponds to a typical pre-treatment depression score of around 23), the treatment effect equals the main effect <span class="math inline">b_2</span>. This conditional treatment effect gets larger or smaller, depending on the value of <span class="math inline">BDI_{pre.c}</span> and the regression weight <span class="math inline">b_3</span>. The meaning of <span class="math inline">b_3</span> is: How much does the treatment effect increase for every 1 unit increase in <span class="math inline">BDI_{pre.c}</span>?</p>
 <p>What are plausible values for <span class="math inline">b_3</span>? First, we need to decide on the sign. We expect that the treatment effect gets more <em>negative</em> (as we expect a decrease in BDI scores) with increasing baseline severity, so the coefficient must be negative. For the moment, let’s assume that the treatment effect gets 0.4 more negative for every unit increase in <span class="math inline">BDI_{pre.c}</span>:</p>
-<p><span class="math display">\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre.c} - 6*\text{treatment} - 0.4*\text{BDI}_{pre.c}*\text{treatment} + e</span> We can plot the predicted values of that equation as two separate regression lines: simply enter either 0 or 1 for <code>treatment</code>:</p>
+<p><span class="math display">\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre.c} - 6*\text{treatment} - 0.4*\text{BDI}_{pre.c}*\text{treatment} + e</span></p>
+<p>We can plot the predicted values of that equation as two separate regression lines: simply enter either 0 or 1 for <code>treatment</code>:</p>
 <p><span class="math display">\text{Control group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*0 - 0.4*\text{BDI}_{pre.c}*0 = 23 + 0.6*\text{BDI}_{pre.c}</span></p>
-<p><span class="math display">\text{Treatment group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*1 - 0.4*\text{BDI}_{pre.c}*1 = 17 + 0.2*\text{BDI}_{pre.c}</span> In the following plot, the limits of the x-axis are chosen to reflect the possible range of the <span class="math inline">BDI_{pre}</span> score: It can go from 0 to 63, which corresponds to -23 to 40 on the centered scale. The actual maximum in our pilot data was 49 (i.e., 26 on the centered scale), marked with a dashed line.</p>
+<p><span class="math display">\text{Treatment group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*1 - 0.4*\text{BDI}_{pre.c}*1 = 17 + 0.2*\text{BDI}_{pre.c}</span></p>
+<p>In the following plot, the limits of the x-axis are chosen to reflect the possible range of the <span class="math inline">BDI_{pre}</span> score: It can go from 0 to 63, which corresponds to -23 to 40 on the centered scale. The actual maximum in our pilot data was 49 (i.e., 26 on the centered scale), marked with a dashed line.</p>
 <div class="cell" data-hash="LM2_cache/html/interaction_plot_c19859404e1642ac7215a4d83f1f89ed">
 <details>
 <summary>Code</summary>
@@ -771,10 +773,10 @@ An additional plausibility check (advanced)
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<div id="quarto-appendix" class="default"><section class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Although this might be due to a floor effect of the measurement instrument: If a questionnaire item is already at the lowest possible value at mild depression, there is no more room for improvement (Hieronymus et al., <a href="https://doi.org/10.1016/S2215-0366(19)30216-0">2019</a>).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1" role="doc-endnote"><p>Although this might be due to a floor effect of the measurement instrument: If a questionnaire item is already at the lowest possible value at mild depression, there is no more room for improvement (Hieronymus et al., <a href="https://doi.org/10.1016/S2215-0366(19)30216-0">2019</a>).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -818,24 +820,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
     setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -863,50 +848,31 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      let href = ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
       });
-    }
+      return popup.innerHTML;
+    });
   }
 });
 </script>
