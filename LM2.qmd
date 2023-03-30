@@ -88,6 +88,7 @@ $$
 Put it all together:
 
 ```{r rmvnorm}
+set.seed(0xBEEF)
 mu <- c(23, 23) # the mean values of both variables
 sigma <- matrix(
     c(117 , 70, 
@@ -178,6 +179,8 @@ sim2 <- function(n=100, treatment_effect=-6, pre_post_cor = 0.6, err_var = 117, 
 Let's test the plausibility of the new `sim2()` function by simulating a very large sample - this should give estimates close to the true values. We also vary the assumed pre-post-correlation. When this is 0, the results should be identical to the simpler model from [Chapter 1](LM1.qmd) (except one *df* that we lost due to the additional predictor). When the pre-post-correlation is > 0, the error variance should be reduced (see `Residual standard error` at the bottom of each `lm` output).
 
 ```{r}
+set.seed(0xBEEF)
+
 # without pre_post_cor, the result should be the same
 sim2(n=100000, pre_post_cor=0, print=TRUE)
 
