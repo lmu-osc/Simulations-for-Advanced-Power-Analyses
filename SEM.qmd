@@ -240,6 +240,12 @@ result_sem <- rbind(result_sem, data.frame(
     power = sum(p_values_sem < .005)/iterations_sem)
   )
 
+#The following line of code can be used to track the progress of the simulations 
+#This can be helpful for simulations with a high number of iterations and/or a large parameter space which require a lot of time
+#I have deactivated this here; to enable it, just remove the "#" sign at the beginning of the next line
+#message(paste("Progress info: Simulations completed for n =", n))
+
+
 }
 
 ```
@@ -342,6 +348,12 @@ for (n in ns_sem) {
     n = n,
     power = sum(p_values_sem < .005, na.rm = TRUE)/iterations_sem)
   )
+  
+#The following line of code can be used to track the progress of the simulations 
+#This can be helpful for simulations with a high number of iterations and/or a large parameter space which require a lot of time
+#I have deactivated this here; to enable it, just remove the "#" sign at the beginning of the next line
+#message(paste("Progress info: Simulations completed for n =", n))
+
 }
 
 
@@ -427,6 +439,12 @@ for (n in ns_sem) {
     n = n,
     power = sum(p_values_sem_safeguard < .005, na.rm = TRUE)/iterations_sem)
   )
+  
+#The following line of code can be used to track the progress of the simulations 
+#This can be helpful for simulations with a high number of iterations and/or a large parameter space which require a lot of time
+#I have deactivated this here; to enable it, just remove the "#" sign at the beginning of the next line
+#message(paste("Progress info: Simulations completed for n =", n))
+  
 }
 
 ggplot(result_sem_safeguard, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_continuous(n.breaks = 18, limits = c(30,200)) + scale_y_continuous(n.breaks = 10, limits = c(0,1)) + geom_hline(yintercept= 0.8, color = "red")
@@ -554,6 +572,11 @@ result_mediation <- rbind(result_mediation, data.frame(
     n = n,
     power = sum(p_values_mediation < .005)/iterations_mediation)
   )
+
+#The following line of code can be used to track the progress of the simulations 
+#This can be helpful for simulations with a high number of iterations and/or a large parameter space which require a lot of time
+#I have deactivated this here; to enable it, just remove the "#" sign at the beginning of the next line
+#message(paste("Progress info: Simulations completed for n =", n))
 
 }
 ```
