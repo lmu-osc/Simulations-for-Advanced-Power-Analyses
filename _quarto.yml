@@ -31,6 +31,8 @@ format:
     css: styles.css
     toc: true
     html-math-method: katex
+    include-in-header:
+      - includes/matomo.html
 
 execute:
   cache: true
