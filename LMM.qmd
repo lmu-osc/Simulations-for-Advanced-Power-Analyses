@@ -85,13 +85,28 @@ BtheB_long$time.c <- BtheB_long$time - 2
 
 l0 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=BtheB_long)
 summary(l0)
+
+# Compute ICC
+97.15 / (97.15 + 25.48)
 ```
 
-Hence, in the pilot data there is a significant negative trend - with each month, participants have a decrease of 0.7 BDI points. But remember that in this data set *all* of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy).
+Hence, in the pilot data there is a significant negative trend - with each month, participants have a decrease of 0.7 BDI points. But remember that in this data set *all* of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy). The ICC is around 79%, hence a huge amount of random variance can be attributed to differences between persons.
 
 The grand intercept $\gamma_{00}$ is 17. This is also the average post-treatment value that we assumed in our previous models in Chapters 1 and 2.
 
 For the random intercept variance and the residual variance, we take generously rounded estimates from the pilot data: $\tau_{00} = 100$ and $\sigma^2 = 25$.
+
+::: {.callout-tip}
+# Default values for ICCs?
+Sometimes the random intercept variance is parametrized via the ICC. Some publications discuss "typical" ICCs (see also Scherbaum & Ferreter, 2008):
+
+- „ICC values typically range between .05 and .20“ (Snijders & Bosker, 1999; Bliese, 2000) 
+- „values greater than .30 will be rare“ (Bliese, 2000)
+- „median value of .12; this is likely an overestimate“ (James, 1982)
+- „a value between .10 and .15 will provide a conservative estimate of the ICC when it cannot be precisely computed“
+
+But: there are some research fields where ICCs > 30% are not uncommon - as you can see in our own pilot data, where the ICC was 79%! Again, defaults based on "typical values in the literature" might be better than blind guessing, but nothing beats domain knowledge.
+:::
 
 ## Let's simulate
 
@@ -377,9 +392,11 @@ Concerning the computed power, we see that we need around 180 participants for t
 
 # Ways forward
 
-While this power analysis could be approximated with existing apps, there are many useful extensions of the simulations that will not be possible in existing apps. For example, we know from the pilot data that there is a lot of drop-out. We could easily simulate that drop-out (e.g., missing completely at random, MCAR) by setting, say, 10% of all BDI values to `NA` from $t_2$ on, additional 10% from $t_3$ on, etc.
-Furthermore, we could simulate floor effects: Currently, the simulated BDI scores can drop below zero. A more realistic data generating model would cap these values at zero. This restricts the range, diminishes the mean difference, and therefore lowers the power.
+While this power analysis could be approximated with existing apps, there are many useful extensions of the simulations that will not be possible in existing apps. Here are some examples:
 
+- We know from the pilot data that there is a lot of **participant drop-out**. We could easily simulate that drop-out (e.g., missing completely at random, MCAR) by setting, say, 10% of all BDI values to `NA` from $t_2$ on, additional 10% from $t_3$ on, etc.
+- We could simulate **floor effects**: Currently, the simulated BDI scores can drop below zero. A more realistic data generating model would cap these values at zero. This restricts the range, diminishes the mean difference, and therefore lowers the power.
+- So far, the tutorial only covered a priori power analysis, where the sample size is the target. With an existing data set, you could do, for example, a **sensitivity power analysis** by varying the effect size in the outer loop (and keeping sample size constant).
 
 # Other packages
 
@@ -413,3 +430,7 @@ sim_faux <- function(n_persons=100, print=FALSE) {
 ```
 
 When you plug this simulation function into our power analysis loop, you will get the same results.
+
+## References
+
+Scherbaum, C. A., & Ferreter, J. M. (2008). Estimating Statistical Power and Required Sample Sizes for Organizational Research Using Multilevel Modeling. Organizational Research Methods, 12(2), 347–367. http://doi.org/10.1177/1094428107308906
