@@ -5,6 +5,10 @@ project:
 website:
   repo-url: https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses
   repo-actions: [edit, issue]
+  favicon: images/LMU-OSC_favicon.jpg
+  margin-header: |
+    ![](/images/LMU-OSC_logo.jpg){width="175"}
+    
   sidebar:
     style: "docked"
     search: true
@@ -27,7 +31,9 @@ website:
 
 format:
   html:
-    theme: cosmo
+    theme: 
+      - cosmo
+      - custom.scss
     css: styles.css
     toc: true
     html-math-method: katex
