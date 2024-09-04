@@ -9,7 +9,7 @@ project-type: website
 This tutorial was created by **Felix Schönbrodt** and **Moritz Fischer**, with contributions from Malika Ihle, to be part of the training offering of the Ludwig-Maximilian University Open Science Center in Munich.
 
 ::: {.callout-note}
-This book is still being developed. If you have comment to contribute to its improvement, you can submit pull requests in the respective .qmd file of the [source repository](https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses) by clicking on the 'Edit this page' and 'Report an issue' in the right navigation panel of each page.
+This book is still being developed. If you have comment to contribute to its improvement, you can submit pull requests in the respective .qmd file of the [source repository](https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses) by clicking on the 'Edit this page' and 'Report an issue' in the right navigation panel of each page.
 :::
 
 

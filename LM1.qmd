@@ -464,7 +464,7 @@ print(result)
 ```
 
 Now power increases monotonically with sample size, as expected.\
-To explore how many Monte-Carlo iterations are necessary to get stable computational results, see the bonus page [Bonus: How many Monte-Carlo iterations are necessary?](https://malikaihle.github.io/Simulations-for-Advanced-Power-Analyses/how_many_iterations.html)
+To explore how many Monte-Carlo iterations are necessary to get stable computational results, see the bonus page [Bonus: How many Monte-Carlo iterations are necessary?](https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/how_many_iterations.html)
 
 # Recap: What did we do?
 
