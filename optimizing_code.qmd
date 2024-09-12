@@ -25,7 +25,7 @@ plan(multisession)
 ```
 
 
-Optimizing code for speed can be an art -- and you get lost and spend/waste hours by micro-optimizing some milliseconds. But the Pareto principle applies here: with 20% effort, you can have quick and substantial gains.
+Optimizing code for speed can be an art -- and you get lost and spend/waste hours by micro-optimizing some milliseconds. But the Pareto principle applies here: With 20% effort, you can have quick and substantial gains.
 
 *Code profiling* means that the code execution is timed, just like you had a stopwatch. Your goal is to make your code snippet as fast as possible. RStudio has a [built-in profiler](https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE) that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we'll resort to the simplest way of timing code: We will measure overall execution time by wrapping our code in a `system.time({ ... })` call. Longer code blocks need to be wrapped in curly braces `{...}`. The function returns multiple timings; the relevant number for us is the "elapsed" time. This is also called the "wall clock" time -- the time you actually have to wait until computation finished.
 
@@ -64,7 +64,7 @@ This first version takes `r t0[3]` seconds. Of course we have sampling error her
 
 # Rule 1: No growing vectors/data frames
 
-This is one of the most common bottlenecks: You start with an empty vector (or even worse: data frame), and grow it by `rbind`-ing new rows to it in each iteration.
+This is one of the most common bottlenecks: You start with an empty vector (or even worse, a data frame) and grow it by `rbind`-ing new rows to it in each iteration.
 
 ```{r}
 t1 <- system.time({
@@ -110,7 +110,7 @@ OK, this didn't really change anything here. But in general (in particular with 
 
 # Rule 2: Avoid data frames as far as possible
 
-Use matrizes instead of data frames wherever possible; or avoid them at all (as we do in the code below).
+Use matrizes instead of data frames wherever possible or avoid data frames completely (as we do in the code below).
 
 ```{r}
 t2 <- system.time({
@@ -206,7 +206,7 @@ This step led to a massive improvement of around `r round(t3[3] - t2[3], 1)` sec
 # Rule 4: Use optimized packages
 
 For many statistical models, there are packages optimized for speed, see for example here:
-[https://stackoverflow.com/q/49732933](https://stackoverflow.com/q/49732933)
+[https://stackoverflow.com/q/49732933](https://stackoverflow.com/q/49732933).
 
 ```{r}
 t4 <- system.time({
@@ -415,7 +415,7 @@ With this optimized setup, we are running `r options(scipen=999); length(ns)*ite
 We covered the most important steps for speeding up your code in R:
 
 1. No growing vectors/data frames. Solution: Pre-allocate the results vector.
-2. Avoid data.frames. Solution: Use matrices wherever possible, or switch to data.table for more complex data structures (not covered here).
+2. Avoid data frames. Solution: Use matrices wherever possible, or switch to data.table for more complex data structures (not covered here).
 3. Avoid unnecessary computations and/or switch to optimized packages that do the same computations much faster, such as the package `Rfast`.
 4. Switch to parallel processing. Solution: If you already programmed your simulations with the `replicate` function, it is very easy with the `future.apply` package.
 

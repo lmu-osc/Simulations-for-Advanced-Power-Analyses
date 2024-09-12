@@ -87,7 +87,7 @@ means_vector
 
 ```
 
-We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the Bergh et al. data as well. There are two ways to do this. First, we can use the `cov` function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal, and the covariances in the remaining cells. 
+We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the Bergh et al. data as well. There are two ways to do this. First, we can use the `cov` function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal and the covariances in the remaining cells. 
 
 ```{r cov matrix SEM}
 
@@ -260,7 +260,7 @@ ggplot(result_sem, aes(x=n, y=power)) + geom_point() + geom_line() + scale_x_con
 
 This graph suggests that we need a sample size of approximately 50 participants to reach a power of 80% with the given population estimates. That's all it takes to run a power analysis for a SEM! 
 
-In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to present an alternative way to simulate data for SEMs, i.e. by using a built-in function in the `lavaan` package. Second, we would like to show how a "safeguard" approach to power analysis can be used within the context of SEM.
+In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to present an alternative way to simulate data for SEMs, i.e., by using a built-in function in the `lavaan` package. Second, we would like to show how a "safeguard" approach to power analysis can be used within the context of SEM.
 
 ## Using the lavaan syntax to simulate data
 
@@ -371,13 +371,13 @@ Here, we conclude that approx. 55 participants would be needed to achieve 80% po
 
 ::: {.callout-tip}
 
-Wang and Rhemtulla ([2021](https://doi.org/10.1177/2515245920918253)) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: [https://yilinandrewang.shinyapps.io/pwrSEM/](https://yilinandrewang.shinyapps.io/pwrSEM/) 
+Wang and Rhemtulla ([2021](https://doi.org/10.1177/2515245920918253)) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: [https://yilinandrewang.shinyapps.io/pwrSEM/](https://yilinandrewang.shinyapps.io/pwrSEM/). 
 
 :::
 
 ## A safeguard power approach for SEMs
 
-Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al. (2016) data set as an estimate of the "true" effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., [2014](https://doi.org/10.1177/1745691614528519)), which we have already applied in Chapter 1 ([Linear Model I: a single dichotomous predictor](LM1.qmd)).
+Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al. (2016) data set as an estimate of the "true" effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., [2014](https://doi.org/10.1177/1745691614528519)), which we have already applied in Chapter 1 ([Linear Model 1: A single dichotomous predictor](LM1.qmd)).
 
 Basically, all need to do in order to account for variability of observed effect sizes is to calculate a 60%-confidence interval around the point estimate of the observed effect size from our pilot data and to use the more conservative bound of this confidence interval (here: the upper bound) as our new effect size estimate. This can be easily done with the `parameterestimates` function from the `lavaan` package which takes the level of the confidence interval as an input parameter. Let's use this function on our object `fit_bergh` which stores the results of our SEM in the `Bergh` data set.  
 
@@ -460,7 +460,7 @@ In addition to this safeguard power approach, we would also have liked to derive
 
 # A simulation-based power analysis for a mediation model with latent variables
 
-Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the Bergh et al. (2016) dataset as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:
+Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the Bergh et al. (2016) data set as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:
 
 1. find plausible estimates of the population parameters
 2. specify the statistical model
@@ -470,7 +470,7 @@ Sometimes, researchers not only wish to investigate whether and how two (latent)
 6. count how many samples would have detected the specified effect (i.e., compute the statistical power)
 7. vary your simulation parameters until the desired level of power (e.g., 80%) is achieved
 
-We first draw on the Bergh et al. (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding male = 0 and female = 1. 
+We first draw on the Bergh et al. (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding "male" with 0 and "female" with 1. 
 
 ```{r means and cov mediation}
 
@@ -490,7 +490,7 @@ cov_mediation <- cov(cbind(gender, EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 
 ::: {.callout-tip}
 
-If we were  interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al. (2017), which can be accessed via [https://schoemanna.shinyapps.io/mc_power_med/](https://schoemanna.shinyapps.io/mc_power_med/). This app currently enables power analyses for some manifest mediation models: Mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, (iv) and three parallel mediators. But as we want to incorporate `generalized prejudice`  and `openness to experience` as latent variables, we need to write a simulation-based power analyses ourselves.   
+If we were  interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al. (2017), which can be accessed via [https://schoemanna.shinyapps.io/mc_power_med/](https://schoemanna.shinyapps.io/mc_power_med/). This app currently enables power analyses for some manifest mediation models: mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, and (iv) three parallel mediators. But as we want to incorporate `generalized prejudice` and `openness to experience` as latent variables, we need to write a simulation-based power analyses ourselves.   
 
 :::
 
@@ -589,7 +589,7 @@ ggplot(result_mediation, aes(x=n, y=power)) + geom_point() + geom_line() + scale
 
 ```
 
-This shows that roughly 1,300 to 1,400 participants will be needed to obtain sufficient power under the assumptions we specified. To achieve a more precise estimate, just increase the number of iterations (and get a cup of coffee while you wait for the results 😅) 
+This shows that roughly 1,300 to 1,400 participants will be needed to obtain sufficient power under the assumptions we specified. To achieve a more precise estimate, just increase the number of iterations (and get a cup of coffee while you wait for the results 😅). 
 
 # References
 

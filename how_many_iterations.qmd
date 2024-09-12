@@ -20,15 +20,15 @@ library(pwr)             # for analytical power analysis
 ```
 
 
-To find the sample size needed for a study, we have previously use, say, 1000 iterations of data simulation and analysis, and varied the sample size *n* from, say, 100 to 1000, every 50, to find where the 80% power threshold was crossed (see  [LM1.qmd#sample-size-planning-find-the-necessary-sample-size](Chapter 1)). But is 1000 iterations giving a precise enough result?
+To find the sample size needed for a study, we have previously used, say, 1000 iterations of data simulation and analysis, and varied the sample size *n* from, say, 100 to 1000, every 50, to find where the 80% power threshold was crossed (see  [LM1.qmd#sample-size-planning-find-the-necessary-sample-size](Chapter 1)). But is 1000 iterations giving a precise enough result?
 
-Using the [optimized code](optimizing_code.qmd), we can explore how many Monte Carlo iterations are necessary to get stable computational results: we can re-run the same simulation with the same sample size and see how much random variation is between results!
+Using the [optimized code](optimizing_code.qmd), we can explore how many Monte Carlo iterations are necessary to get stable computational results: We can re-run the same simulation with the same sample size and see how much random variation is between results!
 
 ::: {.callout-note}
 Monte Carlo methods, or Monte Carlo experiments, are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. The underlying concept is to use randomness to solve problems that might be deterministic in principle. They are often used in physical and mathematical problems and are most useful when it is difficult or impossible to use other approaches. Monte Carlo methods are mainly used in three problem classes: optimization, numerical integration, and generating draws from a probability distribution.
 :::
 
-Let's start with 1000 iterations (at n = 100, and 10 repetitions of the same power analysis):
+Let's start with 1000 iterations (at n = 100 and 10 repetitions of the same power analysis):
 ```{r}
 set.seed(0xBEEF)
 iterations <- 1000
@@ -120,7 +120,7 @@ p1/p2
 As you can see, the MCE gets smaller with increasing iterations. The desired precision of MCE <= .005 can be achieved at around 3000 iterations (the dashed blue line is the exact power estimate from the analytical solution). While precision increases quickly by going from 1000 to 2000 iterations, further improvements are costly in terms of computation time. In sum, 3000 iterations seems to be a good compromise *for this specific power simulation*.
 
 ::: {.callout-note}
-This choice of 3000 iterations does not necessarily generalize to other power simulations with other statistical models. But in my experience, 2000 iterations typically is a good (enough) choice. I often start with 500 iterations when exploring the parameter space (i.e., looking roughly for the range of reasonable sample sizes), and then "zoom" into this range with 2000 iterations.
+This choice of 3000 iterations does not necessarily generalize to other power simulations with other statistical models. But in my experience, 2000 iterations typically is a good (enough) choice. I often start with 500 iterations when exploring the parameter space (i.e., looking roughly for the range of reasonable sample sizes) and then "zoom" into this range with 2000 iterations.
 :::
 
 In the lower plot, you can also see that the MCE estimate itself is a bit wiggly -- we would expect a smooth curve. It suffers from meta-MCE! We could increase the precision of the MCE estimate by increasing the number of repetitions (currently at 100).

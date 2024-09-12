@@ -20,7 +20,7 @@ require(MPsychoR)
 
 ```
 
-In this chapter, we will turn to simulation-based power analysis for fit indices in the context of SEM. We will build on the model we have introduced in Chapter 5 ([Structural Equation Modelling (SEM)](SEM.qmd)), it is therefore recommendable to read this chapter first.  The following chunk specifies this model, in which (latent) generalized prejudice is predicted by (latent) openness to experience (as conceptualized in the big five personality traits). We fit this model to the dataset by Bergh et al. (2016) in order to get a first impression of the model fit.
+In this chapter, we will turn to simulation-based power analysis for fit indices in the context of SEM. We will build on the model we have introduced in Chapter 5 ([Structural Equation Modelling (SEM)](SEM.qmd)), it is therefore recommendable to read this chapter first.  The following chunk specifies this model, in which (latent) generalized prejudice is predicted by (latent) openness to experience (as conceptualized in the big five personality traits). We fit this model to the data set by Bergh et al. (2016) in order to get a first impression of the model fit.
 
 ```{r specify model}
 

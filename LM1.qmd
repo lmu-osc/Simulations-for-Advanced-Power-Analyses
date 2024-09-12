@@ -35,7 +35,7 @@ $$e \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\sigma^2)$$
 
 This assumption of the distribution of the errors is important for our simulations, as we will simulate the error according to that assumption. In an actual statistical analysis, the variance of the errors, $\sigma^2$, is estimated from the data.
 
-"i.i.d" means that the error of each observation is independent from all other observations. This assumption is violated, for example, when we look at romantic couples. If one partner is exceptionally distressed, then the other partner presumably will also have higher stress levels. In this case, the errors of both partners are correlated, and not independent any more. (See the section on [modelling multilevel data](LMM.qmd) for a statistical way of handling such interdependences).
+"iid" means that the error of each observation is independent from all other observations. This assumption is violated, for example, when we look at romantic couples. If one partner is exceptionally distressed, then the other partner presumably will also have higher stress levels. In this case, the errors of both partners are correlated and not independent anymore. (See the section on [modelling multilevel data](LMM.qmd) for a statistical way of handling such interdependences.)
 
 # A concrete example
 
@@ -82,7 +82,7 @@ The standardized cutoffs for the BDI are:
 -   0--13: minimal depression
 -   14--19: mild depression
 -   20--28: moderate depression
--   29--63: severe depression.
+-   29--63: severe depression
 
 Returning to our questions from above:
 
@@ -143,7 +143,7 @@ With our knowledge from the open BDI data, we insert plausible values for the in
 
 $$\widehat{\text{BDI}} = 23 - 6*treatment$$
 
-Hence, the predicted value is $23 - 6*0 = 23$ for the control group, and $23 - 6*1 = 17$ for the treatment group.
+Hence, the predicted value is $23 - 6*0 = 23$ for the control group and $23 - 6*1 = 17$ for the treatment group.
 
 With the current model, all participants in the control group have the same predicted value (23), as do all participants in the treatment group (17).
 
@@ -157,7 +157,7 @@ That's our final equation with assumed population parameters! With that equation
 
 Researchers often have been trained to think in standardized effect sizes, such as Cohen's $d$, a correlation $r$, or other indices such as $f^2$ or partial $\eta^2$. In the simulation approach, we typical work on the raw scale of variables.
 
-The *raw* effect size is simply the treatment effect on the original BDI scale (i.e., the group difference in the outcome variable). In our case we assume that the treatment lowers the BDI score by 6 points, on average. Defining the raw effect requires some domain knowledge -- you need to know your measurement scale, and you need to know what the values (and differences between values) mean. In our example, a reduction of 6 BDI points means that the average patient moves from a moderate depression (23 points) to a mild depression (17 points). Working with raw effect sizes forces you to think about your actual data (instead of plugging in content-free default standardized effect sizes), and enables you to do plausibility checks on your simulation.
+The *raw* effect size is simply the treatment effect on the original BDI scale (i.e., the group difference in the outcome variable). In our case we assume that the treatment lowers the BDI score by 6 points, on average. Defining the raw effect requires some domain knowledge -- you need to know your measurement scale, and you need to know what the values (and differences between values) mean. In our example, a reduction of 6 BDI points means that the average patient moves from a moderate depression (23 points) to a mild depression (17 points). Working with raw effect sizes forces you to think about your actual data (instead of plugging in content-free default standardized effect sizes) and enables you to do plausibility checks on your simulation.
 
 The *standardized* effect size relates the raw effect size to the unexplained error variance. In the two-group example, this can be expressed as Cohen's *d*, which is the mean difference divided by the standard deviation (SD):
 
@@ -379,7 +379,7 @@ for (n in ns) {  # loop through elements of the vector "ns"
 print(result)
 ```
 
-With that more conservative effect size assumption, we would need around 380 participants, i.e. 190 per group.
+With that more conservative effect size assumption, we would need around 380 participants, i.e., 190 per group.
 
 ## Smallest effect size of interest (SESOI)
 
@@ -474,15 +474,15 @@ These are the steps we did in this part of the tutorial:
 2.  **Find empirical information about the parameters in the model.** These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define the assumed state of the population.
 3.  **Program your regression equation**, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.
 4.  **Do the simulation**:
-    a)  Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same)
-    b)  Compute the index of interest (typically: the p-value of a focal effect)
-    c)  Count how many samples would have detected the effect (i.e., the statistical power)
+    a)  Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same).
+    b)  Compute the index of interest (typically: the p-value of a focal effect).
+    c)  Count how many samples would have detected the effect (i.e., the statistical power).
     d)  Tune your simulation parameters until the desired level of power is achieved.
 
 Concerning step 4d, the typical scenario is that you increase sample size until your desired level of power is achieved. But you could imagine other ways to increase power, e.g.:
 
 -   Increase the reliability of a measurement instrument (which will be reflected in a smaller error variance) until desired power is achieved. (This could relate to a trade-off: Do you invest more effort and time in better measurement, or do you keep an unreliable measure and collect more participants?)
--   Compare a within- and a between-design in simulations
+-   Compare a within- and a between-design in simulations.
 
 # References
 

@@ -18,11 +18,11 @@ library(ggplot2)
 library(tidyr)
 ```
 
-In the [first chapter on linear models](LM1.qmd), we had the simplest possible linear model: a continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.
+In the [first chapter on linear models](LM1.qmd), we had the simplest possible linear model: A continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.
 
 # Adding a continuous predictor
 
-We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are "their own control group" and we can explain a lot of (formerly) unexplained error variance by controlling for this between-person variance.
+We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are "their own control group", and we can explain a lot of (formerly) unexplained error variance by controlling for this between-person variance.
 
 ::: {.callout-note}
 As a side-note: Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate model (see, for example, Senn, [2006](http://misc.biblio.s3.amazonaws.com/Senn06Change+from+baseline+and+analysis+of+covariance.pdf) or Wan, [2021](https://doi.org/10.1186/s12874-021-01323-9)).
@@ -54,13 +54,13 @@ Now we add the continuous predictor into our `sim()` function. In order to simul
 
 We use the `rmvnorm` function from the `Rfast` package to create correlated, normally distributed variables. It takes three parameters:
 
-* `n`: The number of random observations
-* `mu`: A vector of mean values (one for each random variable)
-* `sigma`: The variance-covariance-matrix of the random variables. 
+* `n`, the number of random observations
+* `mu`, vector of mean values (one for each random variable)
+* `sigma`, the variance-covariance-matrix of the random variables
 
 For `mu`, we use the value 23 for both the pre and the post value. You can imagine that we only look at the control group: The mean value is not supposed to change systematically from pre to post (although each individual person can go somewhat up or down).
 
-The variance-covariance-matrix defines two properties at once: The variance of each variable, and the covariance to all other variables. In the two-variable case, the general matrix looks like:
+The variance-covariance-matrix defines two properties at once: the variance of each variable and the covariance to all other variables. In the two-variable case, the general matrix looks like:
 
 $$
 \begin{bmatrix}
@@ -188,7 +188,7 @@ sim2(n=100000, pre_post_cor=0, print=TRUE)
 sim2(n=100000, pre_post_cor=0.6, print=TRUE)
 ```
 
-Indeed, with `pre_post_cor = 0` the parameter estimates are identical, and with non-zero pre-post-correlation the error term gets reduced.
+Indeed, with `pre_post_cor = 0` the parameter estimates are identical, and with non-zero pre-post-correlation, the error term gets reduced.
 
 ::: {.callout-note collapse="true"}
 # An additional plausibility check (advanced)
@@ -202,7 +202,7 @@ The square root of this unexplained error variance is the `Residual standard err
 
 ## Do the power analysis
 
-The next step is the same as always: use the `replicate` function to repeatedly call the `sim` function for many iterations, and increase the simulated sample size until the desired power level is achieved.
+The next step is the same as always: Use the `replicate` function to repeatedly call the `sim` function for many iterations, and increase the simulated sample size until the desired power level is achieved.
 
 ```{r}
 #| echo: true
@@ -240,7 +240,7 @@ In the original analysis, we needed $n=180$ (90 in each group) for 80% power. In
 
 Let's check the plausibility of our power simulation. Borm et al. ([2007](http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf), p. 1237) propose a simple method on how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:
 
-> "We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group.
+> "We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group."
 
 When we enter our assumed pre-post-correlation into that formula, we arrive a $n=117$ -- very close to our value:
 $$180 * (1 - .6^2) + 2 = 117$$
@@ -262,7 +262,7 @@ Hence, the size of the treatment effect is $b_2 + b_3*\text{BDI}_{pre}$. Remembe
 What are plausible values for $b_3$? First, we need to decide on the sign. We expect that the treatment effect gets more *negative* (as we expect a decrease in BDI scores) with increasing baseline severity, so the coefficient must be negative. For the moment, let's assume that the treatment effect gets 0.4 more negative for every unit increase in $BDI_{pre.c}$:
 
 $$\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre.c} - 6*\text{treatment} - 0.4*\text{BDI}_{pre.c}*\text{treatment} + e$$
-We can plot the predicted values of that equation as two separate regression lines: simply enter either 0 or 1 for `treatment`:
+We can plot the predicted values of that equation as two separate regression lines -- simply enter either 0 or 1 for `treatment`:
 
 $$\text{Control group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*0 - 0.4*\text{BDI}_{pre.c}*0 = 23 + 0.6*\text{BDI}_{pre.c}$$
 
@@ -298,10 +298,7 @@ With that strenth of the interaction effect, the predicted treatment effect of a
 
 However, the interaction creates an implausible situation at the lower end of baseline severity. The red and the blue line cross at a $BDI_{pre}$ value of around 8: For such persons with a minimal depression, it makes zero difference whether they are in the control or the treatment group. But the effect even *reverses* for patients with very low BDI values below 8: For them, the treatment leads to worse outcomes than being in the control group. 
 
-As this is implausible, we want to calibrate the interaction effect in a way that the treatment ...
-
-* makes no difference for the lowest $\text{BDI}_{pre}$ values, and
-* reduces the BDI by 6 points for average depression scores.
+As this is implausible, we want to calibrate the interaction effect in a way that the treatment a) makes no difference for the lowest $\text{BDI}_{pre}$ values and b) reduces the BDI by 6 points for average depression scores.
 
 (Alternatively, we have to give up the assumption of a *linear* interaction effect and create a non-linear interaction model. But you don't want to go that route ...).
 
@@ -349,9 +346,9 @@ Only when you have drawn a reasonable plot by hand (and validated that with coll
 
 Now that we have our desired parameter values, we update our `sim()` function by:
 
-* Imposing the interaction effect onto our dependent variable
-* Adding the interaction effect to our `lm` analysis model
-* Extracting two p-values: We now want to compute the power both for the treatment main effect and for the interaction term.
+* imposing the interaction effect onto our dependent variable
+* adding the interaction effect to our `lm` analysis model
+* extracting two p-values (we now want to compute the power both for the treatment main effect and for the interaction term)
 
 ```{r sim}
 #| echo: true

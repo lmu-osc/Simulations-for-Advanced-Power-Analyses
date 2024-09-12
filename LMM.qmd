@@ -105,14 +105,14 @@ Sometimes the random intercept variance is parametrized via the ICC. Some public
 - „median value of .12; this is likely an overestimate“ (James, 1982)
 - „a value between .10 and .15 will provide a conservative estimate of the ICC when it cannot be precisely computed“
 
-But: there are some research fields where ICCs > 30% are not uncommon -- as you can see in our own pilot data, where the ICC was 79%! Again, defaults based on "typical values in the literature" might be better than blind guessing, but nothing beats domain knowledge.
+But there are some research fields where ICCs > 30% are not uncommon -- as you can see in our own pilot data, where the ICC was 79%! Again, defaults based on "typical values in the literature" might be better than blind guessing, but nothing beats domain knowledge.
 :::
 
 ## Let's simulate
 
-The next script shows how to simulate multilevel data with a random intercept. We first create a L2 data set (where each row is once participant). This contains a person id (which is necessary to merge the L1 and the L2 data set) and the random intercepts (i.e., the random deviations of persons from the fixed intercept). In more complex models, this also contains all L2 predictors.
+The next script shows how to simulate multilevel data with a random intercept. We first create an L2 data set (where each row is once participant). This contains a person id (which is necessary to merge the L1 and the L2 data set) and the random intercepts (i.e., the random deviations of persons from the fixed intercept). In more complex models, this also contains all L2 predictors.
 
-Next we create a L1 data set, and then merge both into one long format data set.
+Next we create an L1 data set and then merge both into one long format data set.
 We closely simulate the situation of the pilot data: All participants are treated and show a negative trend.
 
 ```{r sim}
@@ -126,13 +126,13 @@ residual_var <- 25
 
 n_persons <- 100
 
-# Create a L2 (person-level) data set; each row is one person
+# Create an L2 (person-level) data set; each row is one person
 df_L2 <- data.frame(
   person_id = 1:n_persons,
   u_0j = rnorm(n_persons, mean=0, sd=sqrt(tau_00))
 )
 
-# Create a L1 (measurement-point-level) data set; each row is one measurement
+# Create an L1 (measurement-point-level) data set; each row is one measurement
 df_L1 <- data.frame(
   person_id = rep(1:n_persons, each=4),  # create 4 rows for each person (as we have 4 measurements)  
   time.c = rep(c(0, 2, 4, 6), times=n_persons)  
@@ -150,7 +150,7 @@ l1 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=df_long)
 summary(l1)
 ```
 
-Now we put this data generating script into a function, and run our power analysis:
+Now we put this data generating script into a function and run our power analysis:
 
 ```{r power_analysis_LMM_simple}
 #| results: hide
@@ -231,7 +231,7 @@ This approximation yields very close values to our simulation:
 
 ![Screenshot from Murayama app](images/LMM_Murayama_app_example.png)
 
-Another option is the app "[PowerAnalysisIL](https://github.com/ginettelafit/PowerAnalysisIL)" by Lafit (2021). In that app you would need to choose "Model 4: Effect of a level-1 continuous predictor (fixed slope)" and set "Autocorrelation of level-1 errors" to zero to estimate an equivalent model to ours. This app, however, is much slower than our own simulations, and cannot perfectly mirror our model, as the continuous L1 predictor cannot be defined exactly as we need it.
+Another option is the app "[PowerAnalysisIL](https://github.com/ginettelafit/PowerAnalysisIL)" by Lafit (2021). In that app you would need to choose "Model 4: Effect of a level-1 continuous predictor (fixed slope)" and set "Autocorrelation of level-1 errors" to zero to estimate an equivalent model to ours. This app, however, is much slower than our own simulations and cannot perfectly mirror our model, as the continuous L1 predictor cannot be defined exactly as we need it.
 
 Nonetheless, the estimates are not far away from ours:
 
@@ -240,7 +240,7 @@ Nonetheless, the estimates are not far away from ours:
 
 # A random-intercept, random-slope model with cross-level interaction
 
-We now make the model more complex by (a) adding a L2 predictor (treatment vs. control), (b) allowing random slopes for the time effect, and (c) model a cross-level interaction (i.e., does the slope differ between treatment and control group?).
+We now make the model more complex by (a) adding an L2 predictor (treatment vs. control), (b) allowing random slopes for the time effect, and (c) model a cross-level interaction (i.e., does the slope differ between treatment and control group?).
 
 The main effect for `treatment` reveals group differences when the other predictor, `time`, is zero (i.e., at the first post-treatment measurement). The main effect for `time` now is a *conditional* effect, as it models the time trend for the control group (i.e., when `treatment` is zero).
 
@@ -280,11 +280,11 @@ We need to assume four additional population values, namely: $\tau_{11}$ (the va
 * For the interaction effect, we expect a steeper decline in the treatment group (e.g., because the treatment "unfolds" its effect over time). If we set the interaction effect to -0.7, this translates to a predicted slope of -0.7 in the treatment group: $\gamma_{10} time_{ij} +  \gamma_{11} \text{treatment}_j time_{ij} =  (\gamma_{10} +  \gamma_{11} \text{treatment}_j) time_{ij}$. 
 
 Is this slope of -0.7, estimated from the pilot data, reasonable?
-Let's extrapolate the trend: Treated patients have an average BDI score of 17 (directly after treatment). If they decline 0.7 points per month, they would have a BDI difference of $12*-0.7 = -8.4$ after one year, and are at around 9 BDI points. With that decline, they would have moved from a mild depression to a minimal depression. This seems plausible.
+Let's extrapolate the trend: Treated patients have an average BDI score of 17 (directly after treatment). If they decline 0.7 points per month, they would have a BDI difference of $12*-0.7 = -8.4$ after one year and are at around 9 BDI points. With that decline, they would have moved from a mild depression to a minimal depression. This seems plausible.
 
 *Random terms:* 
 
-* Assume that ~95% of slopes in the treatment group lie between -0.7 ± 0.3 (i.e., between -0.4 and -1). This corresponds to a standard deviation of 0.15, and consequently a variance of $\tau_{11} = 0.15^2 = 0.0225$. 
+* Assume that ~95% of slopes in the treatment group lie between -0.7 ± 0.3 (i.e., between -0.4 and -1). This corresponds to a standard deviation of 0.15 and consequently a variance of $\tau_{11} = 0.15^2 = 0.0225$. 
 * We assume no random effect correlation, so $\tau_{01} = 0$. 
 
 As recommended in the last chapter, we visualize this assumed interaction effect by a hand drawing:
@@ -388,14 +388,14 @@ print(result)
 
 You will see a lot of warnings about `boundary (singular) fit` -- you can generally ignore these; they typically occur when one of the random variances is exactly zero; but the fixed effect estimates (which are our focus here) are still valid. You will also see some rare warnings about `Model failed to converge with max|grad|`. In this case, the optimizer did not converge with the required precision, but typically still is very close. Finally, there are some warnings `Model failed to converge with 1 negative eigenvalue`. These instances give wrong results. However, if in our thousands of simulations some very few models did not converge, this makes no noticeable difference. If, however, the majority of your models does not converge this is a hint that your simulation has some errors.
 
-Concerning the computed power, we see that we need around 180 participants for the treatment main effect (which mirrors the result from Chapter 1), and around 140 participants for detecting the interaction effect. As there is no main effect for `time.c` (it has been simulated as zero), the power stays always around the $\alpha$-level.
+Concerning the computed power, we see that we need around 180 participants for the treatment main effect (which mirrors the result from Chapter 1) and around 140 participants for detecting the interaction effect. As there is no main effect for `time.c` (it has been simulated as zero), the power stays always around the $\alpha$-level.
 
 # Ways forward
 
 While this power analysis could be approximated with existing apps, there are many useful extensions of the simulations that will not be possible in existing apps. Here are some examples:
 
 - We know from the pilot data that there is a lot of **participant drop-out**. We could easily simulate that drop-out (e.g., missing completely at random, MCAR) by setting, say, 10% of all BDI values to `NA` from $t_2$ on, additional 10% from $t_3$ on, etc.
-- We could simulate **floor effects**: Currently, the simulated BDI scores can drop below zero. A more realistic data generating model would cap these values at zero. This restricts the range, diminishes the mean difference, and therefore lowers the power.
+- We could simulate **floor effects**: Currently, the simulated BDI scores can drop below zero. A more realistic data generating model would cap these values at zero. This restricts the range, diminishes the mean difference and therefore lowers the power.
 - So far, the tutorial only covered a priori power analysis, where the sample size is the target. With an existing data set, you could do, for example, a **sensitivity power analysis** by varying the effect size in the outer loop (and keeping sample size constant).
 
 # Other packages
