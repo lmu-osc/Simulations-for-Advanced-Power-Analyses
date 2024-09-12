@@ -55,8 +55,8 @@ For each model, we will follow the structure:
 
 -   Define what type of data and variables need to be simulated, i.e., their distribution, their class (e.g., factor vs. numerical value).
 -   Generate data based on the equation of the model (data = model + error).
--   Run the statistical test and record the relevant statistic (e.g., p-value).
--   Replicate step 2 and 3 to get the distribution of the statistic of interest (e.g., p-value).
+-   Run the statistical test, and record the relevant statistic (e.g., p-value).
+-   Replicate steps 2 and 3 to get the distribution of the statistic of interest (e.g., p-value).
 -   Analyze and interpret the combined results of many simulations, i.e., check for which sample size you get at a significant result in 80% of the simulations.
 
 ### Install all packages

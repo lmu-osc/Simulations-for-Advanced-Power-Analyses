@@ -110,7 +110,7 @@ OK, this didn't really change anything here. But in general (in particular with 
 
 # Rule 2: Avoid data frames as far as possible
 
-Use matrizes instead of data frames wherever possible or avoid data frames completely (as we do in the code below).
+Use matrizes instead of data frames wherever possible or avoid data frames altogether (as we do in the code below).
 
 ```{r}
 t2 <- system.time({
