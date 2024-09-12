@@ -223,7 +223,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./how_many_iterations.html" class="sidebar-item-text sidebar-link">Bonus: How many Monte-Carlo iterations are necessary?</a>
+  <a href="./how_many_iterations.html" class="sidebar-item-text sidebar-link">Bonus: How many Monte Carlo iterations are necessary?</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -650,7 +650,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="the-final-speed-test-burn-your-machine" class="level1">
 <h1>The final speed test: Burn your machine 🔥</h1>
-<p>Let’s see if parallel processing has an advantage when we have longer computations. We now expand the simulation by exploring a broad parameter range (n ranging from 100 to 1000) and increasing the iterations to 20,000 for more stable results. (See also: “<a href="./how_many_iterations.html">Bonus: How many Monte-Carlo iterations are necessary?</a>”)</p>
+<p>Let’s see if parallel processing has an advantage when we have longer computations. We now expand the simulation by exploring a broad parameter range (n ranging from 100 to 1000) and increasing the iterations to 20,000 for more stable results. (See also: “<a href="./how_many_iterations.html">Bonus: How many Monte Carlo iterations are necessary?</a>”)</p>
 <div class="cell" data-hash="optimizing_code_cache/html/unnamed-chunk-8_1dc0e9f5a17e9845a4ec965b8641f6a6">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
