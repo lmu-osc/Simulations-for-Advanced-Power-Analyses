@@ -90,7 +90,7 @@ summary(l0)
 97.15 / (97.15 + 25.48)
 ```
 
-Hence, in the pilot data there is a significant negative trend - with each month, participants have a decrease of 0.7 BDI points. But remember that in this data set *all* of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy). The ICC is around 79%, hence a huge amount of random variance can be attributed to differences between persons.
+Hence, in the pilot data there is a significant negative trend -- with each month, participants have a decrease of 0.7 BDI points. But remember that in this data set *all* of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy). The ICC is around 79%, hence a huge amount of random variance can be attributed to differences between persons.
 
 The grand intercept $\gamma_{00}$ is 17. This is also the average post-treatment value that we assumed in our previous models in Chapters 1 and 2.
 
@@ -105,7 +105,7 @@ Sometimes the random intercept variance is parametrized via the ICC. Some public
 - „median value of .12; this is likely an overestimate“ (James, 1982)
 - „a value between .10 and .15 will provide a conservative estimate of the ICC when it cannot be precisely computed“
 
-But: there are some research fields where ICCs > 30% are not uncommon - as you can see in our own pilot data, where the ICC was 79%! Again, defaults based on "typical values in the literature" might be better than blind guessing, but nothing beats domain knowledge.
+But: there are some research fields where ICCs > 30% are not uncommon -- as you can see in our own pilot data, where the ICC was 79%! Again, defaults based on "typical values in the literature" might be better than blind guessing, but nothing beats domain knowledge.
 :::
 
 ## Let's simulate
@@ -386,7 +386,7 @@ for (n_persons in ns) {
 print(result)
 ```
 
-You will see a lot of warnings about `boundary (singular) fit` - you can generally ignore these; they typically occur when one of the random variances is exactly zero; but the fixed effect estimates (which are our focus here) are still valid. You will also see some rare warnings about `Model failed to converge with max|grad|`. In this case, the optimizer did not converge with the required precision, but typically still is very close. Finally, there are some warnings `Model failed to converge with 1 negative eigenvalue`. These instances give wrong results. However, if in our thousands of simulations some very few models did not converge, this makes no noticeable difference. If, however, the majority of your models does not converge this is a hint that your simulation has some errors.
+You will see a lot of warnings about `boundary (singular) fit` -- you can generally ignore these; they typically occur when one of the random variances is exactly zero; but the fixed effect estimates (which are our focus here) are still valid. You will also see some rare warnings about `Model failed to converge with max|grad|`. In this case, the optimizer did not converge with the required precision, but typically still is very close. Finally, there are some warnings `Model failed to converge with 1 negative eigenvalue`. These instances give wrong results. However, if in our thousands of simulations some very few models did not converge, this makes no noticeable difference. If, however, the majority of your models does not converge this is a hint that your simulation has some errors.
 
 Concerning the computed power, we see that we need around 180 participants for the treatment main effect (which mirrors the result from Chapter 1), and around 140 participants for detecting the interaction effect. As there is no main effect for `time.c` (it has been simulated as zero), the power stays always around the $\alpha$-level.
 

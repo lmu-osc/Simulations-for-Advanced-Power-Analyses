@@ -42,7 +42,7 @@ Please note that the predictions used as examples in this chapter are not necess
 
 ## Let's get some real data as starting point
 
-Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let's assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al ([2016](https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated)) and the corresponding data set which has been made accessible as part of the `MPsychoR` package. Let's take a look at this data set.
+Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let's assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al. ([2016](https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated)) and the corresponding data set which has been made accessible as part of the `MPsychoR` package. Let's take a look at this data set.
 
 
 ```{r load data, message=FALSE}
@@ -266,7 +266,7 @@ In the following two sub-paragraphs, we would like to present two alternatives a
 
 In our opening example in this chapter, we used the `rmvnorm` function from the `Rfast`package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the `lavaan` package, that is, the `simulateData()` function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data. 
 
-More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al (2016). Let's again take a look at the results of our SEM when applying it to this data set.
+More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al. (2016). Let's again take a look at the results of our SEM when applying it to this data set.
 
 ```{r fit Bergh}
 
@@ -454,13 +454,13 @@ This safeguard power analysis yields a required sample size of ca. 63 participan
 
 ::: {.callout-note}
 
-In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by Bergh et al (2016) were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.
+In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by Bergh et al. (2016) were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.
 
 :::
 
 # A simulation-based power analysis for a mediation model with latent variables
 
-Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the Bergh et al (2016) dataset as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:
+Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the Bergh et al. (2016) dataset as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:
 
 1. find plausible estimates of the population parameters
 2. specify the statistical model
@@ -470,7 +470,7 @@ Sometimes, researchers not only wish to investigate whether and how two (latent)
 6. count how many samples would have detected the specified effect (i.e., compute the statistical power)
 7. vary your simulation parameters until the desired level of power (e.g., 80%) is achieved
 
-We first draw on the Bergh et al (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding male = 0 and female = 1. 
+We first draw on the Bergh et al. (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding male = 0 and female = 1. 
 
 ```{r means and cov mediation}
 
