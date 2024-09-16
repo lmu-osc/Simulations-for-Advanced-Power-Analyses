@@ -18,25 +18,25 @@ library(ggplot2)
 library(tidyr)
 ```
 
-In the [first chapter on linear models](LM1.qmd), we had the simplest possible linear model: a continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.
+In the [first chapter on linear models](LM1.qmd), we had the simplest possible linear model: A continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.
 
 # Adding a continuous predictor
 
-We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are "their own control group" and we can explain a lot of (formerly) unexplained error variance by controlling for this between-person variance.
+We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are "their own control group", and we can explain a lot of (formerly) unexplained error variance by controlling for this between-person variance.
 
 ::: {.callout-note}
 As a side-note: Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate model (see, for example, Senn, [2006](http://misc.biblio.s3.amazonaws.com/Senn06Change+from+baseline+and+analysis+of+covariance.pdf) or Wan, [2021](https://doi.org/10.1186/s12874-021-01323-9)).
 :::
 
-The raw effect size stays the same - the treatment still is expected to lead to a 6-point decrease in depression scores on average. But we expect that the residual (i.e., unexplained) variance in the model decreases by controlling for pre-treatment differences between participants. But how much will the residual variance be reduced? This depends on the pre-post-correlation.
+The raw effect size stays the same -- the treatment still is expected to lead to a 6-point decrease in depression scores on average. But we expect that the residual (i.e., unexplained) variance in the model decreases by controlling for pre-treatment differences between participants. But how much will the residual variance be reduced? This depends on the pre-post-correlation.
 
 ::: {.callout-note}
-If you have absolutely no idea about the pre-post-correlation, a typical default value is $r=.5$. But such generic defaults are always the very last resort - when you run a scientific study, we hope that you bring at least some domain knowledge 🤓
+If you have absolutely no idea about the pre-post-correlation, a typical default value is $r=.5$. But such generic defaults are always the very last resort -- when you run a scientific study, we hope that you bring at least some domain knowledge 🤓
 :::
 
 ## Get some real data as starting point
 
-Instead of guessing the necessary quantities - in the current case, the pre-post-correlation - let's look at real data. The "Beat the blues" (`BtheB`) data set from the `HSAUR` R package contains pre-treatment baseline values (`bdi.pre`), along with multiple post-treatment values. Here we focus on the first post-treatment assessment, 2 months after the treatment (`bdi.2m`).
+Instead of guessing the necessary quantities -- in the current case, the pre-post-correlation -- let's look at real data. The "Beat the blues" (`BtheB`) data set from the `HSAUR` R package contains pre-treatment baseline values (`bdi.pre`), along with multiple post-treatment values. Here we focus on the first post-treatment assessment, 2 months after the treatment (`bdi.2m`).
 
 ```{r load_data}
 # load the data
@@ -54,13 +54,13 @@ Now we add the continuous predictor into our `sim()` function. In order to simul
 
 We use the `rmvnorm` function from the `Rfast` package to create correlated, normally distributed variables. It takes three parameters:
 
-* `n`: The number of random observations
-* `mu`: A vector of mean values (one for each random variable)
-* `sigma`: The variance-covariance-matrix of the random variables. 
+* `n`, the number of random observations
+* `mu`, vector of mean values (one for each random variable)
+* `sigma`, the variance-covariance-matrix of the random variables
 
 For `mu`, we use the value 23 for both the pre and the post value. You can imagine that we only look at the control group: The mean value is not supposed to change systematically from pre to post (although each individual person can go somewhat up or down).
 
-The variance-covariance-matrix defines two properties at once: The variance of each variable, and the covariance to all other variables. In the two-variable case, the general matrix looks like:
+The variance-covariance-matrix defines two properties at once: the variance of each variable and the covariance to all other variables. In the two-variable case, the general matrix looks like:
 
 $$
 \begin{bmatrix}
@@ -134,7 +134,7 @@ ggplot(df_long, aes(x=time, y=value, group=id)) + geom_point() + geom_line() + f
 ggplot(df_long, aes(x=time, y=value, group=time)) + geom_boxplot() + facet_wrap(~treatment)
 ```
 
-Looks good - reasonable BDI values, same means in control group, same variance. The treatment effect of -6 is visible.
+Looks good -- reasonable BDI values, same means in control group, same variance. The treatment effect of -6 is visible.
 
 Let's put that together in the new `sim` function:
 
@@ -176,7 +176,7 @@ sim2 <- function(n=100, treatment_effect=-6, pre_post_cor = 0.6, err_var = 117, 
 }
 ```
 
-Let's test the plausibility of the new `sim2()` function by simulating a very large sample - this should give estimates close to the true values. We also vary the assumed pre-post-correlation. When this is 0, the results should be identical to the simpler model from [Chapter 1](LM1.qmd) (except one *df* that we lost due to the additional predictor). When the pre-post-correlation is > 0, the error variance should be reduced (see `Residual standard error` at the bottom of each `lm` output).
+Let's test the plausibility of the new `sim2()` function by simulating a very large sample -- this should give estimates close to the true values. We also vary the assumed pre-post-correlation. When this is 0, the results should be identical to the simpler model from [Chapter 1](LM1.qmd) (except one *df* that we lost due to the additional predictor). When the pre-post-correlation is > 0, the error variance should be reduced (see `Residual standard error` at the bottom of each `lm` output).
 
 ```{r}
 set.seed(0xBEEF)
@@ -188,7 +188,7 @@ sim2(n=100000, pre_post_cor=0, print=TRUE)
 sim2(n=100000, pre_post_cor=0.6, print=TRUE)
 ```
 
-Indeed, with `pre_post_cor = 0` the parameter estimates are identical, and with non-zero pre-post-correlation the error term gets reduced.
+Indeed, with `pre_post_cor = 0` the parameter estimates are identical, and with non-zero pre-post-correlation, the error term gets reduced.
 
 ::: {.callout-note collapse="true"}
 # An additional plausibility check (advanced)
@@ -202,7 +202,7 @@ The square root of this unexplained error variance is the `Residual standard err
 
 ## Do the power analysis
 
-The next step is the same as always: use the `replicate` function to repeatedly call the `sim` function for many iterations, and increase the simulated sample size until the desired power level is achieved.
+The next step is the same as always: Use the `replicate` function to repeatedly call the `sim` function for many iterations, and increase the simulated sample size until the desired power level is achieved.
 
 ```{r}
 #| echo: true
@@ -236,13 +236,13 @@ for (n in ns) {  # loop through elements of the vector "ns"
 print(result)
 ```
 
-In the original analysis, we needed n=180 (90 in each group) for 80% power. Including the baseline covariate (which explains $r^2 = .6^2 = 36\%$ of the variance in post scores) reduces that number to around n=115.
+In the original analysis, we needed $n=180$ (90 in each group) for 80% power. Including the baseline covariate (which explains $r^2 = .6^2 = 36\%$ of the variance in post scores) reduces that number to around $n=115$.
 
-Let's check the plausibility of our power simulation. Borm et al ([2007](http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf), p. 1237) propose a simple method on how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:
+Let's check the plausibility of our power simulation. Borm et al. ([2007](http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf), p. 1237) propose a simple method on how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:
 
-> "We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group.
+> "We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group."
 
-When we enter our assumed pre-post-correlation into that formula, we arrive a n=117 - very close to our value:
+When we enter our assumed pre-post-correlation into that formula, we arrive a $n=117$ -- very close to our value:
 $$180 * (1 - .6^2) + 2 = 117$$
 
 # Modeling an interaction
@@ -257,12 +257,12 @@ $$\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + b_2*\text{treatment} + b_3*
 When we rearrange the equation by factoring out the `treatment` term, the interaction is easier to interpret:
 
 $$\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + (b_2 + b_3*\text{BDI}_{pre.c})*\text{treatment} + e$$
-Hence, the size of the treatment effect is $b_2 + b_3*\text{BDI}_{pre}$. Remember that we centered $BDI_{pre}$ for better interpretability - this is the place where it gets relevant: When we enter the value 0 for $BDI_{pre.c}$ (which corresponds to a typical pre-treatment depression score of around 23), the treatment effect equals the main effect $b_2$. This conditional treatment effect gets larger or smaller, depending on the value of $BDI_{pre.c}$ and the regression weight $b_3$. The meaning of $b_3$ is: How much does the treatment effect increase for every 1 unit increase in $BDI_{pre.c}$?
+Hence, the size of the treatment effect is $b_2 + b_3*\text{BDI}_{pre}$. Remember that we centered $BDI_{pre}$ for better interpretability -- this is the place where it gets relevant: When we enter the value 0 for $BDI_{pre.c}$ (which corresponds to a typical pre-treatment depression score of around 23), the treatment effect equals the main effect $b_2$. This conditional treatment effect gets larger or smaller, depending on the value of $BDI_{pre.c}$ and the regression weight $b_3$. The meaning of $b_3$ is: How much does the treatment effect increase for every 1 unit increase in $BDI_{pre.c}$?
 
 What are plausible values for $b_3$? First, we need to decide on the sign. We expect that the treatment effect gets more *negative* (as we expect a decrease in BDI scores) with increasing baseline severity, so the coefficient must be negative. For the moment, let's assume that the treatment effect gets 0.4 more negative for every unit increase in $BDI_{pre.c}$:
 
 $$\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre.c} - 6*\text{treatment} - 0.4*\text{BDI}_{pre.c}*\text{treatment} + e$$
-We can plot the predicted values of that equation as two separate regression lines: simply enter either 0 or 1 for `treatment`:
+We can plot the predicted values of that equation as two separate regression lines -- simply enter either 0 or 1 for `treatment`:
 
 $$\text{Control group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*0 - 0.4*\text{BDI}_{pre.c}*0 = 23 + 0.6*\text{BDI}_{pre.c}$$
 
@@ -298,10 +298,7 @@ With that strenth of the interaction effect, the predicted treatment effect of a
 
 However, the interaction creates an implausible situation at the lower end of baseline severity. The red and the blue line cross at a $BDI_{pre}$ value of around 8: For such persons with a minimal depression, it makes zero difference whether they are in the control or the treatment group. But the effect even *reverses* for patients with very low BDI values below 8: For them, the treatment leads to worse outcomes than being in the control group. 
 
-As this is implausible, we want to calibrate the interaction effect in a way that the treatment ...
-
-* makes no difference for the lowest $\text{BDI}_{pre}$ values, and
-* reduces the BDI by 6 points for average depression scores.
+As this is implausible, we want to calibrate the interaction effect in a way that the treatment a) makes no difference for the lowest $\text{BDI}_{pre}$ values and b) reduces the BDI by 6 points for average depression scores.
 
 (Alternatively, we have to give up the assumption of a *linear* interaction effect and create a non-linear interaction model. But you don't want to go that route ...).
 
@@ -337,11 +334,11 @@ Now the treatment makes no difference for persons who are not depressed anyway; 
 We calibrated the interaction effect size by looking at a boundary case. We'd consider this interaction effect to be an *upper limit* (larger interactions make no sense), but the true interaction effect could be smaller of course.
 
 ## Thinking visually
-Arriving at plausible guesses for interaction effects can be tricky. We strongly recommend to **visualize** your assumed interaction effect in a plot - first drawn by hand: Do you expect a disordinal (i.e., cross-over) interaction, or an ordinal one where the effect is amplified (but not reversed) by the moderating variable?
+Arriving at plausible guesses for interaction effects can be tricky. We strongly recommend to **visualize** your assumed interaction effect in a plot -- first drawn by hand: Do you expect a disordinal (i.e., cross-over) interaction, or an ordinal one where the effect is amplified (but not reversed) by the moderating variable?
 
-Look at a reasonable maximum and minimum of your variables - how large would you expect the effect to be there? 
+Look at a reasonable maximum and minimum of your variables -- how large would you expect the effect to be there? 
 
-Evaluate the effect size in subgroups: For example, imagine a group of really severely depressed patients. And then assume that the therapy works exceptionally well for them - what would be a realistic outcome for them? Would you expect them all to be at BDI<10? Probably not. Or would a very good outcome simply be that they move from a "severe depression" to a "moderate depression"? This gives you an estimate of the upper limit of your effect size. After defining upper limits, you should ask: What effect size would be plausible, given your background knowledge of typical effects in your field?
+Evaluate the effect size in subgroups: For example, imagine a group of really severely depressed patients. And then assume that the therapy works exceptionally well for them -- what would be a realistic outcome for them? Would you expect them all to be at BDI<10? Probably not. Or would a very good outcome simply be that they move from a "severe depression" to a "moderate depression"? This gives you an estimate of the upper limit of your effect size. After defining upper limits, you should ask: What effect size would be plausible, given your background knowledge of typical effects in your field?
 
 Only when you have drawn a reasonable plot by hand (and validated that with colleagues), start to work out the parameter values that you need to enter in the regression equations in order to arrive at the desired interaction plot.
 
@@ -349,9 +346,9 @@ Only when you have drawn a reasonable plot by hand (and validated that with coll
 
 Now that we have our desired parameter values, we update our `sim()` function by:
 
-* Imposing the interaction effect onto our dependent variable
-* Adding the interaction effect to our `lm` analysis model
-* Extracting two p-values: We now want to compute the power both for the treatment main effect and for the interaction term.
+* imposing the interaction effect onto our dependent variable
+* adding the interaction effect to our `lm` analysis model
+* extracting two p-values (we now want to compute the power both for the treatment main effect and for the interaction term)
 
 ```{r sim}
 #| echo: true

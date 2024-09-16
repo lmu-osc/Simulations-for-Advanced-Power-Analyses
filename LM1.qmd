@@ -35,7 +35,7 @@ $$e \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\sigma^2)$$
 
 This assumption of the distribution of the errors is important for our simulations, as we will simulate the error according to that assumption. In an actual statistical analysis, the variance of the errors, $\sigma^2$, is estimated from the data.
 
-"i.i.d" means that the error of each observation is independent from all other observations. This assumption is violated, for example, when we look at romantic couples. If one partner is exceptionally distressed, then the other partner presumably will also have higher stress levels. In this case, the errors of both partners are correlated, and not independent any more. (See the section on [modelling multilevel data](LMM.qmd) for a statistical way of handling such interdependences).
+"iid" means that the error of each observation is independent from all other observations. This assumption is violated, for example, when we look at romantic couples. If one partner is exceptionally distressed, then the other partner presumably will also have higher stress levels. In this case, the errors of both partners are correlated and not independent anymore. (See the section on [modelling multilevel data](LMM.qmd) for a statistical way of handling such interdependences.)
 
 # A concrete example
 
@@ -57,7 +57,7 @@ All of these values are needed to be able to simulate data, and the chosen numbe
 ## Get some real data as starting point
 
 ::: callout-note
-The creators of this tutorial are no experts in clinical psychology; we opportunistically selected open data sets based on their availability. Usually, we would look for meta-analyses - ideally bias-corrected - for more comprehensive evidence.
+The creators of this tutorial are no experts in clinical psychology; we opportunistically selected open data sets based on their availability. Usually, we would look for meta-analyses -- ideally bias-corrected -- for more comprehensive evidence.
 :::
 
 The R package `HSAUR` contains open data on 100 depressive patients, where 50 received treatment-as-usual (`TAU`) and 50 received a new treatment ("Beat the blues"; `BtheB`). Data was collected in a pre-post-design with several follow-up measurements. For the moment, we focus on the pre-treatment baseline value (`bdi.pre`) and the first post-treatment value (`bdi.2m`). We will use that data set as a "pilot study" for our power analysis.
@@ -82,7 +82,7 @@ The standardized cutoffs for the BDI are:
 -   0--13: minimal depression
 -   14--19: mild depression
 -   20--28: moderate depression
--   29--63: severe depression.
+-   29--63: severe depression
 
 Returning to our questions from above:
 
@@ -143,7 +143,7 @@ With our knowledge from the open BDI data, we insert plausible values for the in
 
 $$\widehat{\text{BDI}} = 23 - 6*treatment$$
 
-Hence, the predicted value is $23 - 6*0 = 23$ for the control group, and $23 - 6*1 = 17$ for the treatment group.
+Hence, the predicted value is $23 - 6*0 = 23$ for the control group and $23 - 6*1 = 17$ for the treatment group.
 
 With the current model, all participants in the control group have the same predicted value (23), as do all participants in the treatment group (17).
 
@@ -157,7 +157,7 @@ That's our final equation with assumed population parameters! With that equation
 
 Researchers often have been trained to think in standardized effect sizes, such as Cohen's $d$, a correlation $r$, or other indices such as $f^2$ or partial $\eta^2$. In the simulation approach, we typical work on the raw scale of variables.
 
-The *raw* effect size is simply the treatment effect on the original BDI scale (i.e., the group difference in the outcome variable). In our case we assume that the treatment lowers the BDI score by 6 points, on average. Defining the raw effect requires some domain knowledge - you need to know your measurement scale, and you need to know what the values (and differences between values) mean. In our example, a reduction of 6 BDI points means that the average patient moves from a moderate depression (23 points) to a mild depression (17 points). Working with raw effect sizes forces you to think about your actual data (instead of plugging in content-free default standardized effect sizes), and enables you to do plausibility checks on your simulation.
+The *raw* effect size is simply the treatment effect on the original BDI scale (i.e., the group difference in the outcome variable). In our case we assume that the treatment lowers the BDI score by 6 points, on average. Defining the raw effect requires some domain knowledge -- you need to know your measurement scale, and you need to know what the values (and differences between values) mean. In our example, a reduction of 6 BDI points means that the average patient moves from a moderate depression (23 points) to a mild depression (17 points). Working with raw effect sizes forces you to think about your actual data (instead of plugging in content-free default standardized effect sizes) and enables you to do plausibility checks on your simulation.
 
 The *standardized* effect size relates the raw effect size to the unexplained error variance. In the two-group example, this can be expressed as Cohen's *d*, which is the mean difference divided by the standard deviation (SD):
 
@@ -220,7 +220,7 @@ This graph gives us an impression of the plausibility of our simulation: In the 
 
 The plot also highlights an unrealistic aspect of our simulations: In reality, the BDI score is bounded to be \>=0; but our random data (sampled from a normal distribution) can generate values below zero. For our current power simulations this can be neglected (as negative values are quite rare), but in real data collection such floor or ceiling effects can impose a range restriction that might lower the statistical power.
 
-Let's assume that we collected and analyzed this specific sample - what would have been the results?
+Let's assume that we collected and analyzed this specific sample -- what would have been the results?
 
 ```{r}
 summary(lm(BDI ~ treatment, data=df))
@@ -273,7 +273,7 @@ table(p_values < .005)
 
 Only `r round(sum(p_values < .005)*100/iterations)`% of samples with the same size of $n=100$ result in a significant p-value.
 
-`r round(sum(p_values < .005)*100/iterations)`% - that is our power for $\alpha = .005$, Cohen's $d=.55$, and $n=100$.
+`r round(sum(p_values < .005)*100/iterations)`% -- that is our power for $\alpha = .005$, Cohen's $d=.55$, and $n=100$.
 
 ## Sample size planning: Find the necessary sample size
 
@@ -310,17 +310,17 @@ Let's plot there result:
 ggplot(result, aes(x=n, y=power)) + geom_point() + geom_line()
 ```
 
-Hence, with n=180 (90 in each group), we have a 80% chance to detect the effect.
+Hence, with $n=180$ (90 in each group), we have a 80% chance to detect the effect.
 
 🥳 **Congratulations! You did your first power analysis by simulation.** 🎉
 
-For these simple models, we can also compute analytic solutions. Let's verify our results with the `pwr` package - a linear regression with a single dichotomous predictor is equivalent to a t-test:
+For these simple models, we can also compute analytic solutions. Let's verify our results with the `pwr` package -- a linear regression with a single dichotomous predictor is equivalent to a t-test:
 
 ```{r}
 pwr.t.test(d = 0.55, sig.level = 0.005, power = .80)
 ```
 
-Exactly the same result - phew 😅
+Exactly the same result -- phew 😅
 
 # Sensitivity analyses
 
@@ -342,7 +342,7 @@ We can use the `ci.smd` function from the `MBESS` package to compute a CI around
 ci.smd(smd=-0.55, n.1=50, n.2=50, conf.level=.60)
 ```
 
-However, in the simulated regression equation, we need the *raw* effect size - so we have to backtransform the standardized confidence limits into the original metric. As the assumed effect is negative, we aim for the *upper*, i.e., the more conservative limit. After backtransformation in the raw metric, it is considerably smaller, at -4.1:
+However, in the simulated regression equation, we need the *raw* effect size -- so we have to backtransform the standardized confidence limits into the original metric. As the assumed effect is negative, we aim for the *upper*, i.e., the more conservative limit. After backtransformation in the raw metric, it is considerably smaller, at -4.1:
 
 $$d = \frac{M_{diff}}{SD} \Rightarrow M_{diff} = d*SD = -0.377 * \sqrt{117} = -4.08$$
 
@@ -379,7 +379,7 @@ for (n in ns) {  # loop through elements of the vector "ns"
 print(result)
 ```
 
-With that more conservative effect size assumption, we would need around 380 participants, i.e. 190 per group.
+With that more conservative effect size assumption, we would need around 380 participants, i.e., 190 per group.
 
 ## Smallest effect size of interest (SESOI)
 
@@ -429,7 +429,7 @@ print(result)
 
 Hence, we need around 700 participants to reliably detect this smallest effect size of interest.
 
-Did you spot the strange pattern in the result? At n=720, the power is 83%, but only 82% with n=740? This is not possible, as power monotonically increases with sample size. It suggests that this is simply Monte Carlo sampling error - 1000 iterations are not enough to get precise estimates. When we increase iterations to 10,000, it takes much longer, but gives more precise results:
+Did you spot the strange pattern in the result? At $n=720$, the power is 83%, but only 82% with $n=740$? This is not possible, as power monotonically increases with sample size. It suggests that this is simply Monte Carlo sampling error -- 1000 iterations are not enough to get precise estimates. When we increase iterations to 10,000, it takes much longer, but gives more precise results:
 
 ```{r}
 #| results: hide
@@ -464,7 +464,7 @@ print(result)
 ```
 
 Now power increases monotonically with sample size, as expected.\
-To explore how many Monte-Carlo iterations are necessary to get stable computational results, see the bonus page [Bonus: How many Monte-Carlo iterations are necessary?](https://malikaihle.github.io/Simulations-for-Advanced-Power-Analyses/how_many_iterations.html)
+To explore how many Monte Carlo iterations are necessary to get stable computational results, see the bonus page [Bonus: How many Monte Carlo iterations are necessary?](how_many_iterations.qmd)
 
 # Recap: What did we do?
 
@@ -474,15 +474,15 @@ These are the steps we did in this part of the tutorial:
 2.  **Find empirical information about the parameters in the model.** These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define the assumed state of the population.
 3.  **Program your regression equation**, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.
 4.  **Do the simulation**:
-    a)  Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same)
-    b)  Compute the index of interest (typically: the p-value of a focal effect)
-    c)  Count how many samples would have detected the effect (i.e., the statistical power)
+    a)  Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same).
+    b)  Compute the index of interest (typically: the p-value of a focal effect).
+    c)  Count how many samples would have detected the effect (i.e., the statistical power).
     d)  Tune your simulation parameters until the desired level of power is achieved.
 
 Concerning step 4d, the typical scenario is that you increase sample size until your desired level of power is achieved. But you could imagine other ways to increase power, e.g.:
 
 -   Increase the reliability of a measurement instrument (which will be reflected in a smaller error variance) until desired power is achieved. (This could relate to a trade-off: Do you invest more effort and time in better measurement, or do you keep an unreliable measure and collect more participants?)
--   Compare a within- and a between-design in simulations
+-   Compare a within- and a between-design in simulations.
 
 # References
 

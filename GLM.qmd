@@ -32,7 +32,7 @@ data("BtheB", package = "HSAUR")
 str(BtheB)
 ```
 
-This data set compares the effects of two interventions for depression, that is a so-called  "Beat the blues" intervention (`BtheB`) and a "treatment-as-usual" intervention (`TAU`). Note that in this chapter we will compare two active treatment conditions with each other - in the other chapters on linear models, we compare an active treatment with a passive waiting group.
+This data set compares the effects of two interventions for depression, that is a so-called  "Beat the blues" intervention (`BtheB`) and a "treatment-as-usual" intervention (`TAU`). Note that in this chapter we will compare two active treatment conditions with each other -- in the other chapters on linear models, we compare an active treatment with a passive waiting group.
 
 Unfortunately, this data set does not include any dichotomous variable we could use as an outcome measure. Therefore, we simply dichotomize one of the continuous outcome variables to create a categorical outcome artificially. More specifically, we will dichotomize the `bdi.2m` variable which contains a follow-up depression measure (i.e., the Beck Depression Inventory score) two months after the intervention.
 
@@ -210,7 +210,7 @@ ggplot(results, aes(x=n, y=power)) + geom_point() + geom_line() + scale_y_contin
 
 ```
 
-This plot shows that we need approx. 220 participants to achieve 80% under the given assumptions. Note that this is the overall sample size, not the size per condition! That's it - we have performed a simulation-based power analysis for a logistic regression!
+This plot shows that we need approx. 220 participants to achieve 80% under the given assumptions. Note that this is the overall sample size, not the size per condition! That's it -- we have performed a simulation-based power analysis for a logistic regression!
 
 ## Verification with the pwr2ppl package
 
@@ -228,7 +228,7 @@ That's basically the same result, well done!
 
 ## Using a safeguard power approach
 
-Of note, our effect size estimates (i.e, the estimates of the probabilities of not having a moderate/severe depression two months after the `BtheB` or the `TAU` treatment) were so far based on a pilot study. However, this pilot study might not have yielded a precise estimate of these effect sizes. Thus, in order to consider uncertainty in these effect size estimates, it has been suggested to perform a safeguard power analysis (see chapter [first chapter on linear models](LM1.qmd) for more info) instead of a power analysis using the observed effect size. The main idea behind the safeguard power analysis is to compute a 60% confidence interval around the observed effect size, and to take the lower bound of this confidence interval as an effect size estimate (see Perugini et al., [2014](https://journals.sagepub.com/doi/10.1177/1745691614528519)). Let's try this here. 
+Of note, our effect size estimates (i.e, the estimates of the probabilities of not having a moderate/severe depression two months after the `BtheB` or the `TAU` treatment) were so far based on a pilot study. However, this pilot study might not have yielded a precise estimate of these effect sizes. Thus, in order to consider uncertainty in these effect size estimates, it has been suggested to perform a safeguard power analysis (see chapter [first chapter on linear models](LM1.qmd) for more info) instead of a power analysis using the observed effect size. The main idea behind the safeguard power analysis is to compute a 60% confidence interval around the observed effect size and to take the lower bound of this confidence interval as an effect size estimate (see Perugini et al., [2014](https://journals.sagepub.com/doi/10.1177/1745691614528519)). Let's try this here. 
 
 Let's assume that we view the probability of not having a moderate/severe depression after the `TAU` treatment to be probably accurate, but that we want to account for uncertainty in the estimation of the probability of not having a moderate/severe depression after the `BtheB` treatment. We then simply calculate the 60% confidence interval around this effect size. We can use the `BinomCI` function from the `DescTools` package to do this. We need to provide this function with the number of successes (here: 37, see table above) and the number of observations (here: 52, see above).
 
@@ -275,6 +275,6 @@ Here, we get a total sample size of ca. 360 participants in order to ensure 80% 
 
 Aberson, C. L. (2019). Applied power analysis for the behavioral sciences. Routledge.
 
-Perugini, M., Gallucci, M., & Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319-332. [https://journals.sagepub.com/doi/10.1177/1745691614528519](https://journals.sagepub.com/doi/10.1177/1745691614528519)
+Perugini, M., Gallucci, M., & Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. [https://journals.sagepub.com/doi/10.1177/1745691614528519](https://journals.sagepub.com/doi/10.1177/1745691614528519)
 
 Royston, P., Altman, D. G., & Sauerbrei, W. (2006). Dichotomizing continuous predictors in multiple regression: A bad idea. Statistics in Medicine, 25(1), 127–141. [https://doi.org/10.1002/sim.2331](https://doi.org/10.1002/sim.2331)

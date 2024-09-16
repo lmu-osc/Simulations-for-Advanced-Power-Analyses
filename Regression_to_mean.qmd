@@ -67,5 +67,5 @@ ggplot(BDI_long2, aes(x=as.factor(cat), y=value)) +
   gghalves::geom_half_point(side = "l", range_scale = .4, alpha = .5)
 ```
 
-Assumed that we use the predicted scores at t2 (post) and predict the next scores at t3 - will it shrink ever more, until all data points are at the mean?
+Assumed that we use the predicted scores at t2 (post) and predict the next scores at t3 -- will it shrink ever more, until all data points are at the mean?
 But this is not substantively reflected in the raw scores. Is it an artifact of regression?

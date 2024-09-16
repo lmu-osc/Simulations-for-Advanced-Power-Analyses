@@ -25,9 +25,9 @@ plan(multisession)
 ```
 
 
-Optimizing code for speed can be an art - and you get lost and spend/waste hours by micro-optimizing some milliseconds. But the Pareto principle applies here: with 20% effort, you can have quick and substantial gains.
+Optimizing code for speed can be an art -- and you get lost and spend/waste hours by micro-optimizing some milliseconds. But the Pareto principle applies here: With 20% effort, you can have quick and substantial gains.
 
-*Code profiling* means that the code execution is timed, just like you had a stopwatch. Your goal is to make your code snippet as fast as possible. RStudio has a [built-in profiler](https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE) that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we'll resort to the simplest way of timing code: We will measure overall execution time by wrapping our code in a `system.time({ ... })` call. Longer code blocks need to be wrapped in curly braces `{...}`. The function returns multiple timings; the relevant number for us is the "elapsed" time. This is also called the "wall clock" time - the time you actually have to wait until computation finished.
+*Code profiling* means that the code execution is timed, just like you had a stopwatch. Your goal is to make your code snippet as fast as possible. RStudio has a [built-in profiler](https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE) that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we'll resort to the simplest way of timing code: We will measure overall execution time by wrapping our code in a `system.time({ ... })` call. Longer code blocks need to be wrapped in curly braces `{...}`. The function returns multiple timings; the relevant number for us is the "elapsed" time. This is also called the "wall clock" time -- the time you actually have to wait until computation finished.
 
 # First, naive version
 
@@ -64,7 +64,7 @@ This first version takes `r t0[3]` seconds. Of course we have sampling error her
 
 # Rule 1: No growing vectors/data frames
 
-This is one of the most common bottlenecks: You start with an empty vector (or even worse: data frame), and grow it by `rbind`-ing new rows to it in each iteration.
+This is one of the most common bottlenecks: You start with an empty vector (or even worse, a data frame) and grow it by `rbind`-ing new rows to it in each iteration.
 
 ```{r}
 t1 <- system.time({
@@ -110,7 +110,7 @@ OK, this didn't really change anything here. But in general (in particular with 
 
 # Rule 2: Avoid data frames as far as possible
 
-Use matrizes instead of data frames wherever possible; or avoid them at all (as we do in the code below).
+Use matrizes instead of data frames wherever possible or avoid data frames altogether (as we do in the code below).
 
 ```{r}
 t2 <- system.time({
@@ -206,7 +206,7 @@ This step led to a massive improvement of around `r round(t3[3] - t2[3], 1)` sec
 # Rule 4: Use optimized packages
 
 For many statistical models, there are packages optimized for speed, see for example here:
-[https://stackoverflow.com/q/49732933](https://stackoverflow.com/q/49732933)
+[https://stackoverflow.com/q/49732933](https://stackoverflow.com/q/49732933).
 
 ```{r}
 t4 <- system.time({
@@ -248,7 +248,7 @@ timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timin
 timings
 ```
 
-This step only gave a minor `r round(timings$rel_diff[5]*100)`% relative increase in speed - but as a bonus, it made our code much easier to read and shorter.
+This step only gave a minor `r round(timings$rel_diff[5]*100)`% relative increase in speed -- but as a bonus, it made our code much easier to read and shorter.
 
 
 # Rule 5: Go parallel
@@ -260,7 +260,7 @@ By default, R runs single-threaded. That means, a single CPU core works off all 
 
 The first step does not really change a lot: We put the simulation code into a separate function that returns the quantity of interest (in our case: the focal p-value). Different settings of the simulation parameters, such as the sample size or the effect size, can be defined as parameters of the function. 
 
-Every single function call `sim()` now gives you one simulated p-value - try it out!
+Every single function call `sim()` now gives you one simulated p-value -- try it out!
 
 We then use the `replicate` function to run the `sim` function many times and to store the resulting p-values in a vector. Programming the simulation in such a functional style also has the nice side effect that you do not have to pre-allocate the results vector; this is automatically done by the replicate function.
 
@@ -340,12 +340,12 @@ timings
 ```
 
 
-The speed improvement seems only small - with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take *longer*. 
+The speed improvement seems only small -- with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take *longer*. 
 
 
 # The final speed test: Burn your machine 🔥
 
-Let's see if parallel processing has an advantage when we have longer computations. We now expand the simulation by exploring a broad parameter range (n ranging from 100 to 1000) and increasing the iterations to 20,000 for more stable results. (See also: "[Bonus: How many Monte-Carlo iterations are necessary?](how_many_iterations.qmd)")
+Let's see if parallel processing has an advantage when we have longer computations. We now expand the simulation by exploring a broad parameter range (n ranging from 100 to 1000) and increasing the iterations to 20,000 for more stable results. (See also: "[Bonus: How many Monte Carlo iterations are necessary?](how_many_iterations.qmd)")
 
 ```{r}
 plan(multisession, workers = 4)
@@ -415,7 +415,7 @@ With this optimized setup, we are running `r options(scipen=999); length(ns)*ite
 We covered the most important steps for speeding up your code in R:
 
 1. No growing vectors/data frames. Solution: Pre-allocate the results vector.
-2. Avoid data.frames. Solution: Use matrices wherever possible, or switch to data.table for more complex data structures (not covered here).
+2. Avoid data frames. Solution: Use matrices wherever possible, or switch to data.table for more complex data structures (not covered here).
 3. Avoid unnecessary computations and/or switch to optimized packages that do the same computations much faster, such as the package `Rfast`.
 4. Switch to parallel processing. Solution: If you already programmed your simulations with the `replicate` function, it is very easy with the `future.apply` package.
 
