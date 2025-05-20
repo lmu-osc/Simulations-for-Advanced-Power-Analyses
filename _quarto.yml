@@ -32,7 +32,7 @@ format:
     toc: true
     html-math-method: katex
     include-in-header:
-      - includes/matomo.html
+      - file: matomo_analytics.html
 
 execute:
   cache: true
