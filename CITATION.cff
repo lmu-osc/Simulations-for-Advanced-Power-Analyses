@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+message: "If you use this tutorial, please cite it as below."
 authors:
 - family-names: "Schönbrodt"
   given-names: "Felix"
@@ -31,4 +31,4 @@ preferred-citation:
     ror: "https://ror.org/029e6qe04"
   repository-code: "https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses"
   url: "https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses"
-  type: "website"
+  type: "book"
