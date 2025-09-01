@@ -5,3 +5,15 @@ RcppZiggurat
 Rfast
 ggplot2
 tidyr
+tidyverse
+tibble
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
+usethis
+devtools
+zigg
+RcppParallel

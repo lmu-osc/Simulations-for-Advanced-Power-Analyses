@@ -4,3 +4,14 @@ RcppArmadillo
 ggplot2
 patchwork
 pwr
+tidyverse
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
+usethis
+devtools

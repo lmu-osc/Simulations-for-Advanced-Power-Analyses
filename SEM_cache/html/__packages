@@ -11,3 +11,15 @@ future.apply
 Rcpp
 RcppZiggurat
 Rfast
+tidyverse
+tibble
+tidyr
+readr
+purrr
+stringr
+forcats
+lubridate
+usethis
+devtools
+zigg
+RcppParallel

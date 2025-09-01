@@ -3,3 +3,15 @@ prettycode
 RcppArmadillo
 future
 future.apply
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
+usethis
+devtools

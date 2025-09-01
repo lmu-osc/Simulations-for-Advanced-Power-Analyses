@@ -2,3 +2,14 @@ colorDF
 prettycode
 ggplot2
 DescTools
+tidyverse
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
+usethis
+devtools

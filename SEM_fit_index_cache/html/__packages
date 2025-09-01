@@ -3,3 +3,14 @@ future.apply
 ggplot2
 lavaan
 MPsychoR
+tidyverse
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
+usethis
+devtools

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,17 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -42,43 +49,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -89,22 +66,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7b1b06e26e1e2798ccde3208f86b5bbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -113,29 +97,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <!-- Matomo -->
 <script>
   var _paq = window._paq = window._paq || [];
   /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
-  _paq.push(["setCookieDomain", "*.malikaihle.github.io"]);
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function() {
-    var u="//tellmi.psy.lmu.de/matomo/";
+    var u="https://www.analytics.osc.lmu.de/";
     _paq.push(['setTrackerUrl', u+'matomo.php']);
-    _paq.push(['setSiteId', '5']);
+    _paq.push(['setSiteId', '7']);
     var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
     g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
   })();
 </script>
 <!-- End Matomo Code -->
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
@@ -150,20 +134,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    });
 }}});
   </script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Ch. 5: Structural Equation Models</h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./LM1.html">Models</a></li><li class="breadcrumb-item"><a href="./SEM.html">Ch. 5: Structural Equation Models</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -171,95 +187,108 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="./" class="sidebar-logo-link">
+      <a href="./index.html" class="sidebar-logo-link">
       <img src="./images/LMU-OSC_logo_small.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
       </a>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Simulations for Advanced Power Analyses</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simulations for Advanced Power Analyses</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Models</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LM1.html" class="sidebar-item-text sidebar-link">Ch. 1: Linear Model 1: A single dichotomous predictor</a>
+  <a href="./LM1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 1: Linear Model 1: A single dichotomous predictor</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LM2.html" class="sidebar-item-text sidebar-link">Ch. 2: Linear Model 2: Multiple predictors</a>
+  <a href="./LM2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 2: Linear Model 2: Multiple predictors</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./GLM.html" class="sidebar-item-text sidebar-link">Ch. 3: Generalized Linear Models</a>
+  <a href="./GLM.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 3: Generalized Linear Models</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./LMM.html" class="sidebar-item-text sidebar-link">Ch. 4: Linear Mixed Models / Multilevel models</a>
+  <a href="./LMM.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 4: Linear Mixed Models / Multilevel models</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./SEM.html" class="sidebar-item-text sidebar-link active">Ch. 5: Structural Equation Models</a>
+  <a href="./SEM.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Ch. 5: Structural Equation Models</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Bonuses</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Bonuses</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./optimizing_code.html" class="sidebar-item-text sidebar-link">Bonus: Optimizing R code for speed</a>
+  <a href="./optimizing_code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bonus: Optimizing R code for speed</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./how_many_iterations.html" class="sidebar-item-text sidebar-link">Bonus: How many Monte-Carlo iterations are necessary?</a>
+  <a href="./how_many_iterations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bonus: How many Monte Carlo iterations are necessary?</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./SEM_fit_index.html" class="sidebar-item-text sidebar-link">Bonus: Fit indices in SEM</a>
+  <a href="./SEM_fit_index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bonus: Fit indices in SEM</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Resources.html" class="sidebar-item-text sidebar-link">Resources</a>
+  <a href="./Resources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Resources</span></a>
   </div>
 </li>
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -273,14 +302,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables" id="toc-a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables" class="nav-link" data-scroll-target="#a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables">A simulation-based power analysis for a mediation model with latent variables</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses/edit/main/SEM.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses/edit/main/SEM.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./LM1.html">Models</a></li><li class="breadcrumb-item"><a href="./SEM.html">Ch. 5: Structural Equation Models</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Ch. 5: Structural Equation Models</h1>
+<h1 class="title">Ch. 5: Structural Equation Models</h1>
 </div>
 
 
@@ -294,14 +323,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
   </div>
     
+  
     
   </div>
   
 
+
 </header>
 
+
 <p><em>Reading/working time: ~50 min.</em></p>
-<div class="cell" data-hash="SEM_cache/html/install packages_9b87e864766a9dd9a77f541effbca817">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(c("lavaan", "ggplot2", "Rfast", "MBESS", "future.apply"), dependencies = TRUE)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"lavaan"</span>)</span>
@@ -314,13 +346,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># By default, it uses all available cores</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>In this chapter, we will focus on some rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, Root Mean Square Error of Approximation, etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we only focus on the latter, that is power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled “<a href="https://malikaihle.github.io/Simulations-for-Advanced-Power-Analyses/SEM_fit_index.html">Power analysis for fit indices in SEM</a>” if you’re interested in power analyses for fit indices.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<p>In this chapter, we will focus on some rather simple Structural Equation Models (SEM). The goal is to illustrate how simulations can be used to estimate statistical power to detect a given effect in a SEM. In the context of SEMs, the focal effect may be for instance a fit index (e.g., Chi-Square, Root Mean Square Error of Approximation, etc.) or a model coefficient (e.g., a regression coefficient for the association between two latent factors). In this chapter, we only focus on the latter, that is power analyses for regression coefficients in the context of SEM. Please see the bonus chapter titled “<a href="./SEM_fit_index.html">Power analysis for fit indices in SEM</a>” if you’re interested in power analyses for fit indices.</p>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -331,12 +363,12 @@ Note
 <section id="a-simulation-based-power-analysis-for-a-single-regression-coefficient-between-latent-variables" class="level1">
 <h1>A simulation-based power analysis for a single regression coefficient between latent variables</h1>
 <p>Let’s consider the following example: We are planning to conduct a study investigating whether people’s openness to experience (as conceptualized in the big five personality traits) relates negatively to generalized prejudice, that is a latent variable comprising prejudice towards different social groups (e.g., women, foreigners, homosexuals, disabled people). We could plan to scrutinize this prediction with a SEM in which both openness to experience and generalized prejudice are modeled as latent variables.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -346,8 +378,8 @@ Note
 </div>
 <section id="lets-get-some-real-data-as-starting-point" class="level2">
 <h2 class="anchored" data-anchor-id="lets-get-some-real-data-as-starting-point">Let’s get some real data as starting point</h2>
-<p>Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let’s assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al (<a href="https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated">2016</a>) and the corresponding data set which has been made accessible as part of the <code>MPsychoR</code> package. Let’s take a look at this data set.</p>
-<div class="cell" data-hash="SEM_cache/html/load data_cc0422a3291a8777e36159fc8ad18d71">
+<p>Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let’s assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al.&nbsp;(<a href="https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated">2016</a>) and the corresponding data set which has been made accessible as part of the <code>MPsychoR</code> package. Let’s take a look at this data set.</p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("MPsychoR")</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MPsychoR)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -399,7 +431,7 @@ Note
 <li><code>O1</code>, <code>O2</code>, and <code>O3</code> are three items measuring openness to experience.</li>
 </ul>
 <p>To get an impression of this data, we look at the correlations of the variables we’re interested in.</p>
-<div class="cell" data-hash="SEM_cache/html/correlations SEM_80bd27f354f7f9f600ed79bbb5f0bc68">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">cbind</span>(EP, SP, HP, DP, O1, O2, O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      EP    SP    HP    DP    O1    O2    O3
@@ -413,7 +445,7 @@ O3 -0.41 -0.33 -0.29 -0.34  0.74  0.71  1.00</code></pre>
 </div>
 </div>
 <p>As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by Bergh et al.&nbsp;(2016). We start by calculating the means of the variables, rounding them generously, and storing them in a vector called <code>means_vector</code>.</p>
-<div class="cell" data-hash="SEM_cache/html/mean vector SEM_9fc3ff1170b7d271fa3da42914c47170">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#store means</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>means_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">mean</span>(EP), <span class="fu">mean</span>(SP), <span class="fu">mean</span>(HP), <span class="fu">mean</span>(DP), <span class="fu">mean</span>(O1), <span class="fu">mean</span>(O2), <span class="fu">mean</span>(O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -423,8 +455,8 @@ O3 -0.41 -0.33 -0.29 -0.34  0.74  0.71  1.00</code></pre>
 <pre><code>[1] 1.99 2.11 1.22 2.06 3.55 3.49 3.61</code></pre>
 </div>
 </div>
-<p>We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the Bergh et al.&nbsp;data as well. There are two ways to do this. First, we can use the <code>cov</code> function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal, and the covariances in the remaining cells.</p>
-<div class="cell" data-hash="SEM_cache/html/cov matrix SEM_11382f9285e3ddd5bcd28bf70e5a0feb">
+<p>We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the Bergh et al.&nbsp;data as well. There are two ways to do this. First, we can use the <code>cov</code> function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal and the covariances in the remaining cells.</p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#store covariances</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>cov_mat <span class="ot">&lt;-</span> <span class="fu">cov</span>(<span class="fu">cbind</span>(EP, SP, HP, DP, O1, O2, O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -442,7 +474,7 @@ O3 -0.15 -0.12 -0.23 -0.09  0.18  0.17  0.26</code></pre>
 </div>
 </div>
 <p>This works well as long as we have a data set (e.g., from a pilot study or published work) to estimate the variances and covariances. In other cases, however, we might not have access to such a data set. In this case, we might only have a correlation table that was provided in a published paper. But that’s no problem either, as we can transform the correlations and standard deviations of the variables of interest into a variance-covariance matrix. The following chunk shows how this works by using the <code>cor2cov</code> function from the <code>MBESS</code> package.</p>
-<div class="cell" data-hash="SEM_cache/html/sd vector and correlations SEM_5819dbce04de0a40a78cb66631833abb">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#store correlation matrix </span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>cor_mat <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">cbind</span>(EP, SP, HP, DP, O1, O2, O3)) </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -466,7 +498,7 @@ O3 -0.15 -0.12 -0.23 -0.09  0.18  0.17  0.26</code></pre>
 </div>
 </div>
 <p>Let’s do a plausibility check: Did the two ways to estimate the variance-covariance matrix lead to the same results?</p>
-<div class="cell" data-hash="SEM_cache/html/plausibility check SEM_3281b4cb285cb4bc1d6c02b6d17929db">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cov_mat <span class="sc">==</span> cov_mat2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     EP   SP   HP   DP   O1   O2   O3
@@ -480,7 +512,7 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 </div>
 </div>
 <p>Indeed, this worked! Both procedures lead to the exact same variance-covariance matrix. Now that we have an approximation of the variance-covariance matrix, we use the <code>rmvnorm</code> function from the <code>Rfast</code> package to simulate data from a multivariate normal distribution. The following code simulates <code>n = 50</code> observations from the specified population.</p>
-<div class="cell" data-hash="SEM_cache/html/simulate data SEM_52c5cb6e0fb466a83308047303e465af">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -490,17 +522,17 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Let's take a look</span></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_first_simulated_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        EP        SP         HP       DP       O1       O2       O3
-1 1.175231 2.1563276 -0.4498951 1.535653 3.520299 3.768441 3.877645
-2 2.615520 1.7527931 -0.2546117 1.728349 3.048912 2.816513 2.743648
-3 1.849380 2.0383562 -0.3877381 2.055153 3.516697 3.354251 3.792305
-4 1.901085 2.5438523  2.0475777 2.150921 3.824178 3.631459 3.947051
-5 2.182503 2.1326429 -0.2088395 2.674773 3.948864 3.642066 4.005110
-6 1.691124 0.9746677  1.9193559 1.652397 4.184485 3.236144 3.669261</code></pre>
+<pre><code>         EP       SP         HP       DP       O1       O2       O3
+1 0.7279794 1.537620 -0.3964333 1.827504 3.901972 2.964983 3.438749
+2 1.8894094 2.709039  3.1242311 2.238833 3.979225 3.809785 3.997043
+3 3.5096734 2.406820  3.9230718 2.664217 2.345955 2.104337 2.436137
+4 1.9617499 2.605388 -0.3024990 2.029112 3.628284 3.280814 3.881870
+5 3.3944255 3.272411 -0.8930900 1.955356 3.417572 3.243932 3.172727
+6 1.2552449 1.933277  1.0047385 2.591175 3.685443 3.107106 3.811551</code></pre>
 </div>
 </div>
 <p>We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an <span class="math inline">\alpha</span>-level of .005. We will work with the <code>lavaan</code> package to fit SEMs.</p>
-<div class="cell" data-hash="SEM_cache/html/analyze data SEM_8020a3a0c6ce44ac65df04f38cb43898">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>model_sem <span class="ot">&lt;-</span> <span class="st">"generalized_prejudice =~ EP + DP + SP + HP</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="st">              openness =~ O1 + O2 + O3</span></span>
@@ -512,7 +544,7 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#display the results</span></span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_sem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lavaan 0.6.15 ended normally after 36 iterations
+<pre><code>lavaan 0.6-19 ended normally after 37 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -522,9 +554,9 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 
 Model Test User Model:
                                                       
-  Test statistic                                20.528
+  Test statistic                                22.204
   Degrees of freedom                                13
-  P-value (Chi-square)                           0.083
+  P-value (Chi-square)                           0.052
 
 Parameter Estimates:
 
@@ -536,34 +568,34 @@ Latent Variables:
                            Estimate  Std.Err  z-value  P(&gt;|z|)
   generalized_prejudice =~                                    
     EP                        1.000                           
-    DP                        0.891    0.298    2.989    0.003
-    SP                        1.156    0.383    3.022    0.003
-    HP                        0.321    0.677    0.474    0.636
+    DP                        0.725    0.172    4.226    0.000
+    SP                        0.772    0.209    3.695    0.000
+    HP                        0.746    0.386    1.933    0.053
   openness =~                                                 
     O1                        1.000                           
-    O2                        0.857    0.155    5.544    0.000
-    O3                        1.370    0.225    6.086    0.000
+    O2                        1.092    0.150    7.269    0.000
+    O3                        1.197    0.142    8.412    0.000
 
 Regressions:
                           Estimate  Std.Err  z-value  P(&gt;|z|)
   generalized_prejudice ~                                    
-    openness                -0.259    0.204   -1.270    0.204
+    openness                -0.923    0.262   -3.527    0.000
 
 Variances:
                    Estimate  Std.Err  z-value  P(&gt;|z|)
-   .EP                0.352    0.082    4.277    0.000
-   .DP                0.084    0.037    2.292    0.022
-   .SP                0.165    0.064    2.577    0.010
-   .HP                2.475    0.496    4.990    0.000
-   .O1                0.065    0.019    3.433    0.001
-   .O2                0.067    0.017    3.996    0.000
-   .O3                0.045    0.027    1.655    0.098
-   .generlzd_prjdc    0.138    0.078    1.766    0.077
-    openness          0.116    0.036    3.182    0.001</code></pre>
+   .EP                0.251    0.083    3.039    0.002
+   .DP                0.149    0.046    3.249    0.001
+   .SP                0.357    0.085    4.204    0.000
+   .HP                1.846    0.380    4.861    0.000
+   .O1                0.064    0.016    3.935    0.000
+   .O2                0.077    0.019    3.957    0.000
+   .O3                0.019    0.014    1.312    0.189
+   .generlzd_prjdc    0.225    0.090    2.496    0.013
+    openness          0.147    0.041    3.554    0.000</code></pre>
 </div>
 </div>
-<p>The results show that in this case, the regression coefficient is -0.26 which is significant with p = 0.204. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <code>p_values</code>.</p>
-<div class="cell" data-hash="SEM_cache/html/multiple iterations SEM_64989f959b31778a09d73dbeab916ba2">
+<p>The results show that in this case, the regression coefficient is -0.92 which is significant with p = 0. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <code>p_values</code>.</p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -588,26 +620,26 @@ Variances:
 <span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>How many of our 500 virtual samples would have found a significant p-value (i.e., p &lt; .005)?</p>
-<div class="cell" data-hash="SEM_cache/html/results SEM_b722f2f6682059f37021fa7e9eb37089">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#frequency table</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 FALSE  TRUE 
-  144   356 </code></pre>
+  143   357 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#percentage of significant results</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations<span class="sc">*</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 71.2</code></pre>
+<pre><code>[1] 71.4</code></pre>
 </div>
 </div>
-<p>Only 71.2% of samples with the same size of <span class="math inline">n=50</span> result in a significant p-value. We conclude that <span class="math inline">n=50</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
+<p>Only 71.4% of samples with the same size of <span class="math inline">n=50</span> result in a significant p-value. We conclude that <span class="math inline">n=50</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
 </section>
 <section id="sample-size-planning-find-the-necessary-sample-size" class="level2">
 <h2 class="anchored" data-anchor-id="sample-size-planning-find-the-necessary-sample-size">Sample size planning: Find the necessary sample size</h2>
 <p>But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 30 to 200. Running these simulations typically requires quite some computing time.</p>
-<div class="cell" data-hash="SEM_cache/html/power analysis SEM_09d609cc28140020e938f2d2aae4c4a1">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -648,29 +680,55 @@ FALSE  TRUE
 <span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.
+This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.
+This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.
+This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.
+This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.
+This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.
+This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.
+This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.
+This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.
+This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.</code></pre>
+</div>
 </div>
 <p>Let’s plot the results:</p>
-<div class="cell" data-hash="SEM_cache/html/plot power curve SEM_a4628ce36e73e1f25db4394c87681eb2">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_sem, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">18</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">200</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_sem, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">18</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">200</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="SEM_files/figure-html/plot%20power%20curve%20SEM-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="SEM_files/figure-html/plot power curve SEM-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This graph suggests that we need a sample size of approximately 50 participants to reach a power of 80% with the given population estimates. That’s all it takes to run a power analysis for a SEM!</p>
-<p>In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to present an alternative way to simulate data for SEMs, i.e.&nbsp;by using a built-in function in the <code>lavaan</code> package. Second, we would like to show how a “safeguard” approach to power analysis can be used within the context of SEM.</p>
+<p>In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to present an alternative way to simulate data for SEMs, i.e., by using a built-in function in the <code>lavaan</code> package. Second, we would like to show how a “safeguard” approach to power analysis can be used within the context of SEM.</p>
 </section>
 <section id="using-the-lavaan-syntax-to-simulate-data" class="level2">
 <h2 class="anchored" data-anchor-id="using-the-lavaan-syntax-to-simulate-data">Using the lavaan syntax to simulate data</h2>
 <p>In our opening example in this chapter, we used the <code>rmvnorm</code> function from the <code>Rfast</code>package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the <code>lavaan</code> package, that is, the <code>simulateData()</code> function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data.</p>
-<p>More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al (2016). Let’s again take a look at the results of our SEM when applying it to this data set.</p>
-<div class="cell" data-hash="SEM_cache/html/fit Bergh_e1afb8caaa85093ec1f253febb6289a2">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the SEM to the pilot data set</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>fit_bergh <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_sem, <span class="at">data =</span> Bergh)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">#display the results</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_bergh)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al.&nbsp;(2016). Let’s again take a look at the results of our SEM when applying it to this data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the SEM to the pilot data set</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>fit_bergh <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_sem, <span class="at">data =</span> Bergh)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">#display the results</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_bergh)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lavaan 0.6.15 ended normally after 40 iterations
+<pre><code>lavaan 0.6-19 ended normally after 40 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -721,33 +779,33 @@ Variances:
 </div>
 </div>
 <p>In order to use the <code>simulateData()</code> function, we can take the estimates from this previous study and plug them into the lavaan syntax in the following chunk.</p>
-<div class="cell" data-hash="SEM_cache/html/specify lavaan syntax_30dad83cb832c6bbd2d9613262769dbe">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>model_fully_specified <span class="ot">&lt;-</span> </span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="st">"generalized_prejudice =~ 1*EP + 0.71*DP + 0.91*SP + 1*HP</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="st">openness =~ 1*O1 + 0.93*O2 + 1.14*O3</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~ -0.77*openness</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~~ 0.19*generalized_prejudice</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="st">openness ~~ 0.16*openness</span></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="st">EP ~~ 0.21*EP</span></span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="st">DP ~~ 0.14*DP</span></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="st">SP ~~ 0.23*SP</span></span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="st">HP ~~ 2.12*HP</span></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="st">O1 ~~ 0.07*O1</span></span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="st">O2 ~~ 0.08*O2</span></span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="st">O3 ~~ 0.05*O3</span></span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="co">#lets try this</span></span>
-<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>sim_lavaan <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(model_fully_specified, <span class="at">sample.nobs=</span><span class="dv">100</span>)</span>
-<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_lavaan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>model_fully_specified <span class="ot">&lt;-</span> </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="st">"generalized_prejudice =~ 1*EP + 0.71*DP + 0.91*SP + 1*HP</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="st">openness =~ 1*O1 + 0.93*O2 + 1.14*O3</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~ -0.77*openness</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~~ 0.19*generalized_prejudice</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="st">openness ~~ 0.16*openness</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="st">EP ~~ 0.21*EP</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="st">DP ~~ 0.14*DP</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="st">SP ~~ 0.23*SP</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="st">HP ~~ 2.12*HP</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="st">O1 ~~ 0.07*O1</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="st">O2 ~~ 0.08*O2</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="st">O3 ~~ 0.05*O3</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="co">#lets try this</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>sim_lavaan <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(model_fully_specified, <span class="at">sample.nobs=</span><span class="dv">100</span>)</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_lavaan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            EP         DP          SP         HP          O1         O2
 1  0.009175975 -0.4818076 -0.29785829 -3.5273250 -0.02254289 -0.1394437
@@ -766,75 +824,79 @@ Variances:
 </div>
 </div>
 <p>The next step is to integrate this code into our first simulation-based power analysis in this chapter, that is, to replace the data simulation process using the <code>rmvnorm</code> function from the <code>Rfast</code> package with this new method using <code>simulateData()</code> from the <code>lavaan</code> package. To this end, I am adapting the <code>power analysis SEM</code> chunk from above accordingly.</p>
-<div class="cell" data-hash="SEM_cache/html/simulateData_f09bc3613d78f42af6df963a461e8d0e">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 30 and 200</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>ns_sem <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">200</span>, <span class="at">by=</span><span class="dv">10</span>) </span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>result_sem <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co">#set number of iterations</span></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>iterations_sem <span class="ot">&lt;-</span> <span class="dv">500</span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="co">#write function</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>sim_sem_lavaan <span class="ot">&lt;-</span> <span class="cf">function</span>(n, model) {</span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  sim_lavaan <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(<span class="at">model =</span> model, <span class="at">sample.nobs=</span>n)</span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  fit_sem_simulated <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_sem, <span class="at">data =</span> sim_lavaan)</span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  p_value_sem <span class="ot">&lt;-</span> <span class="fu">parameterestimates</span>(fit_sem_simulated)[<span class="dv">8</span>,]<span class="sc">$</span>pvalue</span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_value_sem)</span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_sem) {  </span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  p_values_sem <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_sem, <span class="fu">sim_sem_lavaan</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_fully_specified), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
-<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>  result_sem <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_sem, <span class="fu">data.frame</span>(</span>
-<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_sem <span class="sc">&lt;</span> .<span class="dv">005</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span>iterations_sem)</span>
-<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a><span class="co">#The following line of code can be used to track the progress of the simulations </span></span>
-<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a><span class="co">#This can be helpful for simulations with a high number of iterations and/or a large parameter space which require a lot of time</span></span>
-<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a><span class="co">#I have deactivated this here; to enable it, just remove the "#" sign at the beginning of the next line</span></span>
-<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a><span class="co">#message(paste("Progress info: Simulations completed for n =", n))</span></span>
-<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 30 and 200</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>ns_sem <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">200</span>, <span class="at">by=</span><span class="dv">10</span>) </span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>result_sem <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co">#set number of iterations</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>iterations_sem <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="co">#write function</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>sim_sem_lavaan <span class="ot">&lt;-</span> <span class="cf">function</span>(n, model) {</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  sim_lavaan <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(<span class="at">model =</span> model, <span class="at">sample.nobs=</span>n)</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  fit_sem_simulated <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_sem, <span class="at">data =</span> sim_lavaan)</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  p_value_sem <span class="ot">&lt;-</span> <span class="fu">parameterestimates</span>(fit_sem_simulated)[<span class="dv">8</span>,]<span class="sc">$</span>pvalue</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_value_sem)</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_sem) {  </span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>  p_values_sem <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_sem, <span class="fu">sim_sem_lavaan</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_fully_specified), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>  result_sem <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_sem, <span class="fu">data.frame</span>(</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_sem <span class="sc">&lt;</span> .<span class="dv">005</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span>iterations_sem)</span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a><span class="co">#The following line of code can be used to track the progress of the simulations </span></span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a><span class="co">#This can be helpful for simulations with a high number of iterations and/or a large parameter space which require a lot of time</span></span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a><span class="co">#I have deactivated this here; to enable it, just remove the "#" sign at the beginning of the next line</span></span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a><span class="co">#message(paste("Progress info: Simulations completed for n =", n))</span></span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s plot this again.</p>
-<div class="cell" data-hash="SEM_cache/html/plot power curve SEM lavaan_41231634257cd8768d2ec016ee5bb896">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_sem, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">18</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">200</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_sem, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">18</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">200</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="SEM_files/figure-html/plot%20power%20curve%20SEM%20lavaan-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="SEM_files/figure-html/plot power curve SEM lavaan-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Here, we conclude that approx. 55 participants would be needed to achieve 80% power. The slight difference compared to the previous power analysis should be explained by the fact that we rounded the numbers that define our statistical populations and that we only used 500 Monte Carlo iterations – these differences should decrease with an increasing number of iterations.</p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Wang and Rhemtulla (<a href="https://doi.org/10.1177/2515245920918253">2021</a>) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: <a href="https://yilinandrewang.shinyapps.io/pwrSEM/">https://yilinandrewang.shinyapps.io/pwrSEM/</a></p>
+<p>Wang and Rhemtulla (<a href="https://doi.org/10.1177/2515245920918253">2021</a>) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: <a href="https://yilinandrewang.shinyapps.io/pwrSEM/">https://yilinandrewang.shinyapps.io/pwrSEM/</a>.</p>
 </div>
 </div>
 </section>
 <section id="a-safeguard-power-approach-for-sems" class="level2">
 <h2 class="anchored" data-anchor-id="a-safeguard-power-approach-for-sems">A safeguard power approach for SEMs</h2>
-<p>Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al.&nbsp;(2016) data set as an estimate of the “true” effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., <a href="https://doi.org/10.1177/1745691614528519">2014</a>), which we have already applied in Chapter 1 (<a href="./LM1.html">Linear Model I: a single dichotomous predictor</a>).</p>
+<p>Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al.&nbsp;(2016) data set as an estimate of the “true” effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., <a href="https://doi.org/10.1177/1745691614528519">2014</a>), which we have already applied in Chapter 1 (<a href="./LM1.html">Linear Model 1: A single dichotomous predictor</a>).</p>
 <p>Basically, all need to do in order to account for variability of observed effect sizes is to calculate a 60%-confidence interval around the point estimate of the observed effect size from our pilot data and to use the more conservative bound of this confidence interval (here: the upper bound) as our new effect size estimate. This can be easily done with the <code>parameterestimates</code> function from the <code>lavaan</code> package which takes the level of the confidence interval as an input parameter. Let’s use this function on our object <code>fit_bergh</code> which stores the results of our SEM in the <code>Bergh</code> data set.</p>
-<div class="cell" data-hash="SEM_cache/html/safeguard estimation_27b97e6c194e1df6cde5ec639a8e22bf">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parameterestimates</span>(fit_bergh, <span class="at">level =</span> .<span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parameterestimates</span>(fit_bergh, <span class="at">level =</span> .<span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                     lhs op                   rhs    est    se       z pvalue
 1  generalized_prejudice =~                    EP  1.000 0.000      NA     NA
@@ -875,33 +937,33 @@ Tip
 </div>
 </div>
 <p>This output shows that the upper bound of the 60% confidence interval around the focal regression coefficient is -0.72. We can now use this as our new and more conservative effect size estimate. We can for example insert this value into our simulation using the lavaan syntax. For this purpose, we copy the chunk from above and simply replace the previous effect size estimate (-0.77) with the new estimate (-0.72), while keeping all other parameters that define this data set.</p>
-<div class="cell" data-hash="SEM_cache/html/lavaan model safeguard power_551b7645b9ead06b3ed5f6de16c663c0">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>model_fully_specified_safeguard <span class="ot">&lt;-</span> </span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="st">"generalized_prejudice =~ 1*EP + 0.71*DP + 0.91*SP + 1*HP</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="st">openness =~ 1*O1 + 0.93*O2 + 1.14*O3</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~ -0.72*openness</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~~ 0.19*generalized_prejudice</span></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="st">openness ~~ 0.16*openness</span></span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="st">EP ~~ 0.21*EP</span></span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="st">DP ~~ 0.14*DP</span></span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="st">SP ~~ 0.23*SP</span></span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="st">HP ~~ 2.12*HP</span></span>
-<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="st">O1 ~~ 0.07*O1</span></span>
-<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="st">O2 ~~ 0.08*O2</span></span>
-<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a><span class="st">O3 ~~ 0.05*O3</span></span>
-<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="co">#lets try this</span></span>
-<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>sim_lavaan_safeguard <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(model_fully_specified_safeguard, <span class="at">sample.nobs=</span><span class="dv">100</span>)</span>
-<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_lavaan_safeguard)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co">#specify SEM</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>model_fully_specified_safeguard <span class="ot">&lt;-</span> </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="st">"generalized_prejudice =~ 1*EP + 0.71*DP + 0.91*SP + 1*HP</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="st">openness =~ 1*O1 + 0.93*O2 + 1.14*O3</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~ -0.72*openness</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="st">generalized_prejudice ~~ 0.19*generalized_prejudice</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="st">openness ~~ 0.16*openness</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="st">EP ~~ 0.21*EP</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="st">DP ~~ 0.14*DP</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="st">SP ~~ 0.23*SP</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="st">HP ~~ 2.12*HP</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="st">O1 ~~ 0.07*O1</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="st">O2 ~~ 0.08*O2</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="st">O3 ~~ 0.05*O3</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="co">#lets try this</span></span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>sim_lavaan_safeguard <span class="ot">&lt;-</span> <span class="fu">simulateData</span>(model_fully_specified_safeguard, <span class="at">sample.nobs=</span><span class="dv">100</span>)</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_lavaan_safeguard)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           EP         DP         SP         HP          O1         O2
 1  0.03163582 -0.4674398 -0.2762416 -3.5075535 -0.04391145 -0.1593227
@@ -920,53 +982,57 @@ Tip
 </div>
 </div>
 <p>Now, everything is ready for the actual safeguard power analysis. We can re-use the <code>sim_sem_lavaan</code> function we have defined above. Let’s see what we get here!</p>
-<div class="cell" data-hash="SEM_cache/html/safeguard power analysis_3e0b88936f27ff1bdafdc395304a1b2a">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>result_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_sem) {  </span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  p_values_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_sem, <span class="fu">sim_sem_lavaan</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_fully_specified_safeguard), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  result_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_sem_safeguard, <span class="fu">data.frame</span>(</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_sem_safeguard <span class="sc">&lt;</span> .<span class="dv">005</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span>iterations_sem)</span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="co">#The following line of code can be used to track the progress of the simulations </span></span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="co">#This can be helpful for simulations with a high number of iterations and/or a large parameter space which require a lot of time</span></span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="co">#I have deactivated this here; to enable it, just remove the "#" sign at the beginning of the next line</span></span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="co">#message(paste("Progress info: Simulations completed for n =", n))</span></span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_sem_safeguard, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">18</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">200</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>result_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_sem) {  </span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  p_values_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_sem, <span class="fu">sim_sem_lavaan</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_fully_specified_safeguard), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  result_sem_safeguard <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_sem_safeguard, <span class="fu">data.frame</span>(</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_sem_safeguard <span class="sc">&lt;</span> .<span class="dv">005</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span>iterations_sem)</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a><span class="co">#The following line of code can be used to track the progress of the simulations </span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="co">#This can be helpful for simulations with a high number of iterations and/or a large parameter space which require a lot of time</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a><span class="co">#I have deactivated this here; to enable it, just remove the "#" sign at the beginning of the next line</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a><span class="co">#message(paste("Progress info: Simulations completed for n =", n))</span></span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_sem_safeguard, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">18</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>,<span class="dv">200</span>)) <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="SEM_files/figure-html/safeguard%20power%20analysis-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="SEM_files/figure-html/safeguard power analysis-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This safeguard power analysis yields a required sample size of ca. 63 participants.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by Bergh et al (2016) were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.</p>
+<p>In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by Bergh et al.&nbsp;(2016) were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.</p>
 </div>
 </div>
 </section>
 </section>
 <section id="a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables" class="level1">
 <h1>A simulation-based power analysis for a mediation model with latent variables</h1>
-<p>Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the Bergh et al (2016) dataset as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:</p>
+<p>Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the Bergh et al.&nbsp;(2016) data set as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:</p>
 <ol type="1">
 <li>find plausible estimates of the population parameters</li>
 <li>specify the statistical model</li>
@@ -976,69 +1042,69 @@ Note
 <li>count how many samples would have detected the specified effect (i.e., compute the statistical power)</li>
 <li>vary your simulation parameters until the desired level of power (e.g., 80%) is achieved</li>
 </ol>
-<p>We first draw on the Bergh et al (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding male = 0 and female = 1.</p>
-<div class="cell" data-hash="SEM_cache/html/means and cov mediation_7269ea82b4985ba299ef9fcdbc94db1f">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>Bergh_int <span class="ot">&lt;-</span> Bergh </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>Bergh_int<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Bergh_int<span class="sc">$</span>gender <span class="sc">==</span> <span class="st">"male"</span>, <span class="dv">0</span>, <span class="fu">ifelse</span>(Bergh_int<span class="sc">$</span>gender <span class="sc">==</span> <span class="st">"female"</span>, <span class="dv">1</span>, <span class="cn">NA</span>))</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Bergh_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We first draw on the Bergh et al.&nbsp;(2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding “male” with 0 and “female” with 1.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>Bergh_int <span class="ot">&lt;-</span> Bergh </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>Bergh_int<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Bergh_int<span class="sc">$</span>gender <span class="sc">==</span> <span class="st">"male"</span>, <span class="dv">0</span>, <span class="fu">ifelse</span>(Bergh_int<span class="sc">$</span>gender <span class="sc">==</span> <span class="st">"female"</span>, <span class="dv">1</span>, <span class="cn">NA</span>))</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Bergh_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Die folgenden Objekte sind maskiert von Bergh:
+<pre><code>The following objects are masked from Bergh:
 
     A1, A2, A3, DP, EP, gender, HP, O1, O2, O3, SP</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#store means</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>means_mediation <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">mean</span>(gender), <span class="fu">mean</span>(EP), <span class="fu">mean</span>(SP), <span class="fu">mean</span>(HP), <span class="fu">mean</span>(DP), <span class="fu">mean</span>(O1), <span class="fu">mean</span>(O2), <span class="fu">mean</span>(O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co">#store covarainces</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>cov_mediation <span class="ot">&lt;-</span> <span class="fu">cov</span>(<span class="fu">cbind</span>(gender, EP, SP, HP, DP, O1, O2, O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#store means</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>means_mediation <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">mean</span>(gender), <span class="fu">mean</span>(EP), <span class="fu">mean</span>(SP), <span class="fu">mean</span>(HP), <span class="fu">mean</span>(DP), <span class="fu">mean</span>(O1), <span class="fu">mean</span>(O2), <span class="fu">mean</span>(O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co">#store covarainces</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>cov_mediation <span class="ot">&lt;-</span> <span class="fu">cov</span>(<span class="fu">cbind</span>(gender, EP, SP, HP, DP, O1, O2, O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If we were interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al.&nbsp;(2017), which can be accessed via <a href="https://schoemanna.shinyapps.io/mc_power_med/">https://schoemanna.shinyapps.io/mc_power_med/</a>. This app currently enables power analyses for some manifest mediation models: Mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, (iv) and three parallel mediators. But as we want to incorporate <code>generalized prejudice</code> and <code>openness to experience</code> as latent variables, we need to write a simulation-based power analyses ourselves.</p>
+<p>If we were interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al.&nbsp;(2017), which can be accessed via <a href="https://schoemanna.shinyapps.io/mc_power_med/">https://schoemanna.shinyapps.io/mc_power_med/</a>. This app currently enables power analyses for some manifest mediation models: mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, and (iv) three parallel mediators. But as we want to incorporate <code>generalized prejudice</code> and <code>openness to experience</code> as latent variables, we need to write a simulation-based power analyses ourselves.</p>
 </div>
 </div>
 <p>Now, we specify the statistical mediation model in <code>lavaan</code>.</p>
-<div class="cell" data-hash="SEM_cache/html/specify mediation model_5ed110da39703cf137831f36ab75838d">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#specify mediation model</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>model_mediation <span class="ot">&lt;-</span> <span class="st">'</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="st">              # measurement model</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice =~ EP + DP + SP + HP</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="st">              openness =~ O1 + O2 + O3</span></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="st">              </span></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="st">              # direct effect</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice ~ c*gender</span></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="st">              </span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="st">              # mediator</span></span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="st">              openness ~ a*gender</span></span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice ~ b*openness</span></span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="st">              # indirect effect (a*b)</span></span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a><span class="st">              ab := a*b</span></span>
-<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a><span class="st">           </span></span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a><span class="st">              # total effect</span></span>
-<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="st">              total := c + (a*b)</span></span>
-<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#specify mediation model</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>model_mediation <span class="ot">&lt;-</span> <span class="st">'</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="st">              # measurement model</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice =~ EP + DP + SP + HP</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="st">              openness =~ O1 + O2 + O3</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="st">              </span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="st">              # direct effect</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice ~ c*gender</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="st">              </span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="st">              # mediator</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="st">              openness ~ a*gender</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="st">              generalized_prejudice ~ b*openness</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="st">              # indirect effect (a*b)</span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="st">              ab := a*b</span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a><span class="st">           </span></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a><span class="st">              # total effect</span></span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a><span class="st">              total := c + (a*b)</span></span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To verify that this model syntax works properly, we can fit this model to the data set provided by Bergh et al.&nbsp;(2016).</p>
-<div class="cell" data-hash="SEM_cache/html/test mediation model with the pilot data_bd58f05d7e2477cde53f0d854ce550c1">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the SEM to the simulated data set</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>fit_mediation <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_mediation, <span class="at">data =</span> Bergh_int)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co">#display the results</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_mediation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the SEM to the simulated data set</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>fit_mediation <span class="ot">&lt;-</span> <span class="fu">sem</span>(model_mediation, <span class="at">data =</span> Bergh_int)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co">#display the results</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_mediation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lavaan 0.6.15 ended normally after 39 iterations
+<pre><code>lavaan 0.6-19 ended normally after 39 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -1098,55 +1164,59 @@ Defined Parameters:
 </div>
 </div>
 <p>Now, everything is set up to run the actual power analysis. In the following chunk, we repeatedly simulate data from the specified population and store the p-value of the indirect effect while varying the sample size in a range from 500 to 1500.</p>
-<div class="cell" data-hash="SEM_cache/html/simulate data mediation_6159232a8169f6d20f5b753ce5b4e4db">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 100 and 1500</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>ns_mediation <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">500</span>, <span class="dv">1500</span>, <span class="at">by=</span><span class="dv">50</span>) </span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>result_mediation <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co">#iterations</span></span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>iterations_mediation <span class="ot">&lt;-</span> <span class="dv">500</span></span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co">#write function</span></span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>sim_mediation <span class="ot">&lt;-</span> <span class="cf">function</span>(n, model, mu, sigma) {</span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>      simulated_data_mediation <span class="ot">&lt;-</span> Rfast<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>      fit_mediation_simulated <span class="ot">&lt;-</span> <span class="fu">sem</span>(model, <span class="at">data =</span> simulated_data_mediation)</span>
-<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>      p_value_mediation <span class="ot">&lt;-</span> <span class="fu">parameterestimates</span>(fit_mediation_simulated)[<span class="dv">21</span>,]<span class="sc">$</span>pvalue</span>
-<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(p_value_mediation)</span>
-<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
-<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_mediation) {  </span>
-<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>p_values_mediation <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_mediation, <span class="fu">sim_mediation</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_mediation, <span class="at">mu =</span> means_mediation, <span class="at">sigma =</span> cov_mediation), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
-<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>result_mediation <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_mediation, <span class="fu">data.frame</span>(</span>
-<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_mediation <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations_mediation)</span>
-<span id="cb44-32"><a href="#cb44-32" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb44-33"><a href="#cb44-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-34"><a href="#cb44-34" aria-hidden="true" tabindex="-1"></a><span class="co">#The following line of code can be used to track the progress of the simulations </span></span>
-<span id="cb44-35"><a href="#cb44-35" aria-hidden="true" tabindex="-1"></a><span class="co">#This can be helpful for simulations with a high number of iterations and/or a large parameter space which require a lot of time</span></span>
-<span id="cb44-36"><a href="#cb44-36" aria-hidden="true" tabindex="-1"></a><span class="co">#I have deactivated this here; to enable it, just remove the "#" sign at the beginning of the next line</span></span>
-<span id="cb44-37"><a href="#cb44-37" aria-hidden="true" tabindex="-1"></a><span class="co">#message(paste("Progress info: Simulations completed for n =", n))</span></span>
-<span id="cb44-38"><a href="#cb44-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-39"><a href="#cb44-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">#test ns between 100 and 1500</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>ns_mediation <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">500</span>, <span class="dv">1500</span>, <span class="at">by=</span><span class="dv">50</span>) </span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store results</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>result_mediation <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="co">#iterations</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>iterations_mediation <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a><span class="co">#write function</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>sim_mediation <span class="ot">&lt;-</span> <span class="cf">function</span>(n, model, mu, sigma) {</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>      simulated_data_mediation <span class="ot">&lt;-</span> Rfast<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>      fit_mediation_simulated <span class="ot">&lt;-</span> <span class="fu">sem</span>(model, <span class="at">data =</span> simulated_data_mediation)</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>      p_value_mediation <span class="ot">&lt;-</span> <span class="fu">parameterestimates</span>(fit_mediation_simulated)[<span class="dv">21</span>,]<span class="sc">$</span>pvalue</span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(p_value_mediation)</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a><span class="co">#replicate function with varying ns</span></span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns_mediation) {  </span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a>p_values_mediation <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(iterations_mediation, <span class="fu">sim_mediation</span>(<span class="at">n =</span> n, <span class="at">model =</span> model_mediation, <span class="at">mu =</span> means_mediation, <span class="at">sigma =</span> cov_mediation), <span class="at">future.seed=</span><span class="cn">TRUE</span>)  </span>
+<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>result_mediation <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result_mediation, <span class="fu">data.frame</span>(</span>
+<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
+<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values_mediation <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations_mediation)</span>
+<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-34"><a href="#cb45-34" aria-hidden="true" tabindex="-1"></a><span class="co">#The following line of code can be used to track the progress of the simulations </span></span>
+<span id="cb45-35"><a href="#cb45-35" aria-hidden="true" tabindex="-1"></a><span class="co">#This can be helpful for simulations with a high number of iterations and/or a large parameter space which require a lot of time</span></span>
+<span id="cb45-36"><a href="#cb45-36" aria-hidden="true" tabindex="-1"></a><span class="co">#I have deactivated this here; to enable it, just remove the "#" sign at the beginning of the next line</span></span>
+<span id="cb45-37"><a href="#cb45-37" aria-hidden="true" tabindex="-1"></a><span class="co">#message(paste("Progress info: Simulations completed for n =", n))</span></span>
+<span id="cb45-38"><a href="#cb45-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-39"><a href="#cb45-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s plot the results:</p>
-<div class="cell" data-hash="SEM_cache/html/plot power curve mediation_033ccc00643f300d955b911fee594ae3">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_mediation, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">20</span>) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result_mediation, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">20</span>) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="SEM_files/figure-html/plot%20power%20curve%20mediation-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="SEM_files/figure-html/plot power curve mediation-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<p>This shows that roughly 1,300 to 1,400 participants will be needed to obtain sufficient power under the assumptions we specified. To achieve a more precise estimate, just increase the number of iterations (and get a cup of coffee while you wait for the results 😅)</p>
+</div>
+<p>This shows that roughly 1,300 to 1,400 participants will be needed to obtain sufficient power under the assumptions we specified. To achieve a more precise estimate, just increase the number of iterations (and get a cup of coffee while you wait for the results 😅).</p>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
@@ -1160,104 +1230,407 @@ Defined Parameters:
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    setTimeout(function() {
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
         }
-        popup.appendChild(citeDiv);
-      });
-      return popup.innerHTML;
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-  }
-});
-</script>
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 </div> <!-- /content -->
 
 
 
-</body></html>
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses/edit/main/SEM.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

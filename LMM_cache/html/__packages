@@ -10,3 +10,15 @@ RcppZiggurat
 Rfast
 future
 future.apply
+tidyverse
+tibble
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
+usethis
+devtools
+zigg
+RcppParallel
