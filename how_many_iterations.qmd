@@ -1,9 +1,6 @@
 ---
 title: "Bonus: How many Monte Carlo iterations are necessary?"
 author: "Felix Schönbrodt"
-execute:
-  cache: true
-project-type: website
 ---
 
 *Reading/working time: ~25 min.*
@@ -13,10 +10,10 @@ project-type: website
 # Preparation: Install and load all necessary packages
 # install.packages(c("RcppArmadillo", "ggplot2", "patchwork", "pwr"))
 
-library(ggplot2)         # for plotting
-library(RcppArmadillo)   # for fast LMs
-library(patchwork)       # for arranging multiple ggplots
-library(pwr)             # for analytical power analysis
+library(ggplot2) # for plotting
+library(RcppArmadillo) # for fast LMs
+library(patchwork) # for arranging multiple ggplots
+library(pwr) # for analytical power analysis
 ```
 
 
@@ -39,24 +36,31 @@ ns <- rep(100, 10)
 result <- data.frame()
 
 for (n in ns) {
-  
   x <- cbind(
     rep(1, n),
-    c(rep(0, n/2), rep(1, n/2))
+    c(rep(0, n / 2), rep(1, n / 2))
   )
-  
+
   p_values <- rep(NA, iterations)
-  
+
   for (i in 1:iterations) {
-    y <- 23 - 3*x[, 2] + rnorm(n, mean=0, sd=sqrt(117))
-    
+    y <- 23 - 3 * x[, 2] + rnorm(n, mean = 0, sd = sqrt(117))
+
     mdl <- RcppArmadillo::fastLmPure(x, y)
-    pval <- 2*pt(abs(mdl$coefficients/mdl$stderr), mdl$df.residual, lower.tail=FALSE)
-    
+    pval <- 2 *
+      pt(
+        abs(mdl$coefficients / mdl$stderr),
+        mdl$df.residual,
+        lower.tail = FALSE
+      )
+
     p_values[i] <- pval[2]
   }
-  
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
+
+  result <- rbind(
+    result,
+    data.frame(n = n, power = sum(p_values < .005) / iterations)
+  )
 }
 
 result
@@ -74,47 +78,62 @@ How much do we have to increase the `iterations` to achieve a MCE smaller than, 
 Let's loop through increasing iterations (this takes a few minutes):
 
 ```{r}
-iterations <- seq(1000, 6000, by=1000)
+iterations <- seq(1000, 6000, by = 1000)
 
 # let's have 100 repetitions to get sufficiently stable MCE estimates
 ns <- rep(100, 100)
 result <- data.frame()
 
 for (it in iterations) {
-
   # print(it)  uncomment for showing the progress
 
   for (n in ns) {
-    
     x <- cbind(
       rep(1, n),
-      c(rep(0, n/2), rep(1, n/2))
+      c(rep(0, n / 2), rep(1, n / 2))
     )
-    
+
     p_values <- rep(NA, it)
-    
+
     for (i in 1:it) {
-      y <- 23 - 3*x[, 2] + rnorm(n, mean=0, sd=sqrt(117))
-      
+      y <- 23 - 3 * x[, 2] + rnorm(n, mean = 0, sd = sqrt(117))
+
       mdl <- RcppArmadillo::fastLmPure(x, y)
-      pval <- 2*pt(abs(mdl$coefficients/mdl$stderr), mdl$df.residual, lower.tail=FALSE)
-      
+      pval <- 2 *
+        pt(
+          abs(mdl$coefficients / mdl$stderr),
+          mdl$df.residual,
+          lower.tail = FALSE
+        )
+
       p_values[i] <- pval[2]
     }
-    
-    result <- rbind(result, data.frame(iterations = it, n = n, power = sum(p_values < .005)/it))
+
+    result <- rbind(
+      result,
+      data.frame(iterations = it, n = n, power = sum(p_values < .005) / it)
+    )
   }
 }
 
 # We can compute the exact power with the analytical solution:
 exact_power <- pwr.t.test(d = 3 / sqrt(117), sig.level = 0.005, n = 50)
 
-p1 <- ggplot(result, aes(x=iterations, y=power)) + stat_summary(fun.data=mean_cl_normal) + ggtitle("Power estimate (error bars = SD)") + geom_hline(yintercept = exact_power$power, colour = "blue", linetype = "dashed")
+p1 <- ggplot(result, aes(x = iterations, y = power)) +
+  stat_summary(fun.data = mean_cl_normal) +
+  ggtitle("Power estimate (error bars = SD)") +
+  geom_hline(
+    yintercept = exact_power$power,
+    colour = "blue",
+    linetype = "dashed"
+  )
 
-p2 <- ggplot(result, aes(x=iterations, y=power)) + stat_summary(fun="sd", geom="point") + ylab("MCE") + ggtitle("Monte Carlo Error")
+p2 <- ggplot(result, aes(x = iterations, y = power)) +
+  stat_summary(fun = "sd", geom = "point") +
+  ylab("MCE") +
+  ggtitle("Monte Carlo Error")
 
-p1/p2
-
+p1 / p2
 ```
 
 As you can see, the MCE gets smaller with increasing iterations. The desired precision of MCE <= .005 can be achieved at around 3000 iterations (the dashed blue line is the exact power estimate from the analytical solution). While precision increases quickly by going from 1000 to 2000 iterations, further improvements are costly in terms of computation time. In sum, 3000 iterations seems to be a good compromise *for this specific power simulation*.

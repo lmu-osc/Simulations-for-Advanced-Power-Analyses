@@ -1,9 +1,6 @@
 ---
 title: "Ch. 1: Linear Model 1: A single dichotomous predictor"
 author: "Felix Schönbrodt"
-execute:
-  cache: true
-project-type: website
 ---
 
 *Reading/working time: \~50 min.*
@@ -16,7 +13,7 @@ project-type: website
 
 library(ggplot2)
 library(ggdist)
-library(gghalves)
+# library(gghalves)
 library(pwr)
 library(MBESS)
 ```
@@ -104,10 +101,10 @@ var(BtheB$bdi.pre)
 -   What average treatment effect would we expect?
 
 ```{r}
-# we take the 2 month follow-up measurement, 
-# separately for the  "treatment as usual" and 
+# we take the 2 month follow-up measurement,
+# separately for the  "treatment as usual" and
 # the "Beat the blues" group:
-mean(BtheB$bdi.2m[BtheB$treatment == "TAU"], na.rm=TRUE)
+mean(BtheB$bdi.2m[BtheB$treatment == "TAU"], na.rm = TRUE)
 mean(BtheB$bdi.2m[BtheB$treatment == "BtheB"])
 ```
 
@@ -118,7 +115,7 @@ Hence, the two treatments reduced BDI scores from an average of 23 to 19 (`TAU`)
 For our purpose, we compute the average treatment effect combined for both treatments. The average post-treatment score is:
 
 ```{r}
-mean(BtheB$bdi.2m, na.rm=TRUE)
+mean(BtheB$bdi.2m, na.rm = TRUE)
 ```
 
 So, the average reduction across both treatments is $23-17=6$. In the following scripts, we'll use that value as our assumed treatment effect.
@@ -211,9 +208,9 @@ Let's plot the simulated data with raincloud plots (see [here](https://z3tt.gith
 ggplot(df, aes(x=as.factor(treatment), y=BDI)) + 
   ggdist::stat_halfeye(adjust = .5, width = .3, .width = 0, 
         justification = -.3, point_colour = NA) + 
-  geom_boxplot(width = .1, outlier.shape = NA) +
-  gghalves::geom_half_point(side = "l", range_scale = .4, 
-        alpha = .5)
+  geom_boxplot(width = .1, outlier.shape = NA) 
+  # gghalves::geom_half_point(side = "l", range_scale = .4, 
+  #       alpha = .5)
 ```
 
 This graph gives us an impression of the plausibility of our simulation: In the control group, we have a median BDI score of 26, and 50% of participants, represented by the box of the boxplot, are roughly between 18 and 32 points (i.e., in the range of a moderate depression). After the simulated treatment, the median BDI score is at 18 (mild depression).

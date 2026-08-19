@@ -1,6 +1,5 @@
 project:
   type: website
-  output-dir: docs
 
 website:
   repo-url: https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses
@@ -20,9 +19,9 @@ website:
           - SEM.qmd
       - section: "Bonuses"
         contents:
-        - optimizing_code.qmd
-        - how_many_iterations.qmd
-        - SEM_fit_index.qmd
+          - optimizing_code.qmd
+          - how_many_iterations.qmd
+          - SEM_fit_index.qmd
       - Resources.qmd
 
 format:
@@ -35,6 +34,6 @@ format:
       - file: matomo_analytics.html
 
 execute:
-  cache: true
+  freeze: true
 
 editor: source
