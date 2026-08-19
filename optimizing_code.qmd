@@ -1,11 +1,6 @@
 ---
 title: "Bonus: Optimizing R code for speed"
 author: "Felix Schönbrodt"
-execute:
-  cache: true
-html:
-    code-tools: true  
-project-type: website
 ---
 
 *Reading/working time: ~30 min.*
@@ -16,9 +11,9 @@ project-type: website
 # install.packages(c("RcppArmadillo", "future.apply"))
 
 library(RcppArmadillo) # for fast LMs
-library(future.apply)  # for parallel processing
+library(future.apply) # for parallel processing
 
-# plan() initializes parallel processing, 
+# plan() initializes parallel processing,
 # for faster code execution
 # By default, it uses all available cores
 plan(multisession)
@@ -35,25 +30,29 @@ Here is a first version of the power simulation code for a simple LM. Let's see 
 
 ```{r opt1}
 t0 <- system.time({
+  iterations <- 5000
+  ns <- seq(300, 500, by = 50)
+  result <- data.frame()
 
-iterations <- 5000
-ns <- seq(300, 500, by=50)
-result <- data.frame()
+  for (n in ns) {
+    p_values <- c()
 
-for (n in ns) {
-  p_values <- c()
-  
-  for (i in 1:iterations) {
-    treatment <- c(rep(0, n/2), rep(1, n/2))
-    BDI <- 23 - 3*treatment + rnorm(n, mean=0, sd=sqrt(117))
-    df <- data.frame(treatment, BDI)
-    res <- lm(BDI ~ treatment, data=df)
-    p_values <- c(p_values, summary(res)$coefficients["treatment", "Pr(>|t|)"])
+    for (i in 1:iterations) {
+      treatment <- c(rep(0, n / 2), rep(1, n / 2))
+      BDI <- 23 - 3 * treatment + rnorm(n, mean = 0, sd = sqrt(117))
+      df <- data.frame(treatment, BDI)
+      res <- lm(BDI ~ treatment, data = df)
+      p_values <- c(
+        p_values,
+        summary(res)$coefficients["treatment", "Pr(>|t|)"]
+      )
+    }
+
+    result <- rbind(
+      result,
+      data.frame(n = n, power = sum(p_values < .005) / iterations)
+    )
   }
-  
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
-}
-
 })
 t0
 
@@ -68,40 +67,48 @@ This is one of the most common bottlenecks: You start with an empty vector (or e
 
 ```{r}
 t1 <- system.time({
+  iterations <- 5000
+  ns <- seq(300, 500, by = 50)
 
-iterations <- 5000
-ns <- seq(300, 500, by=50)
+  result <- data.frame()
 
-result <- data.frame()
+  for (n in ns) {
+    # print(n)   # uncomment to see progress
 
-for (n in ns) {
-  # print(n)   # uncomment to see progress
-  
-  # CHANGE: Preallocate vector with the final size, initialize with NAs
-  p_values <- rep(NA, iterations)
-  
-  for (i in 1:iterations) {
-    treatment <- c(rep(0, n/2), rep(1, n/2))
-    BDI <- 23 - 6*treatment + rnorm(n, mean=0, sd=sqrt(117))
-    df <- data.frame(treatment, BDI)
-    res <- lm(BDI ~ treatment, data=df)
-    
-    # CHANGE: assign resulting p-value to specific slot in vector
-    p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
+    # CHANGE: Preallocate vector with the final size, initialize with NAs
+    p_values <- rep(NA, iterations)
+
+    for (i in 1:iterations) {
+      treatment <- c(rep(0, n / 2), rep(1, n / 2))
+      BDI <- 23 - 6 * treatment + rnorm(n, mean = 0, sd = sqrt(117))
+      df <- data.frame(treatment, BDI)
+      res <- lm(BDI ~ treatment, data = df)
+
+      # CHANGE: assign resulting p-value to specific slot in vector
+      p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
+    }
+
+    # Here we stil have a growing data.frame - but as this is only done 5 times, it does not matter.
+    result <- rbind(
+      result,
+      data.frame(n = n, power = sum(p_values < .005) / iterations)
+    )
   }
-  
-  # Here we stil have a growing data.frame - but as this is only done 5 times, it does not matter.
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations)) 
-}
-
 })
 
 # Combine the different timings in a data frame
 timings <- rbind(t0[3], t1[3]) |> data.frame()
 
 # compute the absolute and relative difference of consecutive rows:
-timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
-timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
+timings$diff <- c(
+  NA,
+  timings[2:nrow(timings), 1] - timings[1:(nrow(timings) - 1), 1]
+)
+timings$rel_diff <- c(
+  NA,
+  timings[2:nrow(timings), "diff"] / timings[1:(nrow(timings) - 1), 1]
+) |>
+  round(3)
 
 timings
 ```
@@ -114,35 +121,43 @@ Use matrizes instead of data frames wherever possible or avoid data frames altog
 
 ```{r}
 t2 <- system.time({
+  iterations <- 5000
+  ns <- seq(300, 500, by = 50)
 
-iterations <- 5000
-ns <- seq(300, 500, by=50)
+  result <- data.frame()
 
-result <- data.frame()
+  for (n in ns) {
+    treatment <- c(rep(0, n / 2), rep(1, n / 2))
+    p_values <- rep(NA, iterations)
 
-for (n in ns) {
-  treatment <- c(rep(0, n/2), rep(1, n/2))
-  p_values <- rep(NA, iterations)
-  
-  for (i in 1:iterations) {
-    BDI <- 23 - 3*treatment + rnorm(n, mean=0, sd=sqrt(117))
-    
-    # CHANGE: We don't need the data frame - just create the two variables
-    # in the environment and lm() takes them from there.
-    #df <- data.frame(treatment, BDI)
-    res <- lm(BDI ~ treatment)
-    
-    p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
+    for (i in 1:iterations) {
+      BDI <- 23 - 3 * treatment + rnorm(n, mean = 0, sd = sqrt(117))
+
+      # CHANGE: We don't need the data frame - just create the two variables
+      # in the environment and lm() takes them from there.
+      #df <- data.frame(treatment, BDI)
+      res <- lm(BDI ~ treatment)
+
+      p_values[i] <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
+    }
+
+    result <- rbind(
+      result,
+      data.frame(n = n, power = sum(p_values < .005) / iterations)
+    )
   }
-  
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
-}
-
 })
 
 timings <- rbind(t0[3], t1[3], t2[3]) |> data.frame()
-timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
-timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
+timings$diff <- c(
+  NA,
+  timings[2:nrow(timings), 1] - timings[1:(nrow(timings) - 1), 1]
+)
+timings$rel_diff <- c(
+  NA,
+  timings[2:nrow(timings), "diff"] / timings[1:(nrow(timings) - 1), 1]
+) |>
+  round(3)
 timings
 ```
 
@@ -156,49 +171,57 @@ We could strip away all overhead and do only the necessary steps: Fit the linear
 
 ```{r}
 t3 <- system.time({
+  iterations <- 5000
+  ns <- seq(300, 500, by = 50)
 
-iterations <- 5000
-ns <- seq(300, 500, by=50)
+  result <- data.frame()
 
-result <- data.frame()
+  for (n in ns) {
+    # construct the design matrix: first column is all-1 (intercept), second column is the treatment factor
+    x <- cbind(
+      rep(1, n),
+      c(rep(0, n / 2), rep(1, n / 2))
+    )
 
-for (n in ns) {
-  # construct the design matrix: first column is all-1 (intercept), second column is the treatment factor
-  x <- cbind(
-    rep(1, n),
-    c(rep(0, n/2), rep(1, n/2))
-  )
-  
-  p_values <- rep(NA, iterations)
-  
-  for (i in 1:iterations) {
-    y <- 23 - 3*x[, 2] + rnorm(n, mean=0, sd=sqrt(117))
+    p_values <- rep(NA, iterations)
 
-    # For comparison - do we get the same results? Yes!
-    # res0 <- lm(y ~ x[, 2])
-    # summary(res0)
-    
-    # fit the model:
-    m <- .lm.fit(x, y)
-    
-    # compute p-values based on the residuals:
-    rss <- sum(m$residuals^2)
-    rdf <- length(y) - ncol(x)
-    resvar <- rss/rdf
-    R <- chol2inv(m$qr)
-    se <- sqrt(diag(R) * resvar)
-    ps <- 2*pt(abs(m$coef/se),rdf,lower.tail=FALSE)
-    
-    p_values[i] <- ps[2]
+    for (i in 1:iterations) {
+      y <- 23 - 3 * x[, 2] + rnorm(n, mean = 0, sd = sqrt(117))
+
+      # For comparison - do we get the same results? Yes!
+      # res0 <- lm(y ~ x[, 2])
+      # summary(res0)
+
+      # fit the model:
+      m <- .lm.fit(x, y)
+
+      # compute p-values based on the residuals:
+      rss <- sum(m$residuals^2)
+      rdf <- length(y) - ncol(x)
+      resvar <- rss / rdf
+      R <- chol2inv(m$qr)
+      se <- sqrt(diag(R) * resvar)
+      ps <- 2 * pt(abs(m$coef / se), rdf, lower.tail = FALSE)
+
+      p_values[i] <- ps[2]
+    }
+
+    result <- rbind(
+      result,
+      data.frame(n = n, power = sum(p_values < .005) / iterations)
+    )
   }
-  
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
-}
-
 })
 timings <- rbind(t0[3], t1[3], t2[3], t3[3]) |> data.frame()
-timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
-timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
+timings$diff <- c(
+  NA,
+  timings[2:nrow(timings), 1] - timings[1:(nrow(timings) - 1), 1]
+)
+timings$rel_diff <- c(
+  NA,
+  timings[2:nrow(timings), "diff"] / timings[1:(nrow(timings) - 1), 1]
+) |>
+  round(3)
 timings
 ```
 This step led to a massive improvement of around `r round(t3[3] - t2[3], 1)` seconds; a relative gain of `r round(timings$rel_diff[4]*100, 1)`%.
@@ -210,41 +233,54 @@ For many statistical models, there are packages optimized for speed, see for exa
 
 ```{r}
 t4 <- system.time({
+  iterations <- 5000
+  ns <- seq(300, 500, by = 50)
 
-iterations <- 5000
-ns <- seq(300, 500, by=50)
+  result <- data.frame()
 
-result <- data.frame()
+  for (n in ns) {
+    # construct the design matrix: first column is all-1 (intercept), second column is the treatment factor
+    x <- cbind(
+      rep(1, n),
+      c(rep(0, n / 2), rep(1, n / 2))
+    )
 
-for (n in ns) {
-  # construct the design matrix: first column is all-1 (intercept), second column is the treatment factor
-  x <- cbind(
-    rep(1, n),
-    c(rep(0, n/2), rep(1, n/2))
-  )
-  
-  p_values <- rep(NA, iterations)
-  
-  for (i in 1:iterations) {
-    y <- 23 - 3*x[, 2] + rnorm(n, mean=0, sd=sqrt(117))
+    p_values <- rep(NA, iterations)
 
-    # For comparison - do we get the same results? Yes!
-    # res0 <- lm(y ~ x[, 2])
-    # summary(res0)
-    
-    mdl <- RcppArmadillo::fastLmPure(x, y)
-    
-    # compute the p-value - but only for the coefficient of interest!
-    p_values[i] <- 2*pt(abs(mdl$coefficients[2]/mdl$stderr[2]), mdl$df.residual, lower.tail=FALSE)
+    for (i in 1:iterations) {
+      y <- 23 - 3 * x[, 2] + rnorm(n, mean = 0, sd = sqrt(117))
+
+      # For comparison - do we get the same results? Yes!
+      # res0 <- lm(y ~ x[, 2])
+      # summary(res0)
+
+      mdl <- RcppArmadillo::fastLmPure(x, y)
+
+      # compute the p-value - but only for the coefficient of interest!
+      p_values[i] <- 2 *
+        pt(
+          abs(mdl$coefficients[2] / mdl$stderr[2]),
+          mdl$df.residual,
+          lower.tail = FALSE
+        )
+    }
+
+    result <- rbind(
+      result,
+      data.frame(n = n, power = sum(p_values < .005) / iterations)
+    )
   }
-  
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
-}
-
 })
 timings <- rbind(t0[3], t1[3], t2[3], t3[3], t4[3]) |> data.frame()
-timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
-timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
+timings$diff <- c(
+  NA,
+  timings[2:nrow(timings), 1] - timings[1:(nrow(timings) - 1), 1]
+)
+timings$rel_diff <- c(
+  NA,
+  timings[2:nrow(timings), "diff"] / timings[1:(nrow(timings) - 1), 1]
+) |>
+  round(3)
 timings
 ```
 
@@ -267,36 +303,49 @@ We then use the `replicate` function to run the `sim` function many times and to
 
 ```{r}
 # Wrap the code for a single simulation into a function. It returns the quantity of interest.
-sim <- function(n=100) {
+sim <- function(n = 100) {
   # the "n" is now taken from the function parameter "n"
   x <- cbind(
     rep(1, n),
-    c(rep(0, n/2), rep(1, n/2))
+    c(rep(0, n / 2), rep(1, n / 2))
   )
-  
-  y <- 23 - 3*x[, 2] + rnorm(n, mean=0, sd=sqrt(117))
+
+  y <- 23 - 3 * x[, 2] + rnorm(n, mean = 0, sd = sqrt(117))
   mdl <- RcppArmadillo::fastLmPure(x, y)
-  p_val <- 2*pt(abs(mdl$coefficients[2]/mdl$stderr[2]), mdl$df.residual, lower.tail=FALSE)
+  p_val <- 2 *
+    pt(
+      abs(mdl$coefficients[2] / mdl$stderr[2]),
+      mdl$df.residual,
+      lower.tail = FALSE
+    )
 
   return(p_val)
 }
 
 t5 <- system.time({
+  iterations <- 5000
+  ns <- seq(300, 500, by = 50)
 
-iterations <- 5000
-ns <- seq(300, 500, by=50)
+  result <- data.frame()
 
-result <- data.frame()
-
-for (n in ns) {
-  p_values <- replicate(n=iterations, sim(n=n))
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
-}
-
+  for (n in ns) {
+    p_values <- replicate(n = iterations, sim(n = n))
+    result <- rbind(
+      result,
+      data.frame(n = n, power = sum(p_values < .005) / iterations)
+    )
+  }
 })
 timings <- rbind(t0[3], t1[3], t2[3], t3[3], t4[3], t5[3]) |> data.frame()
-timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
-timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3)
+timings$diff <- c(
+  NA,
+  timings[2:nrow(timings), 1] - timings[1:(nrow(timings) - 1), 1]
+)
+timings$rel_diff <- c(
+  NA,
+  timings[2:nrow(timings), "diff"] / timings[1:(nrow(timings) - 1), 1]
+) |>
+  round(3)
 timings
 ```
 While this refactoring actually slightly increased computation time, we need this for the last, final optimization where we reap the benefits.
@@ -314,23 +363,33 @@ availableCores()
 plan(multisession, workers = 4)
 
 t6 <- system.time({
+  iterations <- 5000
+  ns <- seq(300, 500, by = 50)
 
-iterations <- 5000
-ns <- seq(300, 500, by=50)
+  result <- data.frame()
 
-result <- data.frame()
-
-for (n in ns) {
-  # future.seed = TRUE is needed to set seeds in all parallel processes. Then the computation is reproducible.
-  p_values <- future_replicate(n=iterations, sim(n=n), future.seed = TRUE)
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
-}
-
+  for (n in ns) {
+    # future.seed = TRUE is needed to set seeds in all parallel processes. Then the computation is reproducible.
+    p_values <- future_replicate(n = iterations, sim(n = n), future.seed = TRUE)
+    result <- rbind(
+      result,
+      data.frame(n = n, power = sum(p_values < .005) / iterations)
+    )
+  }
 })
 
-timings <- rbind(t0[3], t1[3], t2[3], t3[3], t4[3], t5[3], t6[3]) |> data.frame()
-timings$diff <- c(NA, timings[2:nrow(timings), 1] - timings[1:(nrow(timings)-1), 1])
-timings$rel_diff <- c(NA, timings[2:nrow(timings), "diff"]/timings[1:(nrow(timings)-1), 1]) |> round(3) |> round(2)
+timings <- rbind(t0[3], t1[3], t2[3], t3[3], t4[3], t5[3], t6[3]) |>
+  data.frame()
+timings$diff <- c(
+  NA,
+  timings[2:nrow(timings), 1] - timings[1:(nrow(timings) - 1), 1]
+)
+timings$rel_diff <- c(
+  NA,
+  timings[2:nrow(timings), "diff"] / timings[1:(nrow(timings) - 1), 1]
+) |>
+  round(3) |>
+  round(2)
 timings
 ```
 
@@ -351,22 +410,28 @@ Let's see if parallel processing has an advantage when we have longer computatio
 plan(multisession, workers = 4)
 
 iterations <- 20000
-ns <- seq(100, 1000, by=50)
+ns <- seq(100, 1000, by = 50)
 result_single <- result_parallel <- data.frame()
 
 # single core
 t_single <- system.time({
   for (n in ns) {
-    p_values <- replicate(n=iterations, sim(n=n))
-    result_single <- rbind(result_single, data.frame(n = n, power = sum(p_values < .005)/iterations))
+    p_values <- replicate(n = iterations, sim(n = n))
+    result_single <- rbind(
+      result_single,
+      data.frame(n = n, power = sum(p_values < .005) / iterations)
+    )
   }
 })
 
 # multi-core
 t_parallel <- system.time({
   for (n in ns) {
-    p_values <- future_replicate(n=iterations, sim(n=n), future.seed = TRUE)
-    result_parallel <- rbind(result_parallel, data.frame(n = n, power = sum(p_values < .005)/iterations))
+    p_values <- future_replicate(n = iterations, sim(n = n), future.seed = TRUE)
+    result_parallel <- rbind(
+      result_parallel,
+      data.frame(n = n, power = sum(p_values < .005) / iterations)
+    )
   }
 })
 
@@ -381,26 +446,30 @@ rbind(t_single, t_parallel) |> data.frame()
 #| echo: false
 
 t0_extra <- system.time({
+  iterations <- 20000
+  ns <- seq(100, 1000, by = 50)
+  result <- data.frame()
 
-iterations <- 20000
-ns <- seq(100, 1000, by=50)
-result <- data.frame()
+  for (n in ns) {
+    print(n)
+    p_values <- c()
 
-for (n in ns) {
-  print(n)
-  p_values <- c()
-  
-  for (i in 1:iterations) {
-    treatment <- c(rep(0, n/2), rep(1, n/2))
-    BDI <- 23 - 3*treatment + rnorm(n, mean=0, sd=sqrt(117))
-    df <- data.frame(treatment, BDI)
-    res <- lm(BDI ~ treatment, data=df)
-    p_values <- c(p_values, summary(res)$coefficients["treatment", "Pr(>|t|)"])
+    for (i in 1:iterations) {
+      treatment <- c(rep(0, n / 2), rep(1, n / 2))
+      BDI <- 23 - 3 * treatment + rnorm(n, mean = 0, sd = sqrt(117))
+      df <- data.frame(treatment, BDI)
+      res <- lm(BDI ~ treatment, data = df)
+      p_values <- c(
+        p_values,
+        summary(res)$coefficients["treatment", "Pr(>|t|)"]
+      )
+    }
+
+    result <- rbind(
+      result,
+      data.frame(n = n, power = sum(p_values < .005) / iterations)
+    )
   }
-  
-  result <- rbind(result, data.frame(n = n, power = sum(p_values < .005)/iterations))
-}
-
 })
 ```
 

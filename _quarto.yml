@@ -34,6 +34,6 @@ format:
       - file: matomo_analytics.html
 
 execute:
-  cache: true
+  freeze: true
 
 editor: source

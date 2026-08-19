@@ -1,9 +1,6 @@
 ---
 title: "Ch. 2: Linear Model 2: Multiple predictors"
 author: "Felix Schönbrodt"
-execute:
-  cache: true
-project-type: website
 ---
 
 *Reading/working time: ~50 min.*
@@ -43,7 +40,7 @@ Instead of guessing the necessary quantities -- in the current case, the pre-pos
 data("BtheB", package = "HSAUR")
 
 # pre-post-correlation
-cor(BtheB$bdi.pre, BtheB$bdi.2m, use="p")
+cor(BtheB$bdi.pre, BtheB$bdi.2m, use = "p")
 ```
 
 In our pilot data set, the pre-post-correlation is around $r=.6$. We will use this value in our simulations.
@@ -91,9 +88,11 @@ Put it all together:
 set.seed(0xBEEF)
 mu <- c(23, 23) # the mean values of both variables
 sigma <- matrix(
-    c(117 , 70, 
-       70, 117), nrow=2, byrow=TRUE)
-df <- rmvnorm(n=10000, mu=mu, sigma=sigma) |> data.frame()
+  c(117, 70, 70, 117),
+  nrow = 2,
+  byrow = TRUE
+)
+df <- rmvnorm(n = 10000, mu = mu, sigma = sigma) |> data.frame()
 names(df) <- c("BDI_pre", "BDI_post0")
 
 # Check: in a large sample the correlation should be close to .6
@@ -108,10 +107,10 @@ We now have the correlated $BDI_{pre}$ and $BDI_{post}$ scores. Finally, we have
 
 ```{r treatment_effect}
 # add treatment predictor variables
-df$treatment <- rep(c(0, 1), times=nrow(df)/2)
-  
+df$treatment <- rep(c(0, 1), times = nrow(df) / 2)
+
 # add the treatment effect to the BDI_post0 variable
-df$BDI_post <- df$BDI_post0 + -6*df$treatment
+df$BDI_post <- df$BDI_post0 + -6 * df$treatment
 ```
 
 We do not need to add an explicit intercept, as this is already encoded in the mean value of the simulated variables.
@@ -125,13 +124,22 @@ df2 <- df[1:400, ]
 df2$id <- 1:nrow(df2)
 df2$BDI_post0 <- NULL
 
-df_long <- pivot_longer(df2, cols=c(BDI_pre, BDI_post), names_to="time")
-df_long$time <- factor(df_long$time, levels=c("BDI_pre", "BDI_post"))
-df_long$treatment <- factor(df_long$treatment, levels=c(0, 1), labels=c("Control", "Treatment"))
+df_long <- pivot_longer(df2, cols = c(BDI_pre, BDI_post), names_to = "time")
+df_long$time <- factor(df_long$time, levels = c("BDI_pre", "BDI_post"))
+df_long$treatment <- factor(
+  df_long$treatment,
+  levels = c(0, 1),
+  labels = c("Control", "Treatment")
+)
 
-ggplot(df_long, aes(x=time, y=value, group=id)) + geom_point() + geom_line() + facet_wrap(~treatment)
+ggplot(df_long, aes(x = time, y = value, group = id)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~treatment)
 
-ggplot(df_long, aes(x=time, y=value, group=time)) + geom_boxplot() + facet_wrap(~treatment)
+ggplot(df_long, aes(x = time, y = value, group = time)) +
+  geom_boxplot() +
+  facet_wrap(~treatment)
 ```
 
 Looks good -- reasonable BDI values, same means in control group, same variance. The treatment effect of -6 is visible.
@@ -143,36 +151,51 @@ Let's put that together in the new `sim` function:
 #| echo: true
 #| results: hide
 
-sim2 <- function(n=100, treatment_effect=-6, pre_post_cor = 0.6, err_var = 117, print=FALSE) {
+sim2 <- function(
+  n = 100,
+  treatment_effect = -6,
+  pre_post_cor = 0.6,
+  err_var = 117,
+  print = FALSE
+) {
   library(Rfast)
-  
+
   # Here we simulate correlated BDI pre and post scores
   mu <- c(23, 23) # the mean values of both variables
   sigma <- matrix(
-    c(err_var, pre_post_cor*sqrt(err_var)*sqrt(err_var), 
-      pre_post_cor*sqrt(err_var)*sqrt(err_var), err_var), 
-    nrow=2, byrow=TRUE)
+    c(
+      err_var,
+      pre_post_cor * sqrt(err_var) * sqrt(err_var),
+      pre_post_cor * sqrt(err_var) * sqrt(err_var),
+      err_var
+    ),
+    nrow = 2,
+    byrow = TRUE
+  )
   df <- rmvnorm(n, mu, sigma) |> data.frame()
   names(df) <- c("BDI_pre", "BDI_post0")
-  
+
   # add treatment predictor variables
-  df$treatment <- c(rep(0, n/2), rep(1, n/2))
-  
+  df$treatment <- c(rep(0, n / 2), rep(1, n / 2))
+
   # center the BDI_pre value for better interpretability
   df$BDI_pre.c <- df$BDI_pre - mean(df$BDI_pre)
-  
+
   # add the treatment effect to the BDI_post0 variable
   # We do not need to add an intercept, as this is already encoded
   # in the mean value of the simulated variables.
-  df$BDI_post <- df$BDI_post0 + df$treatment*treatment_effect
-  
+  df$BDI_post <- df$BDI_post0 + df$treatment * treatment_effect
+
   # fit the model
-  res <- lm(BDI_post ~ BDI_pre.c + treatment, data=df)
+  res <- lm(BDI_post ~ BDI_pre.c + treatment, data = df)
   summary(res)
   p_value <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
-  
-  if (print==TRUE) print(summary(res))
-  else return(p_value) 
+
+  if (print == TRUE) {
+    print(summary(res))
+  } else {
+    return(p_value)
+  }
 }
 ```
 
@@ -182,10 +205,10 @@ Let's test the plausibility of the new `sim2()` function by simulating a very la
 set.seed(0xBEEF)
 
 # without pre_post_cor, the result should be the same
-sim2(n=100000, pre_post_cor=0, print=TRUE)
+sim2(n = 100000, pre_post_cor = 0, print = TRUE)
 
 # with pre_post_cor, the residual error should be reduced
-sim2(n=100000, pre_post_cor=0.6, print=TRUE)
+sim2(n = 100000, pre_post_cor = 0.6, print = TRUE)
 ```
 
 Indeed, with `pre_post_cor = 0` the parameter estimates are identical, and with non-zero pre-post-correlation, the error term gets reduced.
@@ -213,19 +236,22 @@ set.seed(0xBEEF)
 
 # define all predictor and simulation variables.
 iterations <- 2000
-ns <- seq(90, 180, by=10) # ns are already adjusted to cover the relevant range
+ns <- seq(90, 180, by = 10) # ns are already adjusted to cover the relevant range
 
 result <- data.frame()
 
-for (n in ns) {  # loop through elements of the vector "ns"
-  p_values <- replicate(iterations, sim2(n=n, pre_post_cor = 0.6))
-  
-  result <- rbind(result, data.frame(
+for (n in ns) {
+  # loop through elements of the vector "ns"
+  p_values <- replicate(iterations, sim2(n = n, pre_post_cor = 0.6))
+
+  result <- rbind(
+    result,
+    data.frame(
       n = n,
-      power = sum(p_values < .005)/iterations
+      power = sum(p_values < .005) / iterations
     )
   )
-  
+
   # show the result after each run (not shown here in the tutorial)
   print(result)
 }
@@ -273,25 +299,38 @@ In the following plot, the limits of the x-axis are chosen to reflect the possib
 #| code-fold: true
 
 par(mar = c(7, 4, 4, 2) + 0.1)
-plot(NA, xlim=c(-23, 40), ylim=c(0, 63), xlab="", ylab="BDI_post", main="An implausible interaction effect")
-abline(a=23, b=0.6, col="red")
-abline(a=17, b=0.2, col="blue")
-abline(v=26, lty="dotted")
-legend("topleft", legend=c("Control group", "Treatment group"), 
-      col=c("red", "blue"), lty=1, lwd=2, cex=.8)
+plot(
+  NA,
+  xlim = c(-23, 40),
+  ylim = c(0, 63),
+  xlab = "",
+  ylab = "BDI_post",
+  main = "An implausible interaction effect"
+)
+abline(a = 23, b = 0.6, col = "red")
+abline(a = 17, b = 0.2, col = "blue")
+abline(v = 26, lty = "dotted")
+legend(
+  "topleft",
+  legend = c("Control group", "Treatment group"),
+  col = c("red", "blue"),
+  lty = 1,
+  lwd = 2,
+  cex = .8
+)
 
 # secondary axis with non-centered BDI scores
-title(xlab = "BDI_pre.c (upper axis), BDI_pre (lower axis)", line = 2) 
-axis(1, at = seq(-23, 40, by=5), labels=seq(0, 63, by=5), line = 3.5)
+title(xlab = "BDI_pre.c (upper axis), BDI_pre (lower axis)", line = 2)
+axis(1, at = seq(-23, 40, by = 5), labels = seq(0, 63, by = 5), line = 3.5)
 
 # treatment effect at average baseline value
-segments(x0=0, y0=23, x1=0, y1=17, col="darkgreen", lwd=3)
+segments(x0 = 0, y0 = 23, x1 = 0, y1 = 17, col = "darkgreen", lwd = 3)
 
 # treatment effect at smallest possible value (a person with BDI_pre=0)
-segments(x0=-23, y0=9.2, x1=-23, y1=12.4, col="darkgreen", lwd=3)
+segments(x0 = -23, y0 = 9.2, x1 = -23, y1 = 12.4, col = "darkgreen", lwd = 3)
 
 # treatment effect at smallest possible value (a person with BDI_pre=0)
-segments(x0=26, y0=38.6, x1=26, y1=22.2, col="darkgreen", lwd=3)
+segments(x0 = 26, y0 = 38.6, x1 = 26, y1 = 22.2, col = "darkgreen", lwd = 3)
 ```
 
 With that strenth of the interaction effect, the predicted treatment effect of a person with the highest observed $\text{BDI}_{pre}$ score of 49 would be 16.4, nearly three times as large as the treatment effect at average baseline severity (see the long green line in the plot). While this seems quite high, it might still be plausible.
@@ -308,25 +347,38 @@ By setting the interaction effect to -0.2, we achieve a plausible interaction pl
 ```{r interaction_plot2}
 #| code-fold: true
 par(mar = c(7, 4, 4, 2) + 0.1)
-plot(NA, xlim=c(-23, 40), ylim=c(0, 63), xlab="", ylab="BDI_post", main="A plausible interaction effect")
-abline(a=23, b=0.6, col="red")
-abline(a=17, b=0.4, col="blue")
-abline(v=26, lty="dotted")
-legend("topleft", legend=c("Control group", "Treatment group"), 
-      col=c("red", "blue"), lty=1, lwd=2, cex=.8)
+plot(
+  NA,
+  xlim = c(-23, 40),
+  ylim = c(0, 63),
+  xlab = "",
+  ylab = "BDI_post",
+  main = "A plausible interaction effect"
+)
+abline(a = 23, b = 0.6, col = "red")
+abline(a = 17, b = 0.4, col = "blue")
+abline(v = 26, lty = "dotted")
+legend(
+  "topleft",
+  legend = c("Control group", "Treatment group"),
+  col = c("red", "blue"),
+  lty = 1,
+  lwd = 2,
+  cex = .8
+)
 
 # secondary axis with non-centered BDI scores
-title(xlab = "BDI_pre.c (upper axis), BDI_pre (lower axis)", line = 2) 
-axis(1, at = seq(-23, 40, by=5), labels=seq(0, 63, by=5), line = 3.5)
+title(xlab = "BDI_pre.c (upper axis), BDI_pre (lower axis)", line = 2)
+axis(1, at = seq(-23, 40, by = 5), labels = seq(0, 63, by = 5), line = 3.5)
 
 # treatment effect at average baseline value
-segments(x0=0, y0=23, x1=0, y1=17, col="darkgreen", lwd=3)
+segments(x0 = 0, y0 = 23, x1 = 0, y1 = 17, col = "darkgreen", lwd = 3)
 
 # treatment effect at smallest possible value (a person with BDI_pre=0)
-segments(x0=-23, y0=9.2, x1=-23, y1=7.8, col="darkgreen", lwd=3)
+segments(x0 = -23, y0 = 9.2, x1 = -23, y1 = 7.8, col = "darkgreen", lwd = 3)
 
 # treatment effect at smallest possible value (a person with BDI_pre=0)
-segments(x0=26, y0=38.6, x1=26, y1=27.4, col="darkgreen", lwd=3)
+segments(x0 = 26, y0 = 38.6, x1 = 26, y1 = 27.4, col = "darkgreen", lwd = 3)
 ```
 
 Now the treatment makes no difference for persons who are not depressed anyway; and for highly depressed persons the treatment effect is -11.2, roughly double the size of a typical treatment effect.
@@ -355,34 +407,54 @@ Now that we have our desired parameter values, we update our `sim()` function by
 #| results: hide
 
 # CHANGE: Add interaction_effect
-sim3 <- function(n=100, treatment_effect=-6, pre_post_cor = 0.6, 
-                 interaction_effect = -.2, err_var = 117, print=FALSE) {
+sim3 <- function(
+  n = 100,
+  treatment_effect = -6,
+  pre_post_cor = 0.6,
+  interaction_effect = -.2,
+  err_var = 117,
+  print = FALSE
+) {
   library(Rfast)
   mu <- c(23, 23) # the mean values of both variables
   sigma <- matrix(
-    c(err_var, pre_post_cor*sqrt(err_var)*sqrt(err_var), 
-      pre_post_cor*sqrt(err_var)*sqrt(err_var), err_var), 
-    nrow=2, byrow=TRUE)
+    c(
+      err_var,
+      pre_post_cor * sqrt(err_var) * sqrt(err_var),
+      pre_post_cor * sqrt(err_var) * sqrt(err_var),
+      err_var
+    ),
+    nrow = 2,
+    byrow = TRUE
+  )
   df <- rmvnorm(n, mu, sigma) |> data.frame()
   names(df) <- c("BDI_pre", "BDI_post0")
-  
+
   # add treatment predictor variables
-  df$treatment <- c(rep(0, n/2), rep(1, n/2))
-  
+  df$treatment <- c(rep(0, n / 2), rep(1, n / 2))
+
   # center the BDI_pre value for better interpretability
   df$BDI_pre.c <- df$BDI_pre - mean(df$BDI_pre)
-  
+
   # CHANGE: add the treatment main effect and the interaction to the BDI_post variable
-  df$BDI_post <- df$BDI_post0 + treatment_effect*df$treatment + interaction_effect*df$treatment*df$BDI_pre.c
-  
+  df$BDI_post <- df$BDI_post0 +
+    treatment_effect * df$treatment +
+    interaction_effect * df$treatment * df$BDI_pre.c
+
   # CHANGE: Add interaction effect to analysis model
-  res <- lm(BDI_post ~ BDI_pre.c * treatment, data=df)
-  
+  res <- lm(BDI_post ~ BDI_pre.c * treatment, data = df)
+
   # CHANGE: extract both focal p-values
-  p_values <- summary(res)$coefficients[c("treatment", "BDI_pre.c:treatment"), "Pr(>|t|)"]
-  
-  if (print==TRUE) print(summary(res))
-  else return(p_values) 
+  p_values <- summary(res)$coefficients[
+    c("treatment", "BDI_pre.c:treatment"),
+    "Pr(>|t|)"
+  ]
+
+  if (print == TRUE) {
+    print(summary(res))
+  } else {
+    return(p_values)
+  }
 }
 ```
 
@@ -395,24 +467,30 @@ set.seed(0xBEEF)
 
 # define all predictor and simulation variables.
 iterations <- 1000
-ns <- seq(100, 400, by=20)
+ns <- seq(100, 400, by = 20)
 
 result <- data.frame()
 
-for (n in ns) {  # loop through elements of the vector "ns"
-  p_values <- replicate(iterations, sim3(n=n, pre_post_cor = 0.6, interaction_effect = -.2))
-  
+for (n in ns) {
+  # loop through elements of the vector "ns"
+  p_values <- replicate(
+    iterations,
+    sim3(n = n, pre_post_cor = 0.6, interaction_effect = -.2)
+  )
+
   # CHANGE: Analyze both sets of p-values separately
   # The p-values for the main effect are stored in the first row,
   # the p-values for the interaction effect are stored in the 2nd row
-  
-  result <- rbind(result, data.frame(
+
+  result <- rbind(
+    result,
+    data.frame(
       n = n,
-      power_treatment = sum(p_values[1, ] < .005)/iterations,
-      power_interaction = sum(p_values[2, ] < .005)/iterations
+      power_treatment = sum(p_values[1, ] < .005) / iterations,
+      power_interaction = sum(p_values[2, ] < .005) / iterations
     )
   )
-  
+
   # show the result after each run (not shown here in the tutorial)
   print(result)
 }

@@ -1,9 +1,6 @@
 ---
 title: "Ch. 4: Linear Mixed Models / Multilevel models"
 author: "Felix Schönbrodt"
-execute:
-  cache: true
-project-type: website
 ---
 
 *Reading/working time: ~60 min.*
@@ -13,14 +10,14 @@ project-type: website
 # Preparation: Install and load all necessary packages
 # install.packages(c("lme4", "lmerTest", "ggplot2", "tidyr", "Rfast", "future.apply"))
 
-library(lme4)          # for estimating LMMs
-library(lmerTest)      # to get p-values for lme4
-library(ggplot2)       # for plotting
-library(tidyr)         # for reshaping data from wide to long
-library(Rfast)         # fast creation of correlated variables
-library(future.apply)  # for parallel processing
+library(lme4) # for estimating LMMs
+library(lmerTest) # to get p-values for lme4
+library(ggplot2) # for plotting
+library(tidyr) # for reshaping data from wide to long
+library(Rfast) # fast creation of correlated variables
+library(future.apply) # for parallel processing
 
-# plan() initializes parallel processing, 
+# plan() initializes parallel processing,
 # for faster code execution
 # By default, it uses all available cores
 plan(multisession)
@@ -39,7 +36,12 @@ For that, we first have to transform the pilot data set into the long format:
 data("BtheB", package = "HSAUR")
 BtheB$person_id <- 1:nrow(BtheB)
 
-BtheB_long <- pivot_longer(BtheB, cols=matches("^bdi\\.\\d"), values_to = "BDI", names_to = "variable")
+BtheB_long <- pivot_longer(
+  BtheB,
+  cols = matches("^bdi\\.\\d"),
+  values_to = "BDI",
+  names_to = "variable"
+)
 BtheB_long$time <- substr(BtheB_long$variable, 5, 5) |> as.integer()
 ```
 
@@ -47,7 +49,12 @@ Here we plot the trajectory of the first 20 participants. As you can see, there 
 
 ```{r}
 #| warning: false
-ggplot(BtheB_long[BtheB_long$person_id <=20, ], aes(x=time, y=BDI, group=person_id)) + geom_point() + geom_line() +
+ggplot(
+  BtheB_long[BtheB_long$person_id <= 20, ],
+  aes(x = time, y = BDI, group = person_id)
+) +
+  geom_point() +
+  geom_line() +
   facet_wrap(~person_id)
 ```
 
@@ -83,7 +90,7 @@ First, let's run the analysis model in the pilot data. To make the intercept mor
 ```{r}
 BtheB_long$time.c <- BtheB_long$time - 2
 
-l0 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=BtheB_long)
+l0 <- lmer(BDI ~ 1 + time.c + (1 | person_id), data = BtheB_long)
 summary(l0)
 
 # Compute ICC
@@ -120,8 +127,8 @@ We closely simulate the situation of the pilot data: All participants are treate
 # between-person random intercept variance: var(u_0j) = tau_00
 tau_00 <- 100
 
-gamma_00 <- 17    # the grand (fixed) intercept
-gamma_10 <- -0.7  # the fixed slope for time
+gamma_00 <- 17 # the grand (fixed) intercept
+gamma_10 <- -0.7 # the fixed slope for time
 residual_var <- 25
 
 n_persons <- 100
@@ -129,24 +136,27 @@ n_persons <- 100
 # Create an L2 (person-level) data set; each row is one person
 df_L2 <- data.frame(
   person_id = 1:n_persons,
-  u_0j = rnorm(n_persons, mean=0, sd=sqrt(tau_00))
+  u_0j = rnorm(n_persons, mean = 0, sd = sqrt(tau_00))
 )
 
 # Create an L1 (measurement-point-level) data set; each row is one measurement
 df_L1 <- data.frame(
-  person_id = rep(1:n_persons, each=4),  # create 4 rows for each person (as we have 4 measurements)  
-  time.c = rep(c(0, 2, 4, 6), times=n_persons)  
+  person_id = rep(1:n_persons, each = 4), # create 4 rows for each person (as we have 4 measurements)
+  time.c = rep(c(0, 2, 4, 6), times = n_persons)
 )
 
-# combine to a long format data set  
-df_long <- merge(df_L1, df_L2, by="person_id")
-  
+# combine to a long format data set
+df_long <- merge(df_L1, df_L2, by = "person_id")
+
 # compute the DV by writing down the combined equation
 df_long <- within(df_long, {
-  BDI = gamma_00 + gamma_10*time.c + u_0j + rnorm(n_persons*4, mean=0, sd=sqrt(residual_var))
+  BDI <- gamma_00 +
+    gamma_10 * time.c +
+    u_0j +
+    rnorm(n_persons * 4, mean = 0, sd = sqrt(residual_var))
 })
 
-l1 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=df_long)
+l1 <- lmer(BDI ~ 1 + time.c + (1 | person_id), data = df_long)
 summary(l1)
 ```
 
@@ -156,55 +166,72 @@ Now we put this data generating script into a function and run our power analysi
 #| results: hide
 
 # Note: This code could be more optimized for speed, but this way is easier to understand
-sim4 <- function(n_persons = 100, tau_00 = 100, gamma_00 = 17, gamma_10 = -0.7, 
-                 residual_var = 25, print=FALSE) {
-
+sim4 <- function(
+  n_persons = 100,
+  tau_00 = 100,
+  gamma_00 = 17,
+  gamma_10 = -0.7,
+  residual_var = 25,
+  print = FALSE
+) {
   df_L2 <- data.frame(
     person_id = 1:n_persons,
-    u_0j = rnorm(n_persons, mean=0, sd=sqrt(tau_00))
+    u_0j = rnorm(n_persons, mean = 0, sd = sqrt(tau_00))
   )
-  
+
   df_L1 <- data.frame(
-    person_id = rep(1:n_persons, each=4),  # create 4 rows for each person (as we have 4 measurements)
-    time.c = rep(c(0, 2, 4, 6), times=n_persons)  
+    person_id = rep(1:n_persons, each = 4), # create 4 rows for each person (as we have 4 measurements)
+    time.c = rep(c(0, 2, 4, 6), times = n_persons)
   )
-  
-  # combine to a long format data set  
-  df_long <- merge(df_L1, df_L2, by="person_id")
-  
-  # simulate response variable, based on combined equation  
+
+  # combine to a long format data set
+  df_long <- merge(df_L1, df_L2, by = "person_id")
+
+  # simulate response variable, based on combined equation
   df_long <- within(df_long, {
-    BDI = gamma_00 + gamma_10*time.c + u_0j + rnorm(n_persons*4, mean=0, sd=sqrt(residual_var))
+    BDI <- gamma_00 +
+      gamma_10 * time.c +
+      u_0j +
+      rnorm(n_persons * 4, mean = 0, sd = sqrt(residual_var))
   })
-  
+
   # compute p-values
   # these options might speed up code execution a little bit:
   # , control=lmerControl(optimizer="bobyqa", calc.derivs = FALSE)
-  l1 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=df_long)
-  
-  if (print==TRUE) print(summary(l1))
-  else return(summary(l1)$coefficients[, "Pr(>|t|)"])
+  l1 <- lmer(BDI ~ 1 + time.c + (1 | person_id), data = df_long)
+
+  if (print == TRUE) {
+    print(summary(l1))
+  } else {
+    return(summary(l1)$coefficients[, "Pr(>|t|)"])
+  }
 }
 
 
 set.seed(0xBEEF)
 iterations <- 1000
-ns <- seq(30, 50, by=5)
+ns <- seq(30, 50, by = 5)
 
 result <- data.frame()
 
 for (n_persons in ns) {
   system.time({
-    p_values <- future_replicate(iterations, sim4(n_persons=n_persons), future.seed = TRUE)
+    p_values <- future_replicate(
+      iterations,
+      sim4(n_persons = n_persons),
+      future.seed = TRUE
+    )
   })
-  
-  result <- rbind(result, data.frame(
+
+  result <- rbind(
+    result,
+    data.frame(
       n = n_persons,
-      power_intercept = sum(p_values[1, ] < .005)/iterations,
-      power_time.c    = sum(p_values[2, ] < .005)/iterations
+      power_intercept = sum(p_values[1, ] < .005) / iterations,
+      power_time.c = sum(p_values[2, ] < .005) / iterations
     )
   )
-  
+
   # show the result after each run (not shown here in the tutorial)
   print(result)
 }
@@ -303,77 +330,103 @@ Looks good!
 #| output: false
 #| error: false
 
-sim5 <- function(n_persons = 100, tau_00 = 100, tau_11 = 0.0225, tau_01 = 0, 
-                 gamma_00 = 23, gamma_01 = -6, gamma_10 = 0, gamma_11 = -0.7, 
-                 residual_var = 25, print=FALSE) {
-
+sim5 <- function(
+  n_persons = 100,
+  tau_00 = 100,
+  tau_11 = 0.0225,
+  tau_01 = 0,
+  gamma_00 = 23,
+  gamma_01 = -6,
+  gamma_10 = 0,
+  gamma_11 = -0.7,
+  residual_var = 25,
+  print = FALSE
+) {
   # create (correlated) random effect structure
-  mu <- c(0 ,0)
+  mu <- c(0, 0)
   sigma <- matrix(
-    c(tau_00, tau_01, 
-      tau_01, tau_11), nrow=2, byrow=TRUE)
-  RE <- rmvnorm(n=n_persons, mu=mu, sigma=sigma) |> data.frame()
+    c(tau_00, tau_01, tau_01, tau_11),
+    nrow = 2,
+    byrow = TRUE
+  )
+  RE <- rmvnorm(n = n_persons, mu = mu, sigma = sigma) |> data.frame()
   names(RE) <- c("u_0j", "u_1j")
-  
+
   df_L1 <- data.frame(
     person_id = 1:n_persons,
     u_0j = RE$u_0j,
     u_1j = RE$u_1j,
-    treatment = rep(c(0, 1), times=n_persons/2)
+    treatment = rep(c(0, 1), times = n_persons / 2)
   )
-  
+
   df_L2 <- data.frame(
-    person_id = rep(1:n_persons, each=4),  # create 4 rows for each person (as we have 4 measurements)
-    time.c = rep(c(0, 2, 4, 6), times=n_persons)  
+    person_id = rep(1:n_persons, each = 4), # create 4 rows for each person (as we have 4 measurements)
+    time.c = rep(c(0, 2, 4, 6), times = n_persons)
   )
-  
-  # combine to a long format data set  
-  df_long <- merge(df_L1, df_L2, by="person_id")
-  
-  # simulate response variable, based on combined equation  
+
+  # combine to a long format data set
+  df_long <- merge(df_L1, df_L2, by = "person_id")
+
+  # simulate response variable, based on combined equation
   df_long <- within(df_long, {
-      BDI = gamma_00 + # intercept
-      gamma_10*time.c + gamma_01*treatment + gamma_11*time.c*treatment +  # fixed terms
-      u_0j + u_1j*time.c + rnorm(n_persons*4, mean=0, sd=sqrt(residual_var))  # random terms
+    BDI <- gamma_00 + # intercept
+      gamma_10 * time.c +
+      gamma_01 * treatment +
+      gamma_11 * time.c * treatment + # fixed terms
+      u_0j +
+      u_1j * time.c +
+      rnorm(n_persons * 4, mean = 0, sd = sqrt(residual_var)) # random terms
   })
-  
+
   # for debugging: plot some simulated participants
   #ggplot(df_long[df_long$person_id <=20, ], aes(x=time.c, y=BDI, color=factor(treatment), group=person_id)) +
   # geom_point() + geom_line() + facet_wrap(~person_id)
-  
+
   # ggplot(df_long, aes(x=time.c, y=BDI, color=factor(treatment))) +
   # stat_summary(fun.data=mean_cl_normal, geom = "pointrange")
-  
+
   # compute p-values
   # these options might speed up code execution a little bit:
   # , control=lmerControl(optimizer="bobyqa", calc.derivs = FALSE)
-  l1 <- lmer(BDI ~ 1 + time.c*treatment + (1 + time.c|person_id), data=df_long)
-  
-  if (print==TRUE) print(summary(l1))
-  else return(summary(l1)$coefficients[, "Pr(>|t|)"])
+  l1 <- lmer(
+    BDI ~ 1 + time.c * treatment + (1 + time.c | person_id),
+    data = df_long
+  )
+
+  if (print == TRUE) {
+    print(summary(l1))
+  } else {
+    return(summary(l1)$coefficients[, "Pr(>|t|)"])
+  }
 }
 
 
 set.seed(0xBEEF)
 iterations <- 1000
-ns <- seq(60, 200, by=10) # must be dividable by 2
+ns <- seq(60, 200, by = 10) # must be dividable by 2
 
 result <- data.frame()
 
 for (n_persons in ns) {
   system.time({
-    p_values <- future_replicate(iterations, sim5(n_persons=n_persons), future.seed = TRUE)
+    p_values <- future_replicate(
+      iterations,
+      sim5(n_persons = n_persons),
+      future.seed = TRUE
+    )
   })
-  
-  result <- rbind(result, data.frame(
+
+  result <- rbind(
+    result,
+    data.frame(
       n = n_persons,
-      power_intercept = sum(p_values[1, ] < .005)/iterations,
-      power_time.c    = sum(p_values[2, ] < .005)/iterations,
-      power_treatment = sum(p_values[3, ] < .005)/iterations,
-      power_IA        = sum(p_values[4, ] < .005)/iterations
+      power_intercept = sum(p_values[1, ] < .005) / iterations,
+      power_time.c = sum(p_values[2, ] < .005) / iterations,
+      power_treatment = sum(p_values[3, ] < .005) / iterations,
+      power_IA = sum(p_values[4, ] < .005) / iterations
     )
   )
-  
+
   # show the result after each run (not shown here in the tutorial)
   print(result)
 }
@@ -409,23 +462,26 @@ The `faux` package offers an elegant interface to [simulate multilevel data](htt
 # devtools::install_github("debruine/faux")
 library(faux)
 
-sim_faux <- function(n_persons=100, print=FALSE) {
-  df <- add_random(person_id = n_persons)  %>%
-    add_within("person_id", time.c = 0:3) %>% 
-    add_between("person_id", group = c("treatment", "control")) %>% 
+sim_faux <- function(n_persons = 100, print = FALSE) {
+  df <- add_random(person_id = n_persons) %>%
+    add_within("person_id", time.c = 0:3) %>%
+    add_between("person_id", group = c("treatment", "control")) %>%
     add_recode("group", "condition", control = 0, treatment = 1) %>%
-    add_ranef("person_id", u0j = sqrt(100)) %>% 
+    add_ranef("person_id", u0j = sqrt(100)) %>%
     add_ranef(sigma = sqrt(25))
-  
-  df$time.c <- as.integer(as.character(df$time.c))*2
-  
+
+  df$time.c <- as.integer(as.character(df$time.c)) * 2
+
   # compute DV
-  df$BDI = 17 - 0.7*df$time.c + df$u0j + df$sigma
-  
-  l1 <- lmer(BDI ~ 1 + time.c + (1|person_id), data=df)
-  
-  if (print==TRUE) print(summary(l1))
-  else return(summary(l1)$coefficients[, "Pr(>|t|)"])
+  df$BDI <- 17 - 0.7 * df$time.c + df$u0j + df$sigma
+
+  l1 <- lmer(BDI ~ 1 + time.c + (1 | person_id), data = df)
+
+  if (print == TRUE) {
+    print(summary(l1))
+  } else {
+    return(summary(l1)$coefficients[, "Pr(>|t|)"])
+  }
 }
 ```
 
