@@ -16,6 +16,14 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Cache Quarto freeze folder
+        uses: actions/cache@v4
+        with:
+          path: _freeze
+          key: quarto-freeze-${{ runner.os }}-${{ hashFiles('**/*.qmd', '**/*.Rmd', '**/*.R', '_quarto.yml') }}
+          restore-keys: |
+            quarto-freeze-${{ runner.os }}-
+
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
