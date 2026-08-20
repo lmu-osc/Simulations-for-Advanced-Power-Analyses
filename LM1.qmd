@@ -16,6 +16,8 @@ library(ggdist)
 # library(gghalves)
 library(pwr)
 library(MBESS)
+
+1 + 1
 ```
 
 We start with the simplest possible linear model: (a) a continuous outcome variable is predicted by a single dichotomous predictor. This model actually [rephrases a t-test as a linear model](https://lindeloev.github.io/tests-as-linear/)! Then we build up increasingly complex models: (b) a single continuous predictor and (c) multiple continuous predictors (i.e., multiple regression).
