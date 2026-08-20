@@ -385,18 +385,18 @@ Rfast: 2.1.5.2</code></pre>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(pre, post)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9678443</code></pre>
+<pre><code>[1] 0.9665039</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(BDI)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      X1       X2 
-22.91814 22.93214 </code></pre>
+22.93326 22.96507 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(BDI)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         X1       X2
-X1 113.6567 101.9008
-X2 101.9008 113.6627</code></pre>
+X1 116.7582 104.9713
+X2 104.9713 117.0528</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(BDI) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"pre"</span>, <span class="st">"post"</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>BDI<span class="sc">$</span>id <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(BDI)</span>
@@ -408,18 +408,18 @@ lm(formula = post ~ pre, data = BDI)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--15.9470  -3.2042  -0.0158   3.1743  18.0208 
+-19.7455  -3.1793  -0.0622   3.1564  17.7866 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  2.38449    0.11198    21.3   &lt;2e-16 ***
-pre          0.89657    0.00443   202.4   &lt;2e-16 ***
+(Intercept) 2.346946   0.111739      21   &lt;2e-16 ***
+pre         0.899049   0.004408     204   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 4.723 on 9998 degrees of freedom
-Multiple R-squared:  0.8038,    Adjusted R-squared:  0.8038 
-F-statistic: 4.096e+04 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 4.762 on 9998 degrees of freedom
+Multiple R-squared:  0.8063,    Adjusted R-squared:  0.8062 
+F-statistic: 4.161e+04 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -445,7 +445,7 @@ F-statistic: 4.096e+04 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(BDI<span class="sc">$</span>diff)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.01399845</code></pre>
+<pre><code>[1] 0.0318108</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(diff <span class="sc">~</span> pre, BDI))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -455,18 +455,18 @@ lm(formula = diff ~ pre, data = BDI)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--15.9470  -3.2042  -0.0158   3.1743  18.0208 
+-19.7455  -3.1793  -0.0622   3.1564  17.7866 
 
 Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  2.38449    0.11198   21.30   &lt;2e-16 ***
-pre         -0.10343    0.00443  -23.35   &lt;2e-16 ***
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  2.346946   0.111739    21.0   &lt;2e-16 ***
+pre         -0.100951   0.004408   -22.9   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 4.723 on 9998 degrees of freedom
-Multiple R-squared:  0.0517,    Adjusted R-squared:  0.05161 
-F-statistic: 545.1 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 4.762 on 9998 degrees of freedom
+Multiple R-squared:  0.04985,   Adjusted R-squared:  0.04976 
+F-statistic: 524.6 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(BDI, <span class="fu">aes</span>(<span class="at">x =</span> pre, <span class="at">y =</span> absdiff)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
@@ -493,11 +493,11 @@ F-statistic: 545.1 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>BDI<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="fu">lm</span>(post <span class="sc">~</span> pre, BDI))</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(BDI<span class="sc">$</span>predicted)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 22.93214</code></pre>
+<pre><code>[1] 22.96507</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(BDI<span class="sc">$</span>predicted)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 91.36092</code></pre>
+<pre><code>[1] 94.37439</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The predicted values have the same mean (so no systematic treatment effect, as expected)</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># but much smaller variance:</span></span>

@@ -535,28 +535,28 @@ lmerModLmerTest]
 Formula: BDI ~ 1 + time.c + (1 | person_id)
    Data: df_long
 
-REML criterion at convergence: 2701.5
+REML criterion at convergence: 2705.8
 
 Scaled residuals: 
      Min       1Q   Median       3Q      Max 
--2.59661 -0.60428  0.04028  0.59856  2.88094 
+-2.32340 -0.59468  0.04312  0.61133  2.65739 
 
 Random effects:
  Groups    Name        Variance Std.Dev.
- person_id (Intercept) 98.73    9.936   
- Residual              24.84    4.984   
+ person_id (Intercept) 107.23   10.355  
+ Residual               24.56    4.956  
 Number of obs: 400, groups:  person_id, 100
 
 Fixed effects:
             Estimate Std. Error       df t value Pr(&gt;|t|)    
-(Intercept)  16.2268     1.0776 120.7625   15.06  &lt; 2e-16 ***
-time.c       -0.7791     0.1115 299.0000   -6.99 1.79e-11 ***
+(Intercept)  17.6622     1.1154 118.8699  15.834  &lt; 2e-16 ***
+time.c       -0.7360     0.1108 299.0000  -6.642 1.46e-10 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Correlation of Fixed Effects:
        (Intr)
-time.c -0.310</code></pre>
+time.c -0.298</code></pre>
 </div>
 </div>
 <p>Now we put this data generating script into a function and run our power analysis:</p>
@@ -826,21 +826,21 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n power_intercept power_time.c power_treatment power_IA
-1   60               1        0.004           0.241    0.303
-2   70               1        0.005           0.280    0.407
-3   80               1        0.003           0.319    0.453
-4   90               1        0.003           0.398    0.505
-5  100               1        0.001           0.470    0.560
-6  110               1        0.005           0.524    0.614
-7  120               1        0.006           0.557    0.699
-8  130               1        0.003           0.627    0.763
-9  140               1        0.003           0.689    0.789
-10 150               1        0.004           0.681    0.844
-11 160               1        0.006           0.743    0.843
-12 170               1        0.003           0.787    0.861
-13 180               1        0.003           0.801    0.897
-14 190               1        0.003           0.840    0.921
-15 200               1        0.007           0.855    0.935</code></pre>
+1   60               1        0.002           0.225    0.313
+2   70               1        0.009           0.281    0.411
+3   80               1        0.002           0.328    0.447
+4   90               1        0.003           0.399    0.511
+5  100               1        0.001           0.462    0.563
+6  110               1        0.004           0.534    0.611
+7  120               1        0.007           0.580    0.698
+8  130               1        0.002           0.622    0.766
+9  140               1        0.004           0.674    0.797
+10 150               1        0.004           0.724    0.842
+11 160               1        0.006           0.725    0.842
+12 170               1        0.003           0.763    0.861
+13 180               1        0.005           0.815    0.889
+14 190               1        0.003           0.854    0.912
+15 200               1        0.006           0.844    0.933</code></pre>
 </div>
 </div>
 <p>You will see a lot of warnings about <code>boundary (singular) fit</code> – you can generally ignore these; they typically occur when one of the random variances is exactly zero; but the fixed effect estimates (which are our focus here) are still valid. You will also see some rare warnings about <code>Model failed to converge with max|grad|</code>. In this case, the optimizer did not converge with the required precision, but typically still is very close. Finally, there are some warnings <code>Model failed to converge with 1 negative eigenvalue</code>. These instances give wrong results. However, if in our thousands of simulations some very few models did not converge, this makes no noticeable difference. If, however, the majority of your models does not converge this is a hint that your simulation has some errors.</p>

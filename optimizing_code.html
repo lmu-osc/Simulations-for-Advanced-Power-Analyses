@@ -349,19 +349,19 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>t0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
- 14.801   0.013  14.819 </code></pre>
+ 19.828   0.022  19.859 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    n  power
-1 300 0.3320
-2 350 0.4048
-3 400 0.4776
-4 450 0.5490
-5 500 0.6170</code></pre>
+1 300 0.3354
+2 350 0.4042
+3 400 0.4748
+4 450 0.5600
+5 500 0.6092</code></pre>
 </div>
 </div>
-<p>This first version takes 14.819 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
+<p>This first version takes 19.859 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
 </section>
 <section id="rule-1-no-growing-vectorsdata-frames" class="level1">
 <h1>Rule 1: No growing vectors/data frames</h1>
@@ -414,8 +414,8 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>timings</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  elapsed   diff rel_diff
-1  14.819     NA       NA
-2  14.302 -0.517   -0.035</code></pre>
+1  19.859     NA       NA
+2  19.455 -0.404    -0.02</code></pre>
 </div>
 </div>
 <p>OK, this didn’t really change anything here. But in general (in particular with data frames) this is worth looking at.</p>
@@ -465,12 +465,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>timings</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  elapsed   diff rel_diff
-1  14.819     NA       NA
-2  14.302 -0.517   -0.035
-3   9.617 -4.685   -0.328</code></pre>
+1  19.859     NA       NA
+2  19.455 -0.404   -0.020
+3  14.299 -5.156   -0.265</code></pre>
 </div>
 </div>
-<p>This showed a substantial improvement of around -4.7 seconds; a relative gain of -32.8%.</p>
+<p>This showed a substantial improvement of around -5.2 seconds; a relative gain of -26.5%.</p>
 </section>
 <section id="rule-3-avoid-unnecessary-computations" class="level1">
 <h1>Rule 3: Avoid unnecessary computations</h1>
@@ -531,14 +531,14 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>)</span>
 <span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>timings</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed   diff rel_diff
-1  14.819     NA       NA
-2  14.302 -0.517   -0.035
-3   9.617 -4.685   -0.328
-4   0.804 -8.813   -0.916</code></pre>
+<pre><code>  elapsed    diff rel_diff
+1  19.859      NA       NA
+2  19.455  -0.404   -0.020
+3  14.299  -5.156   -0.265
+4   1.082 -13.217   -0.924</code></pre>
 </div>
 </div>
-<p>This step led to a massive improvement of around -8.8 seconds; a relative gain of -91.6%.</p>
+<p>This step led to a massive improvement of around -13.2 seconds; a relative gain of -92.4%.</p>
 </section>
 <section id="rule-4-use-optimized-packages" class="level1">
 <h1>Rule 4: Use optimized packages</h1>
@@ -595,15 +595,15 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>)</span>
 <span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>timings</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed   diff rel_diff
-1  14.819     NA       NA
-2  14.302 -0.517   -0.035
-3   9.617 -4.685   -0.328
-4   0.804 -8.813   -0.916
-5   0.756 -0.048   -0.060</code></pre>
+<pre><code>  elapsed    diff rel_diff
+1  19.859      NA       NA
+2  19.455  -0.404   -0.020
+3  14.299  -5.156   -0.265
+4   1.082 -13.217   -0.924
+5   1.095   0.013    0.012</code></pre>
 </div>
 </div>
-<p>This step only gave a minor -6% relative increase in speed – but as a bonus, it made our code much easier to read and shorter.</p>
+<p>This step only gave a minor 1% relative increase in speed – but as a bonus, it made our code much easier to read and shorter.</p>
 </section>
 <section id="rule-5-go-parallel" class="level1">
 <h1>Rule 5: Go parallel</h1>
@@ -660,13 +660,13 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>)</span>
 <span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>timings</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed   diff rel_diff
-1  14.819     NA       NA
-2  14.302 -0.517   -0.035
-3   9.617 -4.685   -0.328
-4   0.804 -8.813   -0.916
-5   0.756 -0.048   -0.060
-6   0.913  0.157    0.208</code></pre>
+<pre><code>  elapsed    diff rel_diff
+1  19.859      NA       NA
+2  19.455  -0.404   -0.020
+3  14.299  -5.156   -0.265
+4   1.082 -13.217   -0.924
+5   1.095   0.013    0.012
+6   1.355   0.260    0.237</code></pre>
 </div>
 </div>
 <p>While this refactoring actually slightly increased computation time, we need this for the last, final optimization where we reap the benefits.</p>
@@ -713,14 +713,14 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed   diff rel_diff
-1  14.819     NA       NA
-2  14.302 -0.517    -0.04
-3   9.617 -4.685    -0.33
-4   0.804 -8.813    -0.92
-5   0.756 -0.048    -0.06
-6   0.913  0.157     0.21
-7   1.117  0.204     0.22</code></pre>
+<pre><code>  elapsed    diff rel_diff
+1  19.859      NA       NA
+2  19.455  -0.404    -0.02
+3  14.299  -5.156    -0.26
+4   1.082 -13.217    -0.92
+5   1.095   0.013     0.01
+6   1.355   0.260     0.24
+7   1.575   0.220     0.16</code></pre>
 </div>
 </div>
 <p>The speed improvement seems only small – with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take <em>longer</em>.</p>
@@ -762,35 +762,35 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(result_single, <span class="at">power.parallel =</span> result_parallel[, <span class="dv">2</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      n   power power.parallel
-1   100 0.07170        0.07430
-2   150 0.12700        0.12780
-3   200 0.19235        0.20020
-4   250 0.26210        0.26410
-5   300 0.33555        0.34090
-6   350 0.41180        0.40670
-7   400 0.47950        0.48465
-8   450 0.54920        0.54970
-9   500 0.61230        0.60915
-10  550 0.66470        0.67085
-11  600 0.72145        0.71940
-12  650 0.75755        0.76975
-13  700 0.80655        0.80825
-14  750 0.83590        0.83970
-15  800 0.86505        0.86740
-16  850 0.88735        0.89055
-17  900 0.91305        0.90990
-18  950 0.93170        0.93015
-19 1000 0.94220        0.94135</code></pre>
+1   100 0.07410        0.07360
+2   150 0.12705        0.12755
+3   200 0.19105        0.19550
+4   250 0.26510        0.26180
+5   300 0.34000        0.33790
+6   350 0.41420        0.40820
+7   400 0.47865        0.48415
+8   450 0.55205        0.54360
+9   500 0.60515        0.60920
+10  550 0.67340        0.66685
+11  600 0.72615        0.71985
+12  650 0.76435        0.76370
+13  700 0.80015        0.80310
+14  750 0.83595        0.83235
+15  800 0.86805        0.86700
+16  850 0.89010        0.88815
+17  900 0.91095        0.90665
+18  950 0.92825        0.92710
+19 1000 0.93915        0.94285</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(t_single, t_parallel) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           user.self sys.self elapsed user.child sys.child
-t_single      16.362    0.000  16.367          0         0
-t_parallel     2.405    0.024  10.929          0         0</code></pre>
+t_single      24.507    0.002  24.515          0         0
+t_parallel     3.618    0.072  16.204          0         0</code></pre>
 </div>
 </div>
-<p>With this optimized setup, we are running 380000 simulations in just 10.929 seconds. If you try this with the first code version, it takes 230.109 seconds.</p>
-<p><strong>With the final, parallelized version we have a 21.1x speed gain relative to the first version!</strong></p>
+<p>With this optimized setup, we are running 380000 simulations in just 16.204 seconds. If you try this with the first code version, it takes 317.63 seconds.</p>
+<p><strong>With the final, parallelized version we have a 19.6x speed gain relative to the first version!</strong></p>
 </section>
 <section id="recap" class="level1">
 <h1>Recap</h1>
