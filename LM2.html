@@ -440,8 +440,8 @@ cov_{xy} &amp; var_y
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            BDI_pre BDI_post0
-BDI_pre   1.0000000 0.5959117
-BDI_post0 0.5959117 1.0000000</code></pre>
+BDI_pre   1.0000000 0.5961611
+BDI_post0 0.5961611 1.0000000</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -566,19 +566,19 @@ lm(formula = BDI_post ~ BDI_pre.c + treatment, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--52.358  -7.313   0.010   7.290  48.833 
+-50.671  -7.320  -0.012   7.322  44.333 
 
 Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 23.061739   0.048329 477.187   &lt;2e-16 ***
-BDI_pre.c    0.005528   0.003168   1.745    0.081 .  
-treatment   -6.066640   0.068347 -88.762   &lt;2e-16 ***
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 23.0134457  0.0483584 475.894   &lt;2e-16 ***
+BDI_pre.c    0.0006188  0.0031599   0.196    0.845    
+treatment   -6.0426745  0.0683891 -88.357   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Residual standard error: 10.81 on 99997 degrees of freedom
-Multiple R-squared:  0.07306,   Adjusted R-squared:  0.07305 
-F-statistic:  3941 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+Multiple R-squared:  0.07242,   Adjusted R-squared:  0.0724 
+F-statistic:  3904 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># with pre_post_cor, the residual error should be reduced</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sim2</span>(<span class="at">n =</span> <span class="dv">100000</span>, <span class="at">pre_post_cor =</span> <span class="fl">0.6</span>, <span class="at">print =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -589,19 +589,19 @@ lm(formula = BDI_post ~ BDI_pre.c + treatment, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--37.948  -5.847   0.023   5.830  39.765 
+-37.412  -5.801   0.011   5.806  40.334 
 
 Coefficients:
              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 23.028242   0.038607   596.5   &lt;2e-16 ***
-BDI_pre.c    0.600332   0.002512   239.0   &lt;2e-16 ***
-treatment   -6.048263   0.054599  -110.8   &lt;2e-16 ***
+(Intercept) 22.994235   0.038644   595.0   &lt;2e-16 ***
+BDI_pre.c    0.601677   0.002522   238.5   &lt;2e-16 ***
+treatment   -6.076300   0.054651  -111.2   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 8.633 on 99997 degrees of freedom
-Multiple R-squared:  0.4098,    Adjusted R-squared:  0.4097 
-F-statistic: 3.471e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 8.641 on 99997 degrees of freedom
+Multiple R-squared:  0.4087,    Adjusted R-squared:  0.4087 
+F-statistic: 3.456e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>Indeed, with <code>pre_post_cor = 0</code> the parameter estimates are identical, and with non-zero pre-post-correlation, the error term gets reduced.</p>
@@ -658,16 +658,16 @@ F-statistic: 3.471e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n  power
-1   90 0.6455
-2  100 0.7325
-3  110 0.7720
-4  120 0.8200
-5  130 0.8550
-6  140 0.9010
-7  150 0.9065
-8  160 0.9270
-9  170 0.9455
-10 180 0.9645</code></pre>
+1   90 0.6485
+2  100 0.7100
+3  110 0.7750
+4  120 0.8265
+5  130 0.8520
+6  140 0.8815
+7  150 0.9175
+8  160 0.9235
+9  170 0.9440
+10 180 0.9670</code></pre>
 </div>
 </div>
 <p>In the original analysis, we needed <span class="math inline">n=180</span> (90 in each group) for 80% power. Including the baseline covariate (which explains <span class="math inline">r^2 = .6^2 = 36\%</span> of the variance in post scores) reduces that number to around <span class="math inline">n=115</span>.</p>
@@ -888,22 +888,22 @@ F-statistic: 3.471e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n power_treatment power_interaction
-1  100           0.705             0.056
-2  120           0.798             0.077
-3  140           0.867             0.087
-4  160           0.927             0.097
-5  180           0.973             0.098
-6  200           0.975             0.134
-7  220           0.986             0.174
-8  240           0.994             0.185
-9  260           0.997             0.213
-10 280           0.997             0.248
-11 300           0.999             0.267
-12 320           1.000             0.270
-13 340           1.000             0.300
-14 360           1.000             0.304
-15 380           1.000             0.338
-16 400           1.000             0.365</code></pre>
+1  100           0.758             0.054
+2  120           0.823             0.067
+3  140           0.888             0.091
+4  160           0.935             0.114
+5  180           0.960             0.134
+6  200           0.974             0.130
+7  220           0.983             0.150
+8  240           0.995             0.188
+9  260           0.999             0.213
+10 280           1.000             0.241
+11 300           0.998             0.276
+12 320           0.999             0.267
+13 340           1.000             0.293
+14 360           1.000             0.303
+15 380           1.000             0.347
+16 400           1.000             0.342</code></pre>
 </div>
 </div>
 <p>While the power for detecting the main effect quickly approaches 100%, even 400 participants are by far not enough to detect the interaction effect reliably. (In particular when you recall that we set the assumed interaction effect to the largest plausible value).</p>

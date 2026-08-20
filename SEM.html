@@ -547,13 +547,13 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Let's take a look</span></span>
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_first_simulated_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>         EP       SP       HP       DP       O1       O2       O3
-1 0.3404936 2.221093 3.210607 2.034774 2.993606 2.904989 2.767915
-2 1.5808242 2.009705 1.082044 1.180558 4.056375 4.303994 4.065733
-3 2.1692800 2.258266 2.426137 1.910141 3.579559 3.511463 3.466698
-4 0.9683290 1.927634 1.174194 1.521978 3.674361 3.960535 4.601696
-5 1.9619031 1.355844 2.674679 1.087948 3.353504 3.253192 3.157147
-6 1.5888666 2.645888 2.454750 2.877362 3.436980 3.194416 3.496351</code></pre>
+<pre><code>        EP        SP        HP       DP       O1       O2       O3
+1 2.027417 2.9195158 0.6903631 2.134630 3.097167 3.467063 3.329450
+2 1.813928 0.9832062 2.4378848 1.619303 4.254615 3.646514 3.839907
+3 1.692898 2.0095636 0.7573712 1.940452 3.888296 3.799787 3.646367
+4 2.039764 2.1751601 2.2724863 2.230945 3.669337 4.099925 3.338099
+5 2.081396 2.5499372 2.8172734 2.967498 3.010277 3.165985 2.907255
+6 3.060642 2.7913662 2.3533392 2.129213 3.265796 3.541427 3.270685</code></pre>
 </div>
 </div>
 <p>We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an <span class="math inline">\alpha</span>-level of .005. We will work with the <code>lavaan</code> package to fit SEMs.</p>
@@ -569,7 +569,7 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#display the results</span></span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_sem)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lavaan 0.7-2 ended normally after 36 iterations
+<pre><code>lavaan 0.7-2 ended normally after 37 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -579,9 +579,9 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 
 Model Test User Model:
                                                       
-  Test statistic                                11.056
+  Test statistic                                23.802
   Degrees of freedom                                13
-  P-value (Chi-square)                           0.606
+  P-value (Chi-square)                           0.033
 
 Parameter Estimates:
 
@@ -593,33 +593,33 @@ Latent Variables:
                            Estimate  Std.Err  z-value  P(&gt;|z|)
   generalized_prejudice =~                                    
     EP                        1.000                           
-    DP                        1.016    0.214    4.743    0.000
-    SP                        1.111    0.238    4.662    0.000
-    HP                        1.659    0.504    3.291    0.001
+    DP                        0.349    0.131    2.667    0.008
+    SP                        0.758    0.228    3.328    0.001
+    HP                        0.950    0.565    1.681    0.093
   openness =~                                                 
     O1                        1.000                           
-    O2                        1.210    0.147    8.248    0.000
-    O3                        1.382    0.160    8.641    0.000
+    O2                        1.172    0.175    6.710    0.000
+    O3                        1.282    0.200    6.419    0.000
 
 Regressions:
                           Estimate  Std.Err  z-value  P(&gt;|z|)
   generalized_prejudice ~                                    
-    openness                -0.938    0.217   -4.330    0.000
+    openness                -0.961    0.231   -4.155    0.000
 
 Variances:
                    Estimate  Std.Err  z-value  P(&gt;|z|)
-   .EP                0.242    0.059    4.129    0.000
-   .DP                0.144    0.042    3.475    0.001
-   .SP                0.195    0.054    3.649    0.000
-   .HP                1.696    0.364    4.664    0.000
-   .O1                0.054    0.014    3.776    0.000
-   .O2                0.062    0.018    3.396    0.001
-   .O3                0.057    0.021    2.790    0.005
-   .generlzd_prjdc    0.093    0.042    2.225    0.026
-    openness          0.153    0.041    3.725    0.000</code></pre>
+   .EP                0.062    0.059    1.039    0.299
+   .DP                0.141    0.030    4.742    0.000
+   .SP                0.322    0.074    4.345    0.000
+   .HP                3.233    0.656    4.929    0.000
+   .O1                0.054    0.016    3.459    0.001
+   .O2                0.056    0.019    2.956    0.003
+   .O3                0.093    0.026    3.533    0.000
+   .generlzd_prjdc    0.157    0.069    2.296    0.022
+    openness          0.117    0.034    3.413    0.001</code></pre>
 </div>
 </div>
-<p>The results show that in this case, the regression coefficient is -0.94 which is significant with p = 0. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <code>p_values</code>.</p>
+<p>The results show that in this case, the regression coefficient is -0.96 which is significant with p = 0. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <code>p_values</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
@@ -650,15 +650,15 @@ Variances:
 <div class="cell-output cell-output-stdout">
 <pre><code>
 FALSE  TRUE 
-  137   363 </code></pre>
+  138   360 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#percentage of significant results</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 72.6</code></pre>
+<pre><code>[1] NA</code></pre>
 </div>
 </div>
-<p>Only 72.6% of samples with the same size of <span class="math inline">n=50</span> result in a significant p-value. We conclude that <span class="math inline">n=50</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
+<p>Only NA% of samples with the same size of <span class="math inline">n=50</span> result in a significant p-value. We conclude that <span class="math inline">n=50</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
 </section>
 <section id="sample-size-planning-find-the-necessary-sample-size" class="level2">
 <h2 class="anchored" data-anchor-id="sample-size-planning-find-the-necessary-sample-size">Sample size planning: Find the necessary sample size</h2>
