@@ -18,3 +18,6 @@ CITATION.cff
 CITATION-template.cff
 _quarto.yml
 404.qmd
+
+# exceptions
+_freeze/
