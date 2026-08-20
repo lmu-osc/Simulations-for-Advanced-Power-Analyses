@@ -1,5 +1,6 @@
 ---
 title: "Regression to the mean in pre-post-designs"
+aliases: [Regression_to_mean.html]
 ---
 
 

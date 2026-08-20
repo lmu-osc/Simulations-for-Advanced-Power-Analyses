@@ -15,7 +15,7 @@ library(ggplot2)
 library(tidyr)
 ```
 
-In the [first chapter on linear models](LM1.qmd), we had the simplest possible linear model: A continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.
+In the [first chapter on linear models](lm1.qmd), we had the simplest possible linear model: A continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.
 
 # Adding a continuous predictor
 
@@ -199,7 +199,7 @@ sim2 <- function(
 }
 ```
 
-Let's test the plausibility of the new `sim2()` function by simulating a very large sample -- this should give estimates close to the true values. We also vary the assumed pre-post-correlation. When this is 0, the results should be identical to the simpler model from [Chapter 1](LM1.qmd) (except one *df* that we lost due to the additional predictor). When the pre-post-correlation is > 0, the error variance should be reduced (see `Residual standard error` at the bottom of each `lm` output).
+Let's test the plausibility of the new `sim2()` function by simulating a very large sample -- this should give estimates close to the true values. We also vary the assumed pre-post-correlation. When this is 0, the results should be identical to the simpler model from [Chapter 1](lm1.qmd) (except one *df* that we lost due to the additional predictor). When the pre-post-correlation is > 0, the error variance should be reduced (see `Residual standard error` at the bottom of each `lm` output).
 
 ```{r}
 set.seed(0xBEEF)

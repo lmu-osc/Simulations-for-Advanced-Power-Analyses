@@ -1,6 +1,7 @@
 ---
 title: "Bonus: Optimizing R code for speed"
 author: "Felix Schönbrodt"
+aliases: [optimizing_code.html]
 ---
 
 *Reading/working time: ~30 min.*
@@ -404,7 +405,7 @@ The speed improvement seems only small -- with 4 workers, one might expect that 
 
 # The final speed test: Burn your machine 🔥
 
-Let's see if parallel processing has an advantage when we have longer computations. We now expand the simulation by exploring a broad parameter range (n ranging from 100 to 1000) and increasing the iterations to 20,000 for more stable results. (See also: "[Bonus: How many Monte Carlo iterations are necessary?](how_many_iterations.qmd)")
+Let's see if parallel processing has an advantage when we have longer computations. We now expand the simulation by exploring a broad parameter range (n ranging from 100 to 1000) and increasing the iterations to 20,000 for more stable results. (See also: "[Bonus: How many Monte Carlo iterations are necessary?](how-many-iterations.qmd)")
 
 ```{r}
 plan(multisession, workers = 4)

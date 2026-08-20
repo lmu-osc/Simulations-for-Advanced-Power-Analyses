@@ -1,6 +1,7 @@
 ---
 title: "Bonus: How many Monte Carlo iterations are necessary?"
 author: "Felix Schönbrodt"
+aliases: [how_many_iterations.html]
 ---
 
 *Reading/working time: ~25 min.*
@@ -17,9 +18,9 @@ library(pwr) # for analytical power analysis
 ```
 
 
-To find the sample size needed for a study, we have previously used, say, 1000 iterations of data simulation and analysis, and varied the sample size *n* from, say, 100 to 1000, every 50, to find where the 80% power threshold was crossed (see  [LM1.qmd#sample-size-planning-find-the-necessary-sample-size](Chapter 1)). But is 1000 iterations giving a precise enough result?
+To find the sample size needed for a study, we have previously used, say, 1000 iterations of data simulation and analysis, and varied the sample size *n* from, say, 100 to 1000, every 50, to find where the 80% power threshold was crossed (see [Chapter 1](lm1.qmd#sample-size-planning-find-the-necessary-sample-size)). But is 1000 iterations giving a precise enough result?
 
-Using the [optimized code](optimizing_code.qmd), we can explore how many Monte Carlo iterations are necessary to get stable computational results: We can re-run the same simulation with the same sample size and see how much random variation is between results!
+Using the [optimized code](optimizing-code.qmd), we can explore how many Monte Carlo iterations are necessary to get stable computational results: We can re-run the same simulation with the same sample size and see how much random variation is between results!
 
 ::: {.callout-note}
 Monte Carlo methods, or Monte Carlo experiments, are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. The underlying concept is to use randomness to solve problems that might be deterministic in principle. They are often used in physical and mathematical problems and are most useful when it is difficult or impossible to use other approaches. Monte Carlo methods are mainly used in three problem classes: optimization, numerical integration, and generating draws from a probability distribution.
