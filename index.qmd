@@ -1,7 +1,6 @@
 ---
 title: "Simulations for Advanced Power Analyses"
-format: html
-project-type: website
+description: "A self-paced tutorial on simulation-based power analysis for complex statistical models in R, offered by the LMU Open Science Center."
 ---
 
 ## About this work
@@ -17,7 +16,7 @@ This book is still being developed. If you have comment to contribute to its imp
 
 Depending on your prior knowledge, you can fast forward some steps:
 
-![](images/choose_your_level.png)
+![](images/choose-your-level.png)
 
 ### Acquire necessary basic coding skills in R
 
@@ -43,11 +42,11 @@ The rest of the Superpower book teaches how to use the `superpower` R package to
 
 With these prerequisites, you can start to learn power calculations for different complex models. Here are the type of models we will cover, you can pick and choose what is relevant to you:
 
--   Ch. 1: [Linear Model 1: A single dichotomous predictor](LM1.qmd)\
--   Ch. 2: [Linear Model 2: Multiple predictors](LM2.qmd)\
--   Ch. 3: [Generalized Linear Models](GLM.qmd)\
--   Ch. 4: [Linear Mixed Models](LMM.qmd)\
--   Ch. 5: [Structural Equation Modelling (SEM)](SEM.qmd)
+-   Ch. 1: [Linear Model 1: A single dichotomous predictor](lm1.qmd)\
+-   Ch. 2: [Linear Model 2: Multiple predictors](lm2.qmd)\
+-   Ch. 3: [Generalized Linear Models](glm.qmd)\
+-   Ch. 4: [Linear Mixed Models](lmm.qmd)\
+-   Ch. 5: [Structural Equation Modelling (SEM)](sem.qmd)
 
 **We recommend that everybody works through chapters 1 and 2, and then dive into the other chapters that are relevant.**
 
@@ -95,3 +94,30 @@ devtools::install_github("debruine/faux")
 This tutorial was initially commissioned and funded by the University of Hamburg, Faculty of Psychology and Movement Science.
 
 It is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
+
+
+
+:::: {.columns}
+
+::: {.column width="47.5%"}
+
+::: {.callout-tip title="Support the LMU Open Science Center!"}
+
+**Like this tutorial? Be sure to give [the repository]({{< meta repo-url >}}) a star and [follow us on GitHub](https://github.com/lmu-osc)!**
+:::
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="47.5%"}
+
+
+::: {.callout-tip title="Questions about this tutorial?"}
+**If you have questions for the author of this tutorial, please take a look at the [About](about.qmd) page.**
+:::
+
+:::
+
+::::

@@ -32,7 +32,7 @@ $$e \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\sigma^2)$$
 
 This assumption of the distribution of the errors is important for our simulations, as we will simulate the error according to that assumption. In an actual statistical analysis, the variance of the errors, $\sigma^2$, is estimated from the data.
 
-"iid" means that the error of each observation is independent from all other observations. This assumption is violated, for example, when we look at romantic couples. If one partner is exceptionally distressed, then the other partner presumably will also have higher stress levels. In this case, the errors of both partners are correlated and not independent anymore. (See the section on [modelling multilevel data](LMM.qmd) for a statistical way of handling such interdependences.)
+"iid" means that the error of each observation is independent from all other observations. This assumption is violated, for example, when we look at romantic couples. If one partner is exceptionally distressed, then the other partner presumably will also have higher stress levels. In this case, the errors of both partners are correlated and not independent anymore. (See the section on [modelling multilevel data](lmm.qmd) for a statistical way of handling such interdependences.)
 
 # A concrete example
 
@@ -461,7 +461,7 @@ print(result)
 ```
 
 Now power increases monotonically with sample size, as expected.\
-To explore how many Monte Carlo iterations are necessary to get stable computational results, see the bonus page [Bonus: How many Monte Carlo iterations are necessary?](how_many_iterations.qmd)
+To explore how many Monte Carlo iterations are necessary to get stable computational results, see the bonus page [Bonus: How many Monte Carlo iterations are necessary?](how-many-iterations.qmd)
 
 # Recap: What did we do?
 

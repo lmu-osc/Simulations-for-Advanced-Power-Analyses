@@ -1,6 +1,5 @@
 ---
 title: "Resources"
-project-type: website
 ---
 
 These are other resources on power analysis by simulation:

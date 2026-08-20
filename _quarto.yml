@@ -1,39 +1,76 @@
+# Begin Project
 project:
-  type: website
+  type: tutorial-template
+  # FYI: the tutorial-template project type is defined in the lmu-osc/tutorial-template extension
+# End Project
 
+# Begin Website
+repo-url: https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses
 website:
-  repo-url: https://github.com/MalikaIhle/Simulations-for-Advanced-Power-Analyses
-  repo-actions: [edit, issue]
+  title: "Simulations for Advanced Power Analyses"
+  page-footer:
+    border: false
+    center: © 2023 Felix Schönbrodt, Moritz Fischer. Published by LMU Open Science Center. Licensed under CC BY-SA 4.0.
+  repo-url: https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses
+
+  navbar:
+    right:
+      - about.qmd
+    left:
+      - href: index.qmd
+        text: Home
+    tools:
+      - icon: github
+        menu:
+          - text: Source Code
+            href: https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses
+          - text: Report a Bug
+            href: https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues
+      - icon: house-heart
+        url: https://www.osc.lmu.de/
+
   sidebar:
     style: "docked"
-    search: true
-    logo: images/LMU-OSC_logo_small.jpg
     contents:
-      - index.qmd
+      - text: "Overview"
+        href: index.qmd
       - section: "Models"
         contents:
-          - LM1.qmd
-          - LM2.qmd
-          - GLM.qmd
-          - LMM.qmd
-          - SEM.qmd
+          - lm1.qmd
+          - lm2.qmd
+          - glm.qmd
+          - lmm.qmd
+          - sem.qmd
       - section: "Bonuses"
         contents:
-          - optimizing_code.qmd
-          - how_many_iterations.qmd
-          - SEM_fit_index.qmd
-      - Resources.qmd
+          - optimizing-code.qmd
+          - how-many-iterations.qmd
+          - sem-fit-index.qmd
+      - resources.qmd
+# End Website
 
+# Begin Includes
+include-in-header:
+  - file: matomo-analytics.html
+include-after-body:
+  - file: footer/footer.html
+# End Includes
+
+# Begin Format
+# use only if needed. the default format for `tutorial-template` projects is tutorial-template-html+tutorial
+# we recommend just extending the definition below if you need to make format changes
 format:
-  html:
-    theme: cosmo
-    css: styles.css
-    toc: true
+  tutorial-template-html+tutorial:
+    css:
+      - footer/footer-style.css
     html-math-method: katex
-    include-in-header:
-      - file: matomo_analytics.html
+# End Format
 
 execute:
   freeze: auto
 
+# Begin Editor
 editor: source
+# End Editor
+
+bibliography: references.bib
