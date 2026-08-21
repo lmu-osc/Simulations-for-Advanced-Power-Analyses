@@ -72,6 +72,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./glm.html" rel="next">
+<link href="./lm1.html" rel="prev">
 <link href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -405,7 +407,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Ch. 2: Linear Model 2: Multiple predictors</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./lm2.html">Ch. 2: Linear Model 2: Multiple predictors</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -447,20 +449,35 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">lm1.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lm1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 1: Linear Model 1: A single dichotomous predictor</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">lm2.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lm2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Ch. 2: Linear Model 2: Multiple predictors</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">glm.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./glm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 3: Generalized Linear Models</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">lmm.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lmm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 4: Linear Mixed Models / Multilevel models</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">sem.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./sem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 5: Structural Equation Models</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -517,13 +534,13 @@ window.Quarto = {
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/LM2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/LM2.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/lm2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/lm2.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./lm2.html">Ch. 2: Linear Model 2: Multiple predictors</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Ch. 2: Linear Model 2: Multiple predictors</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
@@ -557,7 +574,7 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>In the <a href="lm1.qmd">first chapter on linear models</a>, we had the simplest possible linear model: A continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.</p>
+<p>In the <a href="./lm1.html">first chapter on linear models</a>, we had the simplest possible linear model: A continuous outcome variable is predicted by a single dichotomous predictor. In this chapter, we build up increasingly complex models by (a) adding a single continuous predictor and (b) modeling an interaction.</p>
 <section id="adding-a-continuous-predictor" class="level1">
 <h1>Adding a continuous predictor</h1>
 <p>We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are “their own control group”, and we can explain a lot of (formerly) unexplained error variance by controlling for this between-person variance.</p>
@@ -644,8 +661,8 @@ cov_{xy} &amp; var_y
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            BDI_pre BDI_post0
-BDI_pre   1.0000000 0.6077529
-BDI_post0 0.6077529 1.0000000</code></pre>
+BDI_pre   1.0000000 0.6012241
+BDI_post0 0.6012241 1.0000000</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -757,7 +774,7 @@ Note
 <span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Let’s test the plausibility of the new <code>sim2()</code> function by simulating a very large sample – this should give estimates close to the true values. We also vary the assumed pre-post-correlation. When this is 0, the results should be identical to the simpler model from <a href="lm1.qmd">Chapter 1</a> (except one <em>df</em> that we lost due to the additional predictor). When the pre-post-correlation is &gt; 0, the error variance should be reduced (see <code>Residual standard error</code> at the bottom of each <code>lm</code> output).</p>
+<p>Let’s test the plausibility of the new <code>sim2()</code> function by simulating a very large sample – this should give estimates close to the true values. We also vary the assumed pre-post-correlation. When this is 0, the results should be identical to the simpler model from <a href="./lm1.html">Chapter 1</a> (except one <em>df</em> that we lost due to the additional predictor). When the pre-post-correlation is &gt; 0, the error variance should be reduced (see <code>Residual standard error</code> at the bottom of each <code>lm</code> output).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -770,19 +787,19 @@ lm(formula = BDI_post ~ BDI_pre.c + treatment, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--49.469  -7.283  -0.003   7.264  46.744 
+-50.300  -7.324   0.021   7.330  45.657 
 
 Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 22.955652   0.048287 475.402   &lt;2e-16 ***
-BDI_pre.c    0.002455   0.003160   0.777    0.437    
-treatment   -6.012597   0.068288 -88.048   &lt;2e-16 ***
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 22.9584404  0.0484196 474.156   &lt;2e-16 ***
+BDI_pre.c   -0.0007093  0.0031606  -0.224    0.822    
+treatment   -5.9558201  0.0684757 -86.977   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 10.8 on 99997 degrees of freedom
-Multiple R-squared:  0.07195,   Adjusted R-squared:  0.07194 
-F-statistic:  3877 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 10.83 on 99997 degrees of freedom
+Multiple R-squared:  0.07033,   Adjusted R-squared:  0.07031 
+F-statistic:  3783 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># with pre_post_cor, the residual error should be reduced</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sim2</span>(<span class="at">n =</span> <span class="dv">100000</span>, <span class="at">pre_post_cor =</span> <span class="fl">0.6</span>, <span class="at">print =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -793,19 +810,19 @@ lm(formula = BDI_post ~ BDI_pre.c + treatment, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--36.303  -5.822   0.029   5.849  35.270 
+-37.502  -5.842   0.025   5.845  39.610 
 
 Coefficients:
              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 23.074277   0.038742   595.6   &lt;2e-16 ***
-BDI_pre.c    0.598770   0.002544   235.3   &lt;2e-16 ***
-treatment   -6.081747   0.054791  -111.0   &lt;2e-16 ***
+(Intercept) 22.961205   0.038696   593.4   &lt;2e-16 ***
+BDI_pre.c    0.602354   0.002539   237.2   &lt;2e-16 ***
+treatment   -5.963070   0.054724  -109.0   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 8.663 on 99997 degrees of freedom
-Multiple R-squared:  0.4027,    Adjusted R-squared:  0.4027 
-F-statistic: 3.371e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 8.653 on 99997 degrees of freedom
+Multiple R-squared:  0.4052,    Adjusted R-squared:  0.4052 
+F-statistic: 3.406e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>Indeed, with <code>pre_post_cor = 0</code> the parameter estimates are identical, and with non-zero pre-post-correlation, the error term gets reduced.</p>
@@ -862,16 +879,16 @@ F-statistic: 3.371e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n  power
-1   90 0.6795
-2  100 0.7295
-3  110 0.7835
-4  120 0.8230
-5  130 0.8620
+1   90 0.6675
+2  100 0.7055
+3  110 0.7720
+4  120 0.8110
+5  130 0.8655
 6  140 0.8810
-7  150 0.9125
-8  160 0.9295
-9  170 0.9465
-10 180 0.9675</code></pre>
+7  150 0.9110
+8  160 0.9300
+9  170 0.9490
+10 180 0.9660</code></pre>
 </div>
 </div>
 <p>In the original analysis, we needed <span class="math inline">n=180</span> (90 in each group) for 80% power. Including the baseline covariate (which explains <span class="math inline">r^2 = .6^2 = 36\%</span> of the variance in post scores) reduces that number to around <span class="math inline">n=115</span>.</p>
@@ -1092,22 +1109,22 @@ F-statistic: 3.371e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n power_treatment power_interaction
-1  100           0.712             0.054
-2  120           0.816             0.072
-3  140           0.891             0.095
-4  160           0.952             0.111
-5  180           0.961             0.114
-6  200           0.973             0.137
-7  220           0.985             0.155
-8  240           0.996             0.149
-9  260           0.999             0.204
-10 280           0.999             0.219
-11 300           0.999             0.277
-12 320           1.000             0.273
-13 340           1.000             0.277
-14 360           0.999             0.321
-15 380           1.000             0.309
-16 400           1.000             0.399</code></pre>
+1  100           0.714             0.060
+2  120           0.813             0.075
+3  140           0.892             0.093
+4  160           0.924             0.127
+5  180           0.958             0.127
+6  200           0.981             0.128
+7  220           0.985             0.173
+8  240           0.992             0.191
+9  260           0.996             0.202
+10 280           1.000             0.233
+11 300           1.000             0.252
+12 320           0.999             0.283
+13 340           1.000             0.288
+14 360           1.000             0.313
+15 380           1.000             0.334
+16 400           1.000             0.376</code></pre>
 </div>
 </div>
 <p>While the power for detecting the main effect quickly approaches 100%, even 400 participants are by far not enough to detect the interaction effect reliably. (In particular when you recall that we set the assumed interaction effect to the largest plausible value).</p>
@@ -1601,7 +1618,19 @@ F-statistic: 3.371e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
       }
     }
   });
-  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lm1.html" class="pagination-link" aria-label="Ch. 1: Linear Model 1: A single dichotomous predictor">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ch. 1: Linear Model 1: A single dichotomous predictor</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./glm.html" class="pagination-link" aria-label="Ch. 3: Generalized Linear Models">
+        <span class="nav-page-text">Ch. 3: Generalized Linear Models</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Ch. 2: Linear Model 2: Multiple predictors"</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Felix Schönbrodt"</span></span>
@@ -2125,7 +2154,7 @@ F-statistic: 3.371e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
     </div>   
     <div class="nav-footer-center">
 <p>© 2023 Felix Schönbrodt, Moritz Fischer. Published by LMU Open Science Center. Licensed under CC BY-SA 4.0.</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/LM2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/LM2.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/lm2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/lm2.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

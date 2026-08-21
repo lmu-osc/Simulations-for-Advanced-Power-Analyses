@@ -72,6 +72,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./lmm.html" rel="next">
+<link href="./lm2.html" rel="prev">
 <link href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -362,7 +364,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Ch. 3: Generalized Linear Models</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./glm.html">Ch. 3: Generalized Linear Models</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -404,20 +406,35 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">lm1.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lm1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 1: Linear Model 1: A single dichotomous predictor</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">lm2.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lm2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 2: Linear Model 2: Multiple predictors</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">glm.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./glm.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Ch. 3: Generalized Linear Models</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">lmm.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lmm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 4: Linear Mixed Models / Multilevel models</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">sem.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./sem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 5: Structural Equation Models</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -471,13 +488,13 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/GLM.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/GLM.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/glm.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/glm.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./glm.html">Ch. 3: Generalized Linear Models</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Ch. 3: Generalized Linear Models</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
@@ -511,7 +528,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 </div>
 <section id="a-power-analysis-for-a-simple-logistic-regression-with-one-categorical-predictor" class="level1">
 <h1>A power analysis for a simple logistic regression with one categorical predictor</h1>
-<p>In order to learn how a simulation-based power analysis for logistic regressions work, we build on the previous chapters by continuing to work with the <code>BtheB</code> data set. Please see the <a href="lm1.qmd">first chapter on linear models</a> to get more info about this data set.</p>
+<p>In order to learn how a simulation-based power analysis for logistic regressions work, we build on the previous chapters by continuing to work with the <code>BtheB</code> data set. Please see the <a href="./lm1.html">first chapter on linear models</a> to get more info about this data set.</p>
 <section id="lets-get-some-data-as-a-starting-point" class="level2">
 <h2 class="anchored" data-anchor-id="lets-get-some-data-as-a-starting-point">Let’s get some data as a starting point</h2>
 <div class="cell">
@@ -547,7 +564,7 @@ Note
 <p>Please note that we dichotomize this variable for didactic reasons only. From a statistical point of view, it is preferable to treat a continuous variable as such because dichotomizing leads to a loss of statistical information (Royston et al., 2006).</p>
 </div>
 </div>
-<p>Let’s start by dichotomizing the <code>bdi.2m</code> variable and storing the result in a new variable which we label <code>bdi.2m.dicho</code>. Here, we take 20 as our cut-off value, as BDIs of 20 or more refer to a moderate or severe depression. BDI values lower than 20, in turn, reflect a minimal or mild depression (see <a href="lm1.qmd">first chapter on linear models</a> for more info). In our new <code>bdi.2m.dicho</code> variable, we code minimal/mild depression as “0” and moderate/severe depression as “1”.</p>
+<p>Let’s start by dichotomizing the <code>bdi.2m</code> variable and storing the result in a new variable which we label <code>bdi.2m.dicho</code>. Here, we take 20 as our cut-off value, as BDIs of 20 or more refer to a moderate or severe depression. BDI values lower than 20, in turn, reflect a minimal or mild depression (see <a href="./lm1.html">first chapter on linear models</a> for more info). In our new <code>bdi.2m.dicho</code> variable, we code minimal/mild depression as “0” and moderate/severe depression as “1”.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#dichotomize dv</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m <span class="sc">&lt;</span> <span class="dv">20</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
@@ -806,7 +823,7 @@ Number of Fisher Scoring iterations: 4</code></pre>
 </section>
 <section id="using-a-safeguard-power-approach" class="level2">
 <h2 class="anchored" data-anchor-id="using-a-safeguard-power-approach">Using a safeguard power approach</h2>
-<p>Of note, our effect size estimates (i.e, the estimates of the probabilities of not having a moderate/severe depression two months after the <code>BtheB</code> or the <code>TAU</code> treatment) were so far based on a pilot study. However, this pilot study might not have yielded a precise estimate of these effect sizes. Thus, in order to consider uncertainty in these effect size estimates, it has been suggested to perform a safeguard power analysis (see chapter <a href="lm1.qmd">first chapter on linear models</a> for more info) instead of a power analysis using the observed effect size. The main idea behind the safeguard power analysis is to compute a 60% confidence interval around the observed effect size and to take the lower bound of this confidence interval as an effect size estimate (see Perugini et al., <a href="https://journals.sagepub.com/doi/10.1177/1745691614528519">2014</a>). Let’s try this here.</p>
+<p>Of note, our effect size estimates (i.e, the estimates of the probabilities of not having a moderate/severe depression two months after the <code>BtheB</code> or the <code>TAU</code> treatment) were so far based on a pilot study. However, this pilot study might not have yielded a precise estimate of these effect sizes. Thus, in order to consider uncertainty in these effect size estimates, it has been suggested to perform a safeguard power analysis (see chapter <a href="./lm1.html">first chapter on linear models</a> for more info) instead of a power analysis using the observed effect size. The main idea behind the safeguard power analysis is to compute a 60% confidence interval around the observed effect size and to take the lower bound of this confidence interval as an effect size estimate (see Perugini et al., <a href="https://journals.sagepub.com/doi/10.1177/1745691614528519">2014</a>). Let’s try this here.</p>
 <p>Let’s assume that we view the probability of not having a moderate/severe depression after the <code>TAU</code> treatment to be probably accurate, but that we want to account for uncertainty in the estimation of the probability of not having a moderate/severe depression after the <code>BtheB</code> treatment. We then simply calculate the 60% confidence interval around this effect size. We can use the <code>BinomCI</code> function from the <code>DescTools</code> package to do this. We need to provide this function with the number of successes (here: 37, see table above) and the number of observations (here: 52, see above).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">BinomCI</span>(<span class="dv">37</span>, <span class="dv">52</span>, <span class="at">conf.level =</span> <span class="fl">0.60</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1344,7 +1361,19 @@ Number of Fisher Scoring iterations: 4</code></pre>
       }
     }
   });
-  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lm2.html" class="pagination-link" aria-label="Ch. 2: Linear Model 2: Multiple predictors">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ch. 2: Linear Model 2: Multiple predictors</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./lmm.html" class="pagination-link" aria-label="Ch. 4: Linear Mixed Models / Multilevel models">
+        <span class="nav-page-text">Ch. 4: Linear Mixed Models / Multilevel models</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Ch. 3: Generalized Linear Models"</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> Moritz Fischer</span></span>
@@ -1698,7 +1727,7 @@ Number of Fisher Scoring iterations: 4</code></pre>
     </div>   
     <div class="nav-footer-center">
 <p>© 2023 Felix Schönbrodt, Moritz Fischer. Published by LMU Open Science Center. Licensed under CC BY-SA 4.0.</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/GLM.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/GLM.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/glm.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/glm.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

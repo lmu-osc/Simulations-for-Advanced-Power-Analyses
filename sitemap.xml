@@ -1,71 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/LM1.html</loc>
-    <lastmod>2026-08-20T20:19:38.485Z</lastmod>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/optimizing-code.html</loc>
+    <lastmod>2026-08-21T13:03:47.745Z</lastmod>
   </url>
   <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/how-many-iterations.html</loc>
-    <lastmod>2026-08-20T20:19:38.499Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/footer/privacy.html</loc>
-    <lastmod>2026-08-20T20:19:38.499Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/footer/accessibilty.html</loc>
-    <lastmod>2026-08-20T20:19:38.499Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/SEM.html</loc>
-    <lastmod>2026-08-20T20:19:38.485Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/LICENSE-CODE.html</loc>
-    <lastmod>2026-08-20T20:19:38.485Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/regression-to-mean.html</loc>
-    <lastmod>2026-08-20T20:19:38.504Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/Resources.html</loc>
-    <lastmod>2026-08-20T20:19:38.485Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/LMM.html</loc>
-    <lastmod>2026-08-20T20:19:38.485Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/about.html</loc>
-    <lastmod>2026-08-20T20:19:38.499Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/LM2.html</loc>
-    <lastmod>2026-08-20T20:19:38.485Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/LICENSE.html</loc>
-    <lastmod>2026-08-20T20:19:38.485Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/index.html</loc>
-    <lastmod>2026-08-20T20:19:38.504Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/sem-fit-index.html</loc>
-    <lastmod>2026-08-20T20:19:38.507Z</lastmod>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/sem.html</loc>
+    <lastmod>2026-08-21T13:03:47.747Z</lastmod>
   </url>
   <url>
     <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/footer/imprint.html</loc>
-    <lastmod>2026-08-20T20:19:38.499Z</lastmod>
+    <lastmod>2026-08-21T13:03:47.740Z</lastmod>
   </url>
   <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/GLM.html</loc>
-    <lastmod>2026-08-20T20:19:38.485Z</lastmod>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/sem-fit-index.html</loc>
+    <lastmod>2026-08-21T13:03:47.747Z</lastmod>
   </url>
   <url>
-    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/optimizing-code.html</loc>
-    <lastmod>2026-08-20T20:19:38.504Z</lastmod>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/lm2.html</loc>
+    <lastmod>2026-08-21T13:03:47.745Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/LICENSE.html</loc>
+    <lastmod>2026-08-21T13:03:47.729Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/lmm.html</loc>
+    <lastmod>2026-08-21T13:03:47.745Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/Resources.html</loc>
+    <lastmod>2026-08-21T13:03:47.729Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/lm1.html</loc>
+    <lastmod>2026-08-21T13:03:47.745Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/about.html</loc>
+    <lastmod>2026-08-21T13:03:47.740Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/glm.html</loc>
+    <lastmod>2026-08-21T13:03:47.740Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/regression-to-mean.html</loc>
+    <lastmod>2026-08-21T13:03:47.745Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/LICENSE-CODE.html</loc>
+    <lastmod>2026-08-21T13:03:47.729Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/index.html</loc>
+    <lastmod>2026-08-21T13:03:47.745Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/footer/accessibilty.html</loc>
+    <lastmod>2026-08-21T13:03:47.740Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/footer/privacy.html</loc>
+    <lastmod>2026-08-21T13:03:47.740Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lmu-osc.github.io/Simulations-for-Advanced-Power-Analyses/how-many-iterations.html</loc>
+    <lastmod>2026-08-21T13:03:47.740Z</lastmod>
   </url>
 </urlset>

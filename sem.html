@@ -72,6 +72,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./optimizing-code.html" rel="next">
+<link href="./lmm.html" rel="prev">
 <link href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -405,7 +407,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Ch. 5: Structural Equation Models</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./sem.html">Ch. 5: Structural Equation Models</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -447,20 +449,35 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">lm1.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lm1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 1: Linear Model 1: A single dichotomous predictor</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">lm2.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lm2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 2: Linear Model 2: Multiple predictors</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">glm.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./glm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 3: Generalized Linear Models</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">lmm.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lmm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 4: Linear Mixed Models / Multilevel models</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">sem.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./sem.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Ch. 5: Structural Equation Models</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -514,13 +531,13 @@ window.Quarto = {
   <li><a href="#a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables" id="toc-a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables" class="nav-link" data-scroll-target="#a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables">A simulation-based power analysis for a mediation model with latent variables</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/SEM.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/SEM.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/sem.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/sem.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./sem.html">Ch. 5: Structural Equation Models</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Ch. 5: Structural Equation Models</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
@@ -751,13 +768,13 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Let's take a look</span></span>
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_first_simulated_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        EP       SP         HP       DP       O1       O2       O3
-1 1.331159 1.690898 -0.2686425 1.281535 3.514007 3.297457 4.018206
-2 2.150835 2.069363  1.8537706 2.066787 3.830672 3.845564 3.777120
-3 2.440606 2.377261  0.2257497 2.325096 3.895984 3.220516 3.857794
-4 3.621513 2.197040  2.1446018 3.508653 4.080440 3.746210 4.132182
-5 2.124958 2.037299  1.7958220 2.028219 3.214294 3.045947 3.479226
-6 2.404379 2.758697  1.4287525 2.192714 3.967533 3.739506 3.652799</code></pre>
+<pre><code>         EP       SP         HP        DP       O1       O2       O3
+1 0.9946798 1.935816 -0.5917517 1.1511337 3.656206 4.840169 4.341004
+2 2.4535261 3.526935  1.6990366 2.2639750 3.436317 2.776535 3.579707
+3 2.3144769 2.036667  0.9578468 1.9145624 3.120301 3.857144 3.712110
+4 1.5758325 2.083005  1.3746807 0.8595252 4.476305 4.041324 4.164085
+5 2.0221251 1.892782  1.7100873 1.6551252 4.042440 3.813648 4.159778
+6 1.7453446 1.841720  0.3541296 2.1608526 3.242216 3.634046 3.781332</code></pre>
 </div>
 </div>
 <p>We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an <span class="math inline">\alpha</span>-level of .005. We will work with the <code>lavaan</code> package to fit SEMs.</p>
@@ -773,7 +790,7 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#display the results</span></span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_sem)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lavaan 0.7-2 ended normally after 36 iterations
+<pre><code>lavaan 0.7-2 ended normally after 39 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -783,9 +800,9 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 
 Model Test User Model:
                                                       
-  Test statistic                                 5.638
+  Test statistic                                11.036
   Degrees of freedom                                13
-  P-value (Chi-square)                           0.958
+  P-value (Chi-square)                           0.608
 
 Parameter Estimates:
 
@@ -797,33 +814,33 @@ Latent Variables:
                            Estimate  Std.Err  z-value  P(&gt;|z|)
   generalized_prejudice =~                                    
     EP                        1.000                           
-    DP                        0.492    0.087    5.629    0.000
-    SP                        0.621    0.118    5.261    0.000
-    HP                        0.572    0.262    2.185    0.029
+    DP                        1.153    0.421    2.740    0.006
+    SP                        1.192    0.463    2.574    0.010
+    HP                        2.303    1.067    2.157    0.031
   openness =~                                                 
     O1                        1.000                           
-    O2                        1.023    0.153    6.665    0.000
-    O3                        0.992    0.160    6.219    0.000
+    O2                        1.081    0.175    6.188    0.000
+    O3                        1.156    0.160    7.225    0.000
 
 Regressions:
                           Estimate  Std.Err  z-value  P(&gt;|z|)
   generalized_prejudice ~                                    
-    openness                -0.979    0.310   -3.158    0.002
+    openness                -0.613    0.222   -2.766    0.006
 
 Variances:
                    Estimate  Std.Err  z-value  P(&gt;|z|)
-   .EP                0.082    0.074    1.107    0.268
-   .DP                0.118    0.030    3.956    0.000
-   .SP                0.242    0.057    4.263    0.000
-   .HP                1.771    0.358    4.941    0.000
-   .O1                0.076    0.021    3.635    0.000
-   .O2                0.038    0.016    2.315    0.021
-   .O3                0.074    0.020    3.635    0.000
-   .generlzd_prjdc    0.464    0.128    3.613    0.000
-    openness          0.144    0.044    3.304    0.001</code></pre>
+   .EP                0.330    0.072    4.563    0.000
+   .DP                0.129    0.038    3.418    0.001
+   .SP                0.241    0.058    4.126    0.000
+   .HP                2.124    0.458    4.641    0.000
+   .O1                0.086    0.021    4.056    0.000
+   .O2                0.105    0.026    4.104    0.000
+   .O3                0.023    0.016    1.389    0.165
+   .generlzd_prjdc    0.037    0.028    1.309    0.191
+    openness          0.149    0.045    3.274    0.001</code></pre>
 </div>
 </div>
-<p>The results show that in this case, the regression coefficient is -0.98 which is significant with p = 0.002. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <code>p_values</code>.</p>
+<p>The results show that in this case, the regression coefficient is -0.61 which is significant with p = 0.006. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <code>p_values</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed to make results reproducible</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21364</span>)</span>
@@ -854,15 +871,15 @@ Variances:
 <div class="cell-output cell-output-stdout">
 <pre><code>
 FALSE  TRUE 
-  152   348 </code></pre>
+  127   373 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#percentage of significant results</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 69.6</code></pre>
+<pre><code>[1] 74.6</code></pre>
 </div>
 </div>
-<p>Only 69.6% of samples with the same size of <span class="math inline">n=50</span> result in a significant p-value. We conclude that <span class="math inline">n=50</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
+<p>Only 74.6% of samples with the same size of <span class="math inline">n=50</span> result in a significant p-value. We conclude that <span class="math inline">n=50</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
 </section>
 <section id="sample-size-planning-find-the-necessary-sample-size" class="level2">
 <h2 class="anchored" data-anchor-id="sample-size-planning-find-the-necessary-sample-size">Sample size planning: Find the necessary sample size</h2>
@@ -1117,7 +1134,7 @@ Tip
 </section>
 <section id="a-safeguard-power-approach-for-sems" class="level2">
 <h2 class="anchored" data-anchor-id="a-safeguard-power-approach-for-sems">A safeguard power approach for SEMs</h2>
-<p>Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al.&nbsp;(2016) data set as an estimate of the “true” effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., <a href="https://doi.org/10.1177/1745691614528519">2014</a>), which we have already applied in Chapter 1 (<a href="lm1.qmd">Linear Model 1: A single dichotomous predictor</a>).</p>
+<p>Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al.&nbsp;(2016) data set as an estimate of the “true” effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., <a href="https://doi.org/10.1177/1745691614528519">2014</a>), which we have already applied in Chapter 1 (<a href="./lm1.html">Linear Model 1: A single dichotomous predictor</a>).</p>
 <p>Basically, all need to do in order to account for variability of observed effect sizes is to calculate a 60%-confidence interval around the point estimate of the observed effect size from our pilot data and to use the more conservative bound of this confidence interval (here: the upper bound) as our new effect size estimate. This can be easily done with the <code>parameterestimates</code> function from the <code>lavaan</code> package which takes the level of the confidence interval as an input parameter. Let’s use this function on our object <code>fit_bergh</code> which stores the results of our SEM in the <code>Bergh</code> data set.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parameterestimates</span>(fit_bergh, <span class="at">level =</span> .<span class="dv">60</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1972,7 +1989,19 @@ Defined Parameters:
       }
     }
   });
-  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lmm.html" class="pagination-link" aria-label="Ch. 4: Linear Mixed Models / Multilevel models">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ch. 4: Linear Mixed Models / Multilevel models</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./optimizing-code.html" class="pagination-link" aria-label="Bonus: Optimizing R code for speed">
+        <span class="nav-page-text">Bonus: Optimizing R code for speed</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Ch. 5: Structural Equation Models"</span></span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> Moritz Fischer</span></span>
@@ -2622,7 +2651,7 @@ Defined Parameters:
     </div>   
     <div class="nav-footer-center">
 <p>© 2023 Felix Schönbrodt, Moritz Fischer. Published by LMU Open Science Center. Licensed under CC BY-SA 4.0.</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/SEM.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/SEM.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/sem.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/sem.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

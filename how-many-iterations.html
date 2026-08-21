@@ -406,20 +406,35 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">lm1.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lm1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 1: Linear Model 1: A single dichotomous predictor</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">lm2.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lm2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 2: Linear Model 2: Multiple predictors</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">glm.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./glm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 3: Generalized Linear Models</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">lmm.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lmm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 4: Linear Mixed Models / Multilevel models</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">sem.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./sem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 5: Structural Equation Models</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -501,7 +516,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork) <span class="co"># for arranging multiple ggplots</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pwr) <span class="co"># for analytical power analysis</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>To find the sample size needed for a study, we have previously used, say, 1000 iterations of data simulation and analysis, and varied the sample size <em>n</em> from, say, 100 to 1000, every 50, to find where the 80% power threshold was crossed (see <a href="lm1.qmd#sample-size-planning-find-the-necessary-sample-size">Chapter 1</a>). But is 1000 iterations giving a precise enough result?</p>
+<p>To find the sample size needed for a study, we have previously used, say, 1000 iterations of data simulation and analysis, and varied the sample size <em>n</em> from, say, 100 to 1000, every 50, to find where the 80% power threshold was crossed (see <a href="./lm1.html#sample-size-planning-find-the-necessary-sample-size">Chapter 1</a>). But is 1000 iterations giving a precise enough result?</p>
 <p>Using the <a href="./optimizing-code.html">optimized code</a>, we can explore how many Monte Carlo iterations are necessary to get stable computational results: We can re-run the same simulation with the same sample size and see how much random variation is between results!</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">

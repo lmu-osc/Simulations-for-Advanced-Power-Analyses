@@ -72,6 +72,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./sem.html" rel="next">
+<link href="./glm.html" rel="prev">
 <link href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -405,7 +407,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Ch. 4: Linear Mixed Models / Multilevel models</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./lmm.html">Ch. 4: Linear Mixed Models / Multilevel models</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -447,20 +449,35 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">lm1.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lm1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 1: Linear Model 1: A single dichotomous predictor</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">lm2.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lm2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 2: Linear Model 2: Multiple predictors</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">glm.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./glm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 3: Generalized Linear Models</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">lmm.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./lmm.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Ch. 4: Linear Mixed Models / Multilevel models</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">sem.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./sem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ch. 5: Structural Equation Models</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -523,13 +540,13 @@ window.Quarto = {
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/LMM.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/LMM.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/lmm.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/lmm.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./lmm.html">Ch. 4: Linear Mixed Models / Multilevel models</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Ch. 4: Linear Mixed Models / Multilevel models</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
@@ -571,7 +588,7 @@ window.Quarto = {
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># By default, it uses all available cores</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>In order to keep this chapter at a reasonable length, we focus on how to simulate the mixed effects/multi-level model and spend less time discussing how to arrive at plausible parameter values. Please read Chapters <a href="lm1.qmd">1</a> and <a href="lm2.qmd">2</a> for multiple examples where the parameter values are derived from (a) the literature (e.g., bias-corrected meta-analyses), (b) pilot data, or (c) plausibility constraints.</p>
+<p>In order to keep this chapter at a reasonable length, we focus on how to simulate the mixed effects/multi-level model and spend less time discussing how to arrive at plausible parameter values. Please read Chapters <a href="./lm1.html">1</a> and <a href="./lm2.html">2</a> for multiple examples where the parameter values are derived from (a) the literature (e.g., bias-corrected meta-analyses), (b) pilot data, or (c) plausibility constraints.</p>
 <p>Furthermore, we’ll use the techniques described in the Chapter <a href="./optimizing-code.html">“Bonus: Optimizing R code for speed”</a>, otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!</p>
 <p>We continue to work with the “Beat the blues” (<code>BtheB</code>) data set from the <code>HSAUR</code> R package. As there are multiple post-treatment measurements (after 2, 3, 6, and 8 months) we can create a nice longitudinal multilevel data set, with measurement points on level 1 (L1) and persons on level 2 (L2). We will work with the <code>lme4</code> package to run the mixed-effect models.</p>
 <p>For that, we first have to transform the pilot data set into the long format:</p>
@@ -739,28 +756,28 @@ lmerModLmerTest]
 Formula: BDI ~ 1 + time.c + (1 | person_id)
    Data: df_long
 
-REML criterion at convergence: 2660.4
+REML criterion at convergence: 2660.8
 
 Scaled residuals: 
      Min       1Q   Median       3Q      Max 
--2.65497 -0.57893 -0.00296  0.57915  2.85375 
+-2.18300 -0.64279 -0.01792  0.64556  2.55628 
 
 Random effects:
  Groups    Name        Variance Std.Dev.
- person_id (Intercept) 98.55    9.927   
- Residual              21.71    4.660   
+ person_id (Intercept) 75.79    8.706   
+ Residual              23.55    4.853   
 Number of obs: 400, groups:  person_id, 100
 
 Fixed effects:
             Estimate Std. Error       df t value Pr(&gt;|t|)    
-(Intercept)  18.5281     1.0665 118.1334  17.372  &lt; 2e-16 ***
-time.c       -0.4936     0.1042 299.0000  -4.738 3.35e-06 ***
+(Intercept)  16.2907     0.9606 125.6598   16.96  &lt; 2e-16 ***
+time.c       -0.6044     0.1085 299.0000   -5.57 5.69e-08 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Correlation of Fixed Effects:
        (Intr)
-time.c -0.293</code></pre>
+time.c -0.339</code></pre>
 </div>
 </div>
 <p>Now we put this data generating script into a function and run our power analysis:</p>
@@ -1030,21 +1047,21 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n power_intercept power_time.c power_treatment power_IA
-1   60               1        0.004           0.221    0.293
-2   70               1        0.007           0.270    0.409
-3   80               1        0.003           0.344    0.448
-4   90               1        0.003           0.412    0.503
-5  100               1        0.001           0.475    0.563
-6  110               1        0.004           0.527    0.619
-7  120               1        0.008           0.568    0.702
-8  130               1        0.003           0.600    0.772
-9  140               1        0.005           0.663    0.793
-10 150               1        0.009           0.701    0.850
-11 160               1        0.008           0.749    0.840
-12 170               1        0.004           0.774    0.860
-13 180               1        0.005           0.798    0.884
-14 190               1        0.003           0.834    0.920
-15 200               1        0.004           0.859    0.934</code></pre>
+1   60               1        0.004           0.245    0.311
+2   70               1        0.009           0.280    0.407
+3   80               1        0.002           0.337    0.447
+4   90               1        0.005           0.429    0.497
+5  100               1        0.001           0.442    0.556
+6  110               1        0.006           0.509    0.618
+7  120               1        0.005           0.591    0.703
+8  130               1        0.003           0.588    0.765
+9  140               1        0.003           0.664    0.786
+10 150               1        0.004           0.707    0.854
+11 160               1        0.005           0.758    0.836
+12 170               1        0.002           0.791    0.855
+13 180               1        0.006           0.789    0.889
+14 190               1        0.004           0.843    0.921
+15 200               1        0.006           0.855    0.934</code></pre>
 </div>
 </div>
 <p>You will see a lot of warnings about <code>boundary (singular) fit</code> – you can generally ignore these; they typically occur when one of the random variances is exactly zero; but the fixed effect estimates (which are our focus here) are still valid. You will also see some rare warnings about <code>Model failed to converge with max|grad|</code>. In this case, the optimizer did not converge with the required precision, but typically still is very close. Finally, there are some warnings <code>Model failed to converge with 1 negative eigenvalue</code>. These instances give wrong results. However, if in our thousands of simulations some very few models did not converge, this makes no noticeable difference. If, however, the majority of your models does not converge this is a hint that your simulation has some errors.</p>
@@ -1572,7 +1589,19 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
       }
     }
   });
-  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./glm.html" class="pagination-link" aria-label="Ch. 3: Generalized Linear Models">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ch. 3: Generalized Linear Models</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./sem.html" class="pagination-link" aria-label="Ch. 5: Structural Equation Models">
+        <span class="nav-page-text">Ch. 5: Structural Equation Models</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Ch. 4: Linear Mixed Models / Multilevel models"</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Felix Schönbrodt"</span></span>
@@ -2075,7 +2104,7 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
     </div>   
     <div class="nav-footer-center">
 <p>© 2023 Felix Schönbrodt, Moritz Fischer. Published by LMU Open Science Center. Licensed under CC BY-SA 4.0.</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/LMM.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/LMM.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/lmm.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/lmm.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
