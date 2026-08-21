@@ -341,3 +341,4 @@ Aberson, C. L. (2019). Applied power analysis for the behavioral sciences. Routl
 Perugini, M., Gallucci, M., & Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. [https://journals.sagepub.com/doi/10.1177/1745691614528519](https://journals.sagepub.com/doi/10.1177/1745691614528519)
 
 Royston, P., Altman, D. G., & Sauerbrei, W. (2006). Dichotomizing continuous predictors in multiple regression: A bad idea. Statistics in Medicine, 25(1), 127–141. [https://doi.org/10.1002/sim.2331](https://doi.org/10.1002/sim.2331)
+
