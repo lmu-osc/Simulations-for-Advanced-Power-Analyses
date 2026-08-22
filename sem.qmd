@@ -42,7 +42,6 @@ Just like for any other simulation-based power analysis, we first need to come u
 
 
 ```{r load data, message=FALSE}
-
 #install.packages("MPsychoR")
 library(MPsychoR)
 
@@ -65,14 +64,12 @@ This data set comprises `r ncol(Bergh)` variables measured in `r nrow(Bergh)` pa
 To get an impression of this data, we look at the correlations of the variables we're interested in.
 
 ```{r correlations SEM}
-
 cor(cbind(EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 ```
 
 As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by Bergh et al. (2016). We start by calculating the means of the  variables, rounding them generously, and storing them in a vector called `means_vector`. 
 
 ```{r mean vector SEM}
-
 #store means
 means_vector <- c(
   mean(EP),
@@ -92,7 +89,6 @@ means_vector
 We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the Bergh et al. data as well. There are two ways to do this. First, we can use the `cov` function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal and the covariances in the remaining cells. 
 
 ```{r cov matrix SEM}
-
 #store covariances
 cov_mat <- cov(cbind(EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 
@@ -103,7 +99,6 @@ cov_mat
 This works well as long as we have a data set (e.g., from a pilot study or published work) to estimate the variances and covariances. In other cases, however, we might not have access to such a data set. In this case, we might only have a correlation table that was provided in a published paper. But that's no problem either, as we can transform the correlations and standard deviations of the variables of interest into a variance-covariance matrix. The following chunk shows how this works by using the `cor2cov` function from the `MBESS` package. 
 
 ```{r sd vector and correlations SEM}
-
 #store correlation matrix
 cor_mat <- cor(cbind(EP, SP, HP, DP, O1, O2, O3))
 
@@ -122,14 +117,12 @@ cov_mat2
 Let's do a plausibility check: Did the two ways to estimate the variance-covariance matrix lead to the same results?
 
 ```{r plausibility check SEM}
-
 cov_mat == cov_mat2
 ```
 
 Indeed, this worked! Both procedures lead to the exact same variance-covariance matrix. Now that we have an approximation of the variance-covariance matrix, we use the `rmvnorm` function from the `Rfast` package to simulate data from a multivariate normal distribution. The following code simulates `n = 50` observations from the specified population. 
 
 ```{r simulate data SEM}
-
 #Set seed to make results reproducible
 set.seed(21364)
 
@@ -148,7 +141,6 @@ head(my_first_simulated_data)
 We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an $\alpha$-level of .005. We will work with the `lavaan` package to fit SEMs.
 
 ```{r analyze data SEM}
-
 #specify SEM
 model_sem <- "generalized_prejudice =~ EP + DP + SP + HP
               openness =~ O1 + O2 + O3
@@ -164,7 +156,6 @@ summary(fit_sem)
 The results show that in this case, the regression coefficient is `r lavaan::parameterestimates(fit_sem)[8,]$est |> round(2)` which is significant with p = `r lavaan::parameterestimates(fit_sem)[8,]$pvalue |> round(3)`. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called `p_values`. 
 
 ```{r multiple iterations SEM, warning=FALSE}
-
 #Set seed to make results reproducible
 set.seed(21364)
 
@@ -191,7 +182,6 @@ for (i in 1:iterations) {
 How many of our 500 virtual samples would have found a significant p-value (i.e., p < .005)?
 
 ```{r results SEM}
-
 #frequency table
 table(p_values < .005)
 
@@ -207,7 +197,6 @@ But how many observations do we need to find the presumed effect with a power of
 
 
 ```{r power analysis SEM, warning=FALSE}
-
 #Set seed to make results reproducible
 set.seed(21364)
 
@@ -255,7 +244,6 @@ for (n in ns_sem) {
 Let's plot the results:
 
 ```{r plot power curve SEM, warning=FALSE}
-
 ggplot(result_sem, aes(x = n, y = power)) +
   geom_point() +
   geom_line() +
@@ -275,7 +263,6 @@ In our opening example in this chapter, we used the `rmvnorm` function from the 
 More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al. (2016). Let's again take a look at the results of our SEM when applying it to this data set.
 
 ```{r fit Bergh}
-
 #fit the SEM to the pilot data set
 fit_bergh <- sem(model_sem, data = Bergh)
 
@@ -286,7 +273,6 @@ summary(fit_bergh)
 In order to use the `simulateData()` function, we can take the estimates from this previous study and plug them into the lavaan syntax in the following chunk. 
 
 ```{r specify lavaan syntax}
-
 #Set seed to make results reproducible
 set.seed(21364)
 
@@ -317,7 +303,6 @@ head(sim_lavaan)
 The next step is to integrate this code into our first simulation-based power analysis in this chapter, that is, to replace the data simulation process using the `rmvnorm` function from the `Rfast` package with this new method using `simulateData()` from the `lavaan` package. To this end, I am adapting the `power analysis SEM` chunk from above accordingly.
 
 ```{r simulateData, warning=FALSE}
-
 #Set seed to make results reproducible
 set.seed(21364)
 
@@ -364,7 +349,6 @@ for (n in ns_sem) {
 Let's plot this again. 
 
 ```{r plot power curve SEM lavaan, warning=FALSE}
-
 ggplot(result_sem, aes(x = n, y = power)) +
   geom_point() +
   geom_line() +
@@ -388,7 +372,6 @@ Of note, the two power analyses for our SEM we have conducted so far used the ob
 Basically, all need to do in order to account for variability of observed effect sizes is to calculate a 60%-confidence interval around the point estimate of the observed effect size from our pilot data and to use the more conservative bound of this confidence interval (here: the upper bound) as our new effect size estimate. This can be easily done with the `parameterestimates` function from the `lavaan` package which takes the level of the confidence interval as an input parameter. Let's use this function on our object `fit_bergh` which stores the results of our SEM in the `Bergh` data set.  
 
 ```{r safeguard estimation}
-
 parameterestimates(fit_bergh, level = .60)
 ```
 
@@ -396,7 +379,6 @@ This output shows that the upper bound of the 60% confidence interval around the
 
 
 ```{r lavaan model safeguard power}
-
 #Set seed to make results reproducible
 set.seed(21364)
 
@@ -430,7 +412,6 @@ head(sim_lavaan_safeguard)
 Now, everything is ready for the actual safeguard power analysis. We can re-use the `sim_sem_lavaan` function we have defined above. Let's see what we get here! 
 
 ```{r safeguard power analysis, warning=FALSE}
-
 #Set seed to make results reproducible
 set.seed(21364)
 
@@ -488,7 +469,6 @@ Sometimes, researchers not only wish to investigate whether and how two (latent)
 We first draw on the Bergh et al. (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding "male" with 0 and "female" with 1. 
 
 ```{r means and cov mediation}
-
 Bergh_int <- Bergh
 Bergh_int$gender <- ifelse(
   Bergh_int$gender == "male",
@@ -525,7 +505,6 @@ If we were  interested in a mediation model with only manifest variables, we cou
 Now, we specify the statistical mediation model in `lavaan`. 
 
 ```{r specify mediation model}
-
 #specify mediation model
 model_mediation <- '
 
@@ -553,7 +532,6 @@ model_mediation <- '
 To verify that this model syntax works properly, we can fit this model to the data set provided by Bergh et al. (2016).
 
 ```{r test mediation model with the pilot data}
-
 #fit the SEM to the simulated data set
 fit_mediation <- sem(model_mediation, data = Bergh_int)
 
@@ -564,7 +542,6 @@ summary(fit_mediation)
 Now, everything is set up to run the actual power analysis. In the following chunk, we repeatedly simulate data from the specified population and store the p-value of the indirect effect while varying the sample size in a range from 500 to 1500. 
 
 ```{r simulate data mediation, warning=FALSE}
-  
 #Set seed to make results reproducible
 set.seed(21364)
 
@@ -618,7 +595,6 @@ for (n in ns_mediation) {
 Let's plot the results:
 
 ```{r plot power curve mediation}
-
 ggplot(result_mediation, aes(x = n, y = power)) +
   geom_point() +
   geom_line() +

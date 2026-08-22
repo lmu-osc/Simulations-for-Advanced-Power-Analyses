@@ -7,7 +7,6 @@ aliases: [SEM_fit_index.html]
 *Reading/working time: ~15 min.*
 
 ```{r r install packages, message=FALSE, warning=FALSE}
-
 #install.packages(c("future.apply", "ggplot2", "lavaan", "MPsychoR"), dependencies = TRUE)
 
 require(future.apply)
@@ -19,7 +18,6 @@ require(MPsychoR)
 In this chapter, we will turn to simulation-based power analysis for fit indices in the context of SEM. We will build on the model we have introduced in Chapter 5 ([Structural Equation Modelling (SEM)](sem.qmd)), it is therefore recommendable to read this chapter first.  The following chunk specifies this model, in which (latent) generalized prejudice is predicted by (latent) openness to experience (as conceptualized in the big five personality traits). We fit this model to the data set by Bergh et al. (2016) in order to get a first impression of the model fit.
 
 ```{r specify model}
-
 data("Bergh")
 
 model_sem <- "generalized_prejudice =~ EP + DP + SP + HP
@@ -37,7 +35,6 @@ There are many different fit indices displayed in this output, for example the  
 As a starting point, we again define the population parameters (i.e., the means, variances, and co-variances of all measured variables). We use the study by Bergh et al. (2016) to estimate these parameters (just as we did in Chapter 5).
 
 ```{r define population}
-
 attach(Bergh)
 
 #store means
@@ -59,7 +56,6 @@ cov_mat <- cov(cbind(EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 With these parameters, we can simulate data using the `rmvnorm` function from the `Rfast` package. The only difference to the simulation described in Chapter 5 is that here, we do not calculate and store the p-value of the regression coefficient, but rather, we compute the width of the RMSEA confidence interval and store it in a vector. We then count the number of simulations that yield a confidence interval with a maximum size of, say, .10. The next chunk shows how this is done. 
 
 ```{r power analysis, warning=FALSE}
-
 set.seed(9875234)
 
 #test ns between 50 and 200
@@ -104,7 +100,6 @@ for (n in ns) {
 Let's plot this. 
 
 ```{r plot power curve}
-
 ggplot(result, aes(x = n, y = power)) +
   geom_point() +
   geom_line() +

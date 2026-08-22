@@ -8,7 +8,6 @@ author: Moritz Fischer
 In the previous chapters, we have learned how to conduct simulation-based power analyses for linear regressions with categorical and/or continuous predictor variables. In this chapter, we will turn to generalized linear models, which constitute a generalization of regular linear regressions. This class of statistical models additionally comprise more complex models such as logistic regression and poisson regression. However, as covering all of variants of the generalized linear models would exceed the scope of this workshop, we will only learn how to conduct a simulation-based power analysis for a logistic regression. Recall that a logistic regression is suitable for designs in which you predict a dichotomous outcome with a set of (continuous or categorical) predictors.
 
 ```{r install packages, message=FALSE, warning=FALSE}
-
 #install.packages(c("ggplot2", "DescTools"))
 library(ggplot2)
 library(DescTools)
@@ -39,7 +38,6 @@ Please note that we dichotomize this variable for didactic reasons only. From a 
 Let's start by dichotomizing the `bdi.2m` variable and storing the result in a new variable which we label `bdi.2m.dicho`. Here, we take 20 as our cut-off value, as BDIs of 20 or more refer to a moderate or severe depression. BDI values lower than 20, in turn, reflect a minimal or mild depression (see [first chapter on linear models](lm1.qmd) for more info). In our new `bdi.2m.dicho` variable, we code minimal/mild depression as "0"  and moderate/severe depression as "1".
 
 ```{r dichotomize dv}
-
 #dichotomize dv
 BtheB$bdi.2m.dicho <- ifelse(BtheB$bdi.2m < 20, 0, 1)
 
@@ -63,7 +61,6 @@ As in the previous chapters, we first need to estimate all population parameters
 The first parameter is pretty easy to estimate. In most cases, researchers will assign half of the participants to the treatment condition and the other half to a control condition. In this case, the probability of being in the `BtheB` condition would be 50%. Let's store that in a variable called `prop_btheb`.
 
 ```{r estimate proportion}
-
 prop_btheb <- 0.5
 ```
 
@@ -72,7 +69,6 @@ The other two estimates are only slightly more complicated to estimate. The prob
 These two probabilities can only be estimated with solid pilot data. In our case, we can estimate both probabilities from the `BtheB` data set. The following chunk does that, rounds the estimates to two decimals, and stores the estimates in two objects called `prop_tau` and `prop_btheb`.
 
 ```{r estimate probabilities}
-
 prob_tau <- round(
   length(BtheB$treatment[
     BtheB$treatment == "TAU" &
@@ -105,7 +101,6 @@ In the `BtheB` data set, the probability of *not* having a moderate/ severe depr
 Now we have all we need to start simulating data. There are multiple ways to simulate this kind of data, but one very simple way is to apply the `sample()` function. Here, we use it twice: Once to draw for the `TAU` condition and once for the `BtheB` condition (which differ in their probabilities of yielding a positive outcome, as we have seen before). For each condition, we draw whether or not the participant has a moderate/severe depression two months after the treatment, while coding "no moderate/severe depression" with 0 and "moderate/severe depression" with 1. Let's try this by sampling 100 observations per condition.
 
 ```{r simulate data}
-
 set.seed(8526)
 
 #sample from distribution in "TAU" condition
@@ -134,7 +129,6 @@ btheb <- cbind(
 We now have two data frames (labeled `tau` and `btheB`), one per condition. In the following chunk, we combine them into one data frame, change the variable names, transform the treatment variables to a factor, transform the outcome variable to an integer variable, and edit the factor levels -- all of this is necessary to run our logistic regression on this data set later.
 
 ```{r data preprocessing}
-
 #combine data frames
 simulated_data <- rbind(tau, btheb) |> as.data.frame()
 
@@ -157,7 +151,6 @@ simulated_data$treatment <- factor(
 With this first simulated data set, we can now perform a first logistic regression.
 
 ```{r logistic regression}
-
 simulated_fit <- glm(
   bdi.2m.dicho ~ treatment,
   data = simulated_data,
@@ -172,7 +165,6 @@ Here, we find a negative and significant regression weight for the treatment pre
 ## Let's do the power analysis
 
 ```{r power analysis}
-
 #write a function to automize the data simulation process
 simulation <- function(n, p0, p1, prop = .50) {
   #sample from distribution in "TAU" condition
@@ -251,7 +243,6 @@ for (n in ns) {
 Let's visualize the results.
 
 ```{r plot}
-
 ggplot(results, aes(x = n, y = power)) +
   geom_point() +
   geom_line() +
@@ -267,7 +258,6 @@ This plot shows that we need approx. 220 participants to achieve 80% under the g
 Luckily, there are also R packages that can perform these kinds of power analyses, for example the `pwr2ppl` package (Aberson, 2019). We can use this package to verify our results. Does the `pwr2ppl` package yield the same result? Note that you will need to install this package if you haven't used it before.
 
 ```{r pwr2ppl}
-
 #install.packages("devtools")
 #devtools::install_github("chrisaberson/pwr2ppl")
 pwr2ppl::LRcat(
@@ -288,14 +278,12 @@ Of note, our effect size estimates (i.e, the estimates of the probabilities of n
 Let's assume that we view the probability of not having a moderate/severe depression after the `TAU` treatment to be probably accurate, but that we want to account for uncertainty in the estimation of the probability of not having a moderate/severe depression after the `BtheB` treatment. We then simply calculate the 60% confidence interval around this effect size. We can use the `BinomCI` function from the `DescTools` package to do this. We need to provide this function with the number of successes (here: 37, see table above) and the number of observations (here: 52, see above).
 
 ```{r safeguard estimation}
-
 DescTools::BinomCI(37, 52, conf.level = 0.60)
 ```
 
 This gives us an estimate of `r round(DescTools::BinomCI(37, 52, conf.level = 0.60)[2],2)` for the lower bound of the 60% confidence interval of the probability of not having a moderate/severe depression after the `BtheB` treatment, while the point estimate for this effect size was `r prob_btheb`. We can now redo our power analysis from above with this new effect size estimation. I am copying the chunk from above, while replacing the `prob_btheb` value with `r round(DescTools::BinomCI(37, 52, conf.level = 0.60)[2],2)`.
 
 ```{r safeguard power analysis}
-
 #prepare empty vector to store the p-values
 p_value <- NULL
 

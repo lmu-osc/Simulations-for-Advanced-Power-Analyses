@@ -173,11 +173,11 @@ If you look up the formula of Cohen's *d*, it typically uses the *pooled* SD fro
 ## Plausibility check (not run, not shown in output):
 post <- na.omit(BtheB$bdi.2m)
 pre <- na.omit(BtheB$bdi.pre)
-f = c(rep("T", length(post)), rep("C", length(pre)))
-d = c(post, pre)
-cohen.d(d,f, na.rm=TRUE, pooled=TRUE, noncentral = FALSE)
+f <- c(rep("T", length(post)), rep("C", length(pre)))
+d <- c(post, pre)
+cohen.d(d, f, na.rm = TRUE, pooled = TRUE, noncentral = FALSE)
 
-(mean(post) - mean(pre))/sd(d)
+(mean(post) - mean(pre)) / sd(d)
 ```
 
 # Let's simulate!
@@ -189,10 +189,10 @@ set.seed(0xBEEF)
 
 # define all simulation parameters and predictor variables:
 n <- 100
-treatment <- c(rep(0, n/2), rep(1, n/2)) # first 50 control, then 50 treatment
+treatment <- c(rep(0, n / 2), rep(1, n / 2)) # first 50 control, then 50 treatment
 
 # Write down the equation
-BDI <- 23 - 6*treatment + rnorm(n, mean=0, sd=sqrt(117))
+BDI <- 23 - 6 * treatment + rnorm(n, mean = 0, sd = sqrt(117))
 
 # combine all variables in one data frame
 df <- data.frame(treatment, BDI)
@@ -205,12 +205,17 @@ Let's plot the simulated data with raincloud plots (see [here](https://z3tt.gith
 
 ```{r}
 #| warning: false
-ggplot(df, aes(x=as.factor(treatment), y=BDI)) + 
-  ggdist::stat_halfeye(adjust = .5, width = .3, .width = 0, 
-        justification = -.3, point_colour = NA) + 
-  geom_boxplot(width = .1, outlier.shape = NA) 
-  # gghalves::geom_half_point(side = "l", range_scale = .4, 
-  #       alpha = .5)
+ggplot(df, aes(x = as.factor(treatment), y = BDI)) +
+  ggdist::stat_halfeye(
+    adjust = .5,
+    width = .3,
+    .width = 0,
+    justification = -.3,
+    point_colour = NA
+  ) +
+  geom_boxplot(width = .1, outlier.shape = NA)
+# gghalves::geom_half_point(side = "l", range_scale = .4,
+#       alpha = .5)
 ```
 
 This graph gives us an impression of the plausibility of our simulation: In the control group, we have a median BDI score of 26, and 50% of participants, represented by the box of the boxplot, are roughly between 18 and 32 points (i.e., in the range of a moderate depression). After the simulated treatment, the median BDI score is at 18 (mild depression).
@@ -220,7 +225,7 @@ The plot also highlights an unrealistic aspect of our simulations: In reality, t
 Let's assume that we collected and analyzed this specific sample -- what would have been the results?
 
 ```{r}
-summary(lm(BDI ~ treatment, data=df))
+summary(lm(BDI ~ treatment, data = df))
 ```
 
 Here, and in the entire tutorial, we assume an $\alpha$-level of .005, as this provides more reasonable false positive rates and stronger evidence for new claims (Benjamin et al., [2018](https://doi.org/10.1038/s41562-017-0189-z)).
@@ -245,21 +250,24 @@ set.seed(0xBEEF)
 iterations <- 1000 # the number of Monte Carlo repetitions
 n <- 100 # the size of our simulated sample
 
-sim1 <- function(n=100, treatment_effect=-6, print=FALSE) {
-  treatment <- c(rep(0, n/2), rep(1, n/2))
-  BDI <- 23 + treatment_effect*treatment + rnorm(n, mean=0, sd=sqrt(117))
-  
+sim1 <- function(n = 100, treatment_effect = -6, print = FALSE) {
+  treatment <- c(rep(0, n / 2), rep(1, n / 2))
+  BDI <- 23 + treatment_effect * treatment + rnorm(n, mean = 0, sd = sqrt(117))
+
   # this lm() call should be exactly the function that you use
   # to analyse your real data set
   res <- lm(BDI ~ treatment)
   p_value <- summary(res)$coefficients["treatment", "Pr(>|t|)"]
-  
-  if (print==TRUE) print(summary(res))
-  else return(p_value)
+
+  if (print == TRUE) {
+    print(summary(res))
+  } else {
+    return(p_value)
+  }
 }
 
 # now run the sim() function a 1000 times and store the p-values in a vector:
-p_values <- replicate(iterations, sim1(n=100))
+p_values <- replicate(iterations, sim1(n = 100))
 ```
 
 How many of our 1000 virtual samples would have found the effect?
@@ -284,18 +292,22 @@ set.seed(0xBEEF)
 
 # define all predictor and simulation variables.
 iterations <- 1000
-ns <- seq(100, 300, by=20) # test ns between 100 and 300
+ns <- seq(100, 300, by = 20) # test ns between 100 and 300
 
 result <- data.frame()
 
-for (n in ns) {  # loop through elements of the vector "ns"
-  p_values <- replicate(iterations, sim1(n=n))
-  
-  result <- rbind(result, data.frame(
-    n = n,
-    power = sum(p_values < .005)/iterations)
+for (n in ns) {
+  # loop through elements of the vector "ns"
+  p_values <- replicate(iterations, sim1(n = n))
+
+  result <- rbind(
+    result,
+    data.frame(
+      n = n,
+      power = sum(p_values < .005) / iterations
+    )
   )
-  
+
   # show the result after each run (not shown here in the tutorial)
   print(result)
 }
@@ -304,7 +316,7 @@ for (n in ns) {  # loop through elements of the vector "ns"
 Let's plot there result:
 
 ```{r}
-ggplot(result, aes(x=n, y=power)) + geom_point() + geom_line()
+ggplot(result, aes(x = n, y = power)) + geom_point() + geom_line()
 ```
 
 Hence, with $n=180$ (90 in each group), we have a 80% chance to detect the effect.
@@ -336,7 +348,7 @@ If you assume publication bias, another heuristic for aiming at a more realistic
 We can use the `ci.smd` function from the `MBESS` package to compute a CI around Cohen's $d$ that we computed for our treatment effect:
 
 ```{r}
-ci.smd(smd=-0.55, n.1=50, n.2=50, conf.level=.60)
+ci.smd(smd = -0.55, n.1 = 50, n.2 = 50, conf.level = .60)
 ```
 
 However, in the simulated regression equation, we need the *raw* effect size -- so we have to backtransform the standardized confidence limits into the original metric. As the assumed effect is negative, we aim for the *upper*, i.e., the more conservative limit. After backtransformation in the raw metric, it is considerably smaller, at -4.1:
@@ -354,18 +366,22 @@ set.seed(0xBEEF)
 
 # define all predictor and simulation variables.
 iterations <- 1000
-ns <- seq(200, 400, by=20) # test ns between 200 and 400
+ns <- seq(200, 400, by = 20) # test ns between 200 and 400
 
 result <- data.frame()
 
-for (n in ns) {  # loop through elements of the vector "ns"
-  p_values <- replicate(iterations, sim1(n=n, treatment_effect = -4.1))
-  
-  result <- rbind(result, data.frame(
-    n = n,
-    power = sum(p_values < .005)/iterations)
+for (n in ns) {
+  # loop through elements of the vector "ns"
+  p_values <- replicate(iterations, sim1(n = n, treatment_effect = -4.1))
+
+  result <- rbind(
+    result,
+    data.frame(
+      n = n,
+      power = sum(p_values < .005) / iterations
+    )
   )
-  
+
   # show the result after each run
   print(result)
 }
@@ -401,16 +417,19 @@ set.seed(0xBEEF)
 iterations <- 1000
 
 # CHANGE: we adjusted the range of probed sample sizes upwards, as the effect size now is considerably smaller
-ns <- seq(600, 800, by=20)
+ns <- seq(600, 800, by = 20)
 
 result <- data.frame()
 
 for (n in ns) {
-  p_values <- replicate(iterations, sim1(n=n, treatment_effect = -3))
-  
-  result <- rbind(result, data.frame(
-    n = n,
-    power = sum(p_values < .005)/iterations)
+  p_values <- replicate(iterations, sim1(n = n, treatment_effect = -3))
+
+  result <- rbind(
+    result,
+    data.frame(
+      n = n,
+      power = sum(p_values < .005) / iterations
+    )
   )
 
   print(result)
@@ -437,16 +456,19 @@ set.seed(0xBEEF)
 
 # define all predictor and simulation variables.
 iterations <- 10000
-ns <- seq(640, 740, by=20)
+ns <- seq(640, 740, by = 20)
 
 result <- data.frame()
 
 for (n in ns) {
-  p_values <- replicate(iterations, sim1(n=n, treatment_effect = -3))
-  
-  result <- rbind(result, data.frame(
-    n = n,
-    power = sum(p_values < .005)/iterations)
+  p_values <- replicate(iterations, sim1(n = n, treatment_effect = -3))
+
+  result <- rbind(
+    result,
+    data.frame(
+      n = n,
+      power = sum(p_values < .005) / iterations
+    )
   )
 
   print(result)

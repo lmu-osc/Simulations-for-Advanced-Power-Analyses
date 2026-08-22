@@ -63,7 +63,6 @@ For each model, we will follow the structure:
 The following packages are necessary to reproduce the output of this tutorial. We recommend installing all of them before you dive into the individual chapters.
 
 ```{r install all packages, message=FALSE, error=FALSE, warning=FALSE, echo=TRUE, results='hide', eval=FALSE}
-
 install.packages(
   c(
     "ggplot2",
