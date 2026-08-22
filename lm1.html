@@ -744,10 +744,10 @@ Note
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define all simulation parameters and predictor variables:</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>)) <span class="co"># first 50 control, then 50 treatment</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n <span class="sc">/</span> <span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n <span class="sc">/</span> <span class="dv">2</span>)) <span class="co"># first 50 control, then 50 treatment</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Write down the equation</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">6</span><span class="sc">*</span>treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">6</span> <span class="sc">*</span> treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># combine all variables in one data frame</span></span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(treatment, BDI)</span>
@@ -775,10 +775,15 @@ Note
 </div>
 <p>Let’s plot the simulated data with raincloud plots (see <a href="https://z3tt.github.io/Rainclouds/">here</a> for a tutorial):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">as.factor</span>(treatment), <span class="at">y=</span>BDI)) <span class="sc">+</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_halfeye</span>(<span class="at">adjust =</span> .<span class="dv">5</span>, <span class="at">width =</span> .<span class="dv">3</span>, <span class="at">.width =</span> <span class="dv">0</span>, </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">justification =</span> <span class="sc">-</span>.<span class="dv">3</span>, <span class="at">point_colour =</span> <span class="cn">NA</span>) <span class="sc">+</span> </span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width =</span> .<span class="dv">1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(treatment), <span class="at">y =</span> BDI)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_halfeye</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">adjust =</span> .<span class="dv">5</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> .<span class="dv">3</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.width =</span> <span class="dv">0</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">justification =</span> <span class="sc">-</span>.<span class="dv">3</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">point_colour =</span> <span class="cn">NA</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width =</span> .<span class="dv">1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -786,14 +791,14 @@ Note
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># gghalves::geom_half_point(side = "l", range_scale = .4, </span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#       alpha = .5)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># gghalves::geom_half_point(side = "l", range_scale = .4,</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#       alpha = .5)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This graph gives us an impression of the plausibility of our simulation: In the control group, we have a median BDI score of 26, and 50% of participants, represented by the box of the boxplot, are roughly between 18 and 32 points (i.e., in the range of a moderate depression). After the simulated treatment, the median BDI score is at 18 (mild depression).</p>
 <p>The plot also highlights an unrealistic aspect of our simulations: In reality, the BDI score is bounded to be &gt;=0; but our random data (sampled from a normal distribution) can generate values below zero. For our current power simulations this can be neglected (as negative values are quite rare), but in real data collection such floor or ceiling effects can impose a range restriction that might lower the statistical power.</p>
 <p>Let’s assume that we collected and analyzed this specific sample – what would have been the results?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(BDI <span class="sc">~</span> treatment, <span class="at">data=</span>df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(BDI <span class="sc">~</span> treatment, <span class="at">data =</span> df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -831,21 +836,24 @@ F-statistic: 13.45 on 1 and 98 DF,  p-value: 0.0003985</code></pre>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># the number of Monte Carlo repetitions</span></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># the size of our simulated sample</span></span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>sim1 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>, <span class="at">print=</span><span class="cn">FALSE</span>) {</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">+</span> treatment_effect<span class="sc">*</span>treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>sim1 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="dv">6</span>, <span class="at">print =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n <span class="sc">/</span> <span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n <span class="sc">/</span> <span class="dv">2</span>))</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">+</span> treatment_effect <span class="sc">*</span> treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this lm() call should be exactly the function that you use</span></span>
 <span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to analyse your real data set</span></span>
 <span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI <span class="sc">~</span> treatment)</span>
 <span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print<span class="sc">==</span><span class="cn">TRUE</span>) <span class="fu">print</span>(<span class="fu">summary</span>(res))</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">return</span>(p_value)</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co"># now run the sim() function a 1000 times and store the p-values in a vector:</span></span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n=</span><span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">summary</span>(res))</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(p_value)</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="co"># now run the sim() function a 1000 times and store the p-values in a vector:</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n =</span> <span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>How many of our 1000 virtual samples would have found the effect?</p>
 <div class="cell">
@@ -867,25 +875,29 @@ FALSE  TRUE
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">300</span>, <span class="at">by=</span><span class="dv">20</span>) <span class="co"># test ns between 100 and 300</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">300</span>, <span class="at">by =</span> <span class="dv">20</span>) <span class="co"># test ns between 100 and 300</span></span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {  <span class="co"># loop through elements of the vector "ns"</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n=</span>n))</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations)</span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># loop through elements of the vector "ns"</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n =</span> n))</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    result,</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s plot there result:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result, <span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -937,7 +949,7 @@ Note
 </div>
 <p>We can use the <code>ci.smd</code> function from the <code>MBESS</code> package to compute a CI around Cohen’s <span class="math inline">d</span> that we computed for our treatment effect:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ci.smd</span>(<span class="at">smd=</span><span class="sc">-</span><span class="fl">0.55</span>, <span class="at">n.1=</span><span class="dv">50</span>, <span class="at">n.2=</span><span class="dv">50</span>, <span class="at">conf.level=</span>.<span class="dv">60</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ci.smd</span>(<span class="at">smd =</span> <span class="sc">-</span><span class="fl">0.55</span>, <span class="at">n.1 =</span> <span class="dv">50</span>, <span class="at">n.2 =</span> <span class="dv">50</span>, <span class="at">conf.level =</span> .<span class="dv">60</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$Lower.Conf.Limit.smd
 [1] -0.7201263
@@ -959,21 +971,25 @@ $Upper.Conf.Limit.smd
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">200</span>, <span class="dv">400</span>, <span class="at">by=</span><span class="dv">20</span>) <span class="co"># test ns between 200 and 400</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">200</span>, <span class="dv">400</span>, <span class="at">by =</span> <span class="dv">20</span>) <span class="co"># test ns between 200 and 400</span></span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {  <span class="co"># loop through elements of the vector "ns"</span></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n=</span>n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="fl">4.1</span>))</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations)</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run</span></span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># loop through elements of the vector "ns"</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n =</span> n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="fl">4.1</span>))</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    result,</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -1010,20 +1026,23 @@ $Upper.Conf.Limit.smd
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co"># CHANGE: we adjusted the range of probed sample sizes upwards, as the effect size now is considerably smaller</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">600</span>, <span class="dv">800</span>, <span class="at">by=</span><span class="dv">20</span>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">600</span>, <span class="dv">800</span>, <span class="at">by =</span> <span class="dv">20</span>)</span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n=</span>n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="dv">3</span>))</span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations)</span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n =</span> n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="dv">3</span>))</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    result,</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -1051,20 +1070,23 @@ $Upper.Conf.Limit.smd
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">640</span>, <span class="dv">740</span>, <span class="at">by=</span><span class="dv">20</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">640</span>, <span class="dv">740</span>, <span class="at">by =</span> <span class="dv">20</span>)</span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n=</span>n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="dv">3</span>))</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations)</span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n =</span> n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="dv">3</span>))</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    result,</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -1780,11 +1802,11 @@ To explore how many Monte Carlo iterations are necessary to get stable computati
 <span id="cb36-187"><a href="#cb36-187" aria-hidden="true" tabindex="-1"></a><span class="do">## Plausibility check (not run, not shown in output):</span></span>
 <span id="cb36-188"><a href="#cb36-188" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m)</span>
 <span id="cb36-189"><a href="#cb36-189" aria-hidden="true" tabindex="-1"></a>pre <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(BtheB<span class="sc">$</span>bdi.pre)</span>
-<span id="cb36-190"><a href="#cb36-190" aria-hidden="true" tabindex="-1"></a>f <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"T"</span>, <span class="fu">length</span>(post)), <span class="fu">rep</span>(<span class="st">"C"</span>, <span class="fu">length</span>(pre)))</span>
-<span id="cb36-191"><a href="#cb36-191" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">c</span>(post, pre)</span>
-<span id="cb36-192"><a href="#cb36-192" aria-hidden="true" tabindex="-1"></a><span class="fu">cohen.d</span>(d,f, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">pooled=</span><span class="cn">TRUE</span>, <span class="at">noncentral =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb36-190"><a href="#cb36-190" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"T"</span>, <span class="fu">length</span>(post)), <span class="fu">rep</span>(<span class="st">"C"</span>, <span class="fu">length</span>(pre)))</span>
+<span id="cb36-191"><a href="#cb36-191" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">c</span>(post, pre)</span>
+<span id="cb36-192"><a href="#cb36-192" aria-hidden="true" tabindex="-1"></a><span class="fu">cohen.d</span>(d, f, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">pooled =</span> <span class="cn">TRUE</span>, <span class="at">noncentral =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb36-193"><a href="#cb36-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-194"><a href="#cb36-194" aria-hidden="true" tabindex="-1"></a>(<span class="fu">mean</span>(post) <span class="sc">-</span> <span class="fu">mean</span>(pre))<span class="sc">/</span><span class="fu">sd</span>(d)</span>
+<span id="cb36-194"><a href="#cb36-194" aria-hidden="true" tabindex="-1"></a>(<span class="fu">mean</span>(post) <span class="sc">-</span> <span class="fu">mean</span>(pre)) <span class="sc">/</span> <span class="fu">sd</span>(d)</span>
 <span id="cb36-195"><a href="#cb36-195" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-196"><a href="#cb36-196" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-197"><a href="#cb36-197" aria-hidden="true" tabindex="-1"></a><span class="fu"># Let's simulate!</span></span>
@@ -1796,10 +1818,10 @@ To explore how many Monte Carlo iterations are necessary to get stable computati
 <span id="cb36-205"><a href="#cb36-205" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-206"><a href="#cb36-206" aria-hidden="true" tabindex="-1"></a><span class="co"># define all simulation parameters and predictor variables:</span></span>
 <span id="cb36-207"><a href="#cb36-207" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb36-208"><a href="#cb36-208" aria-hidden="true" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>)) <span class="co"># first 50 control, then 50 treatment</span></span>
+<span id="cb36-208"><a href="#cb36-208" aria-hidden="true" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n <span class="sc">/</span> <span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n <span class="sc">/</span> <span class="dv">2</span>)) <span class="co"># first 50 control, then 50 treatment</span></span>
 <span id="cb36-209"><a href="#cb36-209" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-210"><a href="#cb36-210" aria-hidden="true" tabindex="-1"></a><span class="co"># Write down the equation</span></span>
-<span id="cb36-211"><a href="#cb36-211" aria-hidden="true" tabindex="-1"></a>BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">6</span><span class="sc">*</span>treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
+<span id="cb36-211"><a href="#cb36-211" aria-hidden="true" tabindex="-1"></a>BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">-</span> <span class="dv">6</span> <span class="sc">*</span> treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
 <span id="cb36-212"><a href="#cb36-212" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-213"><a href="#cb36-213" aria-hidden="true" tabindex="-1"></a><span class="co"># combine all variables in one data frame</span></span>
 <span id="cb36-214"><a href="#cb36-214" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(treatment, BDI)</span>
@@ -1812,291 +1834,313 @@ To explore how many Monte Carlo iterations are necessary to get stable computati
 <span id="cb36-221"><a href="#cb36-221" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-224"><a href="#cb36-224" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb36-225"><a href="#cb36-225" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb36-226"><a href="#cb36-226" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">as.factor</span>(treatment), <span class="at">y=</span>BDI)) <span class="sc">+</span> </span>
-<span id="cb36-227"><a href="#cb36-227" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_halfeye</span>(<span class="at">adjust =</span> .<span class="dv">5</span>, <span class="at">width =</span> .<span class="dv">3</span>, <span class="at">.width =</span> <span class="dv">0</span>, </span>
-<span id="cb36-228"><a href="#cb36-228" aria-hidden="true" tabindex="-1"></a>        <span class="at">justification =</span> <span class="sc">-</span>.<span class="dv">3</span>, <span class="at">point_colour =</span> <span class="cn">NA</span>) <span class="sc">+</span> </span>
-<span id="cb36-229"><a href="#cb36-229" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width =</span> .<span class="dv">1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>) </span>
-<span id="cb36-230"><a href="#cb36-230" aria-hidden="true" tabindex="-1"></a>  <span class="co"># gghalves::geom_half_point(side = "l", range_scale = .4, </span></span>
-<span id="cb36-231"><a href="#cb36-231" aria-hidden="true" tabindex="-1"></a>  <span class="co">#       alpha = .5)</span></span>
-<span id="cb36-232"><a href="#cb36-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-233"><a href="#cb36-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-234"><a href="#cb36-234" aria-hidden="true" tabindex="-1"></a>This graph gives us an impression of the plausibility of our simulation: In the control group, we have a median BDI score of 26, and 50% of participants, represented by the box of the boxplot, are roughly between 18 and 32 points (i.e., in the range of a moderate depression). After the simulated treatment, the median BDI score is at 18 (mild depression).</span>
-<span id="cb36-235"><a href="#cb36-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-236"><a href="#cb36-236" aria-hidden="true" tabindex="-1"></a>The plot also highlights an unrealistic aspect of our simulations: In reality, the BDI score is bounded to be <span class="sc">\&gt;</span>=0; but our random data (sampled from a normal distribution) can generate values below zero. For our current power simulations this can be neglected (as negative values are quite rare), but in real data collection such floor or ceiling effects can impose a range restriction that might lower the statistical power.</span>
-<span id="cb36-237"><a href="#cb36-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-238"><a href="#cb36-238" aria-hidden="true" tabindex="-1"></a>Let's assume that we collected and analyzed this specific sample -- what would have been the results?</span>
-<span id="cb36-239"><a href="#cb36-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-242"><a href="#cb36-242" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-243"><a href="#cb36-243" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(BDI <span class="sc">~</span> treatment, <span class="at">data=</span>df))</span>
-<span id="cb36-244"><a href="#cb36-244" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-245"><a href="#cb36-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-246"><a href="#cb36-246" aria-hidden="true" tabindex="-1"></a>Here, and in the entire tutorial, we assume an $\alpha$-level of .005, as this provides more reasonable false positive rates and stronger evidence for new claims (Benjamin et al., <span class="co">[</span><span class="ot">2018</span><span class="co">](https://doi.org/10.1038/s41562-017-0189-z)</span>).</span>
-<span id="cb36-247"><a href="#cb36-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-248"><a href="#cb36-248" aria-hidden="true" tabindex="-1"></a>As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p <span class="sc">\&gt;</span> .02). But how likely are we to detect an effect with a sample of this size?</span>
-<span id="cb36-249"><a href="#cb36-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-250"><a href="#cb36-250" aria-hidden="true" tabindex="-1"></a><span class="fu">## Doing the power analysis</span></span>
-<span id="cb36-251"><a href="#cb36-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-252"><a href="#cb36-252" aria-hidden="true" tabindex="-1"></a>Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a function called <span class="in">`sim`</span>. We coded the function to either return the focal p-value (as default) or to print a model summary (helpful for debugging and testing the function). This function takes two parameters:</span>
-<span id="cb36-253"><a href="#cb36-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-254"><a href="#cb36-254" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`n`</span> defines the required sample size</span>
-<span id="cb36-255"><a href="#cb36-255" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`treatment_effect`</span> defines the treatment effect in the raw scale (i.e., reduction in BDI points)</span>
+<span id="cb36-226"><a href="#cb36-226" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(treatment), <span class="at">y =</span> BDI)) <span class="sc">+</span></span>
+<span id="cb36-227"><a href="#cb36-227" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_halfeye</span>(</span>
+<span id="cb36-228"><a href="#cb36-228" aria-hidden="true" tabindex="-1"></a>    <span class="at">adjust =</span> .<span class="dv">5</span>,</span>
+<span id="cb36-229"><a href="#cb36-229" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> .<span class="dv">3</span>,</span>
+<span id="cb36-230"><a href="#cb36-230" aria-hidden="true" tabindex="-1"></a>    <span class="at">.width =</span> <span class="dv">0</span>,</span>
+<span id="cb36-231"><a href="#cb36-231" aria-hidden="true" tabindex="-1"></a>    <span class="at">justification =</span> <span class="sc">-</span>.<span class="dv">3</span>,</span>
+<span id="cb36-232"><a href="#cb36-232" aria-hidden="true" tabindex="-1"></a>    <span class="at">point_colour =</span> <span class="cn">NA</span></span>
+<span id="cb36-233"><a href="#cb36-233" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb36-234"><a href="#cb36-234" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width =</span> .<span class="dv">1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>)</span>
+<span id="cb36-235"><a href="#cb36-235" aria-hidden="true" tabindex="-1"></a><span class="co"># gghalves::geom_half_point(side = "l", range_scale = .4,</span></span>
+<span id="cb36-236"><a href="#cb36-236" aria-hidden="true" tabindex="-1"></a><span class="co">#       alpha = .5)</span></span>
+<span id="cb36-237"><a href="#cb36-237" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-238"><a href="#cb36-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-239"><a href="#cb36-239" aria-hidden="true" tabindex="-1"></a>This graph gives us an impression of the plausibility of our simulation: In the control group, we have a median BDI score of 26, and 50% of participants, represented by the box of the boxplot, are roughly between 18 and 32 points (i.e., in the range of a moderate depression). After the simulated treatment, the median BDI score is at 18 (mild depression).</span>
+<span id="cb36-240"><a href="#cb36-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-241"><a href="#cb36-241" aria-hidden="true" tabindex="-1"></a>The plot also highlights an unrealistic aspect of our simulations: In reality, the BDI score is bounded to be <span class="sc">\&gt;</span>=0; but our random data (sampled from a normal distribution) can generate values below zero. For our current power simulations this can be neglected (as negative values are quite rare), but in real data collection such floor or ceiling effects can impose a range restriction that might lower the statistical power.</span>
+<span id="cb36-242"><a href="#cb36-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-243"><a href="#cb36-243" aria-hidden="true" tabindex="-1"></a>Let's assume that we collected and analyzed this specific sample -- what would have been the results?</span>
+<span id="cb36-244"><a href="#cb36-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-247"><a href="#cb36-247" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-248"><a href="#cb36-248" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(BDI <span class="sc">~</span> treatment, <span class="at">data =</span> df))</span>
+<span id="cb36-249"><a href="#cb36-249" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-250"><a href="#cb36-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-251"><a href="#cb36-251" aria-hidden="true" tabindex="-1"></a>Here, and in the entire tutorial, we assume an $\alpha$-level of .005, as this provides more reasonable false positive rates and stronger evidence for new claims (Benjamin et al., <span class="co">[</span><span class="ot">2018</span><span class="co">](https://doi.org/10.1038/s41562-017-0189-z)</span>).</span>
+<span id="cb36-252"><a href="#cb36-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-253"><a href="#cb36-253" aria-hidden="true" tabindex="-1"></a>As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p <span class="sc">\&gt;</span> .02). But how likely are we to detect an effect with a sample of this size?</span>
+<span id="cb36-254"><a href="#cb36-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-255"><a href="#cb36-255" aria-hidden="true" tabindex="-1"></a><span class="fu">## Doing the power analysis</span></span>
 <span id="cb36-256"><a href="#cb36-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-257"><a href="#cb36-257" aria-hidden="true" tabindex="-1"></a>We then use the <span class="in">`replicate`</span> function to repeatedly call the <span class="in">`sim`</span> function for 1000 iterations.</span>
+<span id="cb36-257"><a href="#cb36-257" aria-hidden="true" tabindex="-1"></a>Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a function called <span class="in">`sim`</span>. We coded the function to either return the focal p-value (as default) or to print a model summary (helpful for debugging and testing the function). This function takes two parameters:</span>
 <span id="cb36-258"><a href="#cb36-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-261"><a href="#cb36-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-262"><a href="#cb36-262" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb36-263"><a href="#cb36-263" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: hide</span></span>
-<span id="cb36-264"><a href="#cb36-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-265"><a href="#cb36-265" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
-<span id="cb36-266"><a href="#cb36-266" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-267"><a href="#cb36-267" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># the number of Monte Carlo repetitions</span></span>
-<span id="cb36-268"><a href="#cb36-268" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># the size of our simulated sample</span></span>
+<span id="cb36-259"><a href="#cb36-259" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`n`</span> defines the required sample size</span>
+<span id="cb36-260"><a href="#cb36-260" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`treatment_effect`</span> defines the treatment effect in the raw scale (i.e., reduction in BDI points)</span>
+<span id="cb36-261"><a href="#cb36-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-262"><a href="#cb36-262" aria-hidden="true" tabindex="-1"></a>We then use the <span class="in">`replicate`</span> function to repeatedly call the <span class="in">`sim`</span> function for 1000 iterations.</span>
+<span id="cb36-263"><a href="#cb36-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-266"><a href="#cb36-266" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-267"><a href="#cb36-267" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb36-268"><a href="#cb36-268" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: hide</span></span>
 <span id="cb36-269"><a href="#cb36-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-270"><a href="#cb36-270" aria-hidden="true" tabindex="-1"></a>sim1 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">treatment_effect=</span><span class="sc">-</span><span class="dv">6</span>, <span class="at">print=</span><span class="cn">FALSE</span>) {</span>
-<span id="cb36-271"><a href="#cb36-271" aria-hidden="true" tabindex="-1"></a>  treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n<span class="sc">/</span><span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n<span class="sc">/</span><span class="dv">2</span>))</span>
-<span id="cb36-272"><a href="#cb36-272" aria-hidden="true" tabindex="-1"></a>  BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">+</span> treatment_effect<span class="sc">*</span>treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
-<span id="cb36-273"><a href="#cb36-273" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb36-274"><a href="#cb36-274" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this lm() call should be exactly the function that you use</span></span>
-<span id="cb36-275"><a href="#cb36-275" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to analyse your real data set</span></span>
-<span id="cb36-276"><a href="#cb36-276" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI <span class="sc">~</span> treatment)</span>
-<span id="cb36-277"><a href="#cb36-277" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
-<span id="cb36-278"><a href="#cb36-278" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb36-279"><a href="#cb36-279" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print<span class="sc">==</span><span class="cn">TRUE</span>) <span class="fu">print</span>(<span class="fu">summary</span>(res))</span>
-<span id="cb36-280"><a href="#cb36-280" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">return</span>(p_value)</span>
-<span id="cb36-281"><a href="#cb36-281" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb36-282"><a href="#cb36-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-283"><a href="#cb36-283" aria-hidden="true" tabindex="-1"></a><span class="co"># now run the sim() function a 1000 times and store the p-values in a vector:</span></span>
-<span id="cb36-284"><a href="#cb36-284" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n=</span><span class="dv">100</span>))</span>
-<span id="cb36-285"><a href="#cb36-285" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-286"><a href="#cb36-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-287"><a href="#cb36-287" aria-hidden="true" tabindex="-1"></a>How many of our 1000 virtual samples would have found the effect?</span>
-<span id="cb36-288"><a href="#cb36-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-291"><a href="#cb36-291" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-292"><a href="#cb36-292" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)</span>
+<span id="cb36-270"><a href="#cb36-270" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
+<span id="cb36-271"><a href="#cb36-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-272"><a href="#cb36-272" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># the number of Monte Carlo repetitions</span></span>
+<span id="cb36-273"><a href="#cb36-273" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># the size of our simulated sample</span></span>
+<span id="cb36-274"><a href="#cb36-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-275"><a href="#cb36-275" aria-hidden="true" tabindex="-1"></a>sim1 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="dv">6</span>, <span class="at">print =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb36-276"><a href="#cb36-276" aria-hidden="true" tabindex="-1"></a>  treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n <span class="sc">/</span> <span class="dv">2</span>), <span class="fu">rep</span>(<span class="dv">1</span>, n <span class="sc">/</span> <span class="dv">2</span>))</span>
+<span id="cb36-277"><a href="#cb36-277" aria-hidden="true" tabindex="-1"></a>  BDI <span class="ot">&lt;-</span> <span class="dv">23</span> <span class="sc">+</span> treatment_effect <span class="sc">*</span> treatment <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">117</span>))</span>
+<span id="cb36-278"><a href="#cb36-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-279"><a href="#cb36-279" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this lm() call should be exactly the function that you use</span></span>
+<span id="cb36-280"><a href="#cb36-280" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to analyse your real data set</span></span>
+<span id="cb36-281"><a href="#cb36-281" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">lm</span>(BDI <span class="sc">~</span> treatment)</span>
+<span id="cb36-282"><a href="#cb36-282" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">summary</span>(res)<span class="sc">$</span>coefficients[<span class="st">"treatment"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
+<span id="cb36-283"><a href="#cb36-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-284"><a href="#cb36-284" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb36-285"><a href="#cb36-285" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">summary</span>(res))</span>
+<span id="cb36-286"><a href="#cb36-286" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb36-287"><a href="#cb36-287" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(p_value)</span>
+<span id="cb36-288"><a href="#cb36-288" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb36-289"><a href="#cb36-289" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-290"><a href="#cb36-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-291"><a href="#cb36-291" aria-hidden="true" tabindex="-1"></a><span class="co"># now run the sim() function a 1000 times and store the p-values in a vector:</span></span>
+<span id="cb36-292"><a href="#cb36-292" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n =</span> <span class="dv">100</span>))</span>
 <span id="cb36-293"><a href="#cb36-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-294"><a href="#cb36-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-295"><a href="#cb36-295" aria-hidden="true" tabindex="-1"></a>Only <span class="in">`r round(sum(p_values &lt; .005)*100/iterations)`</span>% of samples with the same size of $n=100$ result in a significant p-value.</span>
+<span id="cb36-295"><a href="#cb36-295" aria-hidden="true" tabindex="-1"></a>How many of our 1000 virtual samples would have found the effect?</span>
 <span id="cb36-296"><a href="#cb36-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-297"><a href="#cb36-297" aria-hidden="true" tabindex="-1"></a><span class="in">`r round(sum(p_values &lt; .005)*100/iterations)`</span>% -- that is our power for $\alpha = .005$, Cohen's $d=.55$, and $n=100$.</span>
-<span id="cb36-298"><a href="#cb36-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-299"><a href="#cb36-299" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sample size planning: Find the necessary sample size</span></span>
-<span id="cb36-300"><a href="#cb36-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-301"><a href="#cb36-301" aria-hidden="true" tabindex="-1"></a>Now we know that a sample size of 100 does not lead to a sufficient power. But what sample size would we need to achieve a power of at least 80%? In the simulation approach you need to test different $n$s until you find the necessary sample size. We do this by wrapping the simulation code into a loop that continuously increases the n. We then store the computed power for each n.</span>
+<span id="cb36-299"><a href="#cb36-299" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-300"><a href="#cb36-300" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)</span>
+<span id="cb36-301"><a href="#cb36-301" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-302"><a href="#cb36-302" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-305"><a href="#cb36-305" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-306"><a href="#cb36-306" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb36-307"><a href="#cb36-307" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: hide</span></span>
+<span id="cb36-303"><a href="#cb36-303" aria-hidden="true" tabindex="-1"></a>Only <span class="in">`r round(sum(p_values &lt; .005)*100/iterations)`</span>% of samples with the same size of $n=100$ result in a significant p-value.</span>
+<span id="cb36-304"><a href="#cb36-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-305"><a href="#cb36-305" aria-hidden="true" tabindex="-1"></a><span class="in">`r round(sum(p_values &lt; .005)*100/iterations)`</span>% -- that is our power for $\alpha = .005$, Cohen's $d=.55$, and $n=100$.</span>
+<span id="cb36-306"><a href="#cb36-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-307"><a href="#cb36-307" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sample size planning: Find the necessary sample size</span></span>
 <span id="cb36-308"><a href="#cb36-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-309"><a href="#cb36-309" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
+<span id="cb36-309"><a href="#cb36-309" aria-hidden="true" tabindex="-1"></a>Now we know that a sample size of 100 does not lead to a sufficient power. But what sample size would we need to achieve a power of at least 80%? In the simulation approach you need to test different $n$s until you find the necessary sample size. We do this by wrapping the simulation code into a loop that continuously increases the n. We then store the computed power for each n.</span>
 <span id="cb36-310"><a href="#cb36-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-311"><a href="#cb36-311" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
-<span id="cb36-312"><a href="#cb36-312" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb36-313"><a href="#cb36-313" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">300</span>, <span class="at">by=</span><span class="dv">20</span>) <span class="co"># test ns between 100 and 300</span></span>
-<span id="cb36-314"><a href="#cb36-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-315"><a href="#cb36-315" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb36-313"><a href="#cb36-313" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-314"><a href="#cb36-314" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb36-315"><a href="#cb36-315" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: hide</span></span>
 <span id="cb36-316"><a href="#cb36-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-317"><a href="#cb36-317" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {  <span class="co"># loop through elements of the vector "ns"</span></span>
-<span id="cb36-318"><a href="#cb36-318" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n=</span>n))</span>
-<span id="cb36-319"><a href="#cb36-319" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb36-320"><a href="#cb36-320" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb36-321"><a href="#cb36-321" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb36-322"><a href="#cb36-322" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations)</span>
-<span id="cb36-323"><a href="#cb36-323" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb36-324"><a href="#cb36-324" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb36-325"><a href="#cb36-325" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
-<span id="cb36-326"><a href="#cb36-326" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb36-327"><a href="#cb36-327" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb36-328"><a href="#cb36-328" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-329"><a href="#cb36-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-330"><a href="#cb36-330" aria-hidden="true" tabindex="-1"></a>Let's plot there result:</span>
-<span id="cb36-331"><a href="#cb36-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-334"><a href="#cb36-334" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-335"><a href="#cb36-335" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>()</span>
-<span id="cb36-336"><a href="#cb36-336" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-337"><a href="#cb36-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-338"><a href="#cb36-338" aria-hidden="true" tabindex="-1"></a>Hence, with $n=180$ (90 in each group), we have a 80% chance to detect the effect.</span>
-<span id="cb36-339"><a href="#cb36-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-340"><a href="#cb36-340" aria-hidden="true" tabindex="-1"></a>🥳 **Congratulations! You did your first power analysis by simulation.** 🎉</span>
+<span id="cb36-317"><a href="#cb36-317" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
+<span id="cb36-318"><a href="#cb36-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-319"><a href="#cb36-319" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
+<span id="cb36-320"><a href="#cb36-320" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb36-321"><a href="#cb36-321" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">300</span>, <span class="at">by =</span> <span class="dv">20</span>) <span class="co"># test ns between 100 and 300</span></span>
+<span id="cb36-322"><a href="#cb36-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-323"><a href="#cb36-323" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb36-324"><a href="#cb36-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-325"><a href="#cb36-325" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb36-326"><a href="#cb36-326" aria-hidden="true" tabindex="-1"></a>  <span class="co"># loop through elements of the vector "ns"</span></span>
+<span id="cb36-327"><a href="#cb36-327" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n =</span> n))</span>
+<span id="cb36-328"><a href="#cb36-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-329"><a href="#cb36-329" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb36-330"><a href="#cb36-330" aria-hidden="true" tabindex="-1"></a>    result,</span>
+<span id="cb36-331"><a href="#cb36-331" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb36-332"><a href="#cb36-332" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb36-333"><a href="#cb36-333" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
+<span id="cb36-334"><a href="#cb36-334" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-335"><a href="#cb36-335" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb36-336"><a href="#cb36-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-337"><a href="#cb36-337" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
+<span id="cb36-338"><a href="#cb36-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb36-339"><a href="#cb36-339" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-340"><a href="#cb36-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-341"><a href="#cb36-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-342"><a href="#cb36-342" aria-hidden="true" tabindex="-1"></a>For these simple models, we can also compute analytic solutions. Let's verify our results with the <span class="in">`pwr`</span> package -- a linear regression with a single dichotomous predictor is equivalent to a t-test:</span>
+<span id="cb36-342"><a href="#cb36-342" aria-hidden="true" tabindex="-1"></a>Let's plot there result:</span>
 <span id="cb36-343"><a href="#cb36-343" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-346"><a href="#cb36-346" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-347"><a href="#cb36-347" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.t.test</span>(<span class="at">d =</span> <span class="fl">0.55</span>, <span class="at">sig.level =</span> <span class="fl">0.005</span>, <span class="at">power =</span> .<span class="dv">80</span>)</span>
+<span id="cb36-347"><a href="#cb36-347" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(result, <span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> power)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>()</span>
 <span id="cb36-348"><a href="#cb36-348" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-349"><a href="#cb36-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-350"><a href="#cb36-350" aria-hidden="true" tabindex="-1"></a>Exactly the same result -- phew 😅</span>
+<span id="cb36-350"><a href="#cb36-350" aria-hidden="true" tabindex="-1"></a>Hence, with $n=180$ (90 in each group), we have a 80% chance to detect the effect.</span>
 <span id="cb36-351"><a href="#cb36-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-352"><a href="#cb36-352" aria-hidden="true" tabindex="-1"></a><span class="fu"># Sensitivity analyses</span></span>
+<span id="cb36-352"><a href="#cb36-352" aria-hidden="true" tabindex="-1"></a>🥳 **Congratulations! You did your first power analysis by simulation.** 🎉</span>
 <span id="cb36-353"><a href="#cb36-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-354"><a href="#cb36-354" aria-hidden="true" tabindex="-1"></a>Be aware that "pilot studies are next to worthless to estimate effect sizes" (see Brysbaert, <span class="co">[</span><span class="ot">2019</span><span class="co">](http://doi.org/10.5334/joc.72)</span>, which has a section with that title). When we entered the specific numbers into our equations, we used point estimates from a relatively small pilot sample. As there is considerable uncertainty around these estimates, the true population value could be much smaller or larger. Furthermore, if the very reason for running a study is a significant (exploratory) finding in a small pilot study, your effect size estimate is probably upward biased (because you would have ignored the pilot study if there hadn't been a significant result).</span>
+<span id="cb36-354"><a href="#cb36-354" aria-hidden="true" tabindex="-1"></a>For these simple models, we can also compute analytic solutions. Let's verify our results with the <span class="in">`pwr`</span> package -- a linear regression with a single dichotomous predictor is equivalent to a t-test:</span>
 <span id="cb36-355"><a href="#cb36-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-356"><a href="#cb36-356" aria-hidden="true" tabindex="-1"></a>So, ideally, we base our power estimation on more reliable and/or more conservative prior information, or on theoretical considerations about the smallest effect size of interest. Therefore, we will explore two other ways to set the effect size: *safeguard power analysis* and the *smallest effect size of interest (SESOI)*.</span>
-<span id="cb36-357"><a href="#cb36-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-358"><a href="#cb36-358" aria-hidden="true" tabindex="-1"></a><span class="fu">## Safeguard power analysis</span></span>
-<span id="cb36-359"><a href="#cb36-359" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-360"><a href="#cb36-360" aria-hidden="true" tabindex="-1"></a>As sensitivity analysis, we will apply a safeguard power analysis (Perugini et al., <span class="co">[</span><span class="ot">2014</span><span class="co">](https://doi.org/10.1177/1745691614528519)</span>) that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)</span>
+<span id="cb36-358"><a href="#cb36-358" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-359"><a href="#cb36-359" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.t.test</span>(<span class="at">d =</span> <span class="fl">0.55</span>, <span class="at">sig.level =</span> <span class="fl">0.005</span>, <span class="at">power =</span> .<span class="dv">80</span>)</span>
+<span id="cb36-360"><a href="#cb36-360" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-361"><a href="#cb36-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-362"><a href="#cb36-362" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb36-363"><a href="#cb36-363" aria-hidden="true" tabindex="-1"></a>If you assume publication bias, another heuristic for aiming at a more realistic population effect size is the "divide-by-2" heuristic. (see <span class="co">[</span><span class="ot">kickoff presentation</span><span class="co">](https://osf.io/bzxnj)</span>)</span>
-<span id="cb36-364"><a href="#cb36-364" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb36-362"><a href="#cb36-362" aria-hidden="true" tabindex="-1"></a>Exactly the same result -- phew 😅</span>
+<span id="cb36-363"><a href="#cb36-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-364"><a href="#cb36-364" aria-hidden="true" tabindex="-1"></a><span class="fu"># Sensitivity analyses</span></span>
 <span id="cb36-365"><a href="#cb36-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-366"><a href="#cb36-366" aria-hidden="true" tabindex="-1"></a>We can use the <span class="in">`ci.smd`</span> function from the <span class="in">`MBESS`</span> package to compute a CI around Cohen's $d$ that we computed for our treatment effect:</span>
+<span id="cb36-366"><a href="#cb36-366" aria-hidden="true" tabindex="-1"></a>Be aware that "pilot studies are next to worthless to estimate effect sizes" (see Brysbaert, <span class="co">[</span><span class="ot">2019</span><span class="co">](http://doi.org/10.5334/joc.72)</span>, which has a section with that title). When we entered the specific numbers into our equations, we used point estimates from a relatively small pilot sample. As there is considerable uncertainty around these estimates, the true population value could be much smaller or larger. Furthermore, if the very reason for running a study is a significant (exploratory) finding in a small pilot study, your effect size estimate is probably upward biased (because you would have ignored the pilot study if there hadn't been a significant result).</span>
 <span id="cb36-367"><a href="#cb36-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-370"><a href="#cb36-370" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-371"><a href="#cb36-371" aria-hidden="true" tabindex="-1"></a><span class="fu">ci.smd</span>(<span class="at">smd=</span><span class="sc">-</span><span class="fl">0.55</span>, <span class="at">n.1=</span><span class="dv">50</span>, <span class="at">n.2=</span><span class="dv">50</span>, <span class="at">conf.level=</span>.<span class="dv">60</span>)</span>
-<span id="cb36-372"><a href="#cb36-372" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-368"><a href="#cb36-368" aria-hidden="true" tabindex="-1"></a>So, ideally, we base our power estimation on more reliable and/or more conservative prior information, or on theoretical considerations about the smallest effect size of interest. Therefore, we will explore two other ways to set the effect size: *safeguard power analysis* and the *smallest effect size of interest (SESOI)*.</span>
+<span id="cb36-369"><a href="#cb36-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-370"><a href="#cb36-370" aria-hidden="true" tabindex="-1"></a><span class="fu">## Safeguard power analysis</span></span>
+<span id="cb36-371"><a href="#cb36-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-372"><a href="#cb36-372" aria-hidden="true" tabindex="-1"></a>As sensitivity analysis, we will apply a safeguard power analysis (Perugini et al., <span class="co">[</span><span class="ot">2014</span><span class="co">](https://doi.org/10.1177/1745691614528519)</span>) that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)</span>
 <span id="cb36-373"><a href="#cb36-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-374"><a href="#cb36-374" aria-hidden="true" tabindex="-1"></a>However, in the simulated regression equation, we need the *raw* effect size -- so we have to backtransform the standardized confidence limits into the original metric. As the assumed effect is negative, we aim for the *upper*, i.e., the more conservative limit. After backtransformation in the raw metric, it is considerably smaller, at -4.1:</span>
-<span id="cb36-375"><a href="#cb36-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-376"><a href="#cb36-376" aria-hidden="true" tabindex="-1"></a>$$d = \frac{M_{diff}}{SD} \Rightarrow M_{diff} = d*SD = -0.377 * \sqrt{117} = -4.08$$</span>
+<span id="cb36-374"><a href="#cb36-374" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb36-375"><a href="#cb36-375" aria-hidden="true" tabindex="-1"></a>If you assume publication bias, another heuristic for aiming at a more realistic population effect size is the "divide-by-2" heuristic. (see <span class="co">[</span><span class="ot">kickoff presentation</span><span class="co">](https://osf.io/bzxnj)</span>)</span>
+<span id="cb36-376"><a href="#cb36-376" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb36-377"><a href="#cb36-377" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-378"><a href="#cb36-378" aria-hidden="true" tabindex="-1"></a>Now we can rerun the power simulation with this more conservative value (the only change to the code above is that we changed the treatment effect from -6 to -4.1).</span>
+<span id="cb36-378"><a href="#cb36-378" aria-hidden="true" tabindex="-1"></a>We can use the <span class="in">`ci.smd`</span> function from the <span class="in">`MBESS`</span> package to compute a CI around Cohen's $d$ that we computed for our treatment effect:</span>
 <span id="cb36-379"><a href="#cb36-379" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-382"><a href="#cb36-382" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-383"><a href="#cb36-383" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: hide</span></span>
-<span id="cb36-384"><a href="#cb36-384" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb36-385"><a href="#cb36-385" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show the code"</span></span>
-<span id="cb36-386"><a href="#cb36-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-387"><a href="#cb36-387" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
-<span id="cb36-388"><a href="#cb36-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-389"><a href="#cb36-389" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
-<span id="cb36-390"><a href="#cb36-390" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb36-391"><a href="#cb36-391" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">200</span>, <span class="dv">400</span>, <span class="at">by=</span><span class="dv">20</span>) <span class="co"># test ns between 200 and 400</span></span>
-<span id="cb36-392"><a href="#cb36-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-393"><a href="#cb36-393" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb36-394"><a href="#cb36-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-395"><a href="#cb36-395" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {  <span class="co"># loop through elements of the vector "ns"</span></span>
-<span id="cb36-396"><a href="#cb36-396" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n=</span>n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="fl">4.1</span>))</span>
-<span id="cb36-397"><a href="#cb36-397" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb36-398"><a href="#cb36-398" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb36-399"><a href="#cb36-399" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb36-400"><a href="#cb36-400" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations)</span>
-<span id="cb36-401"><a href="#cb36-401" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb36-402"><a href="#cb36-402" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb36-403"><a href="#cb36-403" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run</span></span>
-<span id="cb36-404"><a href="#cb36-404" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb36-405"><a href="#cb36-405" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb36-406"><a href="#cb36-406" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-407"><a href="#cb36-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-410"><a href="#cb36-410" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-411"><a href="#cb36-411" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb36-412"><a href="#cb36-412" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
-<span id="cb36-413"><a href="#cb36-413" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-414"><a href="#cb36-414" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-415"><a href="#cb36-415" aria-hidden="true" tabindex="-1"></a>With that more conservative effect size assumption, we would need around 380 participants, i.e., 190 per group.</span>
-<span id="cb36-416"><a href="#cb36-416" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-417"><a href="#cb36-417" aria-hidden="true" tabindex="-1"></a><span class="fu">## Smallest effect size of interest (SESOI)</span></span>
+<span id="cb36-383"><a href="#cb36-383" aria-hidden="true" tabindex="-1"></a><span class="fu">ci.smd</span>(<span class="at">smd =</span> <span class="sc">-</span><span class="fl">0.55</span>, <span class="at">n.1 =</span> <span class="dv">50</span>, <span class="at">n.2 =</span> <span class="dv">50</span>, <span class="at">conf.level =</span> .<span class="dv">60</span>)</span>
+<span id="cb36-384"><a href="#cb36-384" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-385"><a href="#cb36-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-386"><a href="#cb36-386" aria-hidden="true" tabindex="-1"></a>However, in the simulated regression equation, we need the *raw* effect size -- so we have to backtransform the standardized confidence limits into the original metric. As the assumed effect is negative, we aim for the *upper*, i.e., the more conservative limit. After backtransformation in the raw metric, it is considerably smaller, at -4.1:</span>
+<span id="cb36-387"><a href="#cb36-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-388"><a href="#cb36-388" aria-hidden="true" tabindex="-1"></a>$$d = \frac{M_{diff}}{SD} \Rightarrow M_{diff} = d*SD = -0.377 * \sqrt{117} = -4.08$$</span>
+<span id="cb36-389"><a href="#cb36-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-390"><a href="#cb36-390" aria-hidden="true" tabindex="-1"></a>Now we can rerun the power simulation with this more conservative value (the only change to the code above is that we changed the treatment effect from -6 to -4.1).</span>
+<span id="cb36-391"><a href="#cb36-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-394"><a href="#cb36-394" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-395"><a href="#cb36-395" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: hide</span></span>
+<span id="cb36-396"><a href="#cb36-396" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-397"><a href="#cb36-397" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show the code"</span></span>
+<span id="cb36-398"><a href="#cb36-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-399"><a href="#cb36-399" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
+<span id="cb36-400"><a href="#cb36-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-401"><a href="#cb36-401" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
+<span id="cb36-402"><a href="#cb36-402" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb36-403"><a href="#cb36-403" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">200</span>, <span class="dv">400</span>, <span class="at">by =</span> <span class="dv">20</span>) <span class="co"># test ns between 200 and 400</span></span>
+<span id="cb36-404"><a href="#cb36-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-405"><a href="#cb36-405" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb36-406"><a href="#cb36-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-407"><a href="#cb36-407" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb36-408"><a href="#cb36-408" aria-hidden="true" tabindex="-1"></a>  <span class="co"># loop through elements of the vector "ns"</span></span>
+<span id="cb36-409"><a href="#cb36-409" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n =</span> n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="fl">4.1</span>))</span>
+<span id="cb36-410"><a href="#cb36-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-411"><a href="#cb36-411" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb36-412"><a href="#cb36-412" aria-hidden="true" tabindex="-1"></a>    result,</span>
+<span id="cb36-413"><a href="#cb36-413" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb36-414"><a href="#cb36-414" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb36-415"><a href="#cb36-415" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
+<span id="cb36-416"><a href="#cb36-416" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-417"><a href="#cb36-417" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb36-418"><a href="#cb36-418" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-419"><a href="#cb36-419" aria-hidden="true" tabindex="-1"></a>Many methodologists argue that we should not power for the *expected* effect size, but rather for the smallest effect size of interest (SESOI). In this case, a non-significant result can be interpreted as "We accept the $H_0$, and even if a real effect existed, it most likely is too small to be relevant".</span>
-<span id="cb36-420"><a href="#cb36-420" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-421"><a href="#cb36-421" aria-hidden="true" tabindex="-1"></a>What change of BDI scores is perceived as "clinically important"? The hard part is to find a convincing theoretical or empirical argument for the chosen SESOI. In the case of the BDI, luckily someone else did that work.</span>
-<span id="cb36-422"><a href="#cb36-422" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-423"><a href="#cb36-423" aria-hidden="true" tabindex="-1"></a>The <span class="co">[</span><span class="ot">NICE guidance</span><span class="co">](https://www.nice.org.uk/guidance/qs8)</span> suggest that a change of <span class="sc">\&gt;</span>=3 BDI-II points is clinically important.</span>
-<span id="cb36-424"><a href="#cb36-424" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-425"><a href="#cb36-425" aria-hidden="true" tabindex="-1"></a>However, as you can expect, things are more complicated. Button et al. (<span class="co">[</span><span class="ot">2015</span><span class="co">](https://doi.org/10.1017/S0033291715001270)</span>) analyzed data sets where patients have been asked, after a treatment, whether they felt "better", "the same" or "worse". With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms were measurably reduced in the BDI, patients still might answer "feels the same", which indicates that the reduction did not surpass a threshold of subjective relevant improvement. But the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need *more* reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are *higher* than the NICE guidelines, more in the range of -6 BDI points.</span>
-<span id="cb36-426"><a href="#cb36-426" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-427"><a href="#cb36-427" aria-hidden="true" tabindex="-1"></a>For our example, let's use the NICE recommendation of -3 BDI points as a lower threshold for our power analysis (anything larger than that will be covered anyway).</span>
-<span id="cb36-428"><a href="#cb36-428" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-431"><a href="#cb36-431" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-432"><a href="#cb36-432" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: hide</span></span>
-<span id="cb36-433"><a href="#cb36-433" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb36-434"><a href="#cb36-434" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show the code"</span></span>
-<span id="cb36-435"><a href="#cb36-435" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-436"><a href="#cb36-436" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
-<span id="cb36-437"><a href="#cb36-437" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-438"><a href="#cb36-438" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
-<span id="cb36-439"><a href="#cb36-439" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb36-419"><a href="#cb36-419" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run</span></span>
+<span id="cb36-420"><a href="#cb36-420" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb36-421"><a href="#cb36-421" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-422"><a href="#cb36-422" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-423"><a href="#cb36-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-426"><a href="#cb36-426" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-427"><a href="#cb36-427" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb36-428"><a href="#cb36-428" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
+<span id="cb36-429"><a href="#cb36-429" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-430"><a href="#cb36-430" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-431"><a href="#cb36-431" aria-hidden="true" tabindex="-1"></a>With that more conservative effect size assumption, we would need around 380 participants, i.e., 190 per group.</span>
+<span id="cb36-432"><a href="#cb36-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-433"><a href="#cb36-433" aria-hidden="true" tabindex="-1"></a><span class="fu">## Smallest effect size of interest (SESOI)</span></span>
+<span id="cb36-434"><a href="#cb36-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-435"><a href="#cb36-435" aria-hidden="true" tabindex="-1"></a>Many methodologists argue that we should not power for the *expected* effect size, but rather for the smallest effect size of interest (SESOI). In this case, a non-significant result can be interpreted as "We accept the $H_0$, and even if a real effect existed, it most likely is too small to be relevant".</span>
+<span id="cb36-436"><a href="#cb36-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-437"><a href="#cb36-437" aria-hidden="true" tabindex="-1"></a>What change of BDI scores is perceived as "clinically important"? The hard part is to find a convincing theoretical or empirical argument for the chosen SESOI. In the case of the BDI, luckily someone else did that work.</span>
+<span id="cb36-438"><a href="#cb36-438" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-439"><a href="#cb36-439" aria-hidden="true" tabindex="-1"></a>The <span class="co">[</span><span class="ot">NICE guidance</span><span class="co">](https://www.nice.org.uk/guidance/qs8)</span> suggest that a change of <span class="sc">\&gt;</span>=3 BDI-II points is clinically important.</span>
 <span id="cb36-440"><a href="#cb36-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-441"><a href="#cb36-441" aria-hidden="true" tabindex="-1"></a><span class="co"># CHANGE: we adjusted the range of probed sample sizes upwards, as the effect size now is considerably smaller</span></span>
-<span id="cb36-442"><a href="#cb36-442" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">600</span>, <span class="dv">800</span>, <span class="at">by=</span><span class="dv">20</span>)</span>
-<span id="cb36-443"><a href="#cb36-443" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-444"><a href="#cb36-444" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb36-445"><a href="#cb36-445" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-446"><a href="#cb36-446" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb36-447"><a href="#cb36-447" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n=</span>n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="dv">3</span>))</span>
-<span id="cb36-448"><a href="#cb36-448" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb36-449"><a href="#cb36-449" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb36-450"><a href="#cb36-450" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb36-451"><a href="#cb36-451" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations)</span>
-<span id="cb36-452"><a href="#cb36-452" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb36-441"><a href="#cb36-441" aria-hidden="true" tabindex="-1"></a>However, as you can expect, things are more complicated. Button et al. (<span class="co">[</span><span class="ot">2015</span><span class="co">](https://doi.org/10.1017/S0033291715001270)</span>) analyzed data sets where patients have been asked, after a treatment, whether they felt "better", "the same" or "worse". With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms were measurably reduced in the BDI, patients still might answer "feels the same", which indicates that the reduction did not surpass a threshold of subjective relevant improvement. But the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need *more* reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are *higher* than the NICE guidelines, more in the range of -6 BDI points.</span>
+<span id="cb36-442"><a href="#cb36-442" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-443"><a href="#cb36-443" aria-hidden="true" tabindex="-1"></a>For our example, let's use the NICE recommendation of -3 BDI points as a lower threshold for our power analysis (anything larger than that will be covered anyway).</span>
+<span id="cb36-444"><a href="#cb36-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-447"><a href="#cb36-447" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-448"><a href="#cb36-448" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: hide</span></span>
+<span id="cb36-449"><a href="#cb36-449" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-450"><a href="#cb36-450" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show the code"</span></span>
+<span id="cb36-451"><a href="#cb36-451" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-452"><a href="#cb36-452" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
 <span id="cb36-453"><a href="#cb36-453" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-454"><a href="#cb36-454" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb36-455"><a href="#cb36-455" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb36-456"><a href="#cb36-456" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-457"><a href="#cb36-457" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-460"><a href="#cb36-460" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-461"><a href="#cb36-461" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb36-462"><a href="#cb36-462" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-463"><a href="#cb36-463" aria-hidden="true" tabindex="-1"></a><span class="co"># show the results</span></span>
-<span id="cb36-464"><a href="#cb36-464" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
-<span id="cb36-465"><a href="#cb36-465" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-466"><a href="#cb36-466" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-467"><a href="#cb36-467" aria-hidden="true" tabindex="-1"></a>Hence, we need around 700 participants to reliably detect this smallest effect size of interest.</span>
-<span id="cb36-468"><a href="#cb36-468" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-469"><a href="#cb36-469" aria-hidden="true" tabindex="-1"></a>Did you spot the strange pattern in the result? At $n=720$, the power is 83%, but only 82% with $n=740$? This is not possible, as power monotonically increases with sample size. It suggests that this is simply Monte Carlo sampling error -- 1000 iterations are not enough to get precise estimates. When we increase iterations to 10,000, it takes much longer, but gives more precise results:</span>
-<span id="cb36-470"><a href="#cb36-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-473"><a href="#cb36-473" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-474"><a href="#cb36-474" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: hide</span></span>
-<span id="cb36-475"><a href="#cb36-475" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb36-476"><a href="#cb36-476" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show the code"</span></span>
-<span id="cb36-477"><a href="#cb36-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-478"><a href="#cb36-478" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
-<span id="cb36-479"><a href="#cb36-479" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-480"><a href="#cb36-480" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
-<span id="cb36-481"><a href="#cb36-481" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb36-482"><a href="#cb36-482" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">640</span>, <span class="dv">740</span>, <span class="at">by=</span><span class="dv">20</span>)</span>
-<span id="cb36-483"><a href="#cb36-483" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-484"><a href="#cb36-484" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb36-454"><a href="#cb36-454" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
+<span id="cb36-455"><a href="#cb36-455" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb36-456"><a href="#cb36-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-457"><a href="#cb36-457" aria-hidden="true" tabindex="-1"></a><span class="co"># CHANGE: we adjusted the range of probed sample sizes upwards, as the effect size now is considerably smaller</span></span>
+<span id="cb36-458"><a href="#cb36-458" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">600</span>, <span class="dv">800</span>, <span class="at">by =</span> <span class="dv">20</span>)</span>
+<span id="cb36-459"><a href="#cb36-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-460"><a href="#cb36-460" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb36-461"><a href="#cb36-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-462"><a href="#cb36-462" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb36-463"><a href="#cb36-463" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n =</span> n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="dv">3</span>))</span>
+<span id="cb36-464"><a href="#cb36-464" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-465"><a href="#cb36-465" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb36-466"><a href="#cb36-466" aria-hidden="true" tabindex="-1"></a>    result,</span>
+<span id="cb36-467"><a href="#cb36-467" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb36-468"><a href="#cb36-468" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb36-469"><a href="#cb36-469" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
+<span id="cb36-470"><a href="#cb36-470" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-471"><a href="#cb36-471" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb36-472"><a href="#cb36-472" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-473"><a href="#cb36-473" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb36-474"><a href="#cb36-474" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-475"><a href="#cb36-475" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-476"><a href="#cb36-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-479"><a href="#cb36-479" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-480"><a href="#cb36-480" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb36-481"><a href="#cb36-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-482"><a href="#cb36-482" aria-hidden="true" tabindex="-1"></a><span class="co"># show the results</span></span>
+<span id="cb36-483"><a href="#cb36-483" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
+<span id="cb36-484"><a href="#cb36-484" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-485"><a href="#cb36-485" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-486"><a href="#cb36-486" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb36-487"><a href="#cb36-487" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n=</span>n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="dv">3</span>))</span>
-<span id="cb36-488"><a href="#cb36-488" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb36-489"><a href="#cb36-489" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(result, <span class="fu">data.frame</span>(</span>
-<span id="cb36-490"><a href="#cb36-490" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
-<span id="cb36-491"><a href="#cb36-491" aria-hidden="true" tabindex="-1"></a>    <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>)<span class="sc">/</span>iterations)</span>
-<span id="cb36-492"><a href="#cb36-492" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb36-493"><a href="#cb36-493" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-494"><a href="#cb36-494" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb36-495"><a href="#cb36-495" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb36-496"><a href="#cb36-496" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-497"><a href="#cb36-497" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-500"><a href="#cb36-500" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb36-501"><a href="#cb36-501" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb36-486"><a href="#cb36-486" aria-hidden="true" tabindex="-1"></a>Hence, we need around 700 participants to reliably detect this smallest effect size of interest.</span>
+<span id="cb36-487"><a href="#cb36-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-488"><a href="#cb36-488" aria-hidden="true" tabindex="-1"></a>Did you spot the strange pattern in the result? At $n=720$, the power is 83%, but only 82% with $n=740$? This is not possible, as power monotonically increases with sample size. It suggests that this is simply Monte Carlo sampling error -- 1000 iterations are not enough to get precise estimates. When we increase iterations to 10,000, it takes much longer, but gives more precise results:</span>
+<span id="cb36-489"><a href="#cb36-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-492"><a href="#cb36-492" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-493"><a href="#cb36-493" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: hide</span></span>
+<span id="cb36-494"><a href="#cb36-494" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-495"><a href="#cb36-495" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show the code"</span></span>
+<span id="cb36-496"><a href="#cb36-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-497"><a href="#cb36-497" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
+<span id="cb36-498"><a href="#cb36-498" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-499"><a href="#cb36-499" aria-hidden="true" tabindex="-1"></a><span class="co"># define all predictor and simulation variables.</span></span>
+<span id="cb36-500"><a href="#cb36-500" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb36-501"><a href="#cb36-501" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">640</span>, <span class="dv">740</span>, <span class="at">by =</span> <span class="dv">20</span>)</span>
 <span id="cb36-502"><a href="#cb36-502" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-503"><a href="#cb36-503" aria-hidden="true" tabindex="-1"></a><span class="co"># show the results</span></span>
-<span id="cb36-504"><a href="#cb36-504" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
-<span id="cb36-505"><a href="#cb36-505" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-506"><a href="#cb36-506" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-507"><a href="#cb36-507" aria-hidden="true" tabindex="-1"></a>Now power increases monotonically with sample size, as expected.\</span>
-<span id="cb36-508"><a href="#cb36-508" aria-hidden="true" tabindex="-1"></a>To explore how many Monte Carlo iterations are necessary to get stable computational results, see the bonus page <span class="co">[</span><span class="ot">Bonus: How many Monte Carlo iterations are necessary?</span><span class="co">](how-many-iterations.qmd)</span></span>
-<span id="cb36-509"><a href="#cb36-509" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-510"><a href="#cb36-510" aria-hidden="true" tabindex="-1"></a><span class="fu"># Recap: What did we do?</span></span>
-<span id="cb36-511"><a href="#cb36-511" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-512"><a href="#cb36-512" aria-hidden="true" tabindex="-1"></a>These are the steps we did in this part of the tutorial:</span>
-<span id="cb36-513"><a href="#cb36-513" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-514"><a href="#cb36-514" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Define the statistical model that you will use to analyze your data** (*in our case: a linear regression*). This sometimes is called the *data generating mechanism* or the *data generating model*.</span>
-<span id="cb36-515"><a href="#cb36-515" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Find empirical information about the parameters in the model.** These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define the assumed state of the population.</span>
-<span id="cb36-516"><a href="#cb36-516" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Program your regression equation**, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.</span>
-<span id="cb36-517"><a href="#cb36-517" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Do the simulation**:</span>
-<span id="cb36-518"><a href="#cb36-518" aria-hidden="true" tabindex="-1"></a>    a)  Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same).</span>
-<span id="cb36-519"><a href="#cb36-519" aria-hidden="true" tabindex="-1"></a>    b)  Compute the index of interest (typically: the p-value of a focal effect).</span>
-<span id="cb36-520"><a href="#cb36-520" aria-hidden="true" tabindex="-1"></a>    c)  Count how many samples would have detected the effect (i.e., the statistical power).</span>
-<span id="cb36-521"><a href="#cb36-521" aria-hidden="true" tabindex="-1"></a>    d)  Tune your simulation parameters until the desired level of power is achieved.</span>
-<span id="cb36-522"><a href="#cb36-522" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-523"><a href="#cb36-523" aria-hidden="true" tabindex="-1"></a>Concerning step 4d, the typical scenario is that you increase sample size until your desired level of power is achieved. But you could imagine other ways to increase power, e.g.:</span>
+<span id="cb36-503"><a href="#cb36-503" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb36-504"><a href="#cb36-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-505"><a href="#cb36-505" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb36-506"><a href="#cb36-506" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(iterations, <span class="fu">sim1</span>(<span class="at">n =</span> n, <span class="at">treatment_effect =</span> <span class="sc">-</span><span class="dv">3</span>))</span>
+<span id="cb36-507"><a href="#cb36-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-508"><a href="#cb36-508" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb36-509"><a href="#cb36-509" aria-hidden="true" tabindex="-1"></a>    result,</span>
+<span id="cb36-510"><a href="#cb36-510" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb36-511"><a href="#cb36-511" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb36-512"><a href="#cb36-512" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
+<span id="cb36-513"><a href="#cb36-513" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-514"><a href="#cb36-514" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb36-515"><a href="#cb36-515" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-516"><a href="#cb36-516" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
+<span id="cb36-517"><a href="#cb36-517" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-518"><a href="#cb36-518" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-519"><a href="#cb36-519" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-522"><a href="#cb36-522" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb36-523"><a href="#cb36-523" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
 <span id="cb36-524"><a href="#cb36-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-525"><a href="#cb36-525" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Increase the reliability of a measurement instrument (which will be reflected in a smaller error variance) until desired power is achieved. (This could relate to a trade-off: Do you invest more effort and time in better measurement, or do you keep an unreliable measure and collect more participants?)</span>
-<span id="cb36-526"><a href="#cb36-526" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Compare a within- and a between-design in simulations.</span>
-<span id="cb36-527"><a href="#cb36-527" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-528"><a href="#cb36-528" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
-<span id="cb36-529"><a href="#cb36-529" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-530"><a href="#cb36-530" aria-hidden="true" tabindex="-1"></a>Benjamin, D. J. et al. (2018). Redefine statistical significance. Nature Human Behaviour, 2(1), 6--10. <span class="ot">&lt;https://doi.org/10.1038/s41562-017-0189-z&gt;</span></span>
+<span id="cb36-525"><a href="#cb36-525" aria-hidden="true" tabindex="-1"></a><span class="co"># show the results</span></span>
+<span id="cb36-526"><a href="#cb36-526" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
+<span id="cb36-527"><a href="#cb36-527" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-528"><a href="#cb36-528" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-529"><a href="#cb36-529" aria-hidden="true" tabindex="-1"></a>Now power increases monotonically with sample size, as expected.\</span>
+<span id="cb36-530"><a href="#cb36-530" aria-hidden="true" tabindex="-1"></a>To explore how many Monte Carlo iterations are necessary to get stable computational results, see the bonus page <span class="co">[</span><span class="ot">Bonus: How many Monte Carlo iterations are necessary?</span><span class="co">](how-many-iterations.qmd)</span></span>
 <span id="cb36-531"><a href="#cb36-531" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-532"><a href="#cb36-532" aria-hidden="true" tabindex="-1"></a>Brysbaert, M. (2019). How many participants do we have to include in properly powered experiments? A tutorial of power analysis with reference tables. Journal of Cognition, 2(1), 16. DOI: <span class="ot">&lt;http://doi.org/10.5334/joc.72&gt;</span></span>
+<span id="cb36-532"><a href="#cb36-532" aria-hidden="true" tabindex="-1"></a><span class="fu"># Recap: What did we do?</span></span>
 <span id="cb36-533"><a href="#cb36-533" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-534"><a href="#cb36-534" aria-hidden="true" tabindex="-1"></a>Button, K. S., Kounali, D., Thomas, L., Wiles, N. J., Peters, T. J., Welton, N. J., Ades, A. E., &amp; Lewis, G. (2015). Minimal clinically important difference on the Beck Depression Inventory---II according to the patient's perspective. Psychological Medicine, 45(15), 3269--3279. <span class="ot">&lt;https://doi.org/10.1017/S0033291715001270&gt;</span></span>
+<span id="cb36-534"><a href="#cb36-534" aria-hidden="true" tabindex="-1"></a>These are the steps we did in this part of the tutorial:</span>
 <span id="cb36-535"><a href="#cb36-535" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-536"><a href="#cb36-536" aria-hidden="true" tabindex="-1"></a>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. <span class="ot">&lt;https://doi.org/10.1177/1745691614528519&gt;</span></span>
+<span id="cb36-536"><a href="#cb36-536" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Define the statistical model that you will use to analyze your data** (*in our case: a linear regression*). This sometimes is called the *data generating mechanism* or the *data generating model*.</span>
+<span id="cb36-537"><a href="#cb36-537" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Find empirical information about the parameters in the model.** These are typically mean values, variances, group differences, regression coefficients, or correlations (*in our case: a mean value (before treatment), a group difference, and an error variance*). These numbers define the assumed state of the population.</span>
+<span id="cb36-538"><a href="#cb36-538" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Program your regression equation**, which consists of a systematic (i.e., deterministic) part and (one or more) random error terms.</span>
+<span id="cb36-539"><a href="#cb36-539" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Do the simulation**:</span>
+<span id="cb36-540"><a href="#cb36-540" aria-hidden="true" tabindex="-1"></a>    a)  Repeatedly sample data from your equation (only the random error changes in each run, the deterministic part stays the same).</span>
+<span id="cb36-541"><a href="#cb36-541" aria-hidden="true" tabindex="-1"></a>    b)  Compute the index of interest (typically: the p-value of a focal effect).</span>
+<span id="cb36-542"><a href="#cb36-542" aria-hidden="true" tabindex="-1"></a>    c)  Count how many samples would have detected the effect (i.e., the statistical power).</span>
+<span id="cb36-543"><a href="#cb36-543" aria-hidden="true" tabindex="-1"></a>    d)  Tune your simulation parameters until the desired level of power is achieved.</span>
+<span id="cb36-544"><a href="#cb36-544" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-545"><a href="#cb36-545" aria-hidden="true" tabindex="-1"></a>Concerning step 4d, the typical scenario is that you increase sample size until your desired level of power is achieved. But you could imagine other ways to increase power, e.g.:</span>
+<span id="cb36-546"><a href="#cb36-546" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-547"><a href="#cb36-547" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Increase the reliability of a measurement instrument (which will be reflected in a smaller error variance) until desired power is achieved. (This could relate to a trade-off: Do you invest more effort and time in better measurement, or do you keep an unreliable measure and collect more participants?)</span>
+<span id="cb36-548"><a href="#cb36-548" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Compare a within- and a between-design in simulations.</span>
+<span id="cb36-549"><a href="#cb36-549" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-550"><a href="#cb36-550" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb36-551"><a href="#cb36-551" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-552"><a href="#cb36-552" aria-hidden="true" tabindex="-1"></a>Benjamin, D. J. et al. (2018). Redefine statistical significance. Nature Human Behaviour, 2(1), 6--10. <span class="ot">&lt;https://doi.org/10.1038/s41562-017-0189-z&gt;</span></span>
+<span id="cb36-553"><a href="#cb36-553" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-554"><a href="#cb36-554" aria-hidden="true" tabindex="-1"></a>Brysbaert, M. (2019). How many participants do we have to include in properly powered experiments? A tutorial of power analysis with reference tables. Journal of Cognition, 2(1), 16. DOI: <span class="ot">&lt;http://doi.org/10.5334/joc.72&gt;</span></span>
+<span id="cb36-555"><a href="#cb36-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-556"><a href="#cb36-556" aria-hidden="true" tabindex="-1"></a>Button, K. S., Kounali, D., Thomas, L., Wiles, N. J., Peters, T. J., Welton, N. J., Ades, A. E., &amp; Lewis, G. (2015). Minimal clinically important difference on the Beck Depression Inventory---II according to the patient's perspective. Psychological Medicine, 45(15), 3269--3279. <span class="ot">&lt;https://doi.org/10.1017/S0033291715001270&gt;</span></span>
+<span id="cb36-557"><a href="#cb36-557" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-558"><a href="#cb36-558" aria-hidden="true" tabindex="-1"></a>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. <span class="ot">&lt;https://doi.org/10.1177/1745691614528519&gt;</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

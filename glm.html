@@ -1384,339 +1384,327 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>In the previous chapters, we have learned how to conduct simulation-based power analyses for linear regressions with categorical and/or continuous predictor variables. In this chapter, we will turn to generalized linear models, which constitute a generalization of regular linear regressions. This class of statistical models additionally comprise more complex models such as logistic regression and poisson regression. However, as covering all of variants of the generalized linear models would exceed the scope of this workshop, we will only learn how to conduct a simulation-based power analysis for a logistic regression. Recall that a logistic regression is suitable for designs in which you predict a dichotomous outcome with a set of (continuous or categorical) predictors.</span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="in">```{r install packages, message=FALSE, warning=FALSE}</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(c("ggplot2", "DescTools"))</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="fu"># A power analysis for a simple logistic regression with one categorical predictor</span></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>In order to learn how a simulation-based power analysis for logistic regressions work, we build on the previous chapters by continuing to work with the <span class="in">`BtheB`</span> data set. Please see the <span class="co">[</span><span class="ot">first chapter on linear models</span><span class="co">](lm1.qmd)</span> to get more info about this data set. </span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Let's get some data as a starting point</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data</span></span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"BtheB"</span>, <span class="at">package =</span> <span class="st">"HSAUR"</span>)</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a><span class="co"># show which variables this data set includes</span></span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(BtheB)</span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>This data set compares the effects of two interventions for depression, that is a so-called  "Beat the blues" intervention (<span class="in">`BtheB`</span>) and a "treatment-as-usual" intervention (<span class="in">`TAU`</span>). Note that in this chapter we will compare two active treatment conditions with each other -- in the other chapters on linear models, we compare an active treatment with a passive waiting group.</span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>Unfortunately, this data set does not include any dichotomous variable we could use as an outcome measure. Therefore, we simply dichotomize one of the continuous outcome variables to create a categorical outcome artificially. More specifically, we will dichotomize the <span class="in">`bdi.2m`</span> variable which contains a follow-up depression measure (i.e., the Beck Depression Inventory score) two months after the intervention.</span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>Please note that we dichotomize this variable for didactic reasons only. From a statistical point of view, it is preferable to treat a continuous variable as such because dichotomizing leads to a loss of statistical information (Royston et al., 2006).</span>
-<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>Let's start by dichotomizing the <span class="in">`bdi.2m`</span> variable and storing the result in a new variable which we label <span class="in">`bdi.2m.dicho`</span>. Here, we take 20 as our cut-off value, as BDIs of 20 or more refer to a moderate or severe depression. BDI values lower than 20, in turn, reflect a minimal or mild depression (see <span class="co">[</span><span class="ot">first chapter on linear models</span><span class="co">](lm1.qmd)</span> for more info). In our new <span class="in">`bdi.2m.dicho`</span> variable, we code minimal/mild depression as "0"  and moderate/severe depression as "1".</span>
-<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dichotomize dv}</span></span>
-<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a><span class="co">#dichotomize dv</span></span>
-<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m <span class="sc">&lt;</span> <span class="dv">20</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a><span class="co">#show frequencies</span></span>
-<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho, BtheB<span class="sc">$</span>treatment)</span>
-<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(c("ggplot2", "DescTools"))</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="fu"># A power analysis for a simple logistic regression with one categorical predictor</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>In order to learn how a simulation-based power analysis for logistic regressions work, we build on the previous chapters by continuing to work with the <span class="in">`BtheB`</span> data set. Please see the <span class="co">[</span><span class="ot">first chapter on linear models</span><span class="co">](lm1.qmd)</span> to get more info about this data set. </span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Let's get some data as a starting point</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"BtheB"</span>, <span class="at">package =</span> <span class="st">"HSAUR"</span>)</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="co"># show which variables this data set includes</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(BtheB)</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>This data set compares the effects of two interventions for depression, that is a so-called  "Beat the blues" intervention (<span class="in">`BtheB`</span>) and a "treatment-as-usual" intervention (<span class="in">`TAU`</span>). Note that in this chapter we will compare two active treatment conditions with each other -- in the other chapters on linear models, we compare an active treatment with a passive waiting group.</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>Unfortunately, this data set does not include any dichotomous variable we could use as an outcome measure. Therefore, we simply dichotomize one of the continuous outcome variables to create a categorical outcome artificially. More specifically, we will dichotomize the <span class="in">`bdi.2m`</span> variable which contains a follow-up depression measure (i.e., the Beck Depression Inventory score) two months after the intervention.</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>Please note that we dichotomize this variable for didactic reasons only. From a statistical point of view, it is preferable to treat a continuous variable as such because dichotomizing leads to a loss of statistical information (Royston et al., 2006).</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>Let's start by dichotomizing the <span class="in">`bdi.2m`</span> variable and storing the result in a new variable which we label <span class="in">`bdi.2m.dicho`</span>. Here, we take 20 as our cut-off value, as BDIs of 20 or more refer to a moderate or severe depression. BDI values lower than 20, in turn, reflect a minimal or mild depression (see <span class="co">[</span><span class="ot">first chapter on linear models</span><span class="co">](lm1.qmd)</span> for more info). In our new <span class="in">`bdi.2m.dicho`</span> variable, we code minimal/mild depression as "0"  and moderate/severe depression as "1".</span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dichotomize dv}</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a><span class="co">#dichotomize dv</span></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m <span class="sc">&lt;</span> <span class="dv">20</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a><span class="co">#show frequencies</span></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho, BtheB<span class="sc">$</span>treatment)</span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>The frequency table shows that there were less patients with moderate/severe depression in the <span class="in">`TAU`</span> treatment as compared to the <span class="in">`BtheB`</span> treatment. That's a first sign that the BtheB intervention might outperform the treatment-as-usual!</span>
 <span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>The frequency table shows that there were less patients with moderate/severe depression in the <span class="in">`TAU`</span> treatment as compared to the <span class="in">`BtheB`</span> treatment. That's a first sign that the BtheB intervention might outperform the treatment-as-usual!</span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>In this chapter, we focus on a very simple version of a logistic regression: A model in which the dichotomous outcome variable is predicted by one categorical predictor variable, that is, the treatment condition (<span class="in">`BtheB`</span> vs. <span class="in">`TAU`</span>). Let's assume that we plan to set up a study in which we want to scrutinize whether or not the "Beat the blues" intervention really outperforms the "treatment-as-usual" intervention with regard to the BDI scores two months after the end of the interventions. How many participants would we need for such a study to achieve 80% power?</span>
 <span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a>In this chapter, we focus on a very simple version of a logistic regression: A model in which the dichotomous outcome variable is predicted by one categorical predictor variable, that is, the treatment condition (<span class="in">`BtheB`</span> vs. <span class="in">`TAU`</span>). Let's assume that we plan to set up a study in which we want to scrutinize whether or not the "Beat the blues" intervention really outperforms the "treatment-as-usual" intervention with regard to the BDI scores two months after the end of the interventions. How many participants would we need for such a study to achieve 80% power?</span>
+<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## Estimating the population parameters</span></span>
 <span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Estimating the population parameters</span></span>
+<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a>As in the previous chapters, we first need to estimate all population parameters relevant for this study. More specifically, we will need three estimates:</span>
 <span id="cb22-57"><a href="#cb22-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a>As in the previous chapters, we first need to estimate all population parameters relevant for this study. More specifically, we will need three estimates:</span>
-<span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>the proportion of participants in the <span class="in">`BtheB`</span> condition </span>
-<span id="cb22-61"><a href="#cb22-61" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>the probability of a favorable outcome in the <span class="in">`BtheB`</span> condition</span>
-<span id="cb22-62"><a href="#cb22-62" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>the probability of a favorable outcome in the <span class="in">`TAU`</span> condition</span>
-<span id="cb22-63"><a href="#cb22-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>the proportion of participants in the <span class="in">`BtheB`</span> condition </span>
+<span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>the probability of a favorable outcome in the <span class="in">`BtheB`</span> condition</span>
+<span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>the probability of a favorable outcome in the <span class="in">`TAU`</span> condition</span>
+<span id="cb22-61"><a href="#cb22-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-62"><a href="#cb22-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-63"><a href="#cb22-63" aria-hidden="true" tabindex="-1"></a>The first parameter is pretty easy to estimate. In most cases, researchers will assign half of the participants to the treatment condition and the other half to a control condition. In this case, the probability of being in the <span class="in">`BtheB`</span> condition would be 50%. Let's store that in a variable called <span class="in">`prop_btheb`</span>.</span>
 <span id="cb22-64"><a href="#cb22-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-65"><a href="#cb22-65" aria-hidden="true" tabindex="-1"></a>The first parameter is pretty easy to estimate. In most cases, researchers will assign half of the participants to the treatment condition and the other half to a control condition. In this case, the probability of being in the <span class="in">`BtheB`</span> condition would be 50%. Let's store that in a variable called <span class="in">`prop_btheb`</span>.</span>
-<span id="cb22-66"><a href="#cb22-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-67"><a href="#cb22-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r estimate proportion}</span></span>
+<span id="cb22-65"><a href="#cb22-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r estimate proportion}</span></span>
+<span id="cb22-66"><a href="#cb22-66" aria-hidden="true" tabindex="-1"></a>prop_btheb <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb22-67"><a href="#cb22-67" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb22-68"><a href="#cb22-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-69"><a href="#cb22-69" aria-hidden="true" tabindex="-1"></a>prop_btheb <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb22-70"><a href="#cb22-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-71"><a href="#cb22-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-72"><a href="#cb22-72" aria-hidden="true" tabindex="-1"></a>The other two estimates are only slightly more complicated to estimate. The probability of a favorable outcome in each of the conditions basically means: How many of the participants will *not* have a moderate/severe depression two months after completing the treatment-as-usual? And, how many of the participants will *not* have a moderate/severe depression two months after completing the Beat the blues intervention?</span>
-<span id="cb22-73"><a href="#cb22-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-74"><a href="#cb22-74" aria-hidden="true" tabindex="-1"></a>These two probabilities can only be estimated with solid pilot data. In our case, we can estimate both probabilities from the <span class="in">`BtheB`</span> data set. The following chunk does that, rounds the estimates to two decimals, and stores the estimates in two objects called <span class="in">`prop_tau`</span> and <span class="in">`prop_btheb`</span>.</span>
-<span id="cb22-75"><a href="#cb22-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-76"><a href="#cb22-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r estimate probabilities}</span></span>
-<span id="cb22-77"><a href="#cb22-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-78"><a href="#cb22-78" aria-hidden="true" tabindex="-1"></a>prob_tau <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
-<span id="cb22-79"><a href="#cb22-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>(BtheB<span class="sc">$</span>treatment[</span>
-<span id="cb22-80"><a href="#cb22-80" aria-hidden="true" tabindex="-1"></a>    BtheB<span class="sc">$</span>treatment <span class="sc">==</span> <span class="st">"TAU"</span> <span class="sc">&amp;</span></span>
-<span id="cb22-81"><a href="#cb22-81" aria-hidden="true" tabindex="-1"></a>      BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
-<span id="cb22-82"><a href="#cb22-82" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.na</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho)</span>
-<span id="cb22-83"><a href="#cb22-83" aria-hidden="true" tabindex="-1"></a>  ]) <span class="sc">/</span></span>
-<span id="cb22-84"><a href="#cb22-84" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(BtheB<span class="sc">$</span>treatment[</span>
-<span id="cb22-85"><a href="#cb22-85" aria-hidden="true" tabindex="-1"></a>      BtheB<span class="sc">$</span>treatment <span class="sc">==</span> <span class="st">"TAU"</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho)</span>
-<span id="cb22-86"><a href="#cb22-86" aria-hidden="true" tabindex="-1"></a>    ]),</span>
-<span id="cb22-87"><a href="#cb22-87" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span></span>
-<span id="cb22-88"><a href="#cb22-88" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-89"><a href="#cb22-89" aria-hidden="true" tabindex="-1"></a>prob_tau</span>
-<span id="cb22-90"><a href="#cb22-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-91"><a href="#cb22-91" aria-hidden="true" tabindex="-1"></a>prob_btheb <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
-<span id="cb22-92"><a href="#cb22-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>(BtheB<span class="sc">$</span>treatment[</span>
-<span id="cb22-93"><a href="#cb22-93" aria-hidden="true" tabindex="-1"></a>    BtheB<span class="sc">$</span>treatment <span class="sc">==</span> <span class="st">"BtheB"</span> <span class="sc">&amp;</span></span>
-<span id="cb22-94"><a href="#cb22-94" aria-hidden="true" tabindex="-1"></a>      BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
-<span id="cb22-95"><a href="#cb22-95" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.na</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho)</span>
-<span id="cb22-96"><a href="#cb22-96" aria-hidden="true" tabindex="-1"></a>  ]) <span class="sc">/</span></span>
-<span id="cb22-97"><a href="#cb22-97" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(BtheB<span class="sc">$</span>treatment[</span>
-<span id="cb22-98"><a href="#cb22-98" aria-hidden="true" tabindex="-1"></a>      BtheB<span class="sc">$</span>treatment <span class="sc">==</span> <span class="st">"BtheB"</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho)</span>
-<span id="cb22-99"><a href="#cb22-99" aria-hidden="true" tabindex="-1"></a>    ]),</span>
-<span id="cb22-100"><a href="#cb22-100" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span></span>
-<span id="cb22-101"><a href="#cb22-101" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-102"><a href="#cb22-102" aria-hidden="true" tabindex="-1"></a>prob_btheb</span>
-<span id="cb22-103"><a href="#cb22-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-69"><a href="#cb22-69" aria-hidden="true" tabindex="-1"></a>The other two estimates are only slightly more complicated to estimate. The probability of a favorable outcome in each of the conditions basically means: How many of the participants will *not* have a moderate/severe depression two months after completing the treatment-as-usual? And, how many of the participants will *not* have a moderate/severe depression two months after completing the Beat the blues intervention?</span>
+<span id="cb22-70"><a href="#cb22-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-71"><a href="#cb22-71" aria-hidden="true" tabindex="-1"></a>These two probabilities can only be estimated with solid pilot data. In our case, we can estimate both probabilities from the <span class="in">`BtheB`</span> data set. The following chunk does that, rounds the estimates to two decimals, and stores the estimates in two objects called <span class="in">`prop_tau`</span> and <span class="in">`prop_btheb`</span>.</span>
+<span id="cb22-72"><a href="#cb22-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-73"><a href="#cb22-73" aria-hidden="true" tabindex="-1"></a><span class="in">```{r estimate probabilities}</span></span>
+<span id="cb22-74"><a href="#cb22-74" aria-hidden="true" tabindex="-1"></a>prob_tau <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
+<span id="cb22-75"><a href="#cb22-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>(BtheB<span class="sc">$</span>treatment[</span>
+<span id="cb22-76"><a href="#cb22-76" aria-hidden="true" tabindex="-1"></a>    BtheB<span class="sc">$</span>treatment <span class="sc">==</span> <span class="st">"TAU"</span> <span class="sc">&amp;</span></span>
+<span id="cb22-77"><a href="#cb22-77" aria-hidden="true" tabindex="-1"></a>      BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
+<span id="cb22-78"><a href="#cb22-78" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.na</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho)</span>
+<span id="cb22-79"><a href="#cb22-79" aria-hidden="true" tabindex="-1"></a>  ]) <span class="sc">/</span></span>
+<span id="cb22-80"><a href="#cb22-80" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(BtheB<span class="sc">$</span>treatment[</span>
+<span id="cb22-81"><a href="#cb22-81" aria-hidden="true" tabindex="-1"></a>      BtheB<span class="sc">$</span>treatment <span class="sc">==</span> <span class="st">"TAU"</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho)</span>
+<span id="cb22-82"><a href="#cb22-82" aria-hidden="true" tabindex="-1"></a>    ]),</span>
+<span id="cb22-83"><a href="#cb22-83" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span></span>
+<span id="cb22-84"><a href="#cb22-84" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-85"><a href="#cb22-85" aria-hidden="true" tabindex="-1"></a>prob_tau</span>
+<span id="cb22-86"><a href="#cb22-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-87"><a href="#cb22-87" aria-hidden="true" tabindex="-1"></a>prob_btheb <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
+<span id="cb22-88"><a href="#cb22-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>(BtheB<span class="sc">$</span>treatment[</span>
+<span id="cb22-89"><a href="#cb22-89" aria-hidden="true" tabindex="-1"></a>    BtheB<span class="sc">$</span>treatment <span class="sc">==</span> <span class="st">"BtheB"</span> <span class="sc">&amp;</span></span>
+<span id="cb22-90"><a href="#cb22-90" aria-hidden="true" tabindex="-1"></a>      BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
+<span id="cb22-91"><a href="#cb22-91" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.na</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho)</span>
+<span id="cb22-92"><a href="#cb22-92" aria-hidden="true" tabindex="-1"></a>  ]) <span class="sc">/</span></span>
+<span id="cb22-93"><a href="#cb22-93" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(BtheB<span class="sc">$</span>treatment[</span>
+<span id="cb22-94"><a href="#cb22-94" aria-hidden="true" tabindex="-1"></a>      BtheB<span class="sc">$</span>treatment <span class="sc">==</span> <span class="st">"BtheB"</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(BtheB<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho)</span>
+<span id="cb22-95"><a href="#cb22-95" aria-hidden="true" tabindex="-1"></a>    ]),</span>
+<span id="cb22-96"><a href="#cb22-96" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span></span>
+<span id="cb22-97"><a href="#cb22-97" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-98"><a href="#cb22-98" aria-hidden="true" tabindex="-1"></a>prob_btheb</span>
+<span id="cb22-99"><a href="#cb22-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-100"><a href="#cb22-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-101"><a href="#cb22-101" aria-hidden="true" tabindex="-1"></a>In the <span class="in">`BtheB`</span> data set, the probability of *not* having a moderate/ severe depression in the <span class="in">`BtheB`</span> condition was <span class="in">`r prob_btheb`</span> and the same probability in the <span class="in">`TAU`</span> condition was <span class="in">`r prob_tau`</span>.  </span>
+<span id="cb22-102"><a href="#cb22-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-103"><a href="#cb22-103" aria-hidden="true" tabindex="-1"></a>Now we have all we need to start simulating data. There are multiple ways to simulate this kind of data, but one very simple way is to apply the <span class="in">`sample()`</span> function. Here, we use it twice: Once to draw for the <span class="in">`TAU`</span> condition and once for the <span class="in">`BtheB`</span> condition (which differ in their probabilities of yielding a positive outcome, as we have seen before). For each condition, we draw whether or not the participant has a moderate/severe depression two months after the treatment, while coding "no moderate/severe depression" with 0 and "moderate/severe depression" with 1. Let's try this by sampling 100 observations per condition.</span>
 <span id="cb22-104"><a href="#cb22-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-105"><a href="#cb22-105" aria-hidden="true" tabindex="-1"></a>In the <span class="in">`BtheB`</span> data set, the probability of *not* having a moderate/ severe depression in the <span class="in">`BtheB`</span> condition was <span class="in">`r prob_btheb`</span> and the same probability in the <span class="in">`TAU`</span> condition was <span class="in">`r prob_tau`</span>.  </span>
-<span id="cb22-106"><a href="#cb22-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-107"><a href="#cb22-107" aria-hidden="true" tabindex="-1"></a>Now we have all we need to start simulating data. There are multiple ways to simulate this kind of data, but one very simple way is to apply the <span class="in">`sample()`</span> function. Here, we use it twice: Once to draw for the <span class="in">`TAU`</span> condition and once for the <span class="in">`BtheB`</span> condition (which differ in their probabilities of yielding a positive outcome, as we have seen before). For each condition, we draw whether or not the participant has a moderate/severe depression two months after the treatment, while coding "no moderate/severe depression" with 0 and "moderate/severe depression" with 1. Let's try this by sampling 100 observations per condition.</span>
-<span id="cb22-108"><a href="#cb22-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-109"><a href="#cb22-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r simulate data}</span></span>
-<span id="cb22-110"><a href="#cb22-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-111"><a href="#cb22-111" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8526</span>)</span>
-<span id="cb22-112"><a href="#cb22-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-113"><a href="#cb22-113" aria-hidden="true" tabindex="-1"></a><span class="co">#sample from distribution in "TAU" condition</span></span>
-<span id="cb22-114"><a href="#cb22-114" aria-hidden="true" tabindex="-1"></a>tau <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
-<span id="cb22-115"><a href="#cb22-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="st">"TAU"</span>, <span class="dv">100</span>),</span>
-<span id="cb22-116"><a href="#cb22-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(</span>
-<span id="cb22-117"><a href="#cb22-117" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb22-118"><a href="#cb22-118" aria-hidden="true" tabindex="-1"></a>    <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb22-119"><a href="#cb22-119" aria-hidden="true" tabindex="-1"></a>    <span class="at">prob =</span> <span class="fu">c</span>(prob_tau, <span class="dv">1</span> <span class="sc">-</span> prob_tau),</span>
-<span id="cb22-120"><a href="#cb22-120" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">100</span></span>
-<span id="cb22-121"><a href="#cb22-121" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-122"><a href="#cb22-122" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-123"><a href="#cb22-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-124"><a href="#cb22-124" aria-hidden="true" tabindex="-1"></a><span class="co">#sample from distribution in "BtheB" condition</span></span>
-<span id="cb22-125"><a href="#cb22-125" aria-hidden="true" tabindex="-1"></a>btheb <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
-<span id="cb22-126"><a href="#cb22-126" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="st">"BtheB"</span>, <span class="dv">100</span>),</span>
-<span id="cb22-127"><a href="#cb22-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(</span>
-<span id="cb22-128"><a href="#cb22-128" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb22-129"><a href="#cb22-129" aria-hidden="true" tabindex="-1"></a>    <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb22-130"><a href="#cb22-130" aria-hidden="true" tabindex="-1"></a>    <span class="at">prob =</span> <span class="fu">c</span>(prob_btheb, <span class="dv">1</span> <span class="sc">-</span> prob_btheb),</span>
-<span id="cb22-131"><a href="#cb22-131" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">100</span></span>
-<span id="cb22-132"><a href="#cb22-132" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-133"><a href="#cb22-133" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-134"><a href="#cb22-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-135"><a href="#cb22-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-136"><a href="#cb22-136" aria-hidden="true" tabindex="-1"></a>We now have two data frames (labeled <span class="in">`tau`</span> and <span class="in">`btheB`</span>), one per condition. In the following chunk, we combine them into one data frame, change the variable names, transform the treatment variables to a factor, transform the outcome variable to an integer variable, and edit the factor levels -- all of this is necessary to run our logistic regression on this data set later.</span>
-<span id="cb22-137"><a href="#cb22-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-138"><a href="#cb22-138" aria-hidden="true" tabindex="-1"></a><span class="in">```{r data preprocessing}</span></span>
+<span id="cb22-105"><a href="#cb22-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{r simulate data}</span></span>
+<span id="cb22-106"><a href="#cb22-106" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8526</span>)</span>
+<span id="cb22-107"><a href="#cb22-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-108"><a href="#cb22-108" aria-hidden="true" tabindex="-1"></a><span class="co">#sample from distribution in "TAU" condition</span></span>
+<span id="cb22-109"><a href="#cb22-109" aria-hidden="true" tabindex="-1"></a>tau <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb22-110"><a href="#cb22-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="st">"TAU"</span>, <span class="dv">100</span>),</span>
+<span id="cb22-111"><a href="#cb22-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(</span>
+<span id="cb22-112"><a href="#cb22-112" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb22-113"><a href="#cb22-113" aria-hidden="true" tabindex="-1"></a>    <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb22-114"><a href="#cb22-114" aria-hidden="true" tabindex="-1"></a>    <span class="at">prob =</span> <span class="fu">c</span>(prob_tau, <span class="dv">1</span> <span class="sc">-</span> prob_tau),</span>
+<span id="cb22-115"><a href="#cb22-115" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">100</span></span>
+<span id="cb22-116"><a href="#cb22-116" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-117"><a href="#cb22-117" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-118"><a href="#cb22-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-119"><a href="#cb22-119" aria-hidden="true" tabindex="-1"></a><span class="co">#sample from distribution in "BtheB" condition</span></span>
+<span id="cb22-120"><a href="#cb22-120" aria-hidden="true" tabindex="-1"></a>btheb <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb22-121"><a href="#cb22-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="st">"BtheB"</span>, <span class="dv">100</span>),</span>
+<span id="cb22-122"><a href="#cb22-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(</span>
+<span id="cb22-123"><a href="#cb22-123" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb22-124"><a href="#cb22-124" aria-hidden="true" tabindex="-1"></a>    <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb22-125"><a href="#cb22-125" aria-hidden="true" tabindex="-1"></a>    <span class="at">prob =</span> <span class="fu">c</span>(prob_btheb, <span class="dv">1</span> <span class="sc">-</span> prob_btheb),</span>
+<span id="cb22-126"><a href="#cb22-126" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">100</span></span>
+<span id="cb22-127"><a href="#cb22-127" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-128"><a href="#cb22-128" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-129"><a href="#cb22-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-130"><a href="#cb22-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-131"><a href="#cb22-131" aria-hidden="true" tabindex="-1"></a>We now have two data frames (labeled <span class="in">`tau`</span> and <span class="in">`btheB`</span>), one per condition. In the following chunk, we combine them into one data frame, change the variable names, transform the treatment variables to a factor, transform the outcome variable to an integer variable, and edit the factor levels -- all of this is necessary to run our logistic regression on this data set later.</span>
+<span id="cb22-132"><a href="#cb22-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-133"><a href="#cb22-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{r data preprocessing}</span></span>
+<span id="cb22-134"><a href="#cb22-134" aria-hidden="true" tabindex="-1"></a><span class="co">#combine data frames</span></span>
+<span id="cb22-135"><a href="#cb22-135" aria-hidden="true" tabindex="-1"></a>simulated_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tau, btheb) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb22-136"><a href="#cb22-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-137"><a href="#cb22-137" aria-hidden="true" tabindex="-1"></a><span class="co">#set variable names</span></span>
+<span id="cb22-138"><a href="#cb22-138" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(simulated_data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"bdi.2m.dicho"</span>)</span>
 <span id="cb22-139"><a href="#cb22-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-140"><a href="#cb22-140" aria-hidden="true" tabindex="-1"></a><span class="co">#combine data frames</span></span>
-<span id="cb22-141"><a href="#cb22-141" aria-hidden="true" tabindex="-1"></a>simulated_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tau, btheb) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb22-140"><a href="#cb22-140" aria-hidden="true" tabindex="-1"></a><span class="co">#change treatment variable to factor</span></span>
+<span id="cb22-141"><a href="#cb22-141" aria-hidden="true" tabindex="-1"></a>simulated_data<span class="sc">$</span>treatment <span class="ot">&lt;-</span> simulated_data<span class="sc">$</span>treatment <span class="sc">|&gt;</span> <span class="fu">as.factor</span>()</span>
 <span id="cb22-142"><a href="#cb22-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-143"><a href="#cb22-143" aria-hidden="true" tabindex="-1"></a><span class="co">#set variable names</span></span>
-<span id="cb22-144"><a href="#cb22-144" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(simulated_data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"bdi.2m.dicho"</span>)</span>
+<span id="cb22-143"><a href="#cb22-143" aria-hidden="true" tabindex="-1"></a><span class="co">#change outcome variable to integer</span></span>
+<span id="cb22-144"><a href="#cb22-144" aria-hidden="true" tabindex="-1"></a>simulated_data<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="ot">&lt;-</span> simulated_data<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="sc">|&gt;</span> <span class="fu">as.integer</span>()</span>
 <span id="cb22-145"><a href="#cb22-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-146"><a href="#cb22-146" aria-hidden="true" tabindex="-1"></a><span class="co">#change treatment variable to factor</span></span>
-<span id="cb22-147"><a href="#cb22-147" aria-hidden="true" tabindex="-1"></a>simulated_data<span class="sc">$</span>treatment <span class="ot">&lt;-</span> simulated_data<span class="sc">$</span>treatment <span class="sc">|&gt;</span> <span class="fu">as.factor</span>()</span>
-<span id="cb22-148"><a href="#cb22-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-149"><a href="#cb22-149" aria-hidden="true" tabindex="-1"></a><span class="co">#change outcome variable to integer</span></span>
-<span id="cb22-150"><a href="#cb22-150" aria-hidden="true" tabindex="-1"></a>simulated_data<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="ot">&lt;-</span> simulated_data<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="sc">|&gt;</span> <span class="fu">as.integer</span>()</span>
-<span id="cb22-151"><a href="#cb22-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-152"><a href="#cb22-152" aria-hidden="true" tabindex="-1"></a><span class="co">#reverse factor levels, this affects the coding of this factor in the regression analysis later</span></span>
-<span id="cb22-153"><a href="#cb22-153" aria-hidden="true" tabindex="-1"></a>simulated_data<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
-<span id="cb22-154"><a href="#cb22-154" aria-hidden="true" tabindex="-1"></a>  simulated_data<span class="sc">$</span>treatment,</span>
-<span id="cb22-155"><a href="#cb22-155" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(simulated_data<span class="sc">$</span>treatment))</span>
-<span id="cb22-156"><a href="#cb22-156" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-157"><a href="#cb22-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-158"><a href="#cb22-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-159"><a href="#cb22-159" aria-hidden="true" tabindex="-1"></a>With this first simulated data set, we can now perform a first logistic regression.</span>
-<span id="cb22-160"><a href="#cb22-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-161"><a href="#cb22-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{r logistic regression}</span></span>
-<span id="cb22-162"><a href="#cb22-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-163"><a href="#cb22-163" aria-hidden="true" tabindex="-1"></a>simulated_fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
-<span id="cb22-164"><a href="#cb22-164" aria-hidden="true" tabindex="-1"></a>  bdi<span class="fl">.2</span>m.dicho <span class="sc">~</span> treatment,</span>
-<span id="cb22-165"><a href="#cb22-165" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> simulated_data,</span>
-<span id="cb22-166"><a href="#cb22-166" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">"binomial"</span></span>
-<span id="cb22-167"><a href="#cb22-167" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-146"><a href="#cb22-146" aria-hidden="true" tabindex="-1"></a><span class="co">#reverse factor levels, this affects the coding of this factor in the regression analysis later</span></span>
+<span id="cb22-147"><a href="#cb22-147" aria-hidden="true" tabindex="-1"></a>simulated_data<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb22-148"><a href="#cb22-148" aria-hidden="true" tabindex="-1"></a>  simulated_data<span class="sc">$</span>treatment,</span>
+<span id="cb22-149"><a href="#cb22-149" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(simulated_data<span class="sc">$</span>treatment))</span>
+<span id="cb22-150"><a href="#cb22-150" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-151"><a href="#cb22-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-152"><a href="#cb22-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-153"><a href="#cb22-153" aria-hidden="true" tabindex="-1"></a>With this first simulated data set, we can now perform a first logistic regression.</span>
+<span id="cb22-154"><a href="#cb22-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-155"><a href="#cb22-155" aria-hidden="true" tabindex="-1"></a><span class="in">```{r logistic regression}</span></span>
+<span id="cb22-156"><a href="#cb22-156" aria-hidden="true" tabindex="-1"></a>simulated_fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb22-157"><a href="#cb22-157" aria-hidden="true" tabindex="-1"></a>  bdi<span class="fl">.2</span>m.dicho <span class="sc">~</span> treatment,</span>
+<span id="cb22-158"><a href="#cb22-158" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> simulated_data,</span>
+<span id="cb22-159"><a href="#cb22-159" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">"binomial"</span></span>
+<span id="cb22-160"><a href="#cb22-160" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-161"><a href="#cb22-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-162"><a href="#cb22-162" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(simulated_fit)</span>
+<span id="cb22-163"><a href="#cb22-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-164"><a href="#cb22-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-165"><a href="#cb22-165" aria-hidden="true" tabindex="-1"></a>Here, we find a negative and significant regression weight for the treatment predictor of <span class="in">`r round(coef(summary(simulated_fit))[2,1],2)`</span>, indicating that the <span class="in">`BtheB`</span> treatment led to less moderate/severe depressions as compared to the <span class="in">`TAU`</span> treatment. But, actually, it is not our central interest to test whether this particular simulated data set results in a significant treatment effect. What we really want to know is: How many of a theoretically infinite number of simulations yield a significant p-value of this effect? Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <span class="in">`p_values`</span>.</span>
+<span id="cb22-166"><a href="#cb22-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-167"><a href="#cb22-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## Let's do the power analysis</span></span>
 <span id="cb22-168"><a href="#cb22-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-169"><a href="#cb22-169" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(simulated_fit)</span>
-<span id="cb22-170"><a href="#cb22-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-171"><a href="#cb22-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-172"><a href="#cb22-172" aria-hidden="true" tabindex="-1"></a>Here, we find a negative and significant regression weight for the treatment predictor of <span class="in">`r round(coef(summary(simulated_fit))[2,1],2)`</span>, indicating that the <span class="in">`BtheB`</span> treatment led to less moderate/severe depressions as compared to the <span class="in">`TAU`</span> treatment. But, actually, it is not our central interest to test whether this particular simulated data set results in a significant treatment effect. What we really want to know is: How many of a theoretically infinite number of simulations yield a significant p-value of this effect? Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <span class="in">`p_values`</span>.</span>
-<span id="cb22-173"><a href="#cb22-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-174"><a href="#cb22-174" aria-hidden="true" tabindex="-1"></a><span class="fu">## Let's do the power analysis</span></span>
-<span id="cb22-175"><a href="#cb22-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-176"><a href="#cb22-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r power analysis}</span></span>
+<span id="cb22-169"><a href="#cb22-169" aria-hidden="true" tabindex="-1"></a><span class="in">```{r power analysis}</span></span>
+<span id="cb22-170"><a href="#cb22-170" aria-hidden="true" tabindex="-1"></a><span class="co">#write a function to automize the data simulation process</span></span>
+<span id="cb22-171"><a href="#cb22-171" aria-hidden="true" tabindex="-1"></a>simulation <span class="ot">&lt;-</span> <span class="cf">function</span>(n, p0, p1, <span class="at">prop =</span> .<span class="dv">50</span>) {</span>
+<span id="cb22-172"><a href="#cb22-172" aria-hidden="true" tabindex="-1"></a>  <span class="co">#sample from distribution in "TAU" condition</span></span>
+<span id="cb22-173"><a href="#cb22-173" aria-hidden="true" tabindex="-1"></a>  tau <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb22-174"><a href="#cb22-174" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">"TAU"</span>, n <span class="sc">*</span> prop),</span>
+<span id="cb22-175"><a href="#cb22-175" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(p0, <span class="dv">1</span> <span class="sc">-</span> p0), <span class="at">size =</span> n <span class="sc">*</span> prop)</span>
+<span id="cb22-176"><a href="#cb22-176" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb22-177"><a href="#cb22-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-178"><a href="#cb22-178" aria-hidden="true" tabindex="-1"></a><span class="co">#write a function to automize the data simulation process</span></span>
-<span id="cb22-179"><a href="#cb22-179" aria-hidden="true" tabindex="-1"></a>simulation <span class="ot">&lt;-</span> <span class="cf">function</span>(n, p0, p1, <span class="at">prop =</span> .<span class="dv">50</span>) {</span>
-<span id="cb22-180"><a href="#cb22-180" aria-hidden="true" tabindex="-1"></a>  <span class="co">#sample from distribution in "TAU" condition</span></span>
-<span id="cb22-181"><a href="#cb22-181" aria-hidden="true" tabindex="-1"></a>  tau <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
-<span id="cb22-182"><a href="#cb22-182" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">"TAU"</span>, n <span class="sc">*</span> prop),</span>
-<span id="cb22-183"><a href="#cb22-183" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(p0, <span class="dv">1</span> <span class="sc">-</span> p0), <span class="at">size =</span> n <span class="sc">*</span> prop)</span>
-<span id="cb22-184"><a href="#cb22-184" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-185"><a href="#cb22-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-186"><a href="#cb22-186" aria-hidden="true" tabindex="-1"></a>  <span class="co">#sample from distribution in "BtheB" condition</span></span>
-<span id="cb22-187"><a href="#cb22-187" aria-hidden="true" tabindex="-1"></a>  btheb <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
-<span id="cb22-188"><a href="#cb22-188" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">"BtheB"</span>, n <span class="sc">*</span> prop),</span>
-<span id="cb22-189"><a href="#cb22-189" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(p1, <span class="dv">1</span> <span class="sc">-</span> p1), <span class="at">size =</span> n <span class="sc">*</span> prop)</span>
-<span id="cb22-190"><a href="#cb22-190" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-191"><a href="#cb22-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-192"><a href="#cb22-192" aria-hidden="true" tabindex="-1"></a>  <span class="co">#combine both data sets and do some preprocessing</span></span>
-<span id="cb22-193"><a href="#cb22-193" aria-hidden="true" tabindex="-1"></a>  simulated_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tau, btheb) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb22-194"><a href="#cb22-194" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(simulated_data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"bdi.2m.dicho"</span>)</span>
-<span id="cb22-195"><a href="#cb22-195" aria-hidden="true" tabindex="-1"></a>  simulated_data<span class="sc">$</span>treatment <span class="ot">&lt;-</span> simulated_data<span class="sc">$</span>treatment <span class="sc">|&gt;</span> <span class="fu">as.factor</span>()</span>
-<span id="cb22-196"><a href="#cb22-196" aria-hidden="true" tabindex="-1"></a>  simulated_data<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="ot">&lt;-</span> simulated_data<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>()</span>
-<span id="cb22-197"><a href="#cb22-197" aria-hidden="true" tabindex="-1"></a>  simulated_data<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
-<span id="cb22-198"><a href="#cb22-198" aria-hidden="true" tabindex="-1"></a>    simulated_data<span class="sc">$</span>treatment,</span>
-<span id="cb22-199"><a href="#cb22-199" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(simulated_data<span class="sc">$</span>treatment))</span>
-<span id="cb22-200"><a href="#cb22-200" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-201"><a href="#cb22-201" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(simulated_data)</span>
-<span id="cb22-202"><a href="#cb22-202" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-178"><a href="#cb22-178" aria-hidden="true" tabindex="-1"></a>  <span class="co">#sample from distribution in "BtheB" condition</span></span>
+<span id="cb22-179"><a href="#cb22-179" aria-hidden="true" tabindex="-1"></a>  btheb <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb22-180"><a href="#cb22-180" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">"BtheB"</span>, n <span class="sc">*</span> prop),</span>
+<span id="cb22-181"><a href="#cb22-181" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(p1, <span class="dv">1</span> <span class="sc">-</span> p1), <span class="at">size =</span> n <span class="sc">*</span> prop)</span>
+<span id="cb22-182"><a href="#cb22-182" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-183"><a href="#cb22-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-184"><a href="#cb22-184" aria-hidden="true" tabindex="-1"></a>  <span class="co">#combine both data sets and do some preprocessing</span></span>
+<span id="cb22-185"><a href="#cb22-185" aria-hidden="true" tabindex="-1"></a>  simulated_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tau, btheb) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb22-186"><a href="#cb22-186" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(simulated_data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"bdi.2m.dicho"</span>)</span>
+<span id="cb22-187"><a href="#cb22-187" aria-hidden="true" tabindex="-1"></a>  simulated_data<span class="sc">$</span>treatment <span class="ot">&lt;-</span> simulated_data<span class="sc">$</span>treatment <span class="sc">|&gt;</span> <span class="fu">as.factor</span>()</span>
+<span id="cb22-188"><a href="#cb22-188" aria-hidden="true" tabindex="-1"></a>  simulated_data<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="ot">&lt;-</span> simulated_data<span class="sc">$</span>bdi<span class="fl">.2</span>m.dicho <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb22-189"><a href="#cb22-189" aria-hidden="true" tabindex="-1"></a>  simulated_data<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb22-190"><a href="#cb22-190" aria-hidden="true" tabindex="-1"></a>    simulated_data<span class="sc">$</span>treatment,</span>
+<span id="cb22-191"><a href="#cb22-191" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(simulated_data<span class="sc">$</span>treatment))</span>
+<span id="cb22-192"><a href="#cb22-192" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-193"><a href="#cb22-193" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(simulated_data)</span>
+<span id="cb22-194"><a href="#cb22-194" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-195"><a href="#cb22-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-196"><a href="#cb22-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-197"><a href="#cb22-197" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store the p-values</span></span>
+<span id="cb22-198"><a href="#cb22-198" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb22-199"><a href="#cb22-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-200"><a href="#cb22-200" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store the results (i.e., the power per sample size)</span></span>
+<span id="cb22-201"><a href="#cb22-201" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb22-202"><a href="#cb22-202" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-203"><a href="#cb22-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-204"><a href="#cb22-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-205"><a href="#cb22-205" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store the p-values</span></span>
-<span id="cb22-206"><a href="#cb22-206" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb22-207"><a href="#cb22-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-208"><a href="#cb22-208" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store the results (i.e., the power per sample size)</span></span>
-<span id="cb22-209"><a href="#cb22-209" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb22-210"><a href="#cb22-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-211"><a href="#cb22-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-212"><a href="#cb22-212" aria-hidden="true" tabindex="-1"></a><span class="co"># write function to store results of simulation</span></span>
-<span id="cb22-213"><a href="#cb22-213" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="cf">function</span>(n, p0, p1, <span class="at">prop =</span> .<span class="dv">50</span>) {</span>
-<span id="cb22-214"><a href="#cb22-214" aria-hidden="true" tabindex="-1"></a>  <span class="co">#simulate data</span></span>
-<span id="cb22-215"><a href="#cb22-215" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">simulation</span>(<span class="at">n =</span> n, <span class="at">p0 =</span> p0, <span class="at">p1 =</span> p1, <span class="at">prop =</span> .<span class="dv">50</span>)</span>
-<span id="cb22-216"><a href="#cb22-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-217"><a href="#cb22-217" aria-hidden="true" tabindex="-1"></a>  <span class="co">#run regression</span></span>
-<span id="cb22-218"><a href="#cb22-218" aria-hidden="true" tabindex="-1"></a>  simulated_fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
-<span id="cb22-219"><a href="#cb22-219" aria-hidden="true" tabindex="-1"></a>    bdi<span class="fl">.2</span>m.dicho <span class="sc">~</span> treatment,</span>
-<span id="cb22-220"><a href="#cb22-220" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> data,</span>
-<span id="cb22-221"><a href="#cb22-221" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">"binomial"</span></span>
-<span id="cb22-222"><a href="#cb22-222" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-223"><a href="#cb22-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-224"><a href="#cb22-224" aria-hidden="true" tabindex="-1"></a>  <span class="co">#store p-value</span></span>
-<span id="cb22-225"><a href="#cb22-225" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">coef</span>(<span class="fu">summary</span>(simulated_fit))[<span class="dv">2</span>, <span class="dv">4</span>]</span>
-<span id="cb22-226"><a href="#cb22-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-227"><a href="#cb22-227" aria-hidden="true" tabindex="-1"></a>  <span class="co">#return p-value</span></span>
-<span id="cb22-228"><a href="#cb22-228" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_value)</span>
-<span id="cb22-229"><a href="#cb22-229" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-230"><a href="#cb22-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-231"><a href="#cb22-231" aria-hidden="true" tabindex="-1"></a><span class="co"># set range of sample sizes</span></span>
-<span id="cb22-232"><a href="#cb22-232" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">500</span>, <span class="at">by =</span> <span class="dv">10</span>)</span>
-<span id="cb22-233"><a href="#cb22-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-234"><a href="#cb22-234" aria-hidden="true" tabindex="-1"></a><span class="co"># set number of iterations</span></span>
-<span id="cb22-235"><a href="#cb22-235" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb22-236"><a href="#cb22-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-237"><a href="#cb22-237" aria-hidden="true" tabindex="-1"></a><span class="co"># perform power analysis</span></span>
-<span id="cb22-238"><a href="#cb22-238" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb22-239"><a href="#cb22-239" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(</span>
-<span id="cb22-240"><a href="#cb22-240" aria-hidden="true" tabindex="-1"></a>    iterations,</span>
-<span id="cb22-241"><a href="#cb22-241" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sim</span>(n, <span class="at">p0 =</span> prob_tau, <span class="at">p1 =</span> prob_btheb, <span class="at">prop =</span> prop)</span>
-<span id="cb22-242"><a href="#cb22-242" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-243"><a href="#cb22-243" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb22-244"><a href="#cb22-244" aria-hidden="true" tabindex="-1"></a>    results,</span>
-<span id="cb22-245"><a href="#cb22-245" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb22-246"><a href="#cb22-246" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
-<span id="cb22-247"><a href="#cb22-247" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
-<span id="cb22-248"><a href="#cb22-248" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb22-249"><a href="#cb22-249" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-250"><a href="#cb22-250" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-251"><a href="#cb22-251" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-252"><a href="#cb22-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-253"><a href="#cb22-253" aria-hidden="true" tabindex="-1"></a>Let's visualize the results.</span>
-<span id="cb22-254"><a href="#cb22-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-255"><a href="#cb22-255" aria-hidden="true" tabindex="-1"></a><span class="in">```{r plot}</span></span>
-<span id="cb22-256"><a href="#cb22-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-257"><a href="#cb22-257" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(results, <span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> power)) <span class="sc">+</span></span>
-<span id="cb22-258"><a href="#cb22-258" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb22-259"><a href="#cb22-259" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb22-260"><a href="#cb22-260" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
-<span id="cb22-261"><a href="#cb22-261" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
-<span id="cb22-262"><a href="#cb22-262" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span>
-<span id="cb22-263"><a href="#cb22-263" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-264"><a href="#cb22-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-265"><a href="#cb22-265" aria-hidden="true" tabindex="-1"></a>This plot shows that we need approx. 220 participants to achieve 80% under the given assumptions. Note that this is the overall sample size, not the size per condition! That's it -- we have performed a simulation-based power analysis for a logistic regression!</span>
-<span id="cb22-266"><a href="#cb22-266" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-267"><a href="#cb22-267" aria-hidden="true" tabindex="-1"></a><span class="fu">## Verification with the pwr2ppl package</span></span>
-<span id="cb22-268"><a href="#cb22-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-269"><a href="#cb22-269" aria-hidden="true" tabindex="-1"></a>Luckily, there are also R packages that can perform these kinds of power analyses, for example the <span class="in">`pwr2ppl`</span> package (Aberson, 2019). We can use this package to verify our results. Does the <span class="in">`pwr2ppl`</span> package yield the same result? Note that you will need to install this package if you haven't used it before.</span>
-<span id="cb22-270"><a href="#cb22-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-271"><a href="#cb22-271" aria-hidden="true" tabindex="-1"></a><span class="in">```{r pwr2ppl}</span></span>
-<span id="cb22-272"><a href="#cb22-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-273"><a href="#cb22-273" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("devtools")</span></span>
-<span id="cb22-274"><a href="#cb22-274" aria-hidden="true" tabindex="-1"></a><span class="co">#devtools::install_github("chrisaberson/pwr2ppl")</span></span>
-<span id="cb22-275"><a href="#cb22-275" aria-hidden="true" tabindex="-1"></a>pwr2ppl<span class="sc">::</span><span class="fu">LRcat</span>(</span>
-<span id="cb22-276"><a href="#cb22-276" aria-hidden="true" tabindex="-1"></a>  <span class="at">p0 =</span> prob_tau,</span>
-<span id="cb22-277"><a href="#cb22-277" aria-hidden="true" tabindex="-1"></a>  <span class="at">p1 =</span> prob_btheb,</span>
-<span id="cb22-278"><a href="#cb22-278" aria-hidden="true" tabindex="-1"></a>  <span class="at">prop =</span> .<span class="dv">50</span>,</span>
-<span id="cb22-279"><a href="#cb22-279" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> .<span class="dv">005</span>,</span>
-<span id="cb22-280"><a href="#cb22-280" aria-hidden="true" tabindex="-1"></a>  <span class="at">power =</span> .<span class="dv">80</span></span>
-<span id="cb22-281"><a href="#cb22-281" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-282"><a href="#cb22-282" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-283"><a href="#cb22-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-284"><a href="#cb22-284" aria-hidden="true" tabindex="-1"></a>That's basically the same result, well done!</span>
+<span id="cb22-204"><a href="#cb22-204" aria-hidden="true" tabindex="-1"></a><span class="co"># write function to store results of simulation</span></span>
+<span id="cb22-205"><a href="#cb22-205" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="cf">function</span>(n, p0, p1, <span class="at">prop =</span> .<span class="dv">50</span>) {</span>
+<span id="cb22-206"><a href="#cb22-206" aria-hidden="true" tabindex="-1"></a>  <span class="co">#simulate data</span></span>
+<span id="cb22-207"><a href="#cb22-207" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">simulation</span>(<span class="at">n =</span> n, <span class="at">p0 =</span> p0, <span class="at">p1 =</span> p1, <span class="at">prop =</span> .<span class="dv">50</span>)</span>
+<span id="cb22-208"><a href="#cb22-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-209"><a href="#cb22-209" aria-hidden="true" tabindex="-1"></a>  <span class="co">#run regression</span></span>
+<span id="cb22-210"><a href="#cb22-210" aria-hidden="true" tabindex="-1"></a>  simulated_fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb22-211"><a href="#cb22-211" aria-hidden="true" tabindex="-1"></a>    bdi<span class="fl">.2</span>m.dicho <span class="sc">~</span> treatment,</span>
+<span id="cb22-212"><a href="#cb22-212" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> data,</span>
+<span id="cb22-213"><a href="#cb22-213" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">"binomial"</span></span>
+<span id="cb22-214"><a href="#cb22-214" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-215"><a href="#cb22-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-216"><a href="#cb22-216" aria-hidden="true" tabindex="-1"></a>  <span class="co">#store p-value</span></span>
+<span id="cb22-217"><a href="#cb22-217" aria-hidden="true" tabindex="-1"></a>  p_value <span class="ot">&lt;-</span> <span class="fu">coef</span>(<span class="fu">summary</span>(simulated_fit))[<span class="dv">2</span>, <span class="dv">4</span>]</span>
+<span id="cb22-218"><a href="#cb22-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-219"><a href="#cb22-219" aria-hidden="true" tabindex="-1"></a>  <span class="co">#return p-value</span></span>
+<span id="cb22-220"><a href="#cb22-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_value)</span>
+<span id="cb22-221"><a href="#cb22-221" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-222"><a href="#cb22-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-223"><a href="#cb22-223" aria-hidden="true" tabindex="-1"></a><span class="co"># set range of sample sizes</span></span>
+<span id="cb22-224"><a href="#cb22-224" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">500</span>, <span class="at">by =</span> <span class="dv">10</span>)</span>
+<span id="cb22-225"><a href="#cb22-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-226"><a href="#cb22-226" aria-hidden="true" tabindex="-1"></a><span class="co"># set number of iterations</span></span>
+<span id="cb22-227"><a href="#cb22-227" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb22-228"><a href="#cb22-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-229"><a href="#cb22-229" aria-hidden="true" tabindex="-1"></a><span class="co"># perform power analysis</span></span>
+<span id="cb22-230"><a href="#cb22-230" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb22-231"><a href="#cb22-231" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(</span>
+<span id="cb22-232"><a href="#cb22-232" aria-hidden="true" tabindex="-1"></a>    iterations,</span>
+<span id="cb22-233"><a href="#cb22-233" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sim</span>(n, <span class="at">p0 =</span> prob_tau, <span class="at">p1 =</span> prob_btheb, <span class="at">prop =</span> prop)</span>
+<span id="cb22-234"><a href="#cb22-234" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-235"><a href="#cb22-235" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb22-236"><a href="#cb22-236" aria-hidden="true" tabindex="-1"></a>    results,</span>
+<span id="cb22-237"><a href="#cb22-237" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb22-238"><a href="#cb22-238" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb22-239"><a href="#cb22-239" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
+<span id="cb22-240"><a href="#cb22-240" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-241"><a href="#cb22-241" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-242"><a href="#cb22-242" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-243"><a href="#cb22-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-244"><a href="#cb22-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-245"><a href="#cb22-245" aria-hidden="true" tabindex="-1"></a>Let's visualize the results.</span>
+<span id="cb22-246"><a href="#cb22-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-247"><a href="#cb22-247" aria-hidden="true" tabindex="-1"></a><span class="in">```{r plot}</span></span>
+<span id="cb22-248"><a href="#cb22-248" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(results, <span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> power)) <span class="sc">+</span></span>
+<span id="cb22-249"><a href="#cb22-249" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb22-250"><a href="#cb22-250" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb22-251"><a href="#cb22-251" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb22-252"><a href="#cb22-252" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb22-253"><a href="#cb22-253" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span>
+<span id="cb22-254"><a href="#cb22-254" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-255"><a href="#cb22-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-256"><a href="#cb22-256" aria-hidden="true" tabindex="-1"></a>This plot shows that we need approx. 220 participants to achieve 80% under the given assumptions. Note that this is the overall sample size, not the size per condition! That's it -- we have performed a simulation-based power analysis for a logistic regression!</span>
+<span id="cb22-257"><a href="#cb22-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-258"><a href="#cb22-258" aria-hidden="true" tabindex="-1"></a><span class="fu">## Verification with the pwr2ppl package</span></span>
+<span id="cb22-259"><a href="#cb22-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-260"><a href="#cb22-260" aria-hidden="true" tabindex="-1"></a>Luckily, there are also R packages that can perform these kinds of power analyses, for example the <span class="in">`pwr2ppl`</span> package (Aberson, 2019). We can use this package to verify our results. Does the <span class="in">`pwr2ppl`</span> package yield the same result? Note that you will need to install this package if you haven't used it before.</span>
+<span id="cb22-261"><a href="#cb22-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-262"><a href="#cb22-262" aria-hidden="true" tabindex="-1"></a><span class="in">```{r pwr2ppl}</span></span>
+<span id="cb22-263"><a href="#cb22-263" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("devtools")</span></span>
+<span id="cb22-264"><a href="#cb22-264" aria-hidden="true" tabindex="-1"></a><span class="co">#devtools::install_github("chrisaberson/pwr2ppl")</span></span>
+<span id="cb22-265"><a href="#cb22-265" aria-hidden="true" tabindex="-1"></a>pwr2ppl<span class="sc">::</span><span class="fu">LRcat</span>(</span>
+<span id="cb22-266"><a href="#cb22-266" aria-hidden="true" tabindex="-1"></a>  <span class="at">p0 =</span> prob_tau,</span>
+<span id="cb22-267"><a href="#cb22-267" aria-hidden="true" tabindex="-1"></a>  <span class="at">p1 =</span> prob_btheb,</span>
+<span id="cb22-268"><a href="#cb22-268" aria-hidden="true" tabindex="-1"></a>  <span class="at">prop =</span> .<span class="dv">50</span>,</span>
+<span id="cb22-269"><a href="#cb22-269" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> .<span class="dv">005</span>,</span>
+<span id="cb22-270"><a href="#cb22-270" aria-hidden="true" tabindex="-1"></a>  <span class="at">power =</span> .<span class="dv">80</span></span>
+<span id="cb22-271"><a href="#cb22-271" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-272"><a href="#cb22-272" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-273"><a href="#cb22-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-274"><a href="#cb22-274" aria-hidden="true" tabindex="-1"></a>That's basically the same result, well done!</span>
+<span id="cb22-275"><a href="#cb22-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-276"><a href="#cb22-276" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using a safeguard power approach</span></span>
+<span id="cb22-277"><a href="#cb22-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-278"><a href="#cb22-278" aria-hidden="true" tabindex="-1"></a>Of note, our effect size estimates (i.e, the estimates of the probabilities of not having a moderate/severe depression two months after the <span class="in">`BtheB`</span> or the <span class="in">`TAU`</span> treatment) were so far based on a pilot study. However, this pilot study might not have yielded a precise estimate of these effect sizes. Thus, in order to consider uncertainty in these effect size estimates, it has been suggested to perform a safeguard power analysis (see chapter <span class="co">[</span><span class="ot">first chapter on linear models</span><span class="co">](lm1.qmd)</span> for more info) instead of a power analysis using the observed effect size. The main idea behind the safeguard power analysis is to compute a 60% confidence interval around the observed effect size and to take the lower bound of this confidence interval as an effect size estimate (see Perugini et al., <span class="co">[</span><span class="ot">2014</span><span class="co">](https://journals.sagepub.com/doi/10.1177/1745691614528519)</span>). Let's try this here. </span>
+<span id="cb22-279"><a href="#cb22-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-280"><a href="#cb22-280" aria-hidden="true" tabindex="-1"></a>Let's assume that we view the probability of not having a moderate/severe depression after the <span class="in">`TAU`</span> treatment to be probably accurate, but that we want to account for uncertainty in the estimation of the probability of not having a moderate/severe depression after the <span class="in">`BtheB`</span> treatment. We then simply calculate the 60% confidence interval around this effect size. We can use the <span class="in">`BinomCI`</span> function from the <span class="in">`DescTools`</span> package to do this. We need to provide this function with the number of successes (here: 37, see table above) and the number of observations (here: 52, see above).</span>
+<span id="cb22-281"><a href="#cb22-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-282"><a href="#cb22-282" aria-hidden="true" tabindex="-1"></a><span class="in">```{r safeguard estimation}</span></span>
+<span id="cb22-283"><a href="#cb22-283" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">BinomCI</span>(<span class="dv">37</span>, <span class="dv">52</span>, <span class="at">conf.level =</span> <span class="fl">0.60</span>)</span>
+<span id="cb22-284"><a href="#cb22-284" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb22-285"><a href="#cb22-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-286"><a href="#cb22-286" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using a safeguard power approach</span></span>
+<span id="cb22-286"><a href="#cb22-286" aria-hidden="true" tabindex="-1"></a>This gives us an estimate of <span class="in">`r round(DescTools::BinomCI(37, 52, conf.level = 0.60)[2],2)`</span> for the lower bound of the 60% confidence interval of the probability of not having a moderate/severe depression after the <span class="in">`BtheB`</span> treatment, while the point estimate for this effect size was <span class="in">`r prob_btheb`</span>. We can now redo our power analysis from above with this new effect size estimation. I am copying the chunk from above, while replacing the <span class="in">`prob_btheb`</span> value with <span class="in">`r round(DescTools::BinomCI(37, 52, conf.level = 0.60)[2],2)`</span>.</span>
 <span id="cb22-287"><a href="#cb22-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-288"><a href="#cb22-288" aria-hidden="true" tabindex="-1"></a>Of note, our effect size estimates (i.e, the estimates of the probabilities of not having a moderate/severe depression two months after the <span class="in">`BtheB`</span> or the <span class="in">`TAU`</span> treatment) were so far based on a pilot study. However, this pilot study might not have yielded a precise estimate of these effect sizes. Thus, in order to consider uncertainty in these effect size estimates, it has been suggested to perform a safeguard power analysis (see chapter <span class="co">[</span><span class="ot">first chapter on linear models</span><span class="co">](lm1.qmd)</span> for more info) instead of a power analysis using the observed effect size. The main idea behind the safeguard power analysis is to compute a 60% confidence interval around the observed effect size and to take the lower bound of this confidence interval as an effect size estimate (see Perugini et al., <span class="co">[</span><span class="ot">2014</span><span class="co">](https://journals.sagepub.com/doi/10.1177/1745691614528519)</span>). Let's try this here. </span>
-<span id="cb22-289"><a href="#cb22-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-290"><a href="#cb22-290" aria-hidden="true" tabindex="-1"></a>Let's assume that we view the probability of not having a moderate/severe depression after the <span class="in">`TAU`</span> treatment to be probably accurate, but that we want to account for uncertainty in the estimation of the probability of not having a moderate/severe depression after the <span class="in">`BtheB`</span> treatment. We then simply calculate the 60% confidence interval around this effect size. We can use the <span class="in">`BinomCI`</span> function from the <span class="in">`DescTools`</span> package to do this. We need to provide this function with the number of successes (here: 37, see table above) and the number of observations (here: 52, see above).</span>
+<span id="cb22-288"><a href="#cb22-288" aria-hidden="true" tabindex="-1"></a><span class="in">```{r safeguard power analysis}</span></span>
+<span id="cb22-289"><a href="#cb22-289" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store the p-values</span></span>
+<span id="cb22-290"><a href="#cb22-290" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
 <span id="cb22-291"><a href="#cb22-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-292"><a href="#cb22-292" aria-hidden="true" tabindex="-1"></a><span class="in">```{r safeguard estimation}</span></span>
-<span id="cb22-293"><a href="#cb22-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-294"><a href="#cb22-294" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">BinomCI</span>(<span class="dv">37</span>, <span class="dv">52</span>, <span class="at">conf.level =</span> <span class="fl">0.60</span>)</span>
-<span id="cb22-295"><a href="#cb22-295" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-296"><a href="#cb22-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-297"><a href="#cb22-297" aria-hidden="true" tabindex="-1"></a>This gives us an estimate of <span class="in">`r round(DescTools::BinomCI(37, 52, conf.level = 0.60)[2],2)`</span> for the lower bound of the 60% confidence interval of the probability of not having a moderate/severe depression after the <span class="in">`BtheB`</span> treatment, while the point estimate for this effect size was <span class="in">`r prob_btheb`</span>. We can now redo our power analysis from above with this new effect size estimation. I am copying the chunk from above, while replacing the <span class="in">`prob_btheb`</span> value with <span class="in">`r round(DescTools::BinomCI(37, 52, conf.level = 0.60)[2],2)`</span>.</span>
-<span id="cb22-298"><a href="#cb22-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-299"><a href="#cb22-299" aria-hidden="true" tabindex="-1"></a><span class="in">```{r safeguard power analysis}</span></span>
+<span id="cb22-292"><a href="#cb22-292" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store the results (i.e., the power per sample size)</span></span>
+<span id="cb22-293"><a href="#cb22-293" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb22-294"><a href="#cb22-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-295"><a href="#cb22-295" aria-hidden="true" tabindex="-1"></a><span class="co"># set range of sample sizes</span></span>
+<span id="cb22-296"><a href="#cb22-296" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">500</span>, <span class="at">by =</span> <span class="dv">10</span>)</span>
+<span id="cb22-297"><a href="#cb22-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-298"><a href="#cb22-298" aria-hidden="true" tabindex="-1"></a><span class="co"># set number of iterations</span></span>
+<span id="cb22-299"><a href="#cb22-299" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb22-300"><a href="#cb22-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-301"><a href="#cb22-301" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store the p-values</span></span>
-<span id="cb22-302"><a href="#cb22-302" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb22-303"><a href="#cb22-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-304"><a href="#cb22-304" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare empty vector to store the results (i.e., the power per sample size)</span></span>
-<span id="cb22-305"><a href="#cb22-305" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb22-306"><a href="#cb22-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-307"><a href="#cb22-307" aria-hidden="true" tabindex="-1"></a><span class="co"># set range of sample sizes</span></span>
-<span id="cb22-308"><a href="#cb22-308" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">500</span>, <span class="at">by =</span> <span class="dv">10</span>)</span>
-<span id="cb22-309"><a href="#cb22-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-310"><a href="#cb22-310" aria-hidden="true" tabindex="-1"></a><span class="co"># set number of iterations</span></span>
-<span id="cb22-311"><a href="#cb22-311" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb22-312"><a href="#cb22-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-313"><a href="#cb22-313" aria-hidden="true" tabindex="-1"></a><span class="co"># perform power analysis</span></span>
-<span id="cb22-314"><a href="#cb22-314" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
-<span id="cb22-315"><a href="#cb22-315" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(</span>
-<span id="cb22-316"><a href="#cb22-316" aria-hidden="true" tabindex="-1"></a>    iterations,</span>
-<span id="cb22-317"><a href="#cb22-317" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sim</span>(n, <span class="at">p0 =</span> prob_tau, <span class="at">p1 =</span> <span class="fl">0.66</span>, <span class="at">prop =</span> prop)</span>
-<span id="cb22-318"><a href="#cb22-318" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-319"><a href="#cb22-319" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb22-320"><a href="#cb22-320" aria-hidden="true" tabindex="-1"></a>    results,</span>
-<span id="cb22-321"><a href="#cb22-321" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb22-322"><a href="#cb22-322" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
-<span id="cb22-323"><a href="#cb22-323" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
-<span id="cb22-324"><a href="#cb22-324" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb22-325"><a href="#cb22-325" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-326"><a href="#cb22-326" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-327"><a href="#cb22-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-328"><a href="#cb22-328" aria-hidden="true" tabindex="-1"></a><span class="co">#let's plot this</span></span>
-<span id="cb22-329"><a href="#cb22-329" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(results, <span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> power)) <span class="sc">+</span></span>
-<span id="cb22-330"><a href="#cb22-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb22-331"><a href="#cb22-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb22-332"><a href="#cb22-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
-<span id="cb22-333"><a href="#cb22-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
-<span id="cb22-334"><a href="#cb22-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span>
-<span id="cb22-335"><a href="#cb22-335" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-336"><a href="#cb22-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-337"><a href="#cb22-337" aria-hidden="true" tabindex="-1"></a>Here, we get a total sample size of ca. 360 participants in order to ensure 80% power with our safeguard  estimation. </span>
-<span id="cb22-338"><a href="#cb22-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-339"><a href="#cb22-339" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
-<span id="cb22-340"><a href="#cb22-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-341"><a href="#cb22-341" aria-hidden="true" tabindex="-1"></a>Aberson, C. L. (2019). Applied power analysis for the behavioral sciences. Routledge.</span>
-<span id="cb22-342"><a href="#cb22-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-343"><a href="#cb22-343" aria-hidden="true" tabindex="-1"></a>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. <span class="co">[</span><span class="ot">https://journals.sagepub.com/doi/10.1177/1745691614528519</span><span class="co">](https://journals.sagepub.com/doi/10.1177/1745691614528519)</span></span>
-<span id="cb22-344"><a href="#cb22-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-345"><a href="#cb22-345" aria-hidden="true" tabindex="-1"></a>Royston, P., Altman, D. G., &amp; Sauerbrei, W. (2006). Dichotomizing continuous predictors in multiple regression: A bad idea. Statistics in Medicine, 25(1), 127–141. <span class="co">[</span><span class="ot">https://doi.org/10.1002/sim.2331</span><span class="co">](https://doi.org/10.1002/sim.2331)</span></span>
+<span id="cb22-301"><a href="#cb22-301" aria-hidden="true" tabindex="-1"></a><span class="co"># perform power analysis</span></span>
+<span id="cb22-302"><a href="#cb22-302" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> ns) {</span>
+<span id="cb22-303"><a href="#cb22-303" aria-hidden="true" tabindex="-1"></a>  p_values <span class="ot">&lt;-</span> <span class="fu">replicate</span>(</span>
+<span id="cb22-304"><a href="#cb22-304" aria-hidden="true" tabindex="-1"></a>    iterations,</span>
+<span id="cb22-305"><a href="#cb22-305" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sim</span>(n, <span class="at">p0 =</span> prob_tau, <span class="at">p1 =</span> <span class="fl">0.66</span>, <span class="at">prop =</span> prop)</span>
+<span id="cb22-306"><a href="#cb22-306" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-307"><a href="#cb22-307" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb22-308"><a href="#cb22-308" aria-hidden="true" tabindex="-1"></a>    results,</span>
+<span id="cb22-309"><a href="#cb22-309" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb22-310"><a href="#cb22-310" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n,</span>
+<span id="cb22-311"><a href="#cb22-311" aria-hidden="true" tabindex="-1"></a>      <span class="at">power =</span> <span class="fu">sum</span>(p_values <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
+<span id="cb22-312"><a href="#cb22-312" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-313"><a href="#cb22-313" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-314"><a href="#cb22-314" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-315"><a href="#cb22-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-316"><a href="#cb22-316" aria-hidden="true" tabindex="-1"></a><span class="co">#let's plot this</span></span>
+<span id="cb22-317"><a href="#cb22-317" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(results, <span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> power)) <span class="sc">+</span></span>
+<span id="cb22-318"><a href="#cb22-318" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb22-319"><a href="#cb22-319" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb22-320"><a href="#cb22-320" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb22-321"><a href="#cb22-321" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb22-322"><a href="#cb22-322" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span>
+<span id="cb22-323"><a href="#cb22-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-324"><a href="#cb22-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-325"><a href="#cb22-325" aria-hidden="true" tabindex="-1"></a>Here, we get a total sample size of ca. 360 participants in order to ensure 80% power with our safeguard  estimation. </span>
+<span id="cb22-326"><a href="#cb22-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-327"><a href="#cb22-327" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb22-328"><a href="#cb22-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-329"><a href="#cb22-329" aria-hidden="true" tabindex="-1"></a>Aberson, C. L. (2019). Applied power analysis for the behavioral sciences. Routledge.</span>
+<span id="cb22-330"><a href="#cb22-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-331"><a href="#cb22-331" aria-hidden="true" tabindex="-1"></a>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. <span class="co">[</span><span class="ot">https://journals.sagepub.com/doi/10.1177/1745691614528519</span><span class="co">](https://journals.sagepub.com/doi/10.1177/1745691614528519)</span></span>
+<span id="cb22-332"><a href="#cb22-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-333"><a href="#cb22-333" aria-hidden="true" tabindex="-1"></a>Royston, P., Altman, D. G., &amp; Sauerbrei, W. (2006). Dichotomizing continuous predictors in multiple regression: A bad idea. Statistics in Medicine, 25(1), 127–141. <span class="co">[</span><span class="ot">https://doi.org/10.1002/sim.2331</span><span class="co">](https://doi.org/10.1002/sim.2331)</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
