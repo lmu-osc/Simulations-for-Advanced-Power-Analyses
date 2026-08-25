@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.10.18">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
 <meta name="author" content="Felix Schönbrodt">
-
 <title>Ch. 4: Linear Mixed Models / Multilevel models – Simulations for Advanced Power Analyses</title>
 <style>
 /* Default styles provided by pandoc.
@@ -64,7 +61,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
-
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -88,8 +84,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-188b87d2eecf63d90488fc07321c5074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark-eb085aa7c0f1d8411752f2c1fdfaa824.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-188b87d2eecf63d90488fc07321c5074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-188b87d2eecf63d90488fc07321c5074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -114,10 +109,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-<style>html{ scroll-behavior: smooth; }</style>
-<!-- Matomo -->
-<script>
+}</script><style>html{ scroll-behavior: smooth; }</style>
+<!-- Matomo --><script>
 if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
   var _paq = window._paq = window._paq || [];
   /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
@@ -131,11 +124,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
     g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
   })();
 }
-</script>
-<!-- End Matomo Code -->
-
-  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
-  <script>document.addEventListener("DOMContentLoaded", function () {
+</script><!-- End Matomo Code --><script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script><script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
  for (var i = 0; i < mathElements.length; i++) {
@@ -148,9 +137,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
     fleqn: false
    });
 }}});
-  </script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
-
+  </script><script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 <script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
@@ -176,12 +163,9 @@ const typesetMath = (el) => {
 window.Quarto = {
   typesetMath
 };
-</script>
-
-<link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/assets/bootstrap-grid.min.css">
+</script><link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/assets/bootstrap-grid.min.css">
 <link rel="stylesheet" href="footer/footer-style.css">
 </head>
-
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
@@ -347,14 +331,10 @@ window.Quarto = {
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" alt="LMU Open Science Center open book icon" class="navbar-logo light-content">
-    <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" alt="LMU Open Science Center open book icon" class="navbar-logo dark-content">
-    </a>
+    <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" alt="LMU Open Science Center open book icon" class="navbar-logo light-content"><img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" alt="LMU Open Science Center open book icon" class="navbar-logo dark-content"></a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Simulations for Advanced Power Analyses</span>
     </a>
@@ -364,23 +344,23 @@ window.Quarto = {
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
+<li class="nav-item">
     <a class="nav-link active" href="./index.html" aria-current="page"> 
 <span class="menu-text">Home</span></a>
   </li>  
 </ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item">
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item">
     <a class="nav-link" href="./about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
+</div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools tools-wide">
     <div class="dropdown">
       <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-github"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
-          <li>
+<li>
             <a class="dropdown-item quarto-navbar-tools-item" href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses">
             Source Code
             </a>
@@ -391,7 +371,7 @@ window.Quarto = {
             </a>
           </li>
       </ul>
-    </div>
+</div>
     <a href="https://www.osc.lmu.de/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-house-heart"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
@@ -401,9 +381,7 @@ window.Quarto = {
 </a>
 </div>
       </div> <!-- /container-fluid -->
-    </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
+    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -414,17 +392,11 @@ window.Quarto = {
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
       <a href="./index.html" class="sidebar-logo-link">
-      <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-logo.svg" alt="LMU Open Science Center logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-logo-dark.svg" alt="LMU Open Science Center logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
-      </a>
+      <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-logo.svg" alt="LMU Open Science Center logo" class="sidebar-logo light-content py-0 d-lg-inline d-none"><img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-logo-dark.svg" alt="LMU Open Science Center logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none"></a>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
@@ -433,7 +405,7 @@ window.Quarto = {
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
@@ -447,8 +419,8 @@ window.Quarto = {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lm1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Ch. 1: Linear Model 1: A single dichotomous predictor</span></a>
@@ -479,7 +451,7 @@ window.Quarto = {
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
@@ -488,8 +460,8 @@ window.Quarto = {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./optimizing-code.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Bonus: Optimizing R code for speed</span></a>
@@ -508,46 +480,44 @@ window.Quarto = {
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item">
  <span class="menu-text">resources.qmd</span>
   </li>
     </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-   
-  <ul>
-  <li><a href="#a-random-intercept-fixed-slope-model" id="toc-a-random-intercept-fixed-slope-model" class="nav-link active" data-scroll-target="#a-random-intercept-fixed-slope-model">A random-intercept, fixed-slope model</a>
+        <nav id="TOC" role="doc-toc" class="toc-active"><ul>
+<li>
+<a href="#a-random-intercept-fixed-slope-model" id="toc-a-random-intercept-fixed-slope-model" class="nav-link active" data-scroll-target="#a-random-intercept-fixed-slope-model">A random-intercept, fixed-slope model</a>
   <ul class="collapse">
-  <li><a href="#the-formulas" id="toc-the-formulas" class="nav-link" data-scroll-target="#the-formulas">The formulas</a></li>
+<li><a href="#the-formulas" id="toc-the-formulas" class="nav-link" data-scroll-target="#the-formulas">The formulas</a></li>
   <li><a href="#analysis-in-pilot-data" id="toc-analysis-in-pilot-data" class="nav-link" data-scroll-target="#analysis-in-pilot-data">Analysis in pilot data</a></li>
   <li><a href="#lets-simulate" id="toc-lets-simulate" class="nav-link" data-scroll-target="#lets-simulate">Let’s simulate</a></li>
   <li><a href="#comparison-with-other-approaches" id="toc-comparison-with-other-approaches" class="nav-link" data-scroll-target="#comparison-with-other-approaches">Comparison with other approaches</a></li>
-  </ul></li>
-  <li><a href="#a-random-intercept-random-slope-model-with-cross-level-interaction" id="toc-a-random-intercept-random-slope-model-with-cross-level-interaction" class="nav-link" data-scroll-target="#a-random-intercept-random-slope-model-with-cross-level-interaction">A random-intercept, random-slope model with cross-level interaction</a>
+  </ul>
+</li>
+  <li>
+<a href="#a-random-intercept-random-slope-model-with-cross-level-interaction" id="toc-a-random-intercept-random-slope-model-with-cross-level-interaction" class="nav-link" data-scroll-target="#a-random-intercept-random-slope-model-with-cross-level-interaction">A random-intercept, random-slope model with cross-level interaction</a>
   <ul class="collapse">
-  <li><a href="#the-formulas-1" id="toc-the-formulas-1" class="nav-link" data-scroll-target="#the-formulas-1">The formulas</a></li>
+<li><a href="#the-formulas-1" id="toc-the-formulas-1" class="nav-link" data-scroll-target="#the-formulas-1">The formulas</a></li>
   <li><a href="#setting-the-population-parameter-values" id="toc-setting-the-population-parameter-values" class="nav-link" data-scroll-target="#setting-the-population-parameter-values">Setting the population parameter values</a></li>
   <li><a href="#lets-simulate-1" id="toc-lets-simulate-1" class="nav-link" data-scroll-target="#lets-simulate-1">Let’s simulate</a></li>
-  </ul></li>
-  <li><a href="#ways-forward" id="toc-ways-forward" class="nav-link" data-scroll-target="#ways-forward">Ways forward</a></li>
-  <li><a href="#other-packages" id="toc-other-packages" class="nav-link" data-scroll-target="#other-packages">Other packages</a>
-  <ul class="collapse">
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
-  </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/lmm.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/lmm.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+</li>
+  <li><a href="#ways-forward" id="toc-ways-forward" class="nav-link" data-scroll-target="#ways-forward">Ways forward</a></li>
+  <li>
+<a href="#other-packages" id="toc-other-packages" class="nav-link" data-scroll-target="#other-packages">Other packages</a>
+  <ul class="collapse">
+<li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/lmm.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/lmm.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./lmm.html">Ch. 4: Linear Mixed Models / Multilevel models</a></li></ol></nav>
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./lmm.html">Ch. 4: Linear Mixed Models / Multilevel models</a></li></ol></nav><div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Ch. 4: Linear Mixed Models / Multilevel models</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
@@ -568,65 +538,59 @@ window.Quarto = {
   
 
 
-</header>
-
-
-<p><em>Reading/working time: ~60 min.</em></p>
+</header><p><em>Reading/working time: ~60 min.</em></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparation: Install and load all necessary packages</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(c("lme4", "lmerTest", "ggplot2", "tidyr", "Rfast", "future.apply"))</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4) <span class="co"># for estimating LMMs</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest) <span class="co"># to get p-values for lme4</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># for plotting</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr) <span class="co"># for reshaping data from wide to long</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rfast) <span class="co"># fast creation of correlated variables</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future.apply) <span class="co"># for parallel processing</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># plan() initializes parallel processing,</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># for faster code execution</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># By default, it uses all available cores</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Preparation: Install and load all necessary packages</span></span>
+<span><span class="co"># install.packages(c("lme4", "lmerTest", "ggplot2", "tidyr", "Rfast", "future.apply"))</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/">lme4</a></span><span class="op">)</span> <span class="co"># for estimating LMMs</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/runehaubo/lmerTestR">lmerTest</a></span><span class="op">)</span> <span class="co"># to get p-values for lme4</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span> <span class="co"># for plotting</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span> <span class="co"># for reshaping data from wide to long</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RfastOfficial/Rfast">Rfast</a></span><span class="op">)</span> <span class="co"># fast creation of correlated variables</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.apply.futureverse.org">future.apply</a></span><span class="op">)</span> <span class="co"># for parallel processing</span></span>
+<span></span>
+<span><span class="co"># plan() initializes parallel processing,</span></span>
+<span><span class="co"># for faster code execution</span></span>
+<span><span class="co"># By default, it uses all available cores</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In order to keep this chapter at a reasonable length, we focus on how to simulate the mixed effects/multi-level model and spend less time discussing how to arrive at plausible parameter values. Please read Chapters <a href="./lm1.html">1</a> and <a href="./lm2.html">2</a> for multiple examples where the parameter values are derived from (a) the literature (e.g., bias-corrected meta-analyses), (b) pilot data, or (c) plausibility constraints.</p>
 <p>Furthermore, we’ll use the techniques described in the Chapter <a href="./optimizing-code.html">“Bonus: Optimizing R code for speed”</a>, otherwise the simulations are too slow. If you wonder about the unknown commands in the code, please read the bonus chapter to learn how to considerably speed up your code!</p>
 <p>We continue to work with the “Beat the blues” (<code>BtheB</code>) data set from the <code>HSAUR</code> R package. As there are multiple post-treatment measurements (after 2, 3, 6, and 8 months) we can create a nice longitudinal multilevel data set, with measurement points on level 1 (L1) and persons on level 2 (L2). We will work with the <code>lme4</code> package to run the mixed-effect models.</p>
 <p>For that, we first have to transform the pilot data set into the long format:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"BtheB"</span>, <span class="at">package =</span> <span class="st">"HSAUR"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>BtheB<span class="sc">$</span>person_id <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(BtheB)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>BtheB_long <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  BtheB,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cols =</span> <span class="fu">matches</span>(<span class="st">"^bdi</span><span class="sc">\\</span><span class="st">.</span><span class="sc">\\</span><span class="st">d"</span>),</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">values_to =</span> <span class="st">"BDI"</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">names_to =</span> <span class="st">"variable"</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>BtheB_long<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="fu">substr</span>(BtheB_long<span class="sc">$</span>variable, <span class="dv">5</span>, <span class="dv">5</span>) <span class="sc">|&gt;</span> <span class="fu">as.integer</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># load the data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"BtheB"</span>, package <span class="op">=</span> <span class="st">"HSAUR"</span><span class="op">)</span></span>
+<span><span class="va">BtheB</span><span class="op">$</span><span class="va">person_id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">BtheB</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">BtheB_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span></span>
+<span>  <span class="va">BtheB</span>,</span>
+<span>  cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">matches</a></span><span class="op">(</span><span class="st">"^bdi\\.\\d"</span><span class="op">)</span>,</span>
+<span>  values_to <span class="op">=</span> <span class="st">"BDI"</span>,</span>
+<span>  names_to <span class="op">=</span> <span class="st">"variable"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">BtheB_long</span><span class="op">$</span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/substr.html">substr</a></span><span class="op">(</span><span class="va">BtheB_long</span><span class="op">$</span><span class="va">variable</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here we plot the trajectory of the first 20 participants. As you can see, there are missing values; not all participants have all follow-up values:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  BtheB_long[BtheB_long<span class="sc">$</span>person_id <span class="sc">&lt;=</span> <span class="dv">20</span>, ],</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> BDI, <span class="at">group =</span> person_id)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>person_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span></span>
+<span>  <span class="va">BtheB_long</span><span class="op">[</span><span class="va">BtheB_long</span><span class="op">$</span><span class="va">person_id</span> <span class="op">&lt;=</span> <span class="fl">20</span>, <span class="op">]</span>,</span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">BDI</span>, group <span class="op">=</span> <span class="va">person_id</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">person_id</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure">
-<p><img src="lmm_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="lmm_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<section id="a-random-intercept-fixed-slope-model" class="level1">
-<h1>A random-intercept, fixed-slope model</h1>
+<section id="a-random-intercept-fixed-slope-model" class="level1"><h1>A random-intercept, fixed-slope model</h1>
 <p>We start with a simple model and analyze the trajectory of the BDI score across time (we ignore the treatment factor for the moment). Hence, the question for this model is: Is there a linear trend over time in BDI scores?</p>
-<section id="the-formulas" class="level2">
-<h2 class="anchored" data-anchor-id="the-formulas">The formulas</h2>
+<section id="the-formulas" class="level2"><h2 class="anchored" data-anchor-id="the-formulas">The formulas</h2>
 <ul>
 <li>i = index for time points</li>
 <li>j = index for persons</li>
@@ -642,15 +606,13 @@ window.Quarto = {
 e_{ij} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\sigma^2) \\
 u_{0j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{00})
 </span></p>
-</section>
-<section id="analysis-in-pilot-data" class="level2">
-<h2 class="anchored" data-anchor-id="analysis-in-pilot-data">Analysis in pilot data</h2>
+</section><section id="analysis-in-pilot-data" class="level2"><h2 class="anchored" data-anchor-id="analysis-in-pilot-data">Analysis in pilot data</h2>
 <p>First, let’s run the analysis model in the pilot data. To make the intercept more interpretable, we center it on the first post-measurement by subtracting 2 (i.e., month “2” becomes month “0” etc.).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>BtheB_long<span class="sc">$</span>time.c <span class="ot">&lt;-</span> BtheB_long<span class="sc">$</span>time <span class="sc">-</span> <span class="dv">2</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>l0 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(BDI <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> time.c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> person_id), <span class="at">data =</span> BtheB_long)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(l0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">BtheB_long</span><span class="op">$</span><span class="va">time.c</span> <span class="op">&lt;-</span> <span class="va">BtheB_long</span><span class="op">$</span><span class="va">time</span> <span class="op">-</span> <span class="fl">2</span></span>
+<span></span>
+<span><span class="va">l0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">BDI</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">time.c</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">person_id</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">BtheB_long</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">l0</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Linear mixed model fit by REML. t-tests use Satterthwaite's method [
 lmerModLmerTest]
@@ -680,8 +642,8 @@ Correlation of Fixed Effects:
        (Intr)
 time.c -0.267</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute ICC</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fl">97.15</span> <span class="sc">/</span> (<span class="fl">97.15</span> <span class="sc">+</span> <span class="fl">25.48</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Compute ICC</span></span>
+<span><span class="fl">97.15</span> <span class="op">/</span> <span class="op">(</span><span class="fl">97.15</span> <span class="op">+</span> <span class="fl">25.48</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7922205</code></pre>
 </div>
@@ -709,149 +671,147 @@ time.c -0.267</code></pre>
 <p>But there are some research fields where ICCs &gt; 30% are not uncommon – as you can see in our own pilot data, where the ICC was 79%! Again, defaults based on “typical values in the literature” might be better than blind guessing, but nothing beats domain knowledge.</p>
 </div>
 </div>
-</section>
-<section id="lets-simulate" class="level2">
-<h2 class="anchored" data-anchor-id="lets-simulate">Let’s simulate</h2>
+</section><section id="lets-simulate" class="level2"><h2 class="anchored" data-anchor-id="lets-simulate">Let’s simulate</h2>
 <p>The next script shows how to simulate multilevel data with a random intercept. We first create an L2 data set (where each row is once participant). This contains a person id (which is necessary to merge the L1 and the L2 data set) and the random intercepts (i.e., the random deviations of persons from the fixed intercept). In more complex models, this also contains all L2 predictors.</p>
 <p>Next we create an L1 data set and then merge both into one long format data set. We closely simulate the situation of the pilot data: All participants are treated and show a negative trend.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#------  Setting the model parameters ---------------</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># between-person random intercept variance: var(u_0j) = tau_00</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>tau_00 <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>gamma_00 <span class="ot">&lt;-</span> <span class="dv">17</span> <span class="co"># the grand (fixed) intercept</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>gamma_10 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.7</span> <span class="co"># the fixed slope for time</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>residual_var <span class="ot">&lt;-</span> <span class="dv">25</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>n_persons <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an L2 (person-level) data set; each row is one person</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>df_L2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">person_id =</span> <span class="dv">1</span><span class="sc">:</span>n_persons,</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">u_0j =</span> <span class="fu">rnorm</span>(n_persons, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(tau_00))</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an L1 (measurement-point-level) data set; each row is one measurement</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>df_L1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">person_id =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_persons, <span class="at">each =</span> <span class="dv">4</span>), <span class="co"># create 4 rows for each person (as we have 4 measurements)</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">time.c =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="at">times =</span> n_persons)</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># combine to a long format data set</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> <span class="fu">merge</span>(df_L1, df_L2, <span class="at">by =</span> <span class="st">"person_id"</span>)</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the DV by writing down the combined equation</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> <span class="fu">within</span>(df_long, {</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  BDI <span class="ot">&lt;-</span> gamma_00 <span class="sc">+</span></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    gamma_10 <span class="sc">*</span> time.c <span class="sc">+</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    u_0j <span class="sc">+</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rnorm</span>(n_persons <span class="sc">*</span> <span class="dv">4</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(residual_var))</span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>l1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(BDI <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> time.c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> person_id), <span class="at">data =</span> df_long)</span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(l1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#------  Setting the model parameters ---------------</span></span>
+<span><span class="co"># between-person random intercept variance: var(u_0j) = tau_00</span></span>
+<span><span class="va">tau_00</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span></span>
+<span><span class="va">gamma_00</span> <span class="op">&lt;-</span> <span class="fl">17</span> <span class="co"># the grand (fixed) intercept</span></span>
+<span><span class="va">gamma_10</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.7</span> <span class="co"># the fixed slope for time</span></span>
+<span><span class="va">residual_var</span> <span class="op">&lt;-</span> <span class="fl">25</span></span>
+<span></span>
+<span><span class="va">n_persons</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span></span>
+<span><span class="co"># Create an L2 (person-level) data set; each row is one person</span></span>
+<span><span class="va">df_L2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  person_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_persons</span>,</span>
+<span>  u_0j <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_persons</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">tau_00</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create an L1 (measurement-point-level) data set; each row is one measurement</span></span>
+<span><span class="va">df_L1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  person_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_persons</span>, each <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, <span class="co"># create 4 rows for each person (as we have 4 measurements)</span></span>
+<span>  time.c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">6</span><span class="op">)</span>, times <span class="op">=</span> <span class="va">n_persons</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># combine to a long format data set</span></span>
+<span><span class="va">df_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">df_L1</span>, <span class="va">df_L2</span>, by <span class="op">=</span> <span class="st">"person_id"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># compute the DV by writing down the combined equation</span></span>
+<span><span class="va">df_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">within</a></span><span class="op">(</span><span class="va">df_long</span>, <span class="op">{</span></span>
+<span>  <span class="va">BDI</span> <span class="op">&lt;-</span> <span class="va">gamma_00</span> <span class="op">+</span></span>
+<span>    <span class="va">gamma_10</span> <span class="op">*</span> <span class="va">time.c</span> <span class="op">+</span></span>
+<span>    <span class="va">u_0j</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_persons</span> <span class="op">*</span> <span class="fl">4</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">residual_var</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">l1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">BDI</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">time.c</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">person_id</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df_long</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">l1</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Linear mixed model fit by REML. t-tests use Satterthwaite's method [
 lmerModLmerTest]
 Formula: BDI ~ 1 + time.c + (1 | person_id)
    Data: df_long
 
-REML criterion at convergence: 2713.2
+REML criterion at convergence: 2682.2
 
 Scaled residuals: 
      Min       1Q   Median       3Q      Max 
--2.41282 -0.59783 -0.01598  0.55978  2.99076 
+-2.67526 -0.60759  0.03479  0.54783  2.42449 
 
 Random effects:
  Groups    Name        Variance Std.Dev.
- person_id (Intercept) 115.16   10.731  
- Residual               24.62    4.961  
+ person_id (Intercept) 79.68    8.926   
+ Residual              24.88    4.988   
 Number of obs: 400, groups:  person_id, 100
 
 Fixed effects:
             Estimate Std. Error       df t value Pr(&gt;|t|)    
-(Intercept)  16.3362     1.1506 117.5799  14.198  &lt; 2e-16 ***
-time.c       -0.5890     0.1109 299.0000  -5.309 2.15e-07 ***
+(Intercept)  16.1429     0.9854 125.7858  16.382  &lt; 2e-16 ***
+time.c       -0.6162     0.1115 299.0000  -5.525 7.19e-08 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Correlation of Fixed Effects:
        (Intr)
-time.c -0.289</code></pre>
+time.c -0.340</code></pre>
 </div>
 </div>
 <p>Now we put this data generating script into a function and run our power analysis:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: This code could be more optimized for speed, but this way is easier to understand</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>sim4 <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_persons =</span> <span class="dv">100</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau_00 =</span> <span class="dv">100</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma_00 =</span> <span class="dv">17</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma_10 =</span> <span class="sc">-</span><span class="fl">0.7</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">residual_var =</span> <span class="dv">25</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">print =</span> <span class="cn">FALSE</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>) {</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  df_L2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">person_id =</span> <span class="dv">1</span><span class="sc">:</span>n_persons,</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">u_0j =</span> <span class="fu">rnorm</span>(n_persons, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(tau_00))</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  df_L1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">person_id =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_persons, <span class="at">each =</span> <span class="dv">4</span>), <span class="co"># create 4 rows for each person (as we have 4 measurements)</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">time.c =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="at">times =</span> n_persons)</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine to a long format data set</span></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  df_long <span class="ot">&lt;-</span> <span class="fu">merge</span>(df_L1, df_L2, <span class="at">by =</span> <span class="st">"person_id"</span>)</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># simulate response variable, based on combined equation</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  df_long <span class="ot">&lt;-</span> <span class="fu">within</span>(df_long, {</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    BDI <span class="ot">&lt;-</span> gamma_00 <span class="sc">+</span></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>      gamma_10 <span class="sc">*</span> time.c <span class="sc">+</span></span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>      u_0j <span class="sc">+</span></span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rnorm</span>(n_persons <span class="sc">*</span> <span class="dv">4</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(residual_var))</span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute p-values</span></span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># these options might speed up code execution a little bit:</span></span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># , control=lmerControl(optimizer="bobyqa", calc.derivs = FALSE)</span></span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  l1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(BDI <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> time.c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> person_id), <span class="at">data =</span> df_long)</span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">summary</span>(l1))</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">summary</span>(l1)<span class="sc">$</span>coefficients[, <span class="st">"Pr(&gt;|t|)"</span>])</span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">50</span>, <span class="at">by =</span> <span class="dv">5</span>)</span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n_persons <span class="cf">in</span> ns) {</span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">system.time</span>({</span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>    p_values <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(</span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>      iterations,</span>
-<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sim4</span>(<span class="at">n_persons =</span> n_persons),</span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>      <span class="at">future.seed =</span> <span class="cn">TRUE</span></span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>    result,</span>
-<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n_persons,</span>
-<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">power_intercept =</span> <span class="fu">sum</span>(p_values[<span class="dv">1</span>, ] <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations,</span>
-<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>      <span class="at">power_time.c =</span> <span class="fu">sum</span>(p_values[<span class="dv">2</span>, ] <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
-<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
-<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Note: This code could be more optimized for speed, but this way is easier to understand</span></span>
+<span><span class="va">sim4</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
+<span>  <span class="va">n_persons</span> <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  <span class="va">tau_00</span> <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  <span class="va">gamma_00</span> <span class="op">=</span> <span class="fl">17</span>,</span>
+<span>  <span class="va">gamma_10</span> <span class="op">=</span> <span class="op">-</span><span class="fl">0.7</span>,</span>
+<span>  <span class="va">residual_var</span> <span class="op">=</span> <span class="fl">25</span>,</span>
+<span>  <span class="va">print</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">df_L2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    person_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_persons</span>,</span>
+<span>    u_0j <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_persons</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">tau_00</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">df_L1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    person_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_persons</span>, each <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, <span class="co"># create 4 rows for each person (as we have 4 measurements)</span></span>
+<span>    time.c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">6</span><span class="op">)</span>, times <span class="op">=</span> <span class="va">n_persons</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># combine to a long format data set</span></span>
+<span>  <span class="va">df_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">df_L1</span>, <span class="va">df_L2</span>, by <span class="op">=</span> <span class="st">"person_id"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># simulate response variable, based on combined equation</span></span>
+<span>  <span class="va">df_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">within</a></span><span class="op">(</span><span class="va">df_long</span>, <span class="op">{</span></span>
+<span>    <span class="va">BDI</span> <span class="op">&lt;-</span> <span class="va">gamma_00</span> <span class="op">+</span></span>
+<span>      <span class="va">gamma_10</span> <span class="op">*</span> <span class="va">time.c</span> <span class="op">+</span></span>
+<span>      <span class="va">u_0j</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_persons</span> <span class="op">*</span> <span class="fl">4</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">residual_var</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># compute p-values</span></span>
+<span>  <span class="co"># these options might speed up code execution a little bit:</span></span>
+<span>  <span class="co"># , control=lmerControl(optimizer="bobyqa", calc.derivs = FALSE)</span></span>
+<span>  <span class="va">l1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">BDI</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">time.c</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">person_id</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df_long</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">print</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">l1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">l1</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span>, <span class="st">"Pr(&gt;|t|)"</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">0xBEEF</span><span class="op">)</span></span>
+<span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
+<span><span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">50</span>, by <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">n_persons</span> <span class="kw">in</span> <span class="va">ns</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">p_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://future.apply.futureverse.org/reference/future_lapply.html">future_replicate</a></span><span class="op">(</span></span>
+<span>      <span class="va">iterations</span>,</span>
+<span>      <span class="fu">sim4</span><span class="op">(</span>n_persons <span class="op">=</span> <span class="va">n_persons</span><span class="op">)</span>,</span>
+<span>      future.seed <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span></span>
+<span>    <span class="va">result</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>      n <span class="op">=</span> <span class="va">n_persons</span>,</span>
+<span>      power_intercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">p_values</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span> <span class="op">&lt;</span> <span class="fl">.005</span><span class="op">)</span> <span class="op">/</span> <span class="va">iterations</span>,</span>
+<span>      power_time.c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">p_values</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span> <span class="op">&lt;</span> <span class="fl">.005</span><span class="op">)</span> <span class="op">/</span> <span class="va">iterations</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -864,9 +824,7 @@ time.c -0.289</code></pre>
 </div>
 </div>
 <p>Hence, we need around 36 persons to achieve a power of 80% to detect this slope.</p>
-</section>
-<section id="comparison-with-other-approaches" class="level2">
-<h2 class="anchored" data-anchor-id="comparison-with-other-approaches">Comparison with other approaches</h2>
+</section><section id="comparison-with-other-approaches" class="level2"><h2 class="anchored" data-anchor-id="comparison-with-other-approaches">Comparison with other approaches</h2>
 <p>Murayama and colleagues (2022) recently released an approximate but easy approach for LMM power analysis based on pilot data. They also provide an interactive <a href="https://koumurayama.shinyapps.io/summary_statistics_based_power/">Shiny app</a>.</p>
 <p>Go to the tab “Level-1 predictor -&gt; Planning L2 sample size only” and enter the values from the pilot study into the fields in the left panel:</p>
 <ul>
@@ -876,27 +834,19 @@ time.c -0.289</code></pre>
 </ul>
 <p>This approximation yields very close values to our simulation:</p>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/lmm-murayama-app-example.png" class="img-fluid figure-img"></p>
-<figcaption>Screenshot from Murayama app</figcaption>
-</figure>
+<figure class="figure"><p><img src="images/lmm-murayama-app-example.png" class="img-fluid figure-img"></p>
+<figcaption>Screenshot from Murayama app</figcaption></figure>
 </div>
 <p>Another option is the app “<a href="https://github.com/ginettelafit/PowerAnalysisIL">PowerAnalysisIL</a>” by Lafit (2021). In that app you would need to choose “Model 4: Effect of a level-1 continuous predictor (fixed slope)” and set “Autocorrelation of level-1 errors” to zero to estimate an equivalent model to ours. This app, however, is much slower than our own simulations and cannot perfectly mirror our model, as the continuous L1 predictor cannot be defined exactly as we need it.</p>
 <p>Nonetheless, the estimates are not far away from ours:</p>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/lmm-lafit-example.png" class="img-fluid figure-img"></p>
-<figcaption>Screenshot from Lafit app</figcaption>
-</figure>
+<figure class="figure"><p><img src="images/lmm-lafit-example.png" class="img-fluid figure-img"></p>
+<figcaption>Screenshot from Lafit app</figcaption></figure>
 </div>
-</section>
-</section>
-<section id="a-random-intercept-random-slope-model-with-cross-level-interaction" class="level1">
-<h1>A random-intercept, random-slope model with cross-level interaction</h1>
+</section></section><section id="a-random-intercept-random-slope-model-with-cross-level-interaction" class="level1"><h1>A random-intercept, random-slope model with cross-level interaction</h1>
 <p>We now make the model more complex by (a) adding an L2 predictor (treatment vs.&nbsp;control), (b) allowing random slopes for the time effect, and (c) model a cross-level interaction (i.e., does the slope differ between treatment and control group?).</p>
 <p>The main effect for <code>treatment</code> reveals group differences when the other predictor, <code>time</code>, is zero (i.e., at the first post-treatment measurement). The main effect for <code>time</code> now is a <em>conditional</em> effect, as it models the time trend for the control group (i.e., when <code>treatment</code> is zero).</p>
-<section id="the-formulas-1" class="level2">
-<h2 class="anchored" data-anchor-id="the-formulas-1">The formulas</h2>
+<section id="the-formulas-1" class="level2"><h2 class="anchored" data-anchor-id="the-formulas-1">The formulas</h2>
 <ul>
 <li>i = index for time points</li>
 <li>j = index for persons</li>
@@ -914,9 +864,7 @@ u_{0j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{00}) \\
 u_{1j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{11}) \\
 cov(u_{0j}, u_{1j}) = \tau_{01}
 </span></p>
-</section>
-<section id="setting-the-population-parameter-values" class="level2">
-<h2 class="anchored" data-anchor-id="setting-the-population-parameter-values">Setting the population parameter values</h2>
+</section><section id="setting-the-population-parameter-values" class="level2"><h2 class="anchored" data-anchor-id="setting-the-population-parameter-values">Setting the population parameter values</h2>
 <p>We need to assume four additional population values, namely: <span class="math inline">\tau_{11}</span> (the variance of random slopes), <span class="math inline">\tau_{01}</span> (the intercept-slope-covariance), <span class="math inline">\gamma_{01}</span> (the treatment main effect), and <span class="math inline">\gamma_{11}</span> (the interaction effect).</p>
 <p><em>Fixed effects:</em></p>
 <ul>
@@ -933,193 +881,178 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 </ul>
 <p>As recommended in the last chapter, we visualize this assumed interaction effect by a hand drawing:</p>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/bdi-interaction-2.jpg" class="img-fluid figure-img"></p>
-<figcaption>hand-drawn interaction plot</figcaption>
-</figure>
+<figure class="figure"><p><img src="images/bdi-interaction-2.jpg" class="img-fluid figure-img"></p>
+<figcaption>hand-drawn interaction plot</figcaption></figure>
 </div>
 <p>Looks good!</p>
-</section>
-<section id="lets-simulate-1" class="level2">
-<h2 class="anchored" data-anchor-id="lets-simulate-1">Let’s simulate</h2>
+</section><section id="lets-simulate-1" class="level2"><h2 class="anchored" data-anchor-id="lets-simulate-1">Let’s simulate</h2>
 <div class="cell" data-warnings="false">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sim5 <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_persons =</span> <span class="dv">100</span>,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau_00 =</span> <span class="dv">100</span>,</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau_11 =</span> <span class="fl">0.0225</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau_01 =</span> <span class="dv">0</span>,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma_00 =</span> <span class="dv">23</span>,</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma_01 =</span> <span class="sc">-</span><span class="dv">6</span>,</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma_10 =</span> <span class="dv">0</span>,</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma_11 =</span> <span class="sc">-</span><span class="fl">0.7</span>,</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">residual_var =</span> <span class="dv">25</span>,</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">print =</span> <span class="cn">FALSE</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>) {</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create (correlated) random effect structure</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(tau_00, tau_01, tau_01, tau_11),</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">nrow =</span> <span class="dv">2</span>,</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">byrow =</span> <span class="cn">TRUE</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  RE <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(<span class="at">n =</span> n_persons, <span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma) <span class="sc">|&gt;</span> <span class="fu">data.frame</span>()</span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(RE) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"u_0j"</span>, <span class="st">"u_1j"</span>)</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  df_L1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">person_id =</span> <span class="dv">1</span><span class="sc">:</span>n_persons,</span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">u_0j =</span> RE<span class="sc">$</span>u_0j,</span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">u_1j =</span> RE<span class="sc">$</span>u_1j,</span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">treatment =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">times =</span> n_persons <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  df_L2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">person_id =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_persons, <span class="at">each =</span> <span class="dv">4</span>), <span class="co"># create 4 rows for each person (as we have 4 measurements)</span></span>
-<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">time.c =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="at">times =</span> n_persons)</span>
-<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine to a long format data set</span></span>
-<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>  df_long <span class="ot">&lt;-</span> <span class="fu">merge</span>(df_L1, df_L2, <span class="at">by =</span> <span class="st">"person_id"</span>)</span>
-<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># simulate response variable, based on combined equation</span></span>
-<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>  df_long <span class="ot">&lt;-</span> <span class="fu">within</span>(df_long, {</span>
-<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>    BDI <span class="ot">&lt;-</span> gamma_00 <span class="sc">+</span> <span class="co"># intercept</span></span>
-<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>      gamma_10 <span class="sc">*</span> time.c <span class="sc">+</span></span>
-<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>      gamma_01 <span class="sc">*</span> treatment <span class="sc">+</span></span>
-<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>      gamma_11 <span class="sc">*</span> time.c <span class="sc">*</span> treatment <span class="sc">+</span> <span class="co"># fixed terms</span></span>
-<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>      u_0j <span class="sc">+</span></span>
-<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>      u_1j <span class="sc">*</span> time.c <span class="sc">+</span></span>
-<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rnorm</span>(n_persons <span class="sc">*</span> <span class="dv">4</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(residual_var)) <span class="co"># random terms</span></span>
-<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># for debugging: plot some simulated participants</span></span>
-<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>  <span class="co">#ggplot(df_long[df_long$person_id &lt;=20, ], aes(x=time.c, y=BDI, color=factor(treatment), group=person_id)) +</span></span>
-<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_point() + geom_line() + facet_wrap(~person_id)</span></span>
-<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ggplot(df_long, aes(x=time.c, y=BDI, color=factor(treatment))) +</span></span>
-<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>  <span class="co"># stat_summary(fun.data=mean_cl_normal, geom = "pointrange")</span></span>
-<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute p-values</span></span>
-<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>  <span class="co"># these options might speed up code execution a little bit:</span></span>
-<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># , control=lmerControl(optimizer="bobyqa", calc.derivs = FALSE)</span></span>
-<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>  l1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(</span>
-<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>    BDI <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> time.c <span class="sc">*</span> treatment <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> time.c <span class="sc">|</span> person_id),</span>
-<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_long</span>
-<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">summary</span>(l1))</span>
-<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">summary</span>(l1)<span class="sc">$</span>coefficients[, <span class="st">"Pr(&gt;|t|)"</span>])</span>
-<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0xBEEF</span>)</span>
-<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">60</span>, <span class="dv">200</span>, <span class="at">by =</span> <span class="dv">10</span>) <span class="co"># must be dividable by 2</span></span>
-<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
-<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n_persons <span class="cf">in</span> ns) {</span>
-<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">system.time</span>({</span>
-<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>    p_values <span class="ot">&lt;-</span> <span class="fu">future_replicate</span>(</span>
-<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>      iterations,</span>
-<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sim5</span>(<span class="at">n_persons =</span> n_persons),</span>
-<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>      <span class="at">future.seed =</span> <span class="cn">TRUE</span></span>
-<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a>    result,</span>
-<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> n_persons,</span>
-<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a>      <span class="at">power_intercept =</span> <span class="fu">sum</span>(p_values[<span class="dv">1</span>, ] <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations,</span>
-<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a>      <span class="at">power_time.c =</span> <span class="fu">sum</span>(p_values[<span class="dv">2</span>, ] <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations,</span>
-<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a>      <span class="at">power_treatment =</span> <span class="fu">sum</span>(p_values[<span class="dv">3</span>, ] <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations,</span>
-<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a>      <span class="at">power_IA =</span> <span class="fu">sum</span>(p_values[<span class="dv">4</span>, ] <span class="sc">&lt;</span> .<span class="dv">005</span>) <span class="sc">/</span> iterations</span>
-<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
-<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result)</span>
-<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sim5</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
+<span>  <span class="va">n_persons</span> <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  <span class="va">tau_00</span> <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  <span class="va">tau_11</span> <span class="op">=</span> <span class="fl">0.0225</span>,</span>
+<span>  <span class="va">tau_01</span> <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">gamma_00</span> <span class="op">=</span> <span class="fl">23</span>,</span>
+<span>  <span class="va">gamma_01</span> <span class="op">=</span> <span class="op">-</span><span class="fl">6</span>,</span>
+<span>  <span class="va">gamma_10</span> <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">gamma_11</span> <span class="op">=</span> <span class="op">-</span><span class="fl">0.7</span>,</span>
+<span>  <span class="va">residual_var</span> <span class="op">=</span> <span class="fl">25</span>,</span>
+<span>  <span class="va">print</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># create (correlated) random effect structure</span></span>
+<span>  <span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span>  <span class="va">sigma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">tau_00</span>, <span class="va">tau_01</span>, <span class="va">tau_01</span>, <span class="va">tau_11</span><span class="op">)</span>,</span>
+<span>    nrow <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    byrow <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">RE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Rfast/man/rmvnorm.html">rmvnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">n_persons</span>, mu <span class="op">=</span> <span class="va">mu</span>, sigma <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">RE</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"u_0j"</span>, <span class="st">"u_1j"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">df_L1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    person_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_persons</span>,</span>
+<span>    u_0j <span class="op">=</span> <span class="va">RE</span><span class="op">$</span><span class="va">u_0j</span>,</span>
+<span>    u_1j <span class="op">=</span> <span class="va">RE</span><span class="op">$</span><span class="va">u_1j</span>,</span>
+<span>    treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, times <span class="op">=</span> <span class="va">n_persons</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">df_L2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    person_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_persons</span>, each <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, <span class="co"># create 4 rows for each person (as we have 4 measurements)</span></span>
+<span>    time.c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">6</span><span class="op">)</span>, times <span class="op">=</span> <span class="va">n_persons</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># combine to a long format data set</span></span>
+<span>  <span class="va">df_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">df_L1</span>, <span class="va">df_L2</span>, by <span class="op">=</span> <span class="st">"person_id"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># simulate response variable, based on combined equation</span></span>
+<span>  <span class="va">df_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">within</a></span><span class="op">(</span><span class="va">df_long</span>, <span class="op">{</span></span>
+<span>    <span class="va">BDI</span> <span class="op">&lt;-</span> <span class="va">gamma_00</span> <span class="op">+</span> <span class="co"># intercept</span></span>
+<span>      <span class="va">gamma_10</span> <span class="op">*</span> <span class="va">time.c</span> <span class="op">+</span></span>
+<span>      <span class="va">gamma_01</span> <span class="op">*</span> <span class="va">treatment</span> <span class="op">+</span></span>
+<span>      <span class="va">gamma_11</span> <span class="op">*</span> <span class="va">time.c</span> <span class="op">*</span> <span class="va">treatment</span> <span class="op">+</span> <span class="co"># fixed terms</span></span>
+<span>      <span class="va">u_0j</span> <span class="op">+</span></span>
+<span>      <span class="va">u_1j</span> <span class="op">*</span> <span class="va">time.c</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_persons</span> <span class="op">*</span> <span class="fl">4</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">residual_var</span><span class="op">)</span><span class="op">)</span> <span class="co"># random terms</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># for debugging: plot some simulated participants</span></span>
+<span>  <span class="co">#ggplot(df_long[df_long$person_id &lt;=20, ], aes(x=time.c, y=BDI, color=factor(treatment), group=person_id)) +</span></span>
+<span>  <span class="co"># geom_point() + geom_line() + facet_wrap(~person_id)</span></span>
+<span></span>
+<span>  <span class="co"># ggplot(df_long, aes(x=time.c, y=BDI, color=factor(treatment))) +</span></span>
+<span>  <span class="co"># stat_summary(fun.data=mean_cl_normal, geom = "pointrange")</span></span>
+<span></span>
+<span>  <span class="co"># compute p-values</span></span>
+<span>  <span class="co"># these options might speed up code execution a little bit:</span></span>
+<span>  <span class="co"># , control=lmerControl(optimizer="bobyqa", calc.derivs = FALSE)</span></span>
+<span>  <span class="va">l1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span></span>
+<span>    <span class="va">BDI</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">time.c</span> <span class="op">*</span> <span class="va">treatment</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time.c</span> <span class="op">|</span> <span class="va">person_id</span><span class="op">)</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">df_long</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">print</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">l1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">l1</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span>, <span class="st">"Pr(&gt;|t|)"</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">0xBEEF</span><span class="op">)</span></span>
+<span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
+<span><span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">200</span>, by <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="co"># must be dividable by 2</span></span>
+<span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">n_persons</span> <span class="kw">in</span> <span class="va">ns</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">p_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://future.apply.futureverse.org/reference/future_lapply.html">future_replicate</a></span><span class="op">(</span></span>
+<span>      <span class="va">iterations</span>,</span>
+<span>      <span class="fu">sim5</span><span class="op">(</span>n_persons <span class="op">=</span> <span class="va">n_persons</span><span class="op">)</span>,</span>
+<span>      future.seed <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span></span>
+<span>    <span class="va">result</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>      n <span class="op">=</span> <span class="va">n_persons</span>,</span>
+<span>      power_intercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">p_values</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span> <span class="op">&lt;</span> <span class="fl">.005</span><span class="op">)</span> <span class="op">/</span> <span class="va">iterations</span>,</span>
+<span>      power_time.c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">p_values</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span> <span class="op">&lt;</span> <span class="fl">.005</span><span class="op">)</span> <span class="op">/</span> <span class="va">iterations</span>,</span>
+<span>      power_treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">p_values</span><span class="op">[</span><span class="fl">3</span>, <span class="op">]</span> <span class="op">&lt;</span> <span class="fl">.005</span><span class="op">)</span> <span class="op">/</span> <span class="va">iterations</span>,</span>
+<span>      power_IA <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">p_values</span><span class="op">[</span><span class="fl">4</span>, <span class="op">]</span> <span class="op">&lt;</span> <span class="fl">.005</span><span class="op">)</span> <span class="op">/</span> <span class="va">iterations</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># show the result after each run (not shown here in the tutorial)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n power_intercept power_time.c power_treatment power_IA
-1   60               1        0.003           0.228    0.304
-2   70               1        0.006           0.298    0.415
-3   80               1        0.003           0.370    0.445
-4   90               1        0.003           0.402    0.504
-5  100               1        0.001           0.470    0.549
-6  110               1        0.003           0.553    0.622
-7  120               1        0.008           0.578    0.705
-8  130               1        0.002           0.606    0.776
-9  140               1        0.004           0.677    0.798
-10 150               1        0.006           0.695    0.847
-11 160               1        0.004           0.744    0.834
-12 170               1        0.004           0.782    0.862
-13 180               1        0.004           0.797    0.882
-14 190               1        0.003           0.822    0.921
-15 200               1        0.004           0.836    0.934</code></pre>
+1   60               1        0.003           0.228    0.305
+2   70               1        0.006           0.269    0.405
+3   80               1        0.002           0.341    0.445
+4   90               1        0.004           0.411    0.505
+5  100               1        0.001           0.484    0.559
+6  110               1        0.004           0.546    0.626
+7  120               1        0.006           0.563    0.694
+8  130               1        0.003           0.626    0.767
+9  140               1        0.004           0.679    0.796
+10 150               1        0.006           0.719    0.851
+11 160               1        0.006           0.762    0.839
+12 170               1        0.003           0.783    0.866
+13 180               1        0.004           0.785    0.890
+14 190               1        0.004           0.846    0.920
+15 200               1        0.002           0.853    0.935</code></pre>
 </div>
 </div>
 <p>You will see a lot of warnings about <code>boundary (singular) fit</code> – you can generally ignore these; they typically occur when one of the random variances is exactly zero; but the fixed effect estimates (which are our focus here) are still valid. You will also see some rare warnings about <code>Model failed to converge with max|grad|</code>. In this case, the optimizer did not converge with the required precision, but typically still is very close. Finally, there are some warnings <code>Model failed to converge with 1 negative eigenvalue</code>. These instances give wrong results. However, if in our thousands of simulations some very few models did not converge, this makes no noticeable difference. If, however, the majority of your models does not converge this is a hint that your simulation has some errors.</p>
 <p>Concerning the computed power, we see that we need around 180 participants for the treatment main effect (which mirrors the result from Chapter 1) and around 140 participants for detecting the interaction effect. As there is no main effect for <code>time.c</code> (it has been simulated as zero), the power stays always around the <span class="math inline">\alpha</span>-level.</p>
-</section>
-</section>
-<section id="ways-forward" class="level1">
-<h1>Ways forward</h1>
+</section></section><section id="ways-forward" class="level1"><h1>Ways forward</h1>
 <p>While this power analysis could be approximated with existing apps, there are many useful extensions of the simulations that will not be possible in existing apps. Here are some examples:</p>
 <ul>
 <li>We know from the pilot data that there is a lot of <strong>participant drop-out</strong>. We could easily simulate that drop-out (e.g., missing completely at random, MCAR) by setting, say, 10% of all BDI values to <code>NA</code> from <span class="math inline">t_2</span> on, additional 10% from <span class="math inline">t_3</span> on, etc.</li>
 <li>We could simulate <strong>floor effects</strong>: Currently, the simulated BDI scores can drop below zero. A more realistic data generating model would cap these values at zero. This restricts the range, diminishes the mean difference and therefore lowers the power.</li>
 <li>So far, the tutorial only covered a priori power analysis, where the sample size is the target. With an existing data set, you could do, for example, a <strong>sensitivity power analysis</strong> by varying the effect size in the outer loop (and keeping sample size constant).</li>
-</ul>
-</section>
-<section id="other-packages" class="level1">
-<h1>Other packages</h1>
+</ul></section><section id="other-packages" class="level1"><h1>Other packages</h1>
 <p>The <code>faux</code> package offers an elegant interface to <a href="https://debruine.github.io/faux/articles/sim_mixed.html#building-multilevel-designs">simulate multilevel data</a>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("devtools")</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_github("debruine/faux")</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(faux)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>sim_faux <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n_persons =</span> <span class="dv">100</span>, <span class="at">print =</span> <span class="cn">FALSE</span>) {</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">add_random</span>(<span class="at">person_id =</span> n_persons) <span class="sc">%&gt;%</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_within</span>(<span class="st">"person_id"</span>, <span class="at">time.c =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_between</span>(<span class="st">"person_id"</span>, <span class="at">group =</span> <span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"control"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_recode</span>(<span class="st">"group"</span>, <span class="st">"condition"</span>, <span class="at">control =</span> <span class="dv">0</span>, <span class="at">treatment =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_ranef</span>(<span class="st">"person_id"</span>, <span class="at">u0j =</span> <span class="fu">sqrt</span>(<span class="dv">100</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_ranef</span>(<span class="at">sigma =</span> <span class="fu">sqrt</span>(<span class="dv">25</span>))</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>time.c <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">as.character</span>(df<span class="sc">$</span>time.c)) <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute DV</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>BDI <span class="ot">&lt;-</span> <span class="dv">17</span> <span class="sc">-</span> <span class="fl">0.7</span> <span class="sc">*</span> df<span class="sc">$</span>time.c <span class="sc">+</span> df<span class="sc">$</span>u0j <span class="sc">+</span> df<span class="sc">$</span>sigma</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  l1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(BDI <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> time.c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> person_id), <span class="at">data =</span> df)</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">summary</span>(l1))</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">summary</span>(l1)<span class="sc">$</span>coefficients[, <span class="st">"Pr(&gt;|t|)"</span>])</span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="co"># devtools::install_github("debruine/faux")</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/scienceverse/faux">faux</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sim_faux</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n_persons</span> <span class="op">=</span> <span class="fl">100</span>, <span class="va">print</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">add_random</span><span class="op">(</span>person_id <span class="op">=</span> <span class="va">n_persons</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu">add_within</span><span class="op">(</span><span class="st">"person_id"</span>, time.c <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu">add_between</span><span class="op">(</span><span class="st">"person_id"</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"treatment"</span>, <span class="st">"control"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu">add_recode</span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"condition"</span>, control <span class="op">=</span> <span class="fl">0</span>, treatment <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu">add_ranef</span><span class="op">(</span><span class="st">"person_id"</span>, u0j <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu">add_ranef</span><span class="op">(</span>sigma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">25</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">df</span><span class="op">$</span><span class="va">time.c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">time.c</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fl">2</span></span>
+<span></span>
+<span>  <span class="co"># compute DV</span></span>
+<span>  <span class="va">df</span><span class="op">$</span><span class="va">BDI</span> <span class="op">&lt;-</span> <span class="fl">17</span> <span class="op">-</span> <span class="fl">0.7</span> <span class="op">*</span> <span class="va">df</span><span class="op">$</span><span class="va">time.c</span> <span class="op">+</span> <span class="va">df</span><span class="op">$</span><span class="va">u0j</span> <span class="op">+</span> <span class="va">df</span><span class="op">$</span><span class="va">sigma</span></span>
+<span></span>
+<span>  <span class="va">l1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">BDI</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">time.c</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">person_id</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">print</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">l1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">l1</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span>, <span class="st">"Pr(&gt;|t|)"</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>When you plug this simulation function into our power analysis loop, you will get the same results.</p>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+<section id="references" class="level2"><h2 class="anchored" data-anchor-id="references">References</h2>
 <p>Scherbaum, C. A., &amp; Ferreter, J. M. (2008). Estimating Statistical Power and Required Sample Sizes for Organizational Research Using Multilevel Modeling. Organizational Research Methods, 12(2), 347–367. http://doi.org/10.1177/1094428107308906</p>
 
 
 <!-- -->
 
-</section>
-</section>
-
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
     if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1589,9 +1522,7 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
       }
     }
   });
-  </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./glm.html" class="pagination-link" aria-label="Ch. 3: Generalized Linear Models">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ch. 3: Generalized Linear Models</span>
       </a>          
@@ -2097,8 +2028,7 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">
       &nbsp;
     </div>   
@@ -2109,9 +2039,7 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
       &nbsp;
     </div>
   </div>
-</footer>
-<footer class="osc-footer-card text-white py-5">
-  <div class="container">
+</footer><footer class="osc-footer-card text-white py-5"><div class="container">
     <div class="row gy-4">
       <div class="col-12 col-md-6 col-lg-3 ">
         <h4 class="fw-bold fs-5 fs-lg-4 text-white">
@@ -2127,7 +2055,7 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
       <div class="col-12 col-md-6 col-lg-3">
         <h4 class="fw-semibold fs-5 text-white">Contact</h4>
         <ul class="list-unstyled mt-2 mb-0">
-          <li>
+<li>
             <a href="mailto:felix.schoenbrodt@psy.lmu.de" class="text-white text-decoration-underline">
               <i class="bi bi-envelope me-1"></i>
               Prof. Dr. Felix Schönbrodt (Managing Director)
@@ -2146,12 +2074,12 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
             </a>
           </li>
         </ul>
-      </div>
+</div>
 
       <div class="col-12 col-md-6 col-lg-3">
         <h4 class="fw-semibold fs-5 text-white">Join Us</h4>
         <ul class="list-unstyled mt-2 mb-0">
-          <li>
+<li>
             <a href="https://lists.lrz.de/mailman/listinfo/lmu-osc" target="_blank" class="text-white text-decoration-underline" aria-label="Subscribe to our announcement list (opens in new window)">
               Subscribe to our announcement list
             </a>
@@ -2167,7 +2095,7 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
             </a>
           </li>
         </ul>
-      </div>
+</div>
 
       <div class="col-12 col-md-6 col-lg-3 d-flex align-items-start gap-3 osc-footer-socials">
         <a href="https://github.com/lmu-osc" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on GitHub (opens in new window)">
@@ -2187,8 +2115,7 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
     </div>
 
     <hr class="my-4 border-light">
-
-    <div class="d-flex flex-wrap gap-3 small">
+<div class="d-flex flex-wrap gap-3 small">
       <a href="./footer/imprint.html" class="text-white text-decoration-underline">Imprint</a>
       <span aria-hidden="true">|</span>
       <a href="./footer/privacy.html" class="text-white text-decoration-underline">Privacy Policy</a>
@@ -2198,8 +2125,6 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 
   </div>
 </footer>
-
-
 
 
 <script src="site_libs/quarto-html/zenscroll-min.js"></script>
