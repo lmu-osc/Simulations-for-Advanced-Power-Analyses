@@ -3,6 +3,14 @@ title: "Simulations for Advanced Power Analyses"
 description: "A self-paced tutorial on simulation-based power analysis for complex statistical models in R, offered by the LMU Open Science Center."
 ---
 
+```{r}
+#| eval: true
+#| echo: false
+#| warning: false
+library(downlit)
+library(xml2)
+```
+
 ## About this work
 
 This tutorial was created by **Felix Schönbrodt** and **Moritz Fischer**, with contributions from Malika Ihle, to be part of the training offering of the Ludwig-Maximilian University Open Science Center in Munich.
