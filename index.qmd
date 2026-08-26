@@ -75,7 +75,6 @@ install.packages(
   c(
     "ggplot2",
     "ggdist",
-    #   "gghalves",
     "pwr",
     "MBESS",
     "Rfast",
