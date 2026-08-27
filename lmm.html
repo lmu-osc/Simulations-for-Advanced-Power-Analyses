@@ -716,28 +716,28 @@ lmerModLmerTest]
 Formula: BDI ~ 1 + time.c + (1 | person_id)
    Data: df_long
 
-REML criterion at convergence: 2682.2
+REML criterion at convergence: 2677.5
 
 Scaled residuals: 
-     Min       1Q   Median       3Q      Max 
--2.67526 -0.60759  0.03479  0.54783  2.42449 
+    Min      1Q  Median      3Q     Max 
+-2.8490 -0.5364 -0.0084  0.5362  3.2214 
 
 Random effects:
  Groups    Name        Variance Std.Dev.
- person_id (Intercept) 79.68    8.926   
- Residual              24.88    4.988   
+ person_id (Intercept) 85.23    9.232   
+ Residual              24.01    4.900   
 Number of obs: 400, groups:  person_id, 100
 
 Fixed effects:
             Estimate Std. Error       df t value Pr(&gt;|t|)    
-(Intercept)  16.1429     0.9854 125.7858  16.382  &lt; 2e-16 ***
-time.c       -0.6162     0.1115 299.0000  -5.525 7.19e-08 ***
+(Intercept)  19.0358     1.0101 123.2646  18.845  &lt; 2e-16 ***
+time.c       -0.7288     0.1096 299.0000  -6.651 1.38e-10 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Correlation of Fixed Effects:
        (Intr)
-time.c -0.340</code></pre>
+time.c -0.325</code></pre>
 </div>
 </div>
 <p>Now we put this data generating script into a function and run our power analysis:</p>
@@ -991,21 +991,21 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n power_intercept power_time.c power_treatment power_IA
-1   60               1        0.003           0.228    0.305
-2   70               1        0.006           0.269    0.405
-3   80               1        0.002           0.341    0.445
-4   90               1        0.004           0.411    0.505
-5  100               1        0.001           0.484    0.559
-6  110               1        0.004           0.546    0.626
-7  120               1        0.006           0.563    0.694
-8  130               1        0.003           0.626    0.767
-9  140               1        0.004           0.679    0.796
-10 150               1        0.006           0.719    0.851
-11 160               1        0.006           0.762    0.839
-12 170               1        0.003           0.783    0.866
-13 180               1        0.004           0.785    0.890
-14 190               1        0.004           0.846    0.920
-15 200               1        0.002           0.853    0.935</code></pre>
+1   60               1        0.003           0.257    0.315
+2   70               1        0.008           0.277    0.398
+3   80               1        0.002           0.338    0.446
+4   90               1        0.006           0.398    0.507
+5  100               1        0.001           0.479    0.554
+6  110               1        0.005           0.513    0.617
+7  120               1        0.007           0.579    0.717
+8  130               1        0.002           0.620    0.768
+9  140               1        0.004           0.649    0.802
+10 150               1        0.004           0.702    0.841
+11 160               1        0.005           0.738    0.831
+12 170               1        0.003           0.771    0.862
+13 180               1        0.004           0.811    0.892
+14 190               1        0.003           0.834    0.924
+15 200               1        0.005           0.865    0.936</code></pre>
 </div>
 </div>
 <p>You will see a lot of warnings about <code>boundary (singular) fit</code> – you can generally ignore these; they typically occur when one of the random variances is exactly zero; but the fixed effect estimates (which are our focus here) are still valid. You will also see some rare warnings about <code>Model failed to converge with max|grad|</code>. In this case, the optimizer did not converge with the required precision, but typically still is very close. Finally, there are some warnings <code>Model failed to converge with 1 negative eigenvalue</code>. These instances give wrong results. However, if in our thousands of simulations some very few models did not converge, this makes no noticeable difference. If, however, the majority of your models does not converge this is a hint that your simulation has some errors.</p>
@@ -1024,12 +1024,12 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/scienceverse/faux">faux</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sim_faux</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n_persons</span> <span class="op">=</span> <span class="fl">100</span>, <span class="va">print</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">add_random</span><span class="op">(</span>person_id <span class="op">=</span> <span class="va">n_persons</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">add_within</span><span class="op">(</span><span class="st">"person_id"</span>, time.c <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">add_between</span><span class="op">(</span><span class="st">"person_id"</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"treatment"</span>, <span class="st">"control"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">add_recode</span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"condition"</span>, control <span class="op">=</span> <span class="fl">0</span>, treatment <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">add_ranef</span><span class="op">(</span><span class="st">"person_id"</span>, u0j <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">add_ranef</span><span class="op">(</span>sigma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">25</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://scienceverse.github.io/faux/reference/add_random.html">add_random</a></span><span class="op">(</span>person_id <span class="op">=</span> <span class="va">n_persons</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://scienceverse.github.io/faux/reference/add_within.html">add_within</a></span><span class="op">(</span><span class="st">"person_id"</span>, time.c <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://scienceverse.github.io/faux/reference/add_between.html">add_between</a></span><span class="op">(</span><span class="st">"person_id"</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"treatment"</span>, <span class="st">"control"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://scienceverse.github.io/faux/reference/add_recode.html">add_recode</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"condition"</span>, control <span class="op">=</span> <span class="fl">0</span>, treatment <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://scienceverse.github.io/faux/reference/add_ranef.html">add_ranef</a></span><span class="op">(</span><span class="st">"person_id"</span>, u0j <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://scienceverse.github.io/faux/reference/add_ranef.html">add_ranef</a></span><span class="op">(</span>sigma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">25</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">df</span><span class="op">$</span><span class="va">time.c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">time.c</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fl">2</span></span>
 <span></span>
