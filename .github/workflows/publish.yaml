@@ -98,6 +98,19 @@ jobs:
           if (length(missing) > 0) install.packages(missing)
         shell: Rscript {0}
 
+      - name: Cache Quarto execution outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            _freeze
+            *_cache
+            **/*_cache
+            *_files
+            **/*_files
+          key: ${{ runner.os }}-quarto-exec-${{ hashFiles('renv.lock', '_quarto.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-quarto-exec-
+
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:
