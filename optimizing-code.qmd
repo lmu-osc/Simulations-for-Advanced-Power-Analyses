@@ -25,6 +25,7 @@ Optimizing code for speed can be an art -- and you get lost and spend/waste hour
 
 *Code profiling* means that the code execution is timed, just like you had a stopwatch. Your goal is to make your code snippet as fast as possible. RStudio has a [built-in profiler](https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE) that (in theory) allows to see which code line takes up the longest time. But in my experience, if the computation of each single line is very short (and the duration mostly comes from the many repetitions), it is very inaccurate (i.e., the time spent is allocated to the wrong lines). Therefore, we'll resort to the simplest way of timing code: We will measure overall execution time by wrapping our code in a `system.time({ ... })` call. Longer code blocks need to be wrapped in curly braces `{...}`. The function returns multiple timings; the relevant number for us is the "elapsed" time. This is also called the "wall clock" time -- the time you actually have to wait until computation finished.
 
+
 # First, naive version
 
 Here is a first version of the power simulation code for a simple LM. Let's see how long it takes:
@@ -114,7 +115,7 @@ timings$rel_diff <- c(
 timings
 ```
 
-OK, this didn't really change anything here. But in general (in particular with data frames) this is worth looking at.
+This change gave a small speed-up of `r timings[2, "diff"]` seconds (or `r  timings[2, "rel_diff"]*100`%).
 
 # Rule 2: Avoid data frames as far as possible
 
@@ -162,7 +163,7 @@ timings$rel_diff <- c(
 timings
 ```
 
-This showed a substantial improvement of around `r round(t2[3] - t1[3], 1)` seconds; a relative gain of `r round(timings$rel_diff[3]*100, 1)`%.
+This showed a substantial improvement of around `r round(t2[3] - t1[3], 1)` seconds; a relative gain of `r round(timings$rel_diff[3]*100, 1)`% (both compared to the preceding version).
 
 # Rule 3: Avoid unnecessary computations
 
@@ -285,7 +286,7 @@ timings$rel_diff <- c(
 timings
 ```
 
-This step only gave a minor `r round(timings$rel_diff[5]*100)`% relative increase in speed -- but as a bonus, it made our code much easier to read and shorter.
+This step made no visible increase in speed -- but as a bonus, it made our code much easier to read and shorter.
 
 
 # Rule 5: Go parallel
@@ -489,7 +490,7 @@ We covered the most important steps for speeding up your code in R:
 3. Avoid unnecessary computations and/or switch to optimized packages that do the same computations much faster, such as the package `Rfast`.
 4. Switch to parallel processing. Solution: If you already programmed your simulations with the `replicate` function, it is very easy with the `future.apply` package.
 
-Some steps, such as avoiding growing vectors, didn't really help in our current example, but will help a lot in other scenarios.
+Some steps, such as avoiding growing vectors, didn't help much in our current example, but will help a lot in other scenarios.
 
 There are *many* blog post showing and comparing strategies to increase R performance, e.g.:
 
@@ -508,7 +509,7 @@ Donald Knuth *(Structured Programming with go to Statements, ACM Journal Computi
 
 # Session Info
 
-These speed measurements have been performed on a 2021 MacBook Pro with M1 processor.
+These speed measurements have been performed on a 2025 MacBook Pro with M4 processor.
 
 ```{r}
 sessionInfo()

@@ -68,6 +68,7 @@ format:
 
 execute:
   freeze: auto
+  cache: true
 
 # Begin Editor
 editor: source
