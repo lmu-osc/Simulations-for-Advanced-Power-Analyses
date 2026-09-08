@@ -124,21 +124,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
     g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
   })();
 }
-</script><!-- End Matomo Code --><script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script><script>document.addEventListener("DOMContentLoaded", function () {
- var mathElements = document.getElementsByClassName("math");
- var macros = [];
- for (var i = 0; i < mathElements.length; i++) {
-  var texText = mathElements[i].firstChild;
-  if (mathElements[i].tagName == "SPAN") {
-   katex.render(texText.data, mathElements[i], {
-    displayMode: mathElements[i].classList.contains('display'),
-    throwOnError: false,
-    macros: macros,
-    fleqn: false
-   });
-}}});
-  </script><script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
-<script type="text/javascript">
+</script><!-- End Matomo Code --><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -595,17 +581,17 @@ window.Quarto = {
 <li>i = index for time points</li>
 <li>j = index for persons</li>
 </ul>
-<p>Level 1 equation: <span class="math display">
+<p>Level 1 equation: <span class="math display">\[
 \text{BDI}_{ij} = \beta_{0j} + \beta_{1j} time_{ij} + e_{ij}
-</span> Level 2 equations: <span class="math display">
+\]</span> Level 2 equations: <span class="math display">\[
 \beta_{0j} = \gamma_{00} + u_{0j}\\
 \beta_{1j} = \gamma_{10}
-</span> Combined equation: <span class="math display">
+\]</span> Combined equation: <span class="math display">\[
 \text{BDI}_{ij} = \gamma_{00} + \gamma_{10} time_{ij}  + u_{0j} + e_{ij} \\
 \\
 e_{ij} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\sigma^2) \\
 u_{0j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{00})
-</span></p>
+\]</span></p>
 </section><section id="analysis-in-pilot-data" class="level2"><h2 class="anchored" data-anchor-id="analysis-in-pilot-data">Analysis in pilot data</h2>
 <p>First, let’s run the analysis model in the pilot data. To make the intercept more interpretable, we center it on the first post-measurement by subtracting 2 (i.e., month “2” becomes month “0” etc.).</p>
 <div class="cell">
@@ -649,8 +635,8 @@ time.c -0.267</code></pre>
 </div>
 </div>
 <p>Hence, in the pilot data there is a significant negative trend – with each month, participants have a decrease of 0.7 BDI points. But remember that in this data set <em>all</em> of the participants have been treated (with one of two treatments). For a passive control group we probably would expect no, or at least a much smaller negative trend over time. (There could be spontaneous remissions, but if this effect is assumed to be very strong, there would be no need for psychotherapy). The ICC is around 79%, hence a huge amount of random variance can be attributed to differences between persons.</p>
-<p>The grand intercept <span class="math inline">\gamma_{00}</span> is 17. This is also the average post-treatment value that we assumed in our previous models in Chapters 1 and 2.</p>
-<p>For the random intercept variance and the residual variance, we take generously rounded estimates from the pilot data: <span class="math inline">\tau_{00} = 100</span> and <span class="math inline">\sigma^2 = 25</span>.</p>
+<p>The grand intercept <span class="math inline">\(\gamma_{00}\)</span> is 17. This is also the average post-treatment value that we assumed in our previous models in Chapters 1 and 2.</p>
+<p>For the random intercept variance and the residual variance, we take generously rounded estimates from the pilot data: <span class="math inline">\(\tau_{00} = 100\)</span> and <span class="math inline">\(\sigma^2 = 25\)</span>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -851,33 +837,33 @@ time.c -0.295</code></pre>
 <li>i = index for time points</li>
 <li>j = index for persons</li>
 </ul>
-<p>Level 1 equation: <span class="math display">
+<p>Level 1 equation: <span class="math display">\[
 \text{BDI}_{ij} = \beta_{0j} + \beta_{1j} time_{ij} + e_{ij}
-</span> Level 2 equations: <span class="math display">
+\]</span> Level 2 equations: <span class="math display">\[
 \beta_{0j} = \gamma_{00} + \gamma_{01} \text{treatment}_j + u_{0j}\\
 \beta_{1j} = \gamma_{10} + \gamma_{11} \text{treatment}_j + u_{1j}
-</span> Combined equation: <span class="math display">
+\]</span> Combined equation: <span class="math display">\[
 \text{BDI}_{ij} = \gamma_{00} + \gamma_{01} \text{treatment}_j + \gamma_{10} time_{ij} +  \gamma_{11} \text{treatment}_j time_{ij} + u_{1j} time_{ij} + u_{0j} + e_{ij} \\
 \\
 e_{ij} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\sigma^2) \\
 u_{0j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{00}) \\
 u_{1j} \mathop{\sim}\limits^{\mathrm{iid}} N(mean=0, var=\tau_{11}) \\
 cov(u_{0j}, u_{1j}) = \tau_{01}
-</span></p>
+\]</span></p>
 </section><section id="setting-the-population-parameter-values" class="level2"><h2 class="anchored" data-anchor-id="setting-the-population-parameter-values">Setting the population parameter values</h2>
-<p>We need to assume four additional population values, namely: <span class="math inline">\tau_{11}</span> (the variance of random slopes), <span class="math inline">\tau_{01}</span> (the intercept-slope-covariance), <span class="math inline">\gamma_{01}</span> (the treatment main effect), and <span class="math inline">\gamma_{11}</span> (the interaction effect).</p>
+<p>We need to assume four additional population values, namely: <span class="math inline">\(\tau_{11}\)</span> (the variance of random slopes), <span class="math inline">\(\tau_{01}\)</span> (the intercept-slope-covariance), <span class="math inline">\(\gamma_{01}\)</span> (the treatment main effect), and <span class="math inline">\(\gamma_{11}\)</span> (the interaction effect).</p>
 <p><em>Fixed effects:</em></p>
 <ul>
-<li>The grand intercept <span class="math inline">\gamma_{00}</span> now is set to 23.</li>
-<li>The treatment effect <span class="math inline">\gamma_{01}</span> is set to -6 (as before). In this more complex model, the treatment effect refers to a difference between treatment and control group directly after treatment.</li>
-<li>As mentioned above, it is reasonable to assume that there should be no marked trend in a passive control group. Therefore, we set the conditional main effect for time, <span class="math inline">\gamma_{10}</span> to 0.</li>
-<li>For the interaction effect, we expect a steeper decline in the treatment group (e.g., because the treatment “unfolds” its effect over time). If we set the interaction effect to -0.7, this translates to a predicted slope of -0.7 in the treatment group: <span class="math inline">\gamma_{10} time_{ij} +  \gamma_{11} \text{treatment}_j time_{ij} =  (\gamma_{10} +  \gamma_{11} \text{treatment}_j) time_{ij}</span>.</li>
+<li>The grand intercept <span class="math inline">\(\gamma_{00}\)</span> now is set to 23.</li>
+<li>The treatment effect <span class="math inline">\(\gamma_{01}\)</span> is set to -6 (as before). In this more complex model, the treatment effect refers to a difference between treatment and control group directly after treatment.</li>
+<li>As mentioned above, it is reasonable to assume that there should be no marked trend in a passive control group. Therefore, we set the conditional main effect for time, <span class="math inline">\(\gamma_{10}\)</span> to 0.</li>
+<li>For the interaction effect, we expect a steeper decline in the treatment group (e.g., because the treatment “unfolds” its effect over time). If we set the interaction effect to -0.7, this translates to a predicted slope of -0.7 in the treatment group: <span class="math inline">\(\gamma_{10} time_{ij} +  \gamma_{11} \text{treatment}_j time_{ij} =  (\gamma_{10} +  \gamma_{11} \text{treatment}_j) time_{ij}\)</span>.</li>
 </ul>
-<p>Is this slope of -0.7, estimated from the pilot data, reasonable? Let’s extrapolate the trend: Treated patients have an average BDI score of 17 (directly after treatment). If they decline 0.7 points per month, they would have a BDI difference of <span class="math inline">12*-0.7 = -8.4</span> after one year and are at around 9 BDI points. With that decline, they would have moved from a mild depression to a minimal depression. This seems plausible.</p>
+<p>Is this slope of -0.7, estimated from the pilot data, reasonable? Let’s extrapolate the trend: Treated patients have an average BDI score of 17 (directly after treatment). If they decline 0.7 points per month, they would have a BDI difference of <span class="math inline">\(12*-0.7 = -8.4\)</span> after one year and are at around 9 BDI points. With that decline, they would have moved from a mild depression to a minimal depression. This seems plausible.</p>
 <p><em>Random terms:</em></p>
 <ul>
-<li>Assume that ~95% of slopes in the treatment group lie between -0.7 ± 0.3 (i.e., between -0.4 and -1). This corresponds to a standard deviation of 0.15 and consequently a variance of <span class="math inline">\tau_{11} = 0.15^2 = 0.0225</span>.</li>
-<li>We assume no random effect correlation, so <span class="math inline">\tau_{01} = 0</span>.</li>
+<li>Assume that ~95% of slopes in the treatment group lie between -0.7 ± 0.3 (i.e., between -0.4 and -1). This corresponds to a standard deviation of 0.15 and consequently a variance of <span class="math inline">\(\tau_{11} = 0.15^2 = 0.0225\)</span>.</li>
+<li>We assume no random effect correlation, so <span class="math inline">\(\tau_{01} = 0\)</span>.</li>
 </ul>
 <p>As recommended in the last chapter, we visualize this assumed interaction effect by a hand drawing:</p>
 <div class="quarto-figure quarto-figure-center">
@@ -1009,11 +995,11 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 </div>
 </div>
 <p>You will see a lot of warnings about <code>boundary (singular) fit</code> – you can generally ignore these; they typically occur when one of the random variances is exactly zero; but the fixed effect estimates (which are our focus here) are still valid. You will also see some rare warnings about <code>Model failed to converge with max|grad|</code>. In this case, the optimizer did not converge with the required precision, but typically still is very close. Finally, there are some warnings <code>Model failed to converge with 1 negative eigenvalue</code>. These instances give wrong results. However, if in our thousands of simulations some very few models did not converge, this makes no noticeable difference. If, however, the majority of your models does not converge this is a hint that your simulation has some errors.</p>
-<p>Concerning the computed power, we see that we need around 180 participants for the treatment main effect (which mirrors the result from Chapter 1) and around 140 participants for detecting the interaction effect. As there is no main effect for <code>time.c</code> (it has been simulated as zero), the power stays always around the <span class="math inline">\alpha</span>-level.</p>
+<p>Concerning the computed power, we see that we need around 180 participants for the treatment main effect (which mirrors the result from Chapter 1) and around 140 participants for detecting the interaction effect. As there is no main effect for <code>time.c</code> (it has been simulated as zero), the power stays always around the <span class="math inline">\(\alpha\)</span>-level.</p>
 </section></section><section id="ways-forward" class="level1"><h1>Ways forward</h1>
 <p>While this power analysis could be approximated with existing apps, there are many useful extensions of the simulations that will not be possible in existing apps. Here are some examples:</p>
 <ul>
-<li>We know from the pilot data that there is a lot of <strong>participant drop-out</strong>. We could easily simulate that drop-out (e.g., missing completely at random, MCAR) by setting, say, 10% of all BDI values to <code>NA</code> from <span class="math inline">t_2</span> on, additional 10% from <span class="math inline">t_3</span> on, etc.</li>
+<li>We know from the pilot data that there is a lot of <strong>participant drop-out</strong>. We could easily simulate that drop-out (e.g., missing completely at random, MCAR) by setting, say, 10% of all BDI values to <code>NA</code> from <span class="math inline">\(t_2\)</span> on, additional 10% from <span class="math inline">\(t_3\)</span> on, etc.</li>
 <li>We could simulate <strong>floor effects</strong>: Currently, the simulated BDI scores can drop below zero. A more realistic data generating model would cap these values at zero. This restricts the range, diminishes the mean difference and therefore lowers the power.</li>
 <li>So far, the tutorial only covered a priori power analysis, where the sample size is the target. With an existing data set, you could do, for example, a <strong>sensitivity power analysis</strong> by varying the effect size in the outer loop (and keeping sample size constant).</li>
 </ul></section><section id="other-packages" class="level1"><h1>Other packages</h1>
@@ -2039,10 +2025,10 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
       &nbsp;
     </div>
   </div>
-</footer><footer class="osc-footer-card text-white py-5"><div class="container">
+</footer><footer class="osc-footer-card py-5"><div class="container">
     <div class="row gy-4">
-      <div class="col-12 col-md-6 col-lg-3 ">
-        <h4 class="fw-bold fs-5 fs-lg-4 text-white">
+      <div class="col-12 col-md-6 col-lg-3">
+        <h4 class="fw-bold fs-5 fs-lg-4">
           Ludwig-Maximilians-Universität<br>
           LMU Open Science Center
         </h4>
@@ -2053,22 +2039,22 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
       </div>
 
       <div class="col-12 col-md-6 col-lg-3">
-        <h4 class="fw-semibold fs-5 text-white">Contact</h4>
+        <h4 class="fw-semibold fs-5">Contact</h4>
         <ul class="list-unstyled mt-2 mb-0">
 <li>
-            <a href="mailto:felix.schoenbrodt@psy.lmu.de" class="text-white text-decoration-underline">
+            <a href="mailto:felix.schoenbrodt@psy.lmu.de" class="text-decoration-underline">
               <i class="bi bi-envelope me-1"></i>
               Prof. Dr. Felix Schönbrodt (Managing Director)
             </a>
           </li>
           <li>
-            <a href="mailto:malika.ihle@lmu.de" class="text-white text-decoration-underline">
+            <a href="mailto:malika.ihle@lmu.de" class="text-decoration-underline">
               <i class="bi bi-envelope me-1"></i>
-              Dr. Malika Ihle (Coordinator) 
+              Dr. Malika Ihle (Coordinator)
             </a>
           </li>
           <li>
-            <a href="mailto:osc@lmu.de" class="text-white text-decoration-underline">
+            <a href="mailto:osc@lmu.de" class="text-decoration-underline">
               <i class="bi bi-envelope me-1"></i>
               OSC team
             </a>
@@ -2077,20 +2063,20 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 </div>
 
       <div class="col-12 col-md-6 col-lg-3">
-        <h4 class="fw-semibold fs-5 text-white">Join Us</h4>
+        <h4 class="fw-semibold fs-5">Join Us</h4>
         <ul class="list-unstyled mt-2 mb-0">
 <li>
-            <a href="https://lists.lrz.de/mailman/listinfo/lmu-osc" target="_blank" class="text-white text-decoration-underline" aria-label="Subscribe to our announcement list (opens in new window)">
+            <a href="https://lists.lrz.de/mailman/listinfo/lmu-osc" class="text-decoration-underline" aria-label="Subscribe to our announcement list (opens in new window)">
               Subscribe to our announcement list
             </a>
           </li>
           <li>
-            <a href="https://www.osc.lmu.de/about/join-us.html" target="_blank" class="text-white text-decoration-underline" aria-label="Become a member (opens in new window)">
+            <a href="https://www.osc.lmu.de/about/join-us.html" class="text-decoration-underline" aria-label="Become a member (opens in new window)">
               Become a member
             </a>
           </li>
           <li>
-            <a href="https://matrix.to/#/#lmu-open-science-center:matrix.lmu.de" target="_blank" class="text-white text-decoration-underline" aria-label="Chat with us on Matrix (opens in new window)">
+            <a href="https://matrix.to/#/#lmu-open-science-center:matrix.lmu.de" class="text-decoration-underline" aria-label="Chat with us on Matrix (opens in new window)">
               Chat with us on Matrix
             </a>
           </li>
@@ -2098,31 +2084,29 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 </div>
 
       <div class="col-12 col-md-6 col-lg-3 d-flex align-items-start gap-3 osc-footer-socials">
-        <a href="https://github.com/lmu-osc" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on GitHub (opens in new window)">
+        <a href="https://github.com/lmu-osc" class="fs-3" aria-label="LMU Open Science Center on GitHub (opens in new window)">
           <i class="bi bi-github"></i>
         </a>
-        <a href="https://www.linkedin.com/company/lmu-open-science-center/" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on LinkedIn (opens in new window)">
+        <a href="https://www.linkedin.com/company/lmu-open-science-center/" class="fs-3" aria-label="LMU Open Science Center on LinkedIn (opens in new window)">
           <i class="bi bi-linkedin"></i>
         </a>
-        <a href="https://bsky.app/profile/lmu-osc.bsky.social" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on Bluesky (opens in new window)">
+        <a href="https://bsky.app/profile/lmu-osc.bsky.social" class="fs-3" aria-label="LMU Open Science Center on Bluesky (opens in new window)">
           <i class="bi bi-bluesky"></i>
         </a>
-        <a href="https://scicomm.xyz/@lmu_osc" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on Mastodon (opens in new window)">
+        <a href="https://scicomm.xyz/@lmu_osc" class="fs-3" aria-label="LMU Open Science Center on Mastodon (opens in new window)">
           <i class="bi bi-mastodon"></i>
         </a>
       </div>
-
     </div>
 
-    <hr class="my-4 border-light">
+    <hr class="my-4">
 <div class="d-flex flex-wrap gap-3 small">
-      <a href="./footer/imprint.html" class="text-white text-decoration-underline">Imprint</a>
+      <a href="./footer/imprint.html" class="text-decoration-underline">Imprint</a>
       <span aria-hidden="true">|</span>
-      <a href="./footer/privacy.html" class="text-white text-decoration-underline">Privacy Policy</a>
+      <a href="./footer/privacy.html" class="text-decoration-underline">Privacy Policy</a>
       <span aria-hidden="true">|</span>
-      <a href="./footer/accessibilty.html" class="text-white text-decoration-underline">Accessibility</a>
+      <a href="./footer/accessibilty.html" class="text-decoration-underline">Accessibility</a>
     </div>
-
   </div>
 </footer>
 

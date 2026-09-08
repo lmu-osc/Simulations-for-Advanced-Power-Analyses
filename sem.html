@@ -124,21 +124,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
     g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
   })();
 }
-</script><!-- End Matomo Code --><script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script><script>document.addEventListener("DOMContentLoaded", function () {
- var mathElements = document.getElementsByClassName("math");
- var macros = [];
- for (var i = 0; i < mathElements.length; i++) {
-  var texText = mathElements[i].firstChild;
-  if (mathElements[i].tagName == "SPAN") {
-   katex.render(texText.data, mathElements[i], {
-    displayMode: mathElements[i].classList.contains('display'),
-    throwOnError: false,
-    macros: macros,
-    fleqn: false
-   });
-}}});
-  </script><script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
-<script type="text/javascript">
+</script><!-- End Matomo Code --><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -743,7 +729,7 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 6 1.592175 1.968929 -0.8206145 1.441477 3.635068 3.482516 3.852668</code></pre>
 </div>
 </div>
-<p>We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an <span class="math inline">\alpha</span>-level of .005. We will work with the <code>lavaan</code> package to fit SEMs.</p>
+<p>We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an <span class="math inline">\(\alpha\)</span>-level of .005. We will work with the <code>lavaan</code> package to fit SEMs.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#specify SEM</span></span>
 <span><span class="va">model_sem</span> <span class="op">&lt;-</span> <span class="st">"generalized_prejudice =~ EP + DP + SP + HP</span></span>
@@ -845,7 +831,7 @@ FALSE  TRUE
 <pre><code>[1] 71.8</code></pre>
 </div>
 </div>
-<p>Only 71.8% of samples with the same size of <span class="math inline">n=50</span> result in a significant p-value. We conclude that <span class="math inline">n=50</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
+<p>Only 71.8% of samples with the same size of <span class="math inline">\(n=50\)</span> result in a significant p-value. We conclude that <span class="math inline">\(n=50\)</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
 </section><section id="sample-size-planning-find-the-necessary-sample-size" class="level2"><h2 class="anchored" data-anchor-id="sample-size-planning-find-the-necessary-sample-size">Sample size planning: Find the necessary sample size</h2>
 <p>But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 30 to 200. Running these simulations typically requires quite some computing time.</p>
 <div class="cell">
@@ -2592,10 +2578,10 @@ Defined Parameters:
       &nbsp;
     </div>
   </div>
-</footer><footer class="osc-footer-card text-white py-5"><div class="container">
+</footer><footer class="osc-footer-card py-5"><div class="container">
     <div class="row gy-4">
-      <div class="col-12 col-md-6 col-lg-3 ">
-        <h4 class="fw-bold fs-5 fs-lg-4 text-white">
+      <div class="col-12 col-md-6 col-lg-3">
+        <h4 class="fw-bold fs-5 fs-lg-4">
           Ludwig-Maximilians-Universität<br>
           LMU Open Science Center
         </h4>
@@ -2606,22 +2592,22 @@ Defined Parameters:
       </div>
 
       <div class="col-12 col-md-6 col-lg-3">
-        <h4 class="fw-semibold fs-5 text-white">Contact</h4>
+        <h4 class="fw-semibold fs-5">Contact</h4>
         <ul class="list-unstyled mt-2 mb-0">
 <li>
-            <a href="mailto:felix.schoenbrodt@psy.lmu.de" class="text-white text-decoration-underline">
+            <a href="mailto:felix.schoenbrodt@psy.lmu.de" class="text-decoration-underline">
               <i class="bi bi-envelope me-1"></i>
               Prof. Dr. Felix Schönbrodt (Managing Director)
             </a>
           </li>
           <li>
-            <a href="mailto:malika.ihle@lmu.de" class="text-white text-decoration-underline">
+            <a href="mailto:malika.ihle@lmu.de" class="text-decoration-underline">
               <i class="bi bi-envelope me-1"></i>
-              Dr. Malika Ihle (Coordinator) 
+              Dr. Malika Ihle (Coordinator)
             </a>
           </li>
           <li>
-            <a href="mailto:osc@lmu.de" class="text-white text-decoration-underline">
+            <a href="mailto:osc@lmu.de" class="text-decoration-underline">
               <i class="bi bi-envelope me-1"></i>
               OSC team
             </a>
@@ -2630,20 +2616,20 @@ Defined Parameters:
 </div>
 
       <div class="col-12 col-md-6 col-lg-3">
-        <h4 class="fw-semibold fs-5 text-white">Join Us</h4>
+        <h4 class="fw-semibold fs-5">Join Us</h4>
         <ul class="list-unstyled mt-2 mb-0">
 <li>
-            <a href="https://lists.lrz.de/mailman/listinfo/lmu-osc" target="_blank" class="text-white text-decoration-underline" aria-label="Subscribe to our announcement list (opens in new window)">
+            <a href="https://lists.lrz.de/mailman/listinfo/lmu-osc" class="text-decoration-underline" aria-label="Subscribe to our announcement list (opens in new window)">
               Subscribe to our announcement list
             </a>
           </li>
           <li>
-            <a href="https://www.osc.lmu.de/about/join-us.html" target="_blank" class="text-white text-decoration-underline" aria-label="Become a member (opens in new window)">
+            <a href="https://www.osc.lmu.de/about/join-us.html" class="text-decoration-underline" aria-label="Become a member (opens in new window)">
               Become a member
             </a>
           </li>
           <li>
-            <a href="https://matrix.to/#/#lmu-open-science-center:matrix.lmu.de" target="_blank" class="text-white text-decoration-underline" aria-label="Chat with us on Matrix (opens in new window)">
+            <a href="https://matrix.to/#/#lmu-open-science-center:matrix.lmu.de" class="text-decoration-underline" aria-label="Chat with us on Matrix (opens in new window)">
               Chat with us on Matrix
             </a>
           </li>
@@ -2651,31 +2637,29 @@ Defined Parameters:
 </div>
 
       <div class="col-12 col-md-6 col-lg-3 d-flex align-items-start gap-3 osc-footer-socials">
-        <a href="https://github.com/lmu-osc" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on GitHub (opens in new window)">
+        <a href="https://github.com/lmu-osc" class="fs-3" aria-label="LMU Open Science Center on GitHub (opens in new window)">
           <i class="bi bi-github"></i>
         </a>
-        <a href="https://www.linkedin.com/company/lmu-open-science-center/" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on LinkedIn (opens in new window)">
+        <a href="https://www.linkedin.com/company/lmu-open-science-center/" class="fs-3" aria-label="LMU Open Science Center on LinkedIn (opens in new window)">
           <i class="bi bi-linkedin"></i>
         </a>
-        <a href="https://bsky.app/profile/lmu-osc.bsky.social" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on Bluesky (opens in new window)">
+        <a href="https://bsky.app/profile/lmu-osc.bsky.social" class="fs-3" aria-label="LMU Open Science Center on Bluesky (opens in new window)">
           <i class="bi bi-bluesky"></i>
         </a>
-        <a href="https://scicomm.xyz/@lmu_osc" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on Mastodon (opens in new window)">
+        <a href="https://scicomm.xyz/@lmu_osc" class="fs-3" aria-label="LMU Open Science Center on Mastodon (opens in new window)">
           <i class="bi bi-mastodon"></i>
         </a>
       </div>
-
     </div>
 
-    <hr class="my-4 border-light">
+    <hr class="my-4">
 <div class="d-flex flex-wrap gap-3 small">
-      <a href="./footer/imprint.html" class="text-white text-decoration-underline">Imprint</a>
+      <a href="./footer/imprint.html" class="text-decoration-underline">Imprint</a>
       <span aria-hidden="true">|</span>
-      <a href="./footer/privacy.html" class="text-white text-decoration-underline">Privacy Policy</a>
+      <a href="./footer/privacy.html" class="text-decoration-underline">Privacy Policy</a>
       <span aria-hidden="true">|</span>
-      <a href="./footer/accessibilty.html" class="text-white text-decoration-underline">Accessibility</a>
+      <a href="./footer/accessibilty.html" class="text-decoration-underline">Accessibility</a>
     </div>
-
   </div>
 </footer>
 

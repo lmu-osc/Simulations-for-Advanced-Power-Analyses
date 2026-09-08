@@ -124,21 +124,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
     g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
   })();
 }
-</script><!-- End Matomo Code --><script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script><script>document.addEventListener("DOMContentLoaded", function () {
- var mathElements = document.getElementsByClassName("math");
- var macros = [];
- for (var i = 0; i < mathElements.length; i++) {
-  var texText = mathElements[i].firstChild;
-  if (mathElements[i].tagName == "SPAN") {
-   katex.render(texText.data, mathElements[i], {
-    displayMode: mathElements[i].classList.contains('display'),
-    throwOnError: false,
-    macros: macros,
-    fleqn: false
-   });
-}}});
-  </script><script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
-<script type="text/javascript">
+</script><!-- End Matomo Code --><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -566,7 +552,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you have absolutely no idea about the pre-post-correlation, a typical default value is <span class="math inline">r=.5</span>. But such generic defaults are always the very last resort – when you run a scientific study, we hope that you bring at least some domain knowledge 🤓</p>
+<p>If you have absolutely no idea about the pre-post-correlation, a typical default value is <span class="math inline">\(r=.5\)</span>. But such generic defaults are always the very last resort – when you run a scientific study, we hope that you bring at least some domain knowledge 🤓</p>
 </div>
 </div>
 <section id="get-some-real-data-as-starting-point" class="level2"><h2 class="anchored" data-anchor-id="get-some-real-data-as-starting-point">Get some real data as starting point</h2>
@@ -581,7 +567,7 @@ Note
 <pre><code>[1] 0.6142207</code></pre>
 </div>
 </div>
-<p>In our pilot data set, the pre-post-correlation is around <span class="math inline">r=.6</span>. We will use this value in our simulations.</p>
+<p>In our pilot data set, the pre-post-correlation is around <span class="math inline">\(r=.6\)</span>. We will use this value in our simulations.</p>
 </section><section id="update-the-sim-function" class="level2"><h2 class="anchored" data-anchor-id="update-the-sim-function">Update the sim() function</h2>
 <p>Now we add the continuous predictor into our <code>sim()</code> function. In order to simulate a correlated variable, we need to slightly change the workflow in our simulation.</p>
 <p>We use the <code>rmvnorm</code> function from the <code>Rfast</code> package to create correlated, normally distributed variables. It takes three parameters:</p>
@@ -595,21 +581,21 @@ Note
 </ul>
 <p>For <code>mu</code>, we use the value 23 for both the pre and the post value. You can imagine that we only look at the control group: The mean value is not supposed to change systematically from pre to post (although each individual person can go somewhat up or down).</p>
 <p>The variance-covariance-matrix defines two properties at once: the variance of each variable and the covariance to all other variables. In the two-variable case, the general matrix looks like:</p>
-<p><span class="math display">
+<p><span class="math display">\[
 \begin{bmatrix}
 var_x &amp; cov_{xy}\\
 cov_{xy} &amp; var_y
 \end{bmatrix}
-</span> Note that the covariance in the diagonal has the same values, as <span class="math inline">cov_{xy} = cov_{yx}</span>. As we need to enter the covariance into <code>sigma</code>, we need to convert the correlation into a covariance. Here’s the formula:</p>
-<p><span class="math display">cor_{xy} = \frac{cov_{xy}}{\sigma_x\sigma_y}</span> (Note: The denominator contains the standard deviation, not the variance.) Solved for the covariance yields:</p>
-<p><span class="math display">cov_{xy} = cor_{xy}\sigma_X\sigma_y = 0.6 * \sqrt{117} * \sqrt{117} = 70.2</span></p>
+\]</span> Note that the covariance in the diagonal has the same values, as <span class="math inline">\(cov_{xy} = cov_{yx}\)</span>. As we need to enter the covariance into <code>sigma</code>, we need to convert the correlation into a covariance. Here’s the formula:</p>
+<p><span class="math display">\[cor_{xy} = \frac{cov_{xy}}{\sigma_x\sigma_y}\]</span> (Note: The denominator contains the standard deviation, not the variance.) Solved for the covariance yields:</p>
+<p><span class="math display">\[cov_{xy} = cor_{xy}\sigma_X\sigma_y = 0.6 * \sqrt{117} * \sqrt{117} = 70.2\]</span></p>
 <p>Hence, the specific variance-covariance-matrix <code>sigma</code> is in our case (generously rounded):</p>
-<p><span class="math display">
+<p><span class="math display">\[
 \begin{bmatrix}
 117 &amp; 70\\
 70 &amp; 117
 \end{bmatrix}
-</span> Put it all together:</p>
+\]</span> Put it all together:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">0xBEEF</span><span class="op">)</span></span>
 <span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">23</span>, <span class="fl">23</span><span class="op">)</span> <span class="co"># the mean values of both variables</span></span>
@@ -642,7 +628,7 @@ Note
 <p>A very nice and user-friendly alternative for simulating correlated variables is the <a href="https://debruine.github.io/faux/articles/rnorm_multi.html"><code>rnorm_multi</code></a> function from the <code>faux</code> package.</p>
 </div>
 </div>
-<p>We now have the correlated <span class="math inline">BDI_{pre}</span> and <span class="math inline">BDI_{post}</span> scores. Finally, we have to impose the treatment effect onto the post variable: In the control group, the mean value stays constant at 23 (what we already have simulated), in the treatment group, the BDI is 6 points lower:</p>
+<p>We now have the correlated <span class="math inline">\(BDI_{pre}\)</span> and <span class="math inline">\(BDI_{post}\)</span> scores. Finally, we have to impose the treatment effect onto the post variable: In the control group, the mean value stays constant at 23 (what we already have simulated), in the treatment group, the BDI is 6 points lower:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># add treatment predictor variables</span></span>
 <span><span class="va">df</span><span class="op">$</span><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -800,9 +786,9 @@ F-statistic: 3.45e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>We assume independence of both predictor variables (<code>BDI_pre</code> and <code>treatment</code>). This is plausible, because the treatment was randomized and therefore independent from the baseline. In this case, the variance that each predictor explains in the dependent variable is additive. The pre-measurement explains <span class="math inline">r^2 = .6^2 = 36\%</span> of the variance in the post-measurement. As this variance is unrelated to the treatment factor, it reduces the variance of the error term (which was at 117) by 36%:</p>
-<p><span class="math inline">\sigma^2_{err} = 117 * (1-0.36) = 74.88</span></p>
-<p>The square root of this unexplained error variance is the <code>Residual standard error</code> from the <code>lm</code> output: <span class="math inline">\sqrt{74.88} = 8.65</span>.</p>
+<p>We assume independence of both predictor variables (<code>BDI_pre</code> and <code>treatment</code>). This is plausible, because the treatment was randomized and therefore independent from the baseline. In this case, the variance that each predictor explains in the dependent variable is additive. The pre-measurement explains <span class="math inline">\(r^2 = .6^2 = 36\%\)</span> of the variance in the post-measurement. As this variance is unrelated to the treatment factor, it reduces the variance of the error term (which was at 117) by 36%:</p>
+<p><span class="math inline">\(\sigma^2_{err} = 117 * (1-0.36) = 74.88\)</span></p>
+<p>The square root of this unexplained error variance is the <code>Residual standard error</code> from the <code>lm</code> output: <span class="math inline">\(\sqrt{74.88} = 8.65\)</span>.</p>
 </div>
 </div>
 </div>
@@ -849,21 +835,21 @@ F-statistic: 3.45e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 10 180 0.9570</code></pre>
 </div>
 </div>
-<p>In the original analysis, we needed <span class="math inline">n=180</span> (90 in each group) for 80% power. Including the baseline covariate (which explains <span class="math inline">r^2 = .6^2 = 36\%</span> of the variance in post scores) reduces that number to around <span class="math inline">n=115</span>.</p>
+<p>In the original analysis, we needed <span class="math inline">\(n=180\)</span> (90 in each group) for 80% power. Including the baseline covariate (which explains <span class="math inline">\(r^2 = .6^2 = 36\%\)</span> of the variance in post scores) reduces that number to around <span class="math inline">\(n=115\)</span>.</p>
 <p>Let’s check the plausibility of our power simulation. Borm et al.&nbsp;(<a href="http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf">2007</a>, p.&nbsp;1237) propose a simple method on how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:</p>
 <blockquote class="blockquote">
 <p>“We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group.”</p>
 </blockquote>
-<p>When we enter our assumed pre-post-correlation into that formula, we arrive a <span class="math inline">n=117</span> – very close to our value: <span class="math display">180 * (1 - .6^2) + 2 = 117</span></p>
+<p>When we enter our assumed pre-post-correlation into that formula, we arrive a <span class="math inline">\(n=117\)</span> – very close to our value: <span class="math display">\[180 * (1 - .6^2) + 2 = 117\]</span></p>
 </section></section><section id="modeling-an-interaction" class="level1"><h1>Modeling an interaction</h1>
-<p>We now include the interaction between the baseline score <span class="math inline">\text{BDI}_{pre}</span> and the <span class="math inline">\text{treatment}</span> factor. Such an interaction would suggest that the treatment is more effective at a certain baseline severity. There is some evidence that depression treatment works better at higher baseline severity, compared to lower baseline severity<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<p>To this end, we add the interaction term to the equation. We use the centered baseline value <span class="math inline">\text{BDI}_{pre.c}</span> for better interpretability:</p>
-<p><span class="math display">\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + b_2*\text{treatment} + b_3*\text{BDI}_{pre.c}*\text{treatment} + e</span> When we rearrange the equation by factoring out the <code>treatment</code> term, the interaction is easier to interpret:</p>
-<p><span class="math display">\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + (b_2 + b_3*\text{BDI}_{pre.c})*\text{treatment} + e</span> Hence, the size of the treatment effect is <span class="math inline">b_2 + b_3*\text{BDI}_{pre}</span>. Remember that we centered <span class="math inline">BDI_{pre}</span> for better interpretability – this is the place where it gets relevant: When we enter the value 0 for <span class="math inline">BDI_{pre.c}</span> (which corresponds to a typical pre-treatment depression score of around 23), the treatment effect equals the main effect <span class="math inline">b_2</span>. This conditional treatment effect gets larger or smaller, depending on the value of <span class="math inline">BDI_{pre.c}</span> and the regression weight <span class="math inline">b_3</span>. The meaning of <span class="math inline">b_3</span> is: How much does the treatment effect increase for every 1 unit increase in <span class="math inline">BDI_{pre.c}</span>?</p>
-<p>What are plausible values for <span class="math inline">b_3</span>? First, we need to decide on the sign. We expect that the treatment effect gets more <em>negative</em> (as we expect a decrease in BDI scores) with increasing baseline severity, so the coefficient must be negative. For the moment, let’s assume that the treatment effect gets 0.4 more negative for every unit increase in <span class="math inline">BDI_{pre.c}</span>:</p>
-<p><span class="math display">\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre.c} - 6*\text{treatment} - 0.4*\text{BDI}_{pre.c}*\text{treatment} + e</span> We can plot the predicted values of that equation as two separate regression lines – simply enter either 0 or 1 for <code>treatment</code>:</p>
-<p><span class="math display">\text{Control group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*0 - 0.4*\text{BDI}_{pre.c}*0 = 23 + 0.6*\text{BDI}_{pre.c}</span></p>
-<p><span class="math display">\text{Treatment group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*1 - 0.4*\text{BDI}_{pre.c}*1 = 17 + 0.2*\text{BDI}_{pre.c}</span> In the following plot, the limits of the x-axis are chosen to reflect the possible range of the <span class="math inline">BDI_{pre}</span> score: It can go from 0 to 63, which corresponds to -23 to 40 on the centered scale. The actual maximum in our pilot data was 49 (i.e., 26 on the centered scale), marked with a dashed line.</p>
+<p>We now include the interaction between the baseline score <span class="math inline">\(\text{BDI}_{pre}\)</span> and the <span class="math inline">\(\text{treatment}\)</span> factor. Such an interaction would suggest that the treatment is more effective at a certain baseline severity. There is some evidence that depression treatment works better at higher baseline severity, compared to lower baseline severity<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>To this end, we add the interaction term to the equation. We use the centered baseline value <span class="math inline">\(\text{BDI}_{pre.c}\)</span> for better interpretability:</p>
+<p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + b_2*\text{treatment} + b_3*\text{BDI}_{pre.c}*\text{treatment} + e\]</span> When we rearrange the equation by factoring out the <code>treatment</code> term, the interaction is easier to interpret:</p>
+<p><span class="math display">\[\text{BDI}_{post} = b_0 + b_1*\text{BDI}_{pre.c} + (b_2 + b_3*\text{BDI}_{pre.c})*\text{treatment} + e\]</span> Hence, the size of the treatment effect is <span class="math inline">\(b_2 + b_3*\text{BDI}_{pre}\)</span>. Remember that we centered <span class="math inline">\(BDI_{pre}\)</span> for better interpretability – this is the place where it gets relevant: When we enter the value 0 for <span class="math inline">\(BDI_{pre.c}\)</span> (which corresponds to a typical pre-treatment depression score of around 23), the treatment effect equals the main effect <span class="math inline">\(b_2\)</span>. This conditional treatment effect gets larger or smaller, depending on the value of <span class="math inline">\(BDI_{pre.c}\)</span> and the regression weight <span class="math inline">\(b_3\)</span>. The meaning of <span class="math inline">\(b_3\)</span> is: How much does the treatment effect increase for every 1 unit increase in <span class="math inline">\(BDI_{pre.c}\)</span>?</p>
+<p>What are plausible values for <span class="math inline">\(b_3\)</span>? First, we need to decide on the sign. We expect that the treatment effect gets more <em>negative</em> (as we expect a decrease in BDI scores) with increasing baseline severity, so the coefficient must be negative. For the moment, let’s assume that the treatment effect gets 0.4 more negative for every unit increase in <span class="math inline">\(BDI_{pre.c}\)</span>:</p>
+<p><span class="math display">\[\text{BDI}_{post} = 23 + 0.6*\text{BDI}_{pre.c} - 6*\text{treatment} - 0.4*\text{BDI}_{pre.c}*\text{treatment} + e\]</span> We can plot the predicted values of that equation as two separate regression lines – simply enter either 0 or 1 for <code>treatment</code>:</p>
+<p><span class="math display">\[\text{Control group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*0 - 0.4*\text{BDI}_{pre.c}*0 = 23 + 0.6*\text{BDI}_{pre.c}\]</span></p>
+<p><span class="math display">\[\text{Treatment group}: \widehat{\text{BDI}_{post}} = 23 + 0.6*\text{BDI}_{pre.c} - 6*1 - 0.4*\text{BDI}_{pre.c}*1 = 17 + 0.2*\text{BDI}_{pre.c}\]</span> In the following plot, the limits of the x-axis are chosen to reflect the possible range of the <span class="math inline">\(BDI_{pre}\)</span> score: It can go from 0 to 63, which corresponds to -23 to 40 on the centered scale. The actual maximum in our pilot data was 49 (i.e., 26 on the centered scale), marked with a dashed line.</p>
 <div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">7</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span></span>
@@ -905,9 +891,9 @@ F-statistic: 3.45e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </div>
-<p>With that strenth of the interaction effect, the predicted treatment effect of a person with the highest observed <span class="math inline">\text{BDI}_{pre}</span> score of 49 would be 16.4, nearly three times as large as the treatment effect at average baseline severity (see the long green line in the plot). While this seems quite high, it might still be plausible.</p>
-<p>However, the interaction creates an implausible situation at the lower end of baseline severity. The red and the blue line cross at a <span class="math inline">BDI_{pre}</span> value of around 8: For such persons with a minimal depression, it makes zero difference whether they are in the control or the treatment group. But the effect even <em>reverses</em> for patients with very low BDI values below 8: For them, the treatment leads to worse outcomes than being in the control group.</p>
-<p>As this is implausible, we want to calibrate the interaction effect in a way that the treatment a) makes no difference for the lowest <span class="math inline">\text{BDI}_{pre}</span> values and b) reduces the BDI by 6 points for average depression scores.</p>
+<p>With that strenth of the interaction effect, the predicted treatment effect of a person with the highest observed <span class="math inline">\(\text{BDI}_{pre}\)</span> score of 49 would be 16.4, nearly three times as large as the treatment effect at average baseline severity (see the long green line in the plot). While this seems quite high, it might still be plausible.</p>
+<p>However, the interaction creates an implausible situation at the lower end of baseline severity. The red and the blue line cross at a <span class="math inline">\(BDI_{pre}\)</span> value of around 8: For such persons with a minimal depression, it makes zero difference whether they are in the control or the treatment group. But the effect even <em>reverses</em> for patients with very low BDI values below 8: For them, the treatment leads to worse outcomes than being in the control group.</p>
+<p>As this is implausible, we want to calibrate the interaction effect in a way that the treatment a) makes no difference for the lowest <span class="math inline">\(\text{BDI}_{pre}\)</span> values and b) reduces the BDI by 6 points for average depression scores.</p>
 <p>(Alternatively, we have to give up the assumption of a <em>linear</em> interaction effect and create a non-linear interaction model. But you don’t want to go that route …).</p>
 <p>By setting the interaction effect to -0.2, we achieve a plausible interaction plot:</p>
 <div class="cell">
@@ -2091,10 +2077,10 @@ F-statistic: 3.45e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
       &nbsp;
     </div>
   </div>
-</footer><footer class="osc-footer-card text-white py-5"><div class="container">
+</footer><footer class="osc-footer-card py-5"><div class="container">
     <div class="row gy-4">
-      <div class="col-12 col-md-6 col-lg-3 ">
-        <h4 class="fw-bold fs-5 fs-lg-4 text-white">
+      <div class="col-12 col-md-6 col-lg-3">
+        <h4 class="fw-bold fs-5 fs-lg-4">
           Ludwig-Maximilians-Universität<br>
           LMU Open Science Center
         </h4>
@@ -2105,22 +2091,22 @@ F-statistic: 3.45e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
       </div>
 
       <div class="col-12 col-md-6 col-lg-3">
-        <h4 class="fw-semibold fs-5 text-white">Contact</h4>
+        <h4 class="fw-semibold fs-5">Contact</h4>
         <ul class="list-unstyled mt-2 mb-0">
 <li>
-            <a href="mailto:felix.schoenbrodt@psy.lmu.de" class="text-white text-decoration-underline">
+            <a href="mailto:felix.schoenbrodt@psy.lmu.de" class="text-decoration-underline">
               <i class="bi bi-envelope me-1"></i>
               Prof. Dr. Felix Schönbrodt (Managing Director)
             </a>
           </li>
           <li>
-            <a href="mailto:malika.ihle@lmu.de" class="text-white text-decoration-underline">
+            <a href="mailto:malika.ihle@lmu.de" class="text-decoration-underline">
               <i class="bi bi-envelope me-1"></i>
-              Dr. Malika Ihle (Coordinator) 
+              Dr. Malika Ihle (Coordinator)
             </a>
           </li>
           <li>
-            <a href="mailto:osc@lmu.de" class="text-white text-decoration-underline">
+            <a href="mailto:osc@lmu.de" class="text-decoration-underline">
               <i class="bi bi-envelope me-1"></i>
               OSC team
             </a>
@@ -2129,20 +2115,20 @@ F-statistic: 3.45e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 
       <div class="col-12 col-md-6 col-lg-3">
-        <h4 class="fw-semibold fs-5 text-white">Join Us</h4>
+        <h4 class="fw-semibold fs-5">Join Us</h4>
         <ul class="list-unstyled mt-2 mb-0">
 <li>
-            <a href="https://lists.lrz.de/mailman/listinfo/lmu-osc" target="_blank" class="text-white text-decoration-underline" aria-label="Subscribe to our announcement list (opens in new window)">
+            <a href="https://lists.lrz.de/mailman/listinfo/lmu-osc" class="text-decoration-underline" aria-label="Subscribe to our announcement list (opens in new window)">
               Subscribe to our announcement list
             </a>
           </li>
           <li>
-            <a href="https://www.osc.lmu.de/about/join-us.html" target="_blank" class="text-white text-decoration-underline" aria-label="Become a member (opens in new window)">
+            <a href="https://www.osc.lmu.de/about/join-us.html" class="text-decoration-underline" aria-label="Become a member (opens in new window)">
               Become a member
             </a>
           </li>
           <li>
-            <a href="https://matrix.to/#/#lmu-open-science-center:matrix.lmu.de" target="_blank" class="text-white text-decoration-underline" aria-label="Chat with us on Matrix (opens in new window)">
+            <a href="https://matrix.to/#/#lmu-open-science-center:matrix.lmu.de" class="text-decoration-underline" aria-label="Chat with us on Matrix (opens in new window)">
               Chat with us on Matrix
             </a>
           </li>
@@ -2150,31 +2136,29 @@ F-statistic: 3.45e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 
       <div class="col-12 col-md-6 col-lg-3 d-flex align-items-start gap-3 osc-footer-socials">
-        <a href="https://github.com/lmu-osc" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on GitHub (opens in new window)">
+        <a href="https://github.com/lmu-osc" class="fs-3" aria-label="LMU Open Science Center on GitHub (opens in new window)">
           <i class="bi bi-github"></i>
         </a>
-        <a href="https://www.linkedin.com/company/lmu-open-science-center/" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on LinkedIn (opens in new window)">
+        <a href="https://www.linkedin.com/company/lmu-open-science-center/" class="fs-3" aria-label="LMU Open Science Center on LinkedIn (opens in new window)">
           <i class="bi bi-linkedin"></i>
         </a>
-        <a href="https://bsky.app/profile/lmu-osc.bsky.social" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on Bluesky (opens in new window)">
+        <a href="https://bsky.app/profile/lmu-osc.bsky.social" class="fs-3" aria-label="LMU Open Science Center on Bluesky (opens in new window)">
           <i class="bi bi-bluesky"></i>
         </a>
-        <a href="https://scicomm.xyz/@lmu_osc" target="_blank" class="text-white fs-3" aria-label="LMU Open Science Center on Mastodon (opens in new window)">
+        <a href="https://scicomm.xyz/@lmu_osc" class="fs-3" aria-label="LMU Open Science Center on Mastodon (opens in new window)">
           <i class="bi bi-mastodon"></i>
         </a>
       </div>
-
     </div>
 
-    <hr class="my-4 border-light">
+    <hr class="my-4">
 <div class="d-flex flex-wrap gap-3 small">
-      <a href="./footer/imprint.html" class="text-white text-decoration-underline">Imprint</a>
+      <a href="./footer/imprint.html" class="text-decoration-underline">Imprint</a>
       <span aria-hidden="true">|</span>
-      <a href="./footer/privacy.html" class="text-white text-decoration-underline">Privacy Policy</a>
+      <a href="./footer/privacy.html" class="text-decoration-underline">Privacy Policy</a>
       <span aria-hidden="true">|</span>
-      <a href="./footer/accessibilty.html" class="text-white text-decoration-underline">Accessibility</a>
+      <a href="./footer/accessibilty.html" class="text-decoration-underline">Accessibility</a>
     </div>
-
   </div>
 </footer>
 
