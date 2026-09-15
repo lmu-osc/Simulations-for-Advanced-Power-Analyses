@@ -46,7 +46,7 @@ website:
           - optimizing-code.qmd
           - how-many-iterations.qmd
           - sem-fit-index.qmd
-      - resources.qmd
+      - Resources.qmd
 # End Website
 
 # Begin Includes
