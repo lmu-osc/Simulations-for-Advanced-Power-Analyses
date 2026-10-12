@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Felix Schönbrodt">
 <title>Ch. 4: Linear Mixed Models / Multilevel models – Simulations for Advanced Power Analyses</title>
@@ -77,9 +77,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-3c3f1368ed8db972a012dae01a8e5220.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-97e28f47ad423cfcb72627c3f906fd98.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-3c3f1368ed8db972a012dae01a8e5220.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-b3b05533756b65102542bf1d1302b2e4.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f050b060498074d55717287ea207baa6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-b3b05533756b65102542bf1d1302b2e4.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-086ab9d7f12d77a34f94d2bc5610e28c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -705,28 +705,28 @@ lmerModLmerTest]
 Formula: BDI ~ 1 + time.c + (1 | person_id)
    Data: df_long
 
-REML criterion at convergence: 2723
+REML criterion at convergence: 2711.1
 
 Scaled residuals: 
-    Min      1Q  Median      3Q     Max 
--2.5717 -0.5606 -0.0569  0.5746  3.7703 
+     Min       1Q   Median       3Q      Max 
+-2.30411 -0.58664 -0.00483  0.59305  2.61725 
 
 Random effects:
  Groups    Name        Variance Std.Dev.
- person_id (Intercept) 112.32   10.598  
- Residual               25.62    5.062  
+ person_id (Intercept) 87.30    9.343   
+ Residual              26.61    5.158   
 Number of obs: 400, groups:  person_id, 100
 
 Fixed effects:
             Estimate Std. Error       df t value Pr(&gt;|t|)    
-(Intercept)  17.3353     1.1413 118.7904  15.189  &lt; 2e-16 ***
-time.c       -0.5759     0.1132 299.0000  -5.089 6.39e-07 ***
+(Intercept)  18.1443     1.0292 125.1672  17.629  &lt; 2e-16 ***
+time.c       -0.9690     0.1153 299.0000  -8.402 1.81e-15 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Correlation of Fixed Effects:
        (Intr)
-time.c -0.298</code></pre>
+time.c -0.336</code></pre>
 </div>
 </div>
 <p>Now we put this data generating script into a function and run our power analysis:</p>
@@ -980,21 +980,21 @@ cov(u_{0j}, u_{1j}) = \tau_{01}
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n power_intercept power_time.c power_treatment power_IA
-1   60               1        0.004           0.231    0.300
-2   70               1        0.006           0.265    0.418
-3   80               1        0.004           0.353    0.440
-4   90               1        0.003           0.389    0.494
-5  100               1        0.001           0.466    0.550
-6  110               1        0.003           0.535    0.607
-7  120               1        0.007           0.570    0.701
-8  130               1        0.002           0.585    0.765
-9  140               1        0.004           0.650    0.790
-10 150               1        0.003           0.720    0.843
-11 160               1        0.006           0.751    0.831
-12 170               1        0.002           0.787    0.865
-13 180               1        0.006           0.825    0.889
-14 190               1        0.004           0.841    0.918
-15 200               1        0.005           0.865    0.933</code></pre>
+1   60               1        0.004           0.219    0.306
+2   70               1        0.008           0.254    0.400
+3   80               1        0.005           0.356    0.442
+4   90               1        0.003           0.418    0.497
+5  100               1        0.001           0.467    0.556
+6  110               1        0.003           0.510    0.622
+7  120               1        0.007           0.560    0.703
+8  130               1        0.003           0.604    0.775
+9  140               1        0.004           0.653    0.802
+10 150               1        0.007           0.693    0.847
+11 160               1        0.005           0.748    0.836
+12 170               1        0.002           0.788    0.860
+13 180               1        0.006           0.808    0.891
+14 190               1        0.004           0.828    0.921
+15 200               1        0.006           0.831    0.933</code></pre>
 </div>
 </div>
 <p>You will see a lot of warnings about <code>boundary (singular) fit</code> – you can generally ignore these; they typically occur when one of the random variances is exactly zero; but the fixed effect estimates (which are our focus here) are still valid. You will also see some rare warnings about <code>Model failed to converge with max|grad|</code>. In this case, the optimizer did not converge with the required precision, but typically still is very close. Finally, there are some warnings <code>Model failed to converge with 1 negative eigenvalue</code>. These instances give wrong results. However, if in our thousands of simulations some very few models did not converge, this makes no noticeable difference. If, however, the majority of your models does not converge this is a hint that your simulation has some errors.</p>

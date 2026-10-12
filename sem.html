@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Moritz Fischer">
 <title>Ch. 5: Structural Equation Models – Simulations for Advanced Power Analyses</title>
@@ -77,9 +77,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-3c3f1368ed8db972a012dae01a8e5220.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-97e28f47ad423cfcb72627c3f906fd98.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-3c3f1368ed8db972a012dae01a8e5220.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-b3b05533756b65102542bf1d1302b2e4.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f050b060498074d55717287ea207baa6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-b3b05533756b65102542bf1d1302b2e4.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-086ab9d7f12d77a34f94d2bc5610e28c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -723,13 +723,13 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <span><span class="co">#Let's take a look</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">my_first_simulated_data</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        EP        SP         HP       DP       O1       O2       O3
-1 1.989263 3.0021490 -1.3556260 2.192981 3.212539 3.353291 3.115631
-2 2.326732 2.5706024  3.1063021 2.525773 3.480593 4.033693 3.405816
-3 1.060953 1.1532219 -0.5120161 1.391673 4.377370 3.765038 4.289126
-4 1.453765 2.1714186  2.1605320 1.997266 3.491512 3.541128 3.796533
-5 2.176786 1.8968786  1.1549046 2.028823 3.589466 3.675924 3.395586
-6 1.703305 0.6470024  1.2837688 1.203120 3.313733 2.716696 3.081703</code></pre>
+<pre><code>         EP       SP         HP       DP       O1       O2       O3
+1 1.1930877 1.405542  2.4429999 2.268197 3.483842 3.271501 3.071717
+2 2.0131940 1.253540 -0.6399139 2.060149 3.014356 3.132903 3.366842
+3 1.0792183 2.173161 -0.6177237 1.709842 4.130901 4.491798 4.276932
+4 1.7085670 2.181535 -1.4232780 2.404468 3.735581 3.321632 3.383895
+5 2.7326800 1.973548  3.3110049 1.807597 3.609656 3.050422 3.672270
+6 0.8994883 2.585811  2.6562015 1.941568 3.791020 3.221618 3.586163</code></pre>
 </div>
 </div>
 <p>We could now fit a SEM to this simulated data set and check whether the regression coefficient modelling the association between openness to experience and generalized prejudice is significant at an <span class="math inline">\(\alpha\)</span>-level of .005. We will work with the <code>lavaan</code> package to fit SEMs.</p>
@@ -745,7 +745,7 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <span><span class="co">#display the results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_sem</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lavaan 0.7-2 ended normally after 36 iterations
+<pre><code>lavaan 0.7-2 ended normally after 38 iterations
 
   Estimator                                         ML
   Optimization method                           NLMINB
@@ -755,9 +755,9 @@ O3 TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 
 Model Test User Model:
                                                       
-  Test statistic                                 7.696
+  Test statistic                                11.131
   Degrees of freedom                                13
-  P-value (Chi-square)                           0.863
+  P-value (Chi-square)                           0.600
 
 Parameter Estimates:
 
@@ -769,33 +769,33 @@ Latent Variables:
                            Estimate  Std.Err  z-value  P(&gt;|z|)
   generalized_prejudice =~                                    
     EP                        1.000                           
-    DP                        1.063    0.297    3.577    0.000
-    SP                        1.821    0.497    3.664    0.000
-    HP                        1.019    0.711    1.433    0.152
+    DP                        0.646    0.162    3.989    0.000
+    SP                        0.838    0.216    3.873    0.000
+    HP                        0.988    0.407    2.428    0.015
   openness =~                                                 
     O1                        1.000                           
-    O2                        0.916    0.147    6.236    0.000
-    O3                        1.096    0.140    7.845    0.000
+    O2                        0.871    0.131    6.625    0.000
+    O3                        1.135    0.170    6.685    0.000
 
 Regressions:
                           Estimate  Std.Err  z-value  P(&gt;|z|)
   generalized_prejudice ~                                    
-    openness                -0.473    0.195   -2.427    0.015
+    openness                -0.879    0.234   -3.750    0.000
 
 Variances:
                    Estimate  Std.Err  z-value  P(&gt;|z|)
-   .EP                0.234    0.057    4.106    0.000
-   .DP                0.208    0.055    3.796    0.000
-   .SP                0.194    0.106    1.823    0.068
-   .HP                2.690    0.546    4.932    0.000
-   .O1                0.023    0.012    1.915    0.056
-   .O2                0.089    0.020    4.369    0.000
-   .O3                0.044    0.016    2.726    0.006
-   .generlzd_prjdc    0.117    0.055    2.111    0.035
-    openness          0.128    0.032    4.000    0.000</code></pre>
+   .EP                0.242    0.075    3.220    0.001
+   .DP                0.153    0.040    3.819    0.000
+   .SP                0.296    0.074    3.981    0.000
+   .HP                1.672    0.352    4.757    0.000
+   .O1                0.118    0.029    4.095    0.000
+   .O2                0.042    0.014    2.920    0.003
+   .O3                0.064    0.024    2.706    0.007
+   .generlzd_prjdc    0.166    0.073    2.269    0.023
+    openness          0.187    0.059    3.187    0.001</code></pre>
 </div>
 </div>
-<p>The results show that in this case, the regression coefficient is -0.47 which is significant with p = 0.015. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <code>p_values</code>.</p>
+<p>The results show that in this case, the regression coefficient is -0.88 which is significant with p = 0. But, actually, it is not our primary interest to see whether this particular simulated data set results in a significant regression coefficient. Rather, we want to know how many of a theoretically infinite number of simulations yield a significant p-value of the focal regression coefficient. Thus, as in the previous chapters, we now repeatedly simulate data sets of a certain size (say, 50 observations) from the specified population and store the results of the focal test (here: the p-value of the regression coefficient) in a vector called <code>p_values</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Set seed to make results reproducible</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">21364</span><span class="op">)</span></span>
@@ -826,15 +826,15 @@ Variances:
 <div class="cell-output cell-output-stdout">
 <pre><code>
 FALSE  TRUE 
-  136   363 </code></pre>
+  164   336 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#percentage of significant results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">p_values</span> <span class="op">&lt;</span> <span class="fl">.005</span><span class="op">)</span> <span class="op">/</span> <span class="va">iterations</span> <span class="op">*</span> <span class="fl">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
+<pre><code>[1] 67.2</code></pre>
 </div>
 </div>
-<p>Only NA% of samples with the same size of <span class="math inline">\(n=50\)</span> result in a significant p-value. We conclude that <span class="math inline">\(n=50\)</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
+<p>Only 67.2% of samples with the same size of <span class="math inline">\(n=50\)</span> result in a significant p-value. We conclude that <span class="math inline">\(n=50\)</span> observations seems to be insufficient, as the power with these parameters is lower than 80%.</p>
 </section><section id="sample-size-planning-find-the-necessary-sample-size" class="level2"><h2 class="anchored" data-anchor-id="sample-size-planning-find-the-necessary-sample-size">Sample size planning: Find the necessary sample size</h2>
 <p>But how many observations do we need to find the presumed effect with a power of 80%? Like before, we can now systematically vary certain parameters (e.g., sample size) of our simulation and see how that affects power. We could, for example, vary the sample size in a range from 30 to 200. Running these simulations typically requires quite some computing time.</p>
 <div class="cell">
