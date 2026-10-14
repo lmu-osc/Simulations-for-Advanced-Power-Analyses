@@ -38,7 +38,7 @@ Please note that the predictions used as examples in this chapter are not necess
 
 ## Let's get some real data as starting point
 
-Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let's assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al. ([2016](https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated)) and the corresponding data set which has been made accessible as part of the `MPsychoR` package. Let's take a look at this data set.
+Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let's assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by @bergh2016 and the corresponding data set which has been made accessible as part of the `MPsychoR` package. Let's take a look at this data set.
 
 
 ```{r load data, message=FALSE}
@@ -67,7 +67,7 @@ To get an impression of this data, we look at the correlations of the variables 
 cor(cbind(EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 ```
 
-As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by Bergh et al. (2016). We start by calculating the means of the  variables, rounding them generously, and storing them in a vector called `means_vector`. 
+As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by @bergh2016. We start by calculating the means of the  variables, rounding them generously, and storing them in a vector called `means_vector`.
 
 ```{r mean vector SEM}
 #store means
@@ -86,7 +86,7 @@ means_vector <- c(
 means_vector
 ```
 
-We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the Bergh et al. data as well. There are two ways to do this. First, we can use the `cov` function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal and the covariances in the remaining cells. 
+We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the @bergh2016 data as well. There are two ways to do this. First, we can use the `cov` function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal and the covariances in the remaining cells.
 
 ```{r cov matrix SEM}
 #store covariances
@@ -260,7 +260,7 @@ In the following two sub-paragraphs, we would like to present two alternatives a
 
 In our opening example in this chapter, we used the `rmvnorm` function from the `Rfast`package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the `lavaan` package, that is, the `simulateData()` function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data. 
 
-More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al. (2016). Let's again take a look at the results of our SEM when applying it to this data set.
+More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by @bergh2016. Let's again take a look at the results of our SEM when applying it to this data set.
 
 ```{r fit Bergh}
 #fit the SEM to the pilot data set
@@ -361,13 +361,13 @@ Here, we conclude that approx. 55 participants would be needed to achieve 80% po
 
 ::: {.callout-tip}
 
-Wang and Rhemtulla ([2021](https://doi.org/10.1177/2515245920918253)) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: [https://yilinandrewang.shinyapps.io/pwrSEM/](https://yilinandrewang.shinyapps.io/pwrSEM/). 
+@wang2021 developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: [https://yilinandrewang.shinyapps.io/pwrSEM/](https://yilinandrewang.shinyapps.io/pwrSEM/).
 
 :::
 
 ## A safeguard power approach for SEMs
 
-Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al. (2016) data set as an estimate of the "true" effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., [2014](https://doi.org/10.1177/1745691614528519)), which we have already applied in Chapter 1 ([Linear Model 1: A single dichotomous predictor](lm1.qmd)).
+Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the @bergh2016 data set as an estimate of the "true" effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach [@perugini2014], which we have already applied in Chapter 1 ([Linear Model 1: A single dichotomous predictor](lm1.qmd)).
 
 Basically, all need to do in order to account for variability of observed effect sizes is to calculate a 60%-confidence interval around the point estimate of the observed effect size from our pilot data and to use the more conservative bound of this confidence interval (here: the upper bound) as our new effect size estimate. This can be easily done with the `parameterestimates` function from the `lavaan` package which takes the level of the confidence interval as an input parameter. Let's use this function on our object `fit_bergh` which stores the results of our SEM in the `Bergh` data set.  
 
@@ -450,13 +450,13 @@ This safeguard power analysis yields a required sample size of ca. 63 participan
 
 ::: {.callout-note}
 
-In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by Bergh et al. (2016) were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.
+In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by @bergh2016 were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.
 
 :::
 
 # A simulation-based power analysis for a mediation model with latent variables
 
-Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the Bergh et al. (2016) data set as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:
+Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the @bergh2016 data set as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:
 
 1. find plausible estimates of the population parameters
 2. specify the statistical model
@@ -466,7 +466,7 @@ Sometimes, researchers not only wish to investigate whether and how two (latent)
 6. count how many samples would have detected the specified effect (i.e., compute the statistical power)
 7. vary your simulation parameters until the desired level of power (e.g., 80%) is achieved
 
-We first draw on the Bergh et al. (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding "male" with 0 and "female" with 1. 
+We first draw on the @bergh2016 data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding "male" with 0 and "female" with 1.
 
 ```{r means and cov mediation}
 Bergh_int <- Bergh
@@ -497,7 +497,7 @@ cov_mediation <- cov(cbind(gender, EP, SP, HP, DP, O1, O2, O3)) |> round(2)
 
 ::: {.callout-tip}
 
-If we were  interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al. (2017), which can be accessed via [https://schoemanna.shinyapps.io/mc_power_med/](https://schoemanna.shinyapps.io/mc_power_med/). This app currently enables power analyses for some manifest mediation models: mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, and (iv) three parallel mediators. But as we want to incorporate `generalized prejudice` and `openness to experience` as latent variables, we need to write a simulation-based power analyses ourselves.   
+If we were  interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by @schoemann2017, which can be accessed via [https://schoemanna.shinyapps.io/mc_power_med/](https://schoemanna.shinyapps.io/mc_power_med/). This app currently enables power analyses for some manifest mediation models: mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, and (iv) three parallel mediators. But as we want to incorporate `generalized prejudice` and `openness to experience` as latent variables, we need to write a simulation-based power analyses ourselves.
 
 :::
 
@@ -529,7 +529,7 @@ model_mediation <- '
 '
 ```
 
-To verify that this model syntax works properly, we can fit this model to the data set provided by Bergh et al. (2016).
+To verify that this model syntax works properly, we can fit this model to the data set provided by @bergh2016.
 
 ```{r test mediation model with the pilot data}
 #fit the SEM to the simulated data set
@@ -607,11 +607,5 @@ This shows that roughly 1,300 to 1,400 participants will be needed to obtain suf
 
 # References
 
-Bergh, R., Akrami, N., Sidanius, J., & Sibley, C. G. (2016). Is group membership necessary for understanding generalized prejudice? A re-evaluation of why prejudices are interrelated. Journal of Personality and Social Psychology, 111(3), 367–395. [https://doi.org/10.1037/pspi0000064](https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated)
-
-Perugini, M., Gallucci, M., & Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. <https://doi.org/10.1177/1745691614528519>
-
-Schoemann, A. M., Boulton, A. J., & Short, S. D. (2017). Determining power and sample size for simple and complex mediation models. Social Psychological and Personality Science, 8(4), 379–386. [https://doi.org/10.1177/1948550617715068](https://www.researchgate.net/publication/317631067_Determining_Power_and_Sample_Size_for_Simple_and_Complex_Mediation_Models)
-
-Wang, Y. A., & Rhemtulla, M. (2021). Power analysis for parameter estimation in structural equation modeling: A discussion and tutorial. Advances in Methods and Practices in Psychological Science, 4(1), 1–17. [https://doi.org/10.1177/2515245920918253](https://doi.org/10.1177/2515245920918253)
-
+::: {#refs}
+:::

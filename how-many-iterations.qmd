@@ -66,7 +66,7 @@ for (n in ns) {
 
 result
 ```
-As you can see, the power estimates show some variance, ranging from `r min(result$power)` to `r max(result$power)`. This can be formalized as the **Monte Carlo error (MCE)**, which is define as "the standard deviation of the Monte Carlo estimator, taken across hypothetical repetitions of the simulation" ([Koehler et al., 2009](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3337209/)). With 1000 iterations (and 10 repetitions), this is:
+As you can see, the power estimates show some variance, ranging from `r min(result$power)` to `r max(result$power)`. This can be formalized as the **Monte Carlo error (MCE)**, which is define as "the standard deviation of the Monte Carlo estimator, taken across hypothetical repetitions of the simulation" [@koehler2009]. With 1000 iterations (and 10 repetitions), this is:
 
 ```{r}
 sd(result$power) |> round(4)
@@ -144,3 +144,8 @@ This choice of 3000 iterations does not necessarily generalize to other power si
 :::
 
 In the lower plot, you can also see that the MCE estimate itself is a bit wiggly -- we would expect a smooth curve. It suffers from meta-MCE! We could increase the precision of the MCE estimate by increasing the number of repetitions (currently at 100).
+
+# References
+
+::: {#refs}
+:::
