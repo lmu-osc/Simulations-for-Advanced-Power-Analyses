@@ -82,9 +82,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-b3b05533756b65102542bf1d1302b2e4.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-086ab9d7f12d77a34f94d2bc5610e28c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-29f470653e47eca4888459144373f9ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-086ab9d7f12d77a34f94d2bc5610e28c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-38f81cde6cd64092e69b3824775ff2e2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-53998771347dfff4a341eb68abd81eea.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-38f81cde6cd64092e69b3824775ff2e2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -764,7 +764,7 @@ F-statistic: 13.45 on 1 and 98 DF,  p-value: 0.0003985</code></pre>
 </div>
 </div>
 <p>Here, and in the entire tutorial, we assume an <span class="math inline">\(\alpha\)</span>-level of .005, as this provides more reasonable false positive rates and stronger evidence for new claims (Benjamin et al., <a href="https://doi.org/10.1038/s41562-017-0189-z">2018</a>).</p>
-<p>As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p &gt; .02). But how likely are we to detect an effect with a sample of this size?</p>
+<p>As you can see, in this simulated sample (based on a specific seed), the treatment effect is significant (<em>p</em> &lt; .0004). But how likely are we to detect an effect with a sample of this size?</p>
 <section id="doing-the-power-analysis" class="level2"><h2 class="anchored" data-anchor-id="doing-the-power-analysis">Doing the power analysis</h2>
 <p>Now we need to repeatedly draw many samples and see how many of the analyses would have detected the existing effect. To do this, we put the code from above into a function called <code>sim</code>. We coded the function to either return the focal p-value (as default) or to print a model summary (helpful for debugging and testing the function). This function takes two parameters:</p>
 <ul>
@@ -1777,7 +1777,7 @@ To explore how many Monte Carlo iterations are necessary to get stable computati
 <span id="cb35-248"><a href="#cb35-248" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-249"><a href="#cb35-249" aria-hidden="true" tabindex="-1"></a>Here, and in the entire tutorial, we assume an $\alpha$-level of .005, as this provides more reasonable false positive rates and stronger evidence for new claims (Benjamin et al., <span class="co">[</span><span class="ot">2018</span><span class="co">](https://doi.org/10.1038/s41562-017-0189-z)</span>).</span>
 <span id="cb35-250"><a href="#cb35-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-251"><a href="#cb35-251" aria-hidden="true" tabindex="-1"></a>As you can see, in this simulated sample (based on a specific seed), the treatment effect is not significant (p <span class="sc">\&gt;</span> .02). But how likely are we to detect an effect with a sample of this size?</span>
+<span id="cb35-251"><a href="#cb35-251" aria-hidden="true" tabindex="-1"></a>As you can see, in this simulated sample (based on a specific seed), the treatment effect is significant (*p* &lt; .0004). But how likely are we to detect an effect with a sample of this size?</span>
 <span id="cb35-252"><a href="#cb35-252" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-253"><a href="#cb35-253" aria-hidden="true" tabindex="-1"></a><span class="fu">## Doing the power analysis</span></span>
 <span id="cb35-254"><a href="#cb35-254" aria-hidden="true" tabindex="-1"></a></span>
