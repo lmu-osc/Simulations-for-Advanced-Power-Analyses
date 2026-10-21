@@ -226,7 +226,7 @@ Let's assume that we collected and analyzed this specific sample -- what would h
 summary(lm(BDI ~ treatment, data = df))
 ```
 
-Here, and in the entire tutorial, we assume an $\alpha$-level of .005, as this provides more reasonable false positive rates and stronger evidence for new claims (Benjamin et al., [2018](https://doi.org/10.1038/s41562-017-0189-z)).
+Here, and in the entire tutorial, we assume an $\alpha$-level of .005, as this provides more reasonable false positive rates and stronger evidence for new claims [@benjamin2018].
 
 As you can see, in this simulated sample (based on a specific seed), the treatment effect is significant (*p* < .0004). But how likely are we to detect an effect with a sample of this size?
 
@@ -331,13 +331,13 @@ Exactly the same result -- phew 😅
 
 # Sensitivity analyses
 
-Be aware that "pilot studies are next to worthless to estimate effect sizes" (see Brysbaert, [2019](http://doi.org/10.5334/joc.72), which has a section with that title). When we entered the specific numbers into our equations, we used point estimates from a relatively small pilot sample. As there is considerable uncertainty around these estimates, the true population value could be much smaller or larger. Furthermore, if the very reason for running a study is a significant (exploratory) finding in a small pilot study, your effect size estimate is probably upward biased (because you would have ignored the pilot study if there hadn't been a significant result).
+Be aware that "pilot studies are next to worthless to estimate effect sizes" (see @brysbaert2019, which has a section with that title). When we entered the specific numbers into our equations, we used point estimates from a relatively small pilot sample. As there is considerable uncertainty around these estimates, the true population value could be much smaller or larger. Furthermore, if the very reason for running a study is a significant (exploratory) finding in a small pilot study, your effect size estimate is probably upward biased (because you would have ignored the pilot study if there hadn't been a significant result).
 
 So, ideally, we base our power estimation on more reliable and/or more conservative prior information, or on theoretical considerations about the smallest effect size of interest. Therefore, we will explore two other ways to set the effect size: *safeguard power analysis* and the *smallest effect size of interest (SESOI)*.
 
 ## Safeguard power analysis
 
-As sensitivity analysis, we will apply a safeguard power analysis (Perugini et al., [2014](https://doi.org/10.1177/1745691614528519)) that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)
+As sensitivity analysis, we will apply a safeguard power analysis [@perugini2014] that aims for the lower end of a two-sided 60% CI around the parameter of the treatment effect (the intercept is irrelevant). (Of course you can use any other value than 60%, but this is the value (tentatively) mentioned by the inventors of the safeguard power analysis.)
 
 ::: callout-note
 If you assume publication bias, another heuristic for aiming at a more realistic population effect size is the "divide-by-2" heuristic. (see [kickoff presentation](https://osf.io/bzxnj))
@@ -398,9 +398,9 @@ Many methodologists argue that we should not power for the *expected* effect siz
 
 What change of BDI scores is perceived as "clinically important"? The hard part is to find a convincing theoretical or empirical argument for the chosen SESOI. In the case of the BDI, luckily someone else did that work.
 
-The [NICE guidance](https://www.nice.org.uk/guidance/qs8) suggest that a change of \>=3 BDI-II points is clinically important.
+The NICE guidance [@nice2011] suggest that a change of \>=3 BDI-II points is clinically important.
 
-However, as you can expect, things are more complicated. Button et al. ([2015](https://doi.org/10.1017/S0033291715001270)) analyzed data sets where patients have been asked, after a treatment, whether they felt "better", "the same" or "worse". With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms were measurably reduced in the BDI, patients still might answer "feels the same", which indicates that the reduction did not surpass a threshold of subjective relevant improvement. But the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need *more* reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are *higher* than the NICE guidelines, more in the range of -6 BDI points.
+However, as you can expect, things are more complicated. @button2015 analyzed data sets where patients have been asked, after a treatment, whether they felt "better", "the same" or "worse". With these subjective ratings, they could relate changes in BDI-II scores to perceived improvements. Hence, even when depressive symptoms were measurably reduced in the BDI, patients still might answer "feels the same", which indicates that the reduction did not surpass a threshold of subjective relevant improvement. But the minimal clinical importance depends on the baseline severity: For patients to feel notably better, they need *more* reduction of BDI-II scores if they start from a higher level of depressive symptoms. Following from this analysis, typical SESOIs are *higher* than the NICE guidelines, more in the range of -6 BDI points.
 
 For our example, let's use the NICE recommendation of -3 BDI points as a lower threshold for our power analysis (anything larger than that will be covered anyway).
 
@@ -503,10 +503,5 @@ Concerning step 4d, the typical scenario is that you increase sample size until 
 
 # References
 
-Benjamin, D. J. et al. (2018). Redefine statistical significance. Nature Human Behaviour, 2(1), 6--10. <https://doi.org/10.1038/s41562-017-0189-z>
-
-Brysbaert, M. (2019). How many participants do we have to include in properly powered experiments? A tutorial of power analysis with reference tables. Journal of Cognition, 2(1), 16. DOI: <http://doi.org/10.5334/joc.72>
-
-Button, K. S., Kounali, D., Thomas, L., Wiles, N. J., Peters, T. J., Welton, N. J., Ades, A. E., & Lewis, G. (2015). Minimal clinically important difference on the Beck Depression Inventory---II according to the patient's perspective. Psychological Medicine, 45(15), 3269--3279. <https://doi.org/10.1017/S0033291715001270>
-
-Perugini, M., Gallucci, M., & Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. <https://doi.org/10.1177/1745691614528519>
+::: {#refs}
+:::
