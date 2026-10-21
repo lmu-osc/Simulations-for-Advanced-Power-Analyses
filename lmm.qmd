@@ -316,7 +316,7 @@ Let's extrapolate the trend: Treated patients have an average BDI score of 17 (d
 
 As recommended in the last chapter, we visualize this assumed interaction effect by a hand drawing:
 
-![hand-drawn interaction plot](images/bdi-interaction-2.jpg)
+![hand-drawn interaction plot](images/bdi-interaction.jpg)
 
 Looks good!
 
