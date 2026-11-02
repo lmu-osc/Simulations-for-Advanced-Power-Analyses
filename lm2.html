@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.10.20">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Felix Schönbrodt">
 <title>Ch. 2: Linear Model 2: Multiple predictors – Simulations for Advanced Power Analyses</title>
@@ -77,14 +77,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b3b05533756b65102542bf1d1302b2e4.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f050b060498074d55717287ea207baa6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b3b05533756b65102542bf1d1302b2e4.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-47f5fb99abae87aa2c6ae6626d4ea23a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6601c60c13f93198fb48ac96eb2d4be1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-47f5fb99abae87aa2c6ae6626d4ea23a.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-086ab9d7f12d77a34f94d2bc5610e28c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-29f470653e47eca4888459144373f9ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-086ab9d7f12d77a34f94d2bc5610e28c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-979f5be15db9dbe6fa469a13e9456379.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-ef9f7d397fb0b986316238fa4eb973b2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-979f5be15db9dbe6fa469a13e9456379.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -614,8 +614,8 @@ cov_{xy} &amp; var_y
 <span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            BDI_pre BDI_post0
-BDI_pre   1.0000000 0.6119909
-BDI_post0 0.6119909 1.0000000</code></pre>
+BDI_pre   1.0000000 0.6012733
+BDI_post0 0.6012733 1.0000000</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -738,19 +738,19 @@ lm(formula = BDI_post ~ BDI_pre.c + treatment, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--48.955  -7.297  -0.016   7.345  46.413 
+-49.891  -7.330   0.040   7.293  47.824 
 
 Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 23.0580086  0.0484785 475.634   &lt;2e-16 ***
-BDI_pre.c    0.0009784  0.0031765   0.308    0.758    
-treatment   -6.0449436  0.0685593 -88.171   &lt;2e-16 ***
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 23.017818   0.048449 475.098   &lt;2e-16 ***
+BDI_pre.c   -0.002873   0.003166  -0.907    0.364    
+treatment   -5.970899   0.068517 -87.145   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 10.84 on 99997 degrees of freedom
-Multiple R-squared:  0.07214,   Adjusted R-squared:  0.07212 
-F-statistic:  3887 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 10.83 on 99997 degrees of freedom
+Multiple R-squared:  0.0706,    Adjusted R-squared:  0.07058 
+F-statistic:  3798 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># with pre_post_cor, the residual error should be reduced</span></span>
 <span><span class="fu">sim2</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100000</span>, pre_post_cor <span class="op">=</span> <span class="fl">0.6</span>, print <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -761,19 +761,19 @@ lm(formula = BDI_post ~ BDI_pre.c + treatment, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--35.793  -5.849  -0.009   5.838  39.935 
+-39.046  -5.787  -0.045   5.816  35.368 
 
 Coefficients:
              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 23.031485   0.038662   595.7   &lt;2e-16 ***
-BDI_pre.c    0.596819   0.002518   237.0   &lt;2e-16 ***
-treatment   -6.001914   0.054677  -109.8   &lt;2e-16 ***
+(Intercept) 23.100716   0.038603   598.4   &lt;2e-16 ***
+BDI_pre.c    0.600826   0.002521   238.4   &lt;2e-16 ***
+treatment   -6.085188   0.054593  -111.5   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 8.645 on 99997 degrees of freedom
-Multiple R-squared:  0.4052,    Adjusted R-squared:  0.4051 
-F-statistic: 3.405e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 8.632 on 99997 degrees of freedom
+Multiple R-squared:  0.4086,    Adjusted R-squared:  0.4086 
+F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>Indeed, with <code>pre_post_cor = 0</code> the parameter estimates are identical, and with non-zero pre-post-correlation, the error term gets reduced.</p>
@@ -826,16 +826,16 @@ F-statistic: 3.405e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n  power
-1   90 0.6600
-2  100 0.6985
-3  110 0.7855
-4  120 0.8145
-5  130 0.8565
-6  140 0.8900
-7  150 0.9105
-8  160 0.9380
-9  170 0.9435
-10 180 0.9615</code></pre>
+1   90 0.6565
+2  100 0.7195
+3  110 0.7630
+4  120 0.8160
+5  130 0.8520
+6  140 0.8955
+7  150 0.9235
+8  160 0.9330
+9  170 0.9450
+10 180 0.9675</code></pre>
 </div>
 </div>
 <p>In the original analysis, we needed <span class="math inline">\(n=180\)</span> (90 in each group) for 80% power. Including the baseline covariate (which explains <span class="math inline">\(r^2 = .6^2 = 36\%\)</span> of the variance in post scores) reduces that number to around <span class="math inline">\(n=115\)</span>.</p>
@@ -1042,22 +1042,22 @@ F-statistic: 3.405e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n power_treatment power_interaction
-1  100           0.723             0.065
-2  120           0.805             0.070
-3  140           0.897             0.079
-4  160           0.933             0.086
-5  180           0.962             0.118
-6  200           0.976             0.140
-7  220           0.986             0.162
-8  240           0.993             0.181
-9  260           0.998             0.196
-10 280           0.999             0.232
-11 300           1.000             0.261
-12 320           1.000             0.262
-13 340           1.000             0.286
-14 360           1.000             0.326
-15 380           1.000             0.336
-16 400           1.000             0.388</code></pre>
+1  100           0.729             0.057
+2  120           0.815             0.068
+3  140           0.906             0.080
+4  160           0.948             0.105
+5  180           0.961             0.111
+6  200           0.983             0.156
+7  220           0.995             0.164
+8  240           0.992             0.204
+9  260           0.995             0.195
+10 280           0.998             0.233
+11 300           1.000             0.239
+12 320           1.000             0.295
+13 340           0.999             0.298
+14 360           1.000             0.332
+15 380           1.000             0.360
+16 400           1.000             0.356</code></pre>
 </div>
 </div>
 <p>While the power for detecting the main effect quickly approaches 100%, even 400 participants are by far not enough to detect the interaction effect reliably. (In particular when you recall that we set the assumed interaction effect to the largest plausible value).</p>
