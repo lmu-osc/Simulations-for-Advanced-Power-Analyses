@@ -32,7 +32,7 @@ This data set compares the effects of two interventions for depression, that is 
 Unfortunately, this data set does not include any dichotomous variable we could use as an outcome measure. Therefore, we simply dichotomize one of the continuous outcome variables to create a categorical outcome artificially. More specifically, we will dichotomize the `bdi.2m` variable which contains a follow-up depression measure (i.e., the Beck Depression Inventory score) two months after the intervention.
 
 ::: callout-note
-Please note that we dichotomize this variable for didactic reasons only. From a statistical point of view, it is preferable to treat a continuous variable as such because dichotomizing leads to a loss of statistical information (Royston et al., 2006).
+Please note that we dichotomize this variable for didactic reasons only. From a statistical point of view, it is preferable to treat a continuous variable as such because dichotomizing leads to a loss of statistical information [@royston2006].
 :::
 
 Let's start by dichotomizing the `bdi.2m` variable and storing the result in a new variable which we label `bdi.2m.dicho`. Here, we take 20 as our cut-off value, as BDIs of 20 or more refer to a moderate or severe depression. BDI values lower than 20, in turn, reflect a minimal or mild depression (see [first chapter on linear models](lm1.qmd) for more info). In our new `bdi.2m.dicho` variable, we code minimal/mild depression as "0"  and moderate/severe depression as "1".
@@ -255,7 +255,7 @@ This plot shows that we need approx. 220 participants to achieve 80% under the g
 
 ## Verification with the pwr2ppl package
 
-Luckily, there are also R packages that can perform these kinds of power analyses, for example the `pwr2ppl` package (Aberson, 2019). We can use this package to verify our results. Does the `pwr2ppl` package yield the same result? Note that you will need to install this package if you haven't used it before.
+Luckily, there are also R packages that can perform these kinds of power analyses, for example the `pwr2ppl` package [@aberson2019]. We can use this package to verify our results. Does the `pwr2ppl` package yield the same result? Note that you will need to install this package if you haven't used it before.
 
 ```{r pwr2ppl}
 #install.packages("devtools")
@@ -273,7 +273,7 @@ That's basically the same result, well done!
 
 ## Using a safeguard power approach
 
-Of note, our effect size estimates (i.e, the estimates of the probabilities of not having a moderate/severe depression two months after the `BtheB` or the `TAU` treatment) were so far based on a pilot study. However, this pilot study might not have yielded a precise estimate of these effect sizes. Thus, in order to consider uncertainty in these effect size estimates, it has been suggested to perform a safeguard power analysis (see chapter [first chapter on linear models](lm1.qmd) for more info) instead of a power analysis using the observed effect size. The main idea behind the safeguard power analysis is to compute a 60% confidence interval around the observed effect size and to take the lower bound of this confidence interval as an effect size estimate (see Perugini et al., [2014](https://journals.sagepub.com/doi/10.1177/1745691614528519)). Let's try this here. 
+Of note, our effect size estimates (i.e, the estimates of the probabilities of not having a moderate/severe depression two months after the `BtheB` or the `TAU` treatment) were so far based on a pilot study. However, this pilot study might not have yielded a precise estimate of these effect sizes. Thus, in order to consider uncertainty in these effect size estimates, it has been suggested to perform a safeguard power analysis (see chapter [first chapter on linear models](lm1.qmd) for more info) instead of a power analysis using the observed effect size. The main idea behind the safeguard power analysis is to compute a 60% confidence interval around the observed effect size and to take the lower bound of this confidence interval as an effect size estimate [see @perugini2014]. Let's try this here.
 
 Let's assume that we view the probability of not having a moderate/severe depression after the `TAU` treatment to be probably accurate, but that we want to account for uncertainty in the estimation of the probability of not having a moderate/severe depression after the `BtheB` treatment. We then simply calculate the 60% confidence interval around this effect size. We can use the `BinomCI` function from the `DescTools` package to do this. We need to provide this function with the number of successes (here: 37, see table above) and the number of observations (here: 52, see above).
 
@@ -324,9 +324,5 @@ Here, we get a total sample size of ca. 360 participants in order to ensure 80% 
 
 # References
 
-Aberson, C. L. (2019). Applied power analysis for the behavioral sciences. Routledge.
-
-Perugini, M., Gallucci, M., & Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. [https://journals.sagepub.com/doi/10.1177/1745691614528519](https://journals.sagepub.com/doi/10.1177/1745691614528519)
-
-Royston, P., Altman, D. G., & Sauerbrei, W. (2006). Dichotomizing continuous predictors in multiple regression: A bad idea. Statistics in Medicine, 25(1), 127–141. [https://doi.org/10.1002/sim.2331](https://doi.org/10.1002/sim.2331)
-
+::: {#refs}
+:::

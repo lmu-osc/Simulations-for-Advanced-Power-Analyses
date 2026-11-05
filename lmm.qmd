@@ -105,11 +105,11 @@ For the random intercept variance and the residual variance, we take generously 
 
 ::: {.callout-tip}
 # Default values for ICCs?
-Sometimes the random intercept variance is parametrized via the ICC. Some publications discuss "typical" ICCs (see also Scherbaum & Ferreter, 2008):
+Sometimes the random intercept variance is parametrized via the ICC. Some publications discuss "typical" ICCs [see also @scherbaum2009]:
 
-- „ICC values typically range between .05 and .20“ (Snijders & Bosker, 1999; Bliese, 2000) 
-- „values greater than .30 will be rare“ (Bliese, 2000)
-- „median value of .12; this is likely an overestimate“ (James, 1982)
+- „ICC values typically range between .05 and .20“ [@snijders1999; @bliese2000]
+- „values greater than .30 will be rare“ [@bliese2000]
+- „median value of .12; this is likely an overestimate“ [@james1982]
 - „a value between .10 and .15 will provide a conservative estimate of the ICC when it cannot be precisely computed“
 
 But there are some research fields where ICCs > 30% are not uncommon -- as you can see in our own pilot data, where the ICC was 79%! Again, defaults based on "typical values in the literature" might be better than blind guessing, but nothing beats domain knowledge.
@@ -245,7 +245,7 @@ Hence, we need around 36 persons to achieve a power of 80% to detect this slope.
 
 ## Comparison with other approaches
 
-Murayama and colleagues (2022) recently released an approximate but easy approach for LMM power analysis based on pilot data.
+@murayama2022 recently released an approximate but easy approach for LMM power analysis based on pilot data.
 They also provide an interactive [Shiny app](https://koumurayama.shinyapps.io/summary_statistics_based_power/).
 
 Go to the tab "Level-1 predictor -> Planning L2 sample size only" and enter the values from the pilot study into the fields in the left panel:
@@ -258,7 +258,7 @@ This approximation yields very close values to our simulation:
 
 ![Screenshot from Murayama app](images/lmm-murayama-app-example.png)
 
-Another option is the app "[PowerAnalysisIL](https://github.com/ginettelafit/PowerAnalysisIL)" by Lafit (2021). In that app you would need to choose "Model 4: Effect of a level-1 continuous predictor (fixed slope)" and set "Autocorrelation of level-1 errors" to zero to estimate an equivalent model to ours. This app, however, is much slower than our own simulations and cannot perfectly mirror our model, as the continuous L1 predictor cannot be defined exactly as we need it.
+Another option is the app "[PowerAnalysisIL](https://github.com/ginettelafit/PowerAnalysisIL)" by @lafit2021. In that app you would need to choose "Model 4: Effect of a level-1 continuous predictor (fixed slope)" and set "Autocorrelation of level-1 errors" to zero to estimate an equivalent model to ours. This app, however, is much slower than our own simulations and cannot perfectly mirror our model, as the continuous L1 predictor cannot be defined exactly as we need it.
 
 Nonetheless, the estimates are not far away from ours:
 
@@ -489,4 +489,5 @@ When you plug this simulation function into our power analysis loop, you will ge
 
 ## References
 
-Scherbaum, C. A., & Ferreter, J. M. (2008). Estimating Statistical Power and Required Sample Sizes for Organizational Research Using Multilevel Modeling. Organizational Research Methods, 12(2), 347–367. http://doi.org/10.1177/1094428107308906
+::: {#refs}
+:::

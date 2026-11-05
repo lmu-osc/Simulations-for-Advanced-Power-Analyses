@@ -15,7 +15,7 @@ require(lavaan)
 require(MPsychoR)
 ```
 
-In this chapter, we will turn to simulation-based power analysis for fit indices in the context of SEM. We will build on the model we have introduced in Chapter 5 ([Structural Equation Modelling (SEM)](sem.qmd)), it is therefore recommendable to read this chapter first.  The following chunk specifies this model, in which (latent) generalized prejudice is predicted by (latent) openness to experience (as conceptualized in the big five personality traits). We fit this model to the data set by Bergh et al. (2016) in order to get a first impression of the model fit.
+In this chapter, we will turn to simulation-based power analysis for fit indices in the context of SEM. We will build on the model we have introduced in Chapter 5 ([Structural Equation Modelling (SEM)](sem.qmd)), it is therefore recommendable to read this chapter first.  The following chunk specifies this model, in which (latent) generalized prejudice is predicted by (latent) openness to experience (as conceptualized in the big five personality traits). We fit this model to the data set by @bergh2016 in order to get a first impression of the model fit.
 
 ```{r specify model}
 data("Bergh")
@@ -32,7 +32,7 @@ summary(fit, fit.measures = TRUE)
 
 There are many different fit indices displayed in this output, for example the  Comparative Fit Index (CFI), the Root Mean Square Error of Approximation (RMSEA) and the Standardized Root Mean Square Residual (SRMR). We can not go into the details of the interpretations of the fit indices here, but it is important to know that many of these indices are not very sensitive to sample size. Therefore, running a power analysis for these fit indices is not really meaningful. But instead of analyzing how one of these indices varies as a function of sample size, we can optimize the precision of one of these indices. For example, the `lavaan` output from above displays the 90% confidence interval for the RMSEA index. We could, for example, plan to find a certain sample size that ensures that the confidence interval around the RMSEA estimate has a certain maximum size, that is, the RMSEA estimate is sufficiently precise. This what we will learn to do in this chapter. 
 
-As a starting point, we again define the population parameters (i.e., the means, variances, and co-variances of all measured variables). We use the study by Bergh et al. (2016) to estimate these parameters (just as we did in Chapter 5).
+As a starting point, we again define the population parameters (i.e., the means, variances, and co-variances of all measured variables). We use the study by @bergh2016 to estimate these parameters (just as we did in Chapter 5).
 
 ```{r define population}
 attach(Bergh)
@@ -108,6 +108,9 @@ ggplot(result, aes(x = n, y = power)) +
   geom_hline(yintercept = 0.8, color = "red")
 ```
 
-This analysis suggests that approx. 168 participants are needed to obtain a 90%-confidence interval around the RMSEA coefficient that is not larger than .10 in 80% of the cases. 
+This analysis suggests that approx. 168 participants are needed to obtain a 90%-confidence interval around the RMSEA coefficient that is not larger than .10 in 80% of the cases.
 
+# References
 
+::: {#refs}
+:::
