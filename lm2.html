@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.20">
+<meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Felix Schönbrodt">
 <title>Ch. 2: Linear Model 2: Multiple predictors – Simulations for Advanced Power Analyses</title>
@@ -59,7 +59,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -73,18 +92,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-47f5fb99abae87aa2c6ae6626d4ea23a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6601c60c13f93198fb48ac96eb2d4be1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-47f5fb99abae87aa2c6ae6626d4ea23a.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-47407c29e8f0cbb45854e90f85b31c93.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-29bebc711971320925fa0dba636024dd.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-47407c29e8f0cbb45854e90f85b31c93.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-979f5be15db9dbe6fa469a13e9456379.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-ef9f7d397fb0b986316238fa4eb973b2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-979f5be15db9dbe6fa469a13e9456379.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-f3005ca03597eb881cb5ef1f376f261c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-988e768f3fcf52bc71cffef2a47ca54c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-f3005ca03597eb881cb5ef1f376f261c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -152,7 +172,7 @@ window.Quarto = {
 </script><link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/assets/bootstrap-grid.min.css">
 <link rel="stylesheet" href="footer/footer-style.css">
 </head>
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -175,6 +195,7 @@ window.Quarto = {
       for (let i=0; i < toggles.length; i++) {
         const toggle = toggles[i];
         if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
           if (alternate) {
             toggle.classList.add("alternate");
           } else {
@@ -204,13 +225,19 @@ window.Quarto = {
       manageTransitions('#quarto-margin-sidebar .nav-link', true);
       // Switch the toggles
       setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
       if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
         manageTransitions("body", false);
-        window.scrollTo(0, 1);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
         setTimeout(() => {
-          window.scrollTo(0, 0);
+          window.scrollTo(0, scrollY);
           manageTransitions("body", true);
         }, 40);
       }
@@ -304,6 +331,7 @@ window.Quarto = {
       // Read the current dark / light value
       let toAlternate = !hasAlternateSentinel();
       toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
@@ -317,7 +345,7 @@ window.Quarto = {
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" alt="LMU Open Science Center open book icon" class="navbar-logo light-content"><img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" alt="LMU Open Science Center open book icon" class="navbar-logo dark-content"></a>
@@ -325,7 +353,7 @@ window.Quarto = {
     <span class="navbar-title">Simulations for Advanced Power Analyses</span>
     </a>
   </div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -359,7 +387,7 @@ window.Quarto = {
       </ul>
 </div>
     <a href="https://www.osc.lmu.de/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-house-heart"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="bi"></i></button>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -367,12 +395,12 @@ window.Quarto = {
 </a>
 </div>
       </div> <!-- /container-fluid -->
-    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+    </nav><nav class="quarto-secondary-nav" aria-label="Toolbar"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./lm2.html">Ch. 2: Linear Model 2: Multiple predictors</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./lm2.html">Ch. 2: Linear Model 2: Multiple predictors</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -380,7 +408,7 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Section"><div class="pt-lg-2 mt-2 text-left sidebar-header">
       <a href="./index.html" class="sidebar-logo-link">
       <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-logo.svg" alt="LMU Open Science Center logo" class="sidebar-logo light-content py-0 d-lg-inline d-none"><img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-logo-dark.svg" alt="LMU Open Science Center logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none"></a>
       </div>
@@ -399,13 +427,10 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Models</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Models</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lm1.html" class="sidebar-item-text sidebar-link">
@@ -440,13 +465,10 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Bonuses</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Bonuses</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./optimizing-code.html" class="sidebar-item-text sidebar-link">
@@ -498,7 +520,7 @@ window.Quarto = {
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/lm2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/lm2.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./lm2.html">Ch. 2: Linear Model 2: Multiple predictors</a></li></ol></nav><div class="quarto-title">
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./lm2.html">Ch. 2: Linear Model 2: Multiple predictors</a></li></ol></nav><div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Ch. 2: Linear Model 2: Multiple predictors</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
@@ -541,7 +563,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>As a side-note: Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate model (see, for example, Senn, <a href="http://misc.biblio.s3.amazonaws.com/Senn06Change+from+baseline+and+analysis+of+covariance.pdf">2006</a> or Wan, <a href="https://doi.org/10.1186/s12874-021-01323-9">2021</a>).</p>
+<p>As a side-note: Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate model <span class="citation" data-cites="senn2006 wan2021">(see, for example, <a href="#ref-senn2006" role="doc-biblioref">Senn 2006</a>; <a href="#ref-wan2021" role="doc-biblioref">Wan 2021</a>)</span>.</p>
 </div>
 </div>
 <p>The raw effect size stays the same – the treatment still is expected to lead to a 6-point decrease in depression scores on average. But we expect that the residual (i.e., unexplained) variance in the model decreases by controlling for pre-treatment differences between participants. But how much will the residual variance be reduced? This depends on the pre-post-correlation.</p>
@@ -839,7 +861,7 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>In the original analysis, we needed <span class="math inline">\(n=180\)</span> (90 in each group) for 80% power. Including the baseline covariate (which explains <span class="math inline">\(r^2 = .6^2 = 36\%\)</span> of the variance in post scores) reduces that number to around <span class="math inline">\(n=115\)</span>.</p>
-<p>Let’s check the plausibility of our power simulation. Borm et al.&nbsp;(<a href="http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf">2007</a>, p.&nbsp;1237) propose a simple method on how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:</p>
+<p>Let’s check the plausibility of our power simulation. <span class="citation" data-cites="borm2007">Borm et al. (<a href="#ref-borm2007" role="doc-biblioref">2007, 1237</a>)</span> propose a simple method on how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:</p>
 <blockquote class="blockquote">
 <p>“We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group.”</p>
 </blockquote>
@@ -1062,29 +1084,75 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>While the power for detecting the main effect quickly approaches 100%, even 400 participants are by far not enough to detect the interaction effect reliably. (In particular when you recall that we set the assumed interaction effect to the largest plausible value).</p>
 </section></section><section id="references" class="level1"><h1>References</h1>
-<p>Hieronymus, F., Lisinski, A., Nilsson, S., &amp; Eriksson, E. (2019). Influence of baseline severity on the effects of SSRIs in depression: An item-based, patient-level post-hoc analysis. The Lancet Psychiatry, 6(9), 745–752. <a href="https://doi.org/10.1016/S2215-0366(19)30216-0">https://doi.org/10.1016/S2215-0366(19)30216-0</a></p>
-<p>Senn, S. (2006). Change from baseline and analysis of covariance revisited. Statistics in Medicine, 25(24), 4334–4344. <a href="http://misc.biblio.s3.amazonaws.com/Senn06Change+from+baseline+and+analysis+of+covariance.pdf">https://doi.org/10.1002/sim.2682</a></p>
-<p>Wan, F. (2021). Statistical analysis of two arm randomized pre-post designs with one post-treatment measurement. BMC Medical Research Methodology, 21(1), 150. <a href="https://doi.org/10.1186/s12874-021-01323-9">https://doi.org/10.1186/s12874-021-01323-9</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-borm2007" class="csl-entry" role="listitem">
+Borm, George F., Jaap Fransen, and Wim A. J. G. Lemmens. 2007. <span>“A Simple Sample Size Formula for Analysis of Covariance in Randomized Clinical Trials.”</span> <em>Journal of Clinical Epidemiology</em> 60 (12): 1234–38. <a href="https://doi.org/10.1016/j.jclinepi.2007.02.006">https://doi.org/10.1016/j.jclinepi.2007.02.006</a>.
+</div>
+<div id="ref-hieronymus2019" class="csl-entry" role="listitem">
+Hieronymus, Fredrik, Alexander Lisinski, Staffan Nilsson, and Elias Eriksson. 2019. <span>“Influence of Baseline Severity on the Effects of <span>SSRIs</span> in Depression: An Item-Based, Patient-Level Post-Hoc Analysis.”</span> <em>The Lancet Psychiatry</em> 6 (9): 745–52. <a href="https://doi.org/10.1016/s2215-0366(19)30216-0">https://doi.org/10.1016/s2215-0366(19)30216-0</a>.
+</div>
+<div id="ref-senn2006" class="csl-entry" role="listitem">
+Senn, Stephen. 2006. <span>“Change from Baseline and Analysis of Covariance Revisited.”</span> <em>Statistics in Medicine</em> 25 (24): 4334–44. <a href="https://doi.org/10.1002/sim.2682">https://doi.org/10.1002/sim.2682</a>.
+</div>
+<div id="ref-wan2021" class="csl-entry" role="listitem">
+Wan, Fei. 2021. <span>“Statistical Analysis of Two Arm Randomized Pre-Post Designs with One Post-Treatment Measurement.”</span> <em>BMC Medical Research Methodology</em> 21 (1). <a href="https://doi.org/10.1186/s12874-021-01323-9">https://doi.org/10.1186/s12874-021-01323-9</a>.
+</div>
+</div>
 
 
 <!-- -->
 
 </section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 <ol>
-<li id="fn1"><p>Although this might be due to a floor effect of the measurement instrument: If a questionnaire item is already at the lowest possible value at mild depression, there is no more room for improvement (Hieronymus et al., <a href="https://doi.org/10.1016/S2215-0366(19)30216-0">2019</a>).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Although this might be due to a floor effect of the measurement instrument: If a questionnaire item is already at the lowest possible value at mild depression, there is no more room for improvement <span class="citation" data-cites="hieronymus2019">(<a href="#ref-hieronymus2019" role="doc-biblioref">Hieronymus et al. 2019</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></div></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
     if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "Toggle dark mode");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
       const i = window.document.createElement("i");
       i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "Toggle dark mode");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
     }
     setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
@@ -1210,11 +1278,30 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp("https:\/\/lmu-osc\.github\.io\/Simulations-for-Advanced-Power-Analyses\/");
+      const newWindowLabel = "(opens in a new tab)";
+      const newWindowNoteId = "quarto-ext-newwindow-label";
+      // Links reference one hidden label through aria-describedby, so the
+      // announcement never changes their accessible name.
+      var describeNewWindow = (link) => {
+        if (!window.document.getElementById(newWindowNoteId)) {
+          var newWindowNote = window.document.createElement("span");
+          newWindowNote.id = newWindowNoteId;
+          newWindowNote.hidden = true;
+          newWindowNote.textContent = newWindowLabel;
+          window.document.body.appendChild(newWindowNote);
+        }
+        var describedBy = (link.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+        if (!describedBy.includes(newWindowNoteId)) {
+          describedBy.push(newWindowNoteId);
+          link.setAttribute("aria-describedby", describedBy.join(" "));
+        }
+      }
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -1228,10 +1315,72 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
             if (link.getAttribute("rel") === null) {
               link.setAttribute("rel", "noopener");
             }
+            describeNewWindow(link);
+          if (!link.classList.contains('no-external-icon')) {
             // default icon
             link.classList.add("external");
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -1245,6 +1394,7 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1407,44 +1557,54 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1542,7 +1702,9 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
       }
     }
   });
-  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+  </script><script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script><nav class="page-navigation" aria-label="Page"><div class="nav-page nav-page-previous">
       <a href="./lm1.html" class="pagination-link" aria-label="Ch. 1: Linear Model 1: A single dichotomous predictor">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ch. 1: Linear Model 1: A single dichotomous predictor</span>
       </a>          
@@ -1577,7 +1739,7 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>We can improve our causal inference by including the pre-treatment baseline scores of depression into the model: This way, participants are "their own control group", and we can explain a lot of (formerly) unexplained error variance by controlling for this between-person variance.</span>
 <span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>As a side-note: Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate model (see, for example, Senn, <span class="co">[</span><span class="ot">2006</span><span class="co">](http://misc.biblio.s3.amazonaws.com/Senn06Change+from+baseline+and+analysis+of+covariance.pdf)</span> or Wan, <span class="co">[</span><span class="ot">2021</span><span class="co">](https://doi.org/10.1186/s12874-021-01323-9)</span>).</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>As a side-note: Many statistical models have been proposed for analyzing a pre-post control-treatment design. There is growing consensus that a model with the baseline (pre) measurement as covariate is the most appropriate model <span class="co">[</span><span class="ot">see, for example, @senn2006; @wan2021</span><span class="co">]</span>.</span>
 <span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>The raw effect size stays the same -- the treatment still is expected to lead to a 6-point decrease in depression scores on average. But we expect that the residual (i.e., unexplained) variance in the model decreases by controlling for pre-treatment differences between participants. But how much will the residual variance be reduced? This depends on the pre-post-correlation.</span>
@@ -1819,7 +1981,7 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb21-272"><a href="#cb21-272" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-273"><a href="#cb21-273" aria-hidden="true" tabindex="-1"></a>In the original analysis, we needed $n=180$ (90 in each group) for 80% power. Including the baseline covariate (which explains $r^2 = .6^2 = 36\%$ of the variance in post scores) reduces that number to around $n=115$.</span>
 <span id="cb21-274"><a href="#cb21-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-275"><a href="#cb21-275" aria-hidden="true" tabindex="-1"></a>Let's check the plausibility of our power simulation. Borm et al. (<span class="co">[</span><span class="ot">2007</span><span class="co">](http://www.math.chalmers.se/Stat/Grundutb/GU/MSA620/S18/Ancova.pdf)</span>, p. 1237) propose a simple method on how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:</span>
+<span id="cb21-275"><a href="#cb21-275" aria-hidden="true" tabindex="-1"></a>Let's check the plausibility of our power simulation. @borm2007 <span class="co">[</span><span class="ot">p. 1237</span><span class="co">]</span> propose a simple method on how to arrive at a planned sample size when switching from a simple t-test (comparing post-treatment groups) to a model that controls for the baseline:</span>
 <span id="cb21-276"><a href="#cb21-276" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-277"><a href="#cb21-277" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; "We propose a simple method for the sample size calculation when ANCOVA is used: multiply the number of subjects required for the t-test by (1-r^2) and add one extra subject per group."</span></span>
 <span id="cb21-278"><a href="#cb21-278" aria-hidden="true" tabindex="-1"></a></span>
@@ -1830,7 +1992,7 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb21-283"><a href="#cb21-283" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-284"><a href="#cb21-284" aria-hidden="true" tabindex="-1"></a>We now include the interaction between the baseline score $\text{BDI}_{pre}$ and the $\text{treatment}$ factor. Such an interaction would suggest that the treatment is more effective at a certain baseline severity. There is some evidence that depression treatment works better at higher baseline severity, compared to lower baseline severity<span class="ot">[^1]</span>.</span>
 <span id="cb21-285"><a href="#cb21-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-286"><a href="#cb21-286" aria-hidden="true" tabindex="-1"></a><span class="ot">[^1]: </span>Although this might be due to a floor effect of the measurement instrument: If a questionnaire item is already at the lowest possible value at mild depression, there is no more room for improvement (Hieronymus et al., <span class="co">[</span><span class="ot">2019</span><span class="co">]</span>(https://doi.org/10.1016/S2215-0366(19)30216-0)).</span>
+<span id="cb21-286"><a href="#cb21-286" aria-hidden="true" tabindex="-1"></a><span class="ot">[^1]: </span>Although this might be due to a floor effect of the measurement instrument: If a questionnaire item is already at the lowest possible value at mild depression, there is no more room for improvement <span class="co">[</span><span class="ot">@hieronymus2019</span><span class="co">]</span>.</span>
 <span id="cb21-287"><a href="#cb21-287" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-288"><a href="#cb21-288" aria-hidden="true" tabindex="-1"></a>To this end, we add the interaction term to the equation. We use the centered baseline value $\text{BDI}_{pre.c}$ for better interpretability:</span>
 <span id="cb21-289"><a href="#cb21-289" aria-hidden="true" tabindex="-1"></a></span>
@@ -2060,12 +2222,8 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb21-515"><a href="#cb21-515" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-516"><a href="#cb21-516" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
 <span id="cb21-517"><a href="#cb21-517" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-518"><a href="#cb21-518" aria-hidden="true" tabindex="-1"></a>Hieronymus, F., Lisinski, A., Nilsson, S., &amp; Eriksson, E. (2019). Influence of baseline severity on the effects of SSRIs in depression: An item-based, patient-level post-hoc analysis. The Lancet Psychiatry, 6(9), 745–752. <span class="co">[</span><span class="ot">https://doi.org/10.1016/S2215-0366(19)30216-0</span><span class="co">]</span>(https://doi.org/10.1016/S2215-0366(19)30216-0)</span>
-<span id="cb21-519"><a href="#cb21-519" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-520"><a href="#cb21-520" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-521"><a href="#cb21-521" aria-hidden="true" tabindex="-1"></a>Senn, S. (2006). Change from baseline and analysis of covariance revisited. Statistics in Medicine, 25(24), 4334–4344. <span class="co">[</span><span class="ot">https://doi.org/10.1002/sim.2682</span><span class="co">](http://misc.biblio.s3.amazonaws.com/Senn06Change+from+baseline+and+analysis+of+covariance.pdf)</span></span>
-<span id="cb21-522"><a href="#cb21-522" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-523"><a href="#cb21-523" aria-hidden="true" tabindex="-1"></a>Wan, F. (2021). Statistical analysis of two arm randomized pre-post designs with one post-treatment measurement. BMC Medical Research Methodology, 21(1), 150. <span class="co">[</span><span class="ot">https://doi.org/10.1186/s12874-021-01323-9</span><span class="co">](https://doi.org/10.1186/s12874-021-01323-9)</span></span>
+<span id="cb21-518"><a href="#cb21-518" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
+<span id="cb21-519"><a href="#cb21-519" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

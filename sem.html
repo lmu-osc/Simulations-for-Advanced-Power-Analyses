@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.20">
+<meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Moritz Fischer">
 <title>Ch. 5: Structural Equation Models – Simulations for Advanced Power Analyses</title>
@@ -59,7 +59,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -73,18 +92,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-47f5fb99abae87aa2c6ae6626d4ea23a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6601c60c13f93198fb48ac96eb2d4be1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-47f5fb99abae87aa2c6ae6626d4ea23a.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-47407c29e8f0cbb45854e90f85b31c93.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-29bebc711971320925fa0dba636024dd.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-47407c29e8f0cbb45854e90f85b31c93.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-979f5be15db9dbe6fa469a13e9456379.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-ef9f7d397fb0b986316238fa4eb973b2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-979f5be15db9dbe6fa469a13e9456379.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-f3005ca03597eb881cb5ef1f376f261c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-988e768f3fcf52bc71cffef2a47ca54c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-f3005ca03597eb881cb5ef1f376f261c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -152,7 +172,7 @@ window.Quarto = {
 </script><link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/assets/bootstrap-grid.min.css">
 <link rel="stylesheet" href="footer/footer-style.css">
 </head>
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -175,6 +195,7 @@ window.Quarto = {
       for (let i=0; i < toggles.length; i++) {
         const toggle = toggles[i];
         if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
           if (alternate) {
             toggle.classList.add("alternate");
           } else {
@@ -204,13 +225,19 @@ window.Quarto = {
       manageTransitions('#quarto-margin-sidebar .nav-link', true);
       // Switch the toggles
       setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
       if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
         manageTransitions("body", false);
-        window.scrollTo(0, 1);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
         setTimeout(() => {
-          window.scrollTo(0, 0);
+          window.scrollTo(0, scrollY);
           manageTransitions("body", true);
         }, 40);
       }
@@ -304,6 +331,7 @@ window.Quarto = {
       // Read the current dark / light value
       let toAlternate = !hasAlternateSentinel();
       toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
@@ -317,7 +345,7 @@ window.Quarto = {
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" alt="LMU Open Science Center open book icon" class="navbar-logo light-content"><img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" alt="LMU Open Science Center open book icon" class="navbar-logo dark-content"></a>
@@ -325,7 +353,7 @@ window.Quarto = {
     <span class="navbar-title">Simulations for Advanced Power Analyses</span>
     </a>
   </div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -359,7 +387,7 @@ window.Quarto = {
       </ul>
 </div>
     <a href="https://www.osc.lmu.de/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-house-heart"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="bi"></i></button>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -367,12 +395,12 @@ window.Quarto = {
 </a>
 </div>
       </div> <!-- /container-fluid -->
-    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+    </nav><nav class="quarto-secondary-nav" aria-label="Toolbar"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./sem.html">Ch. 5: Structural Equation Models</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./sem.html">Ch. 5: Structural Equation Models</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -380,7 +408,7 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Section"><div class="pt-lg-2 mt-2 text-left sidebar-header">
       <a href="./index.html" class="sidebar-logo-link">
       <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-logo.svg" alt="LMU Open Science Center logo" class="sidebar-logo light-content py-0 d-lg-inline d-none"><img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-logo-dark.svg" alt="LMU Open Science Center logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none"></a>
       </div>
@@ -399,13 +427,10 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Models</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Models</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lm1.html" class="sidebar-item-text sidebar-link">
@@ -440,13 +465,10 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Bonuses</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Bonuses</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./optimizing-code.html" class="sidebar-item-text sidebar-link">
@@ -493,7 +515,7 @@ window.Quarto = {
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/sem.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/sem.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./sem.html">Ch. 5: Structural Equation Models</a></li></ol></nav><div class="quarto-title">
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lm1.html">Models</a></li><li class="breadcrumb-item"><a href="./sem.html">Ch. 5: Structural Equation Models</a></li></ol></nav><div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Ch. 5: Structural Equation Models</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
@@ -558,7 +580,7 @@ Note
 </div>
 </div>
 <section id="lets-get-some-real-data-as-starting-point" class="level2"><h2 class="anchored" data-anchor-id="lets-get-some-real-data-as-starting-point">Let’s get some real data as starting point</h2>
-<p>Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let’s assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al.&nbsp;(<a href="https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated">2016</a>) and the corresponding data set which has been made accessible as part of the <code>MPsychoR</code> package. Let’s take a look at this data set.</p>
+<p>Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let’s assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by <span class="citation" data-cites="bergh2016">Bergh et al. (<a href="#ref-bergh2016" role="doc-biblioref">2016</a>)</span> and the corresponding data set which has been made accessible as part of the <code>MPsychoR</code> package. Let’s take a look at this data set.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#install.packages("MPsychoR")</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">MPsychoR</span><span class="op">)</span></span>
@@ -629,7 +651,7 @@ O2 -0.36 -0.31 -0.30 -0.33  0.66  1.00  0.71
 O3 -0.41 -0.33 -0.29 -0.34  0.74  0.71  1.00</code></pre>
 </div>
 </div>
-<p>As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by Bergh et al.&nbsp;(2016). We start by calculating the means of the variables, rounding them generously, and storing them in a vector called <code>means_vector</code>.</p>
+<p>As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by <span class="citation" data-cites="bergh2016">Bergh et al. (<a href="#ref-bergh2016" role="doc-biblioref">2016</a>)</span>. We start by calculating the means of the variables, rounding them generously, and storing them in a vector called <code>means_vector</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#store means</span></span>
 <span><span class="va">means_vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
@@ -649,7 +671,7 @@ O3 -0.41 -0.33 -0.29 -0.34  0.74  0.71  1.00</code></pre>
 <pre><code>[1] 1.99 2.11 1.22 2.06 3.55 3.49 3.61</code></pre>
 </div>
 </div>
-<p>We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the Bergh et al.&nbsp;data as well. There are two ways to do this. First, we can use the <code>cov</code> function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal and the covariances in the remaining cells.</p>
+<p>We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the <span class="citation" data-cites="bergh2016">Bergh et al. (<a href="#ref-bergh2016" role="doc-biblioref">2016</a>)</span> data as well. There are two ways to do this. First, we can use the <code>cov</code> function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal and the covariances in the remaining cells.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#store covariances</span></span>
 <span><span class="va">cov_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">EP</span>, <span class="va">SP</span>, <span class="va">HP</span>, <span class="va">DP</span>, <span class="va">O1</span>, <span class="va">O2</span>, <span class="va">O3</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
@@ -900,7 +922,7 @@ FALSE  TRUE
 <p>In the following two sub-paragraphs, we would like to present two alternatives and/or extensions to this first way of doing a power analysis for a SEM. First, we would like to present an alternative way to simulate data for SEMs, i.e., by using a built-in function in the <code>lavaan</code> package. Second, we would like to show how a “safeguard” approach to power analysis can be used within the context of SEM.</p>
 </section><section id="using-the-lavaan-syntax-to-simulate-data" class="level2"><h2 class="anchored" data-anchor-id="using-the-lavaan-syntax-to-simulate-data">Using the lavaan syntax to simulate data</h2>
 <p>In our opening example in this chapter, we used the <code>rmvnorm</code> function from the <code>Rfast</code>package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the <code>lavaan</code> package, that is, the <code><a href="https://rdrr.io/pkg/lavaan/man/simulateData.html">simulateData()</a></code> function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data.</p>
-<p>More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al.&nbsp;(2016). Let’s again take a look at the results of our SEM when applying it to this data set.</p>
+<p>More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by <span class="citation" data-cites="bergh2016">Bergh et al. (<a href="#ref-bergh2016" role="doc-biblioref">2016</a>)</span>. Let’s again take a look at the results of our SEM when applying it to this data set.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#fit the SEM to the pilot data set</span></span>
 <span><span class="va">fit_bergh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span><span class="va">model_sem</span>, data <span class="op">=</span> <span class="va">Bergh</span><span class="op">)</span></span>
@@ -1077,11 +1099,11 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Wang and Rhemtulla (<a href="https://doi.org/10.1177/2515245920918253">2021</a>) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: <a href="https://yilinandrewang.shinyapps.io/pwrSEM/">https://yilinandrewang.shinyapps.io/pwrSEM/</a>.</p>
+<p><span class="citation" data-cites="wang2021">Wang and Rhemtulla (<a href="#ref-wang2021" role="doc-biblioref">2021</a>)</span> developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: <a href="https://yilinandrewang.shinyapps.io/pwrSEM/">https://yilinandrewang.shinyapps.io/pwrSEM/</a>.</p>
 </div>
 </div>
 </section><section id="a-safeguard-power-approach-for-sems" class="level2"><h2 class="anchored" data-anchor-id="a-safeguard-power-approach-for-sems">A safeguard power approach for SEMs</h2>
-<p>Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al.&nbsp;(2016) data set as an estimate of the “true” effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., <a href="https://doi.org/10.1177/1745691614528519">2014</a>), which we have already applied in Chapter 1 (<a href="./lm1.html">Linear Model 1: A single dichotomous predictor</a>).</p>
+<p>Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the <span class="citation" data-cites="bergh2016">Bergh et al. (<a href="#ref-bergh2016" role="doc-biblioref">2016</a>)</span> data set as an estimate of the “true” effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach <span class="citation" data-cites="perugini2014">(<a href="#ref-perugini2014" role="doc-biblioref">Perugini et al. 2014</a>)</span>, which we have already applied in Chapter 1 (<a href="./lm1.html">Linear Model 1: A single dichotomous predictor</a>).</p>
 <p>Basically, all need to do in order to account for variability of observed effect sizes is to calculate a 60%-confidence interval around the point estimate of the observed effect size from our pilot data and to use the more conservative bound of this confidence interval (here: the upper bound) as our new effect size estimate. This can be easily done with the <code>parameterestimates</code> function from the <code>lavaan</code> package which takes the level of the confidence interval as an input parameter. Let’s use this function on our object <code>fit_bergh</code> which stores the results of our SEM in the <code>Bergh</code> data set.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/parameterEstimates.html">parameterestimates</a></span><span class="op">(</span><span class="va">fit_bergh</span>, level <span class="op">=</span> <span class="fl">.60</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1224,11 +1246,11 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by Bergh et al.&nbsp;(2016) were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.</p>
+<p>In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by <span class="citation" data-cites="bergh2016">Bergh et al. (<a href="#ref-bergh2016" role="doc-biblioref">2016</a>)</span> were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.</p>
 </div>
 </div>
 </section></section><section id="a-simulation-based-power-analysis-for-a-mediation-model-with-latent-variables" class="level1"><h1>A simulation-based power analysis for a mediation model with latent variables</h1>
-<p>Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the Bergh et al.&nbsp;(2016) data set as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:</p>
+<p>Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the <span class="citation" data-cites="bergh2016">Bergh et al. (<a href="#ref-bergh2016" role="doc-biblioref">2016</a>)</span> data set as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:</p>
 <ol type="1">
 <li>find plausible estimates of the population parameters</li>
 <li>specify the statistical model</li>
@@ -1238,7 +1260,7 @@ Note
 <li>count how many samples would have detected the specified effect (i.e., compute the statistical power)</li>
 <li>vary your simulation parameters until the desired level of power (e.g., 80%) is achieved</li>
 </ol>
-<p>We first draw on the Bergh et al.&nbsp;(2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding “male” with 0 and “female” with 1.</p>
+<p>We first draw on the <span class="citation" data-cites="bergh2016">Bergh et al. (<a href="#ref-bergh2016" role="doc-biblioref">2016</a>)</span> data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding “male” with 0 and “female” with 1.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Bergh_int</span> <span class="op">&lt;-</span> <span class="va">Bergh</span></span>
 <span><span class="va">Bergh_int</span><span class="op">$</span><span class="va">gender</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span></span>
@@ -1279,7 +1301,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If we were interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al.&nbsp;(2017), which can be accessed via <a href="https://schoemanna.shinyapps.io/mc_power_med/">https://schoemanna.shinyapps.io/mc_power_med/</a>. This app currently enables power analyses for some manifest mediation models: mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, and (iv) three parallel mediators. But as we want to incorporate <code>generalized prejudice</code> and <code>openness to experience</code> as latent variables, we need to write a simulation-based power analyses ourselves.</p>
+<p>If we were interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by <span class="citation" data-cites="schoemann2017">Schoemann et al. (<a href="#ref-schoemann2017" role="doc-biblioref">2017</a>)</span>, which can be accessed via <a href="https://schoemanna.shinyapps.io/mc_power_med/">https://schoemanna.shinyapps.io/mc_power_med/</a>. This app currently enables power analyses for some manifest mediation models: mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, and (iv) three parallel mediators. But as we want to incorporate <code>generalized prejudice</code> and <code>openness to experience</code> as latent variables, we need to write a simulation-based power analyses ourselves.</p>
 </div>
 </div>
 <p>Now, we specify the statistical mediation model in <code>lavaan</code>.</p>
@@ -1306,7 +1328,7 @@ Tip
 <span><span class="st"></span></span>
 <span><span class="st">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>To verify that this model syntax works properly, we can fit this model to the data set provided by Bergh et al.&nbsp;(2016).</p>
+<p>To verify that this model syntax works properly, we can fit this model to the data set provided by <span class="citation" data-cites="bergh2016">Bergh et al. (<a href="#ref-bergh2016" role="doc-biblioref">2016</a>)</span>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#fit the SEM to the simulated data set</span></span>
 <span><span class="va">fit_mediation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span><span class="va">model_mediation</span>, data <span class="op">=</span> <span class="va">Bergh_int</span><span class="op">)</span></span>
@@ -1448,10 +1470,20 @@ Defined Parameters:
 </div>
 <p>This shows that roughly 1,300 to 1,400 participants will be needed to obtain sufficient power under the assumptions we specified. To achieve a more precise estimate, just increase the number of iterations (and get a cup of coffee while you wait for the results 😅).</p>
 </section><section id="references" class="level1"><h1>References</h1>
-<p>Bergh, R., Akrami, N., Sidanius, J., &amp; Sibley, C. G. (2016). Is group membership necessary for understanding generalized prejudice? A re-evaluation of why prejudices are interrelated. Journal of Personality and Social Psychology, 111(3), 367–395. <a href="https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated">https://doi.org/10.1037/pspi0000064</a></p>
-<p>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319–332. <a href="https://doi.org/10.1177/1745691614528519" class="uri">https://doi.org/10.1177/1745691614528519</a></p>
-<p>Schoemann, A. M., Boulton, A. J., &amp; Short, S. D. (2017). Determining power and sample size for simple and complex mediation models. Social Psychological and Personality Science, 8(4), 379–386. <a href="https://www.researchgate.net/publication/317631067_Determining_Power_and_Sample_Size_for_Simple_and_Complex_Mediation_Models">https://doi.org/10.1177/1948550617715068</a></p>
-<p>Wang, Y. A., &amp; Rhemtulla, M. (2021). Power analysis for parameter estimation in structural equation modeling: A discussion and tutorial. Advances in Methods and Practices in Psychological Science, 4(1), 1–17. <a href="https://doi.org/10.1177/2515245920918253">https://doi.org/10.1177/2515245920918253</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-bergh2016" class="csl-entry" role="listitem">
+Bergh, Robin, Nazar Akrami, Jim Sidanius, and Chris G. Sibley. 2016. <span>“Is Group Membership Necessary for Understanding Generalized Prejudice? A Re-Evaluation of Why Prejudices Are Interrelated.”</span> <em>Journal of Personality and Social Psychology</em> 111 (3): 367–95. <a href="https://doi.org/10.1037/pspi0000064">https://doi.org/10.1037/pspi0000064</a>.
+</div>
+<div id="ref-perugini2014" class="csl-entry" role="listitem">
+Perugini, Marco, Marcello Gallucci, and Giulio Costantini. 2014. <span>“Safeguard Power as a Protection Against Imprecise Power Estimates.”</span> <em>Perspectives on Psychological Science</em> 9 (3): 319–32. <a href="https://doi.org/10.1177/1745691614528519">https://doi.org/10.1177/1745691614528519</a>.
+</div>
+<div id="ref-schoemann2017" class="csl-entry" role="listitem">
+Schoemann, Alexander M., Aaron J. Boulton, and Stephen D. Short. 2017. <span>“Determining Power and Sample Size for Simple and Complex Mediation Models.”</span> <em>Social Psychological and Personality Science</em> 8 (4): 379–86. <a href="https://doi.org/10.1177/1948550617715068">https://doi.org/10.1177/1948550617715068</a>.
+</div>
+<div id="ref-wang2021" class="csl-entry" role="listitem">
+Wang, Y. Andre, and Mijke Rhemtulla. 2021. <span>“Power Analysis for Parameter Estimation in Structural Equation Modeling: A Discussion and Tutorial.”</span> <em>Advances in Methods and Practices in Psychological Science</em> 4 (1). <a href="https://doi.org/10.1177/2515245920918253">https://doi.org/10.1177/2515245920918253</a>.
+</div>
+</div>
 
 
 <!-- -->
@@ -1460,15 +1492,50 @@ Defined Parameters:
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
     if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "Toggle dark mode");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
       const i = window.document.createElement("i");
       i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "Toggle dark mode");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
     }
     setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
@@ -1594,11 +1661,30 @@ Defined Parameters:
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp("https:\/\/lmu-osc\.github\.io\/Simulations-for-Advanced-Power-Analyses\/");
+      const newWindowLabel = "(opens in a new tab)";
+      const newWindowNoteId = "quarto-ext-newwindow-label";
+      // Links reference one hidden label through aria-describedby, so the
+      // announcement never changes their accessible name.
+      var describeNewWindow = (link) => {
+        if (!window.document.getElementById(newWindowNoteId)) {
+          var newWindowNote = window.document.createElement("span");
+          newWindowNote.id = newWindowNoteId;
+          newWindowNote.hidden = true;
+          newWindowNote.textContent = newWindowLabel;
+          window.document.body.appendChild(newWindowNote);
+        }
+        var describedBy = (link.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+        if (!describedBy.includes(newWindowNoteId)) {
+          describedBy.push(newWindowNoteId);
+          link.setAttribute("aria-describedby", describedBy.join(" "));
+        }
+      }
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -1612,10 +1698,72 @@ Defined Parameters:
             if (link.getAttribute("rel") === null) {
               link.setAttribute("rel", "noopener");
             }
+            describeNewWindow(link);
+          if (!link.classList.contains('no-external-icon')) {
             // default icon
             link.classList.add("external");
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -1629,6 +1777,7 @@ Defined Parameters:
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1791,44 +1940,54 @@ Defined Parameters:
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1926,7 +2085,9 @@ Defined Parameters:
       }
     }
   });
-  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+  </script><script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script><nav class="page-navigation" aria-label="Page"><div class="nav-page nav-page-previous">
       <a href="./lmm.html" class="pagination-link" aria-label="Ch. 4: Linear Mixed Models / Multilevel models">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ch. 4: Linear Mixed Models / Multilevel models</span>
       </a>          
@@ -1977,7 +2138,7 @@ Defined Parameters:
 <span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## Let's get some real data as starting point</span></span>
 <span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a>Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let's assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by Bergh et al. (<span class="co">[</span><span class="ot">2016</span><span class="co">](https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated)</span>) and the corresponding data set which has been made accessible as part of the <span class="in">`MPsychoR`</span> package. Let's take a look at this data set.</span>
+<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a>Just like for any other simulation-based power analysis, we first need to come up with plausible estimates of the distribution of the (manifest) variables. For the sake of simplicity, let's assume that there is a published study that measured manifestations of our two latent variables and that the corresponding data set is publicly available. For the purpose of this tutorial, we will draw on a publication by @bergh2016 and the corresponding data set which has been made accessible as part of the <span class="in">`MPsychoR`</span> package. Let's take a look at this data set.</span>
 <span id="cb48-42"><a href="#cb48-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-43"><a href="#cb48-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-44"><a href="#cb48-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{r load data, message=FALSE}</span></span>
@@ -2006,7 +2167,7 @@ Defined Parameters:
 <span id="cb48-67"><a href="#cb48-67" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">cbind</span>(EP, SP, HP, DP, O1, O2, O3)) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span>
 <span id="cb48-68"><a href="#cb48-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb48-69"><a href="#cb48-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-70"><a href="#cb48-70" aria-hidden="true" tabindex="-1"></a>As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by Bergh et al. (2016). We start by calculating the means of the  variables, rounding them generously, and storing them in a vector called <span class="in">`means_vector`</span>. </span>
+<span id="cb48-70"><a href="#cb48-70" aria-hidden="true" tabindex="-1"></a>As we have discussed in the previous chapters, the starting point of every simulation-based power analysis is to specify the population parameters of the variables of interest. In our example, we can estimate the population parameters from the study by @bergh2016. We start by calculating the means of the  variables, rounding them generously, and storing them in a vector called <span class="in">`means_vector`</span>.</span>
 <span id="cb48-71"><a href="#cb48-71" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-72"><a href="#cb48-72" aria-hidden="true" tabindex="-1"></a><span class="in">```{r mean vector SEM}</span></span>
 <span id="cb48-73"><a href="#cb48-73" aria-hidden="true" tabindex="-1"></a><span class="co">#store means</span></span>
@@ -2025,7 +2186,7 @@ Defined Parameters:
 <span id="cb48-86"><a href="#cb48-86" aria-hidden="true" tabindex="-1"></a>means_vector</span>
 <span id="cb48-87"><a href="#cb48-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb48-88"><a href="#cb48-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-89"><a href="#cb48-89" aria-hidden="true" tabindex="-1"></a>We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the Bergh et al. data as well. There are two ways to do this. First, we can use the <span class="in">`cov`</span> function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal and the covariances in the remaining cells. </span>
+<span id="cb48-89"><a href="#cb48-89" aria-hidden="true" tabindex="-1"></a>We also need the variance-covariance matrix of our variables in order to simulate data. Luckily, we can estimate this from the @bergh2016 data as well. There are two ways to do this. First, we can use the <span class="in">`cov`</span> function to obtain the variance-covariance matrix. This matrix incorporates the variance of each variable on the diagonal and the covariances in the remaining cells.</span>
 <span id="cb48-90"><a href="#cb48-90" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-91"><a href="#cb48-91" aria-hidden="true" tabindex="-1"></a><span class="in">```{r cov matrix SEM}</span></span>
 <span id="cb48-92"><a href="#cb48-92" aria-hidden="true" tabindex="-1"></a><span class="co">#store covariances</span></span>
@@ -2199,7 +2360,7 @@ Defined Parameters:
 <span id="cb48-260"><a href="#cb48-260" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-261"><a href="#cb48-261" aria-hidden="true" tabindex="-1"></a>In our opening example in this chapter, we used the <span class="in">`rmvnorm`</span> function from the <span class="in">`Rfast`</span>package to simulate data based on the means of the manifest variables as well as their variance-covariance matrix. An alternative to this procedure is to use a built-in function in the <span class="in">`lavaan`</span> package, that is, the <span class="in">`simulateData()`</span> function. The main idea here is to provide this function with a lavaan model that specifies all relevant population parameters and then to use this function to directly simulate data. </span>
 <span id="cb48-262"><a href="#cb48-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-263"><a href="#cb48-263" aria-hidden="true" tabindex="-1"></a>More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by Bergh et al. (2016). Let's again take a look at the results of our SEM when applying it to this data set.</span>
+<span id="cb48-263"><a href="#cb48-263" aria-hidden="true" tabindex="-1"></a>More specifically, we need to incorporate the factor loadings, regression coefficients and (residual) variances of all latent and manifest variables in the lavaan syntax. As these parameters are hardly ever known without a previous study, we will again draw on the results from the data by @bergh2016. Let's again take a look at the results of our SEM when applying it to this data set.</span>
 <span id="cb48-264"><a href="#cb48-264" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-265"><a href="#cb48-265" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fit Bergh}</span></span>
 <span id="cb48-266"><a href="#cb48-266" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the SEM to the pilot data set</span></span>
@@ -2300,13 +2461,13 @@ Defined Parameters:
 <span id="cb48-361"><a href="#cb48-361" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-362"><a href="#cb48-362" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
 <span id="cb48-363"><a href="#cb48-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-364"><a href="#cb48-364" aria-hidden="true" tabindex="-1"></a>Wang and Rhemtulla (<span class="co">[</span><span class="ot">2021</span><span class="co">](https://doi.org/10.1177/2515245920918253)</span>) developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: <span class="co">[</span><span class="ot">https://yilinandrewang.shinyapps.io/pwrSEM/</span><span class="co">](https://yilinandrewang.shinyapps.io/pwrSEM/)</span>. </span>
+<span id="cb48-364"><a href="#cb48-364" aria-hidden="true" tabindex="-1"></a>@wang2021 developed a shiny app that can do power analyses for SEMs in a similar fashion, but that additionally provides a point-and-click interface. You can use it here, for instance, to replicate the results of this simulation-based power analysis: <span class="co">[</span><span class="ot">https://yilinandrewang.shinyapps.io/pwrSEM/</span><span class="co">](https://yilinandrewang.shinyapps.io/pwrSEM/)</span>.</span>
 <span id="cb48-365"><a href="#cb48-365" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-366"><a href="#cb48-366" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb48-367"><a href="#cb48-367" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-368"><a href="#cb48-368" aria-hidden="true" tabindex="-1"></a><span class="fu">## A safeguard power approach for SEMs</span></span>
 <span id="cb48-369"><a href="#cb48-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-370"><a href="#cb48-370" aria-hidden="true" tabindex="-1"></a>Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the Bergh et al. (2016) data set as an estimate of the "true" effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach (Perugini et al., <span class="co">[</span><span class="ot">2014</span><span class="co">](https://doi.org/10.1177/1745691614528519)</span>), which we have already applied in Chapter 1 (<span class="co">[</span><span class="ot">Linear Model 1: A single dichotomous predictor</span><span class="co">](lm1.qmd)</span>).</span>
+<span id="cb48-370"><a href="#cb48-370" aria-hidden="true" tabindex="-1"></a>Of note, the two power analyses for our SEM we have conducted so far used the observed effect size from the @bergh2016 data set as an estimate of the "true" effect size. But, as this point estimate may be imprecise (e.g., because of publication bias), it seems reasonable to use a more conservative estimate of the true effect size. One more conservative approach in this context is the safeguard power approach <span class="co">[</span><span class="ot">@perugini2014</span><span class="co">]</span>, which we have already applied in Chapter 1 (<span class="co">[</span><span class="ot">Linear Model 1: A single dichotomous predictor</span><span class="co">](lm1.qmd)</span>).</span>
 <span id="cb48-371"><a href="#cb48-371" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-372"><a href="#cb48-372" aria-hidden="true" tabindex="-1"></a>Basically, all need to do in order to account for variability of observed effect sizes is to calculate a 60%-confidence interval around the point estimate of the observed effect size from our pilot data and to use the more conservative bound of this confidence interval (here: the upper bound) as our new effect size estimate. This can be easily done with the <span class="in">`parameterestimates`</span> function from the <span class="in">`lavaan`</span> package which takes the level of the confidence interval as an input parameter. Let's use this function on our object <span class="in">`fit_bergh`</span> which stores the results of our SEM in the <span class="in">`Bergh`</span> data set.  </span>
 <span id="cb48-373"><a href="#cb48-373" aria-hidden="true" tabindex="-1"></a></span>
@@ -2389,13 +2550,13 @@ Defined Parameters:
 <span id="cb48-450"><a href="#cb48-450" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-451"><a href="#cb48-451" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
 <span id="cb48-452"><a href="#cb48-452" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-453"><a href="#cb48-453" aria-hidden="true" tabindex="-1"></a>In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by Bergh et al. (2016) were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.</span>
+<span id="cb48-453"><a href="#cb48-453" aria-hidden="true" tabindex="-1"></a>In addition to this safeguard power approach, we would also have liked to derive a smallest effect size of interest (SESOI). However, no prior studies on SESOI in the context of personality/stereotypes were available and the measures/response scales used by @bergh2016 were only vaguely reported in their manuscript, thereby making it difficult to derive a meaningful SESOI. We therefore only report a safeguard approach but no SESOI approach here.</span>
 <span id="cb48-454"><a href="#cb48-454" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-455"><a href="#cb48-455" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb48-456"><a href="#cb48-456" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-457"><a href="#cb48-457" aria-hidden="true" tabindex="-1"></a><span class="fu"># A simulation-based power analysis for a mediation model with latent variables</span></span>
 <span id="cb48-458"><a href="#cb48-458" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-459"><a href="#cb48-459" aria-hidden="true" tabindex="-1"></a>Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the Bergh et al. (2016) data set as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:</span>
+<span id="cb48-459"><a href="#cb48-459" aria-hidden="true" tabindex="-1"></a>Sometimes, researchers not only wish to investigate whether and how two (latent) variables related to each other, but also whether the association between two (manifest or latent) variables is mediated by a third variable. We will run a power analysis for such a latent mediation model, investigating whether gender affects generalized prejudice (fully or partially) through openness to experience, while using the @bergh2016 data set as a pilot study. We can repeat the same steps as in our previous power analysis, while incorporating gender into our analysis. Specifically, we will follow these steps:</span>
 <span id="cb48-460"><a href="#cb48-460" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-461"><a href="#cb48-461" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>find plausible estimates of the population parameters</span>
 <span id="cb48-462"><a href="#cb48-462" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>specify the statistical model</span>
@@ -2405,7 +2566,7 @@ Defined Parameters:
 <span id="cb48-466"><a href="#cb48-466" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>count how many samples would have detected the specified effect (i.e., compute the statistical power)</span>
 <span id="cb48-467"><a href="#cb48-467" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>vary your simulation parameters until the desired level of power (e.g., 80%) is achieved</span>
 <span id="cb48-468"><a href="#cb48-468" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-469"><a href="#cb48-469" aria-hidden="true" tabindex="-1"></a>We first draw on the Bergh et al. (2016) data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding "male" with 0 and "female" with 1. </span>
+<span id="cb48-469"><a href="#cb48-469" aria-hidden="true" tabindex="-1"></a>We first draw on the @bergh2016 data set to estimate the means and the variance-covariance matrix. In this data set, gender is a factor with two levels, male and female. We first need to transform this categorical variable into an integer variable, for instance coding "male" with 0 and "female" with 1.</span>
 <span id="cb48-470"><a href="#cb48-470" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-471"><a href="#cb48-471" aria-hidden="true" tabindex="-1"></a><span class="in">```{r means and cov mediation}</span></span>
 <span id="cb48-472"><a href="#cb48-472" aria-hidden="true" tabindex="-1"></a>Bergh_int <span class="ot">&lt;-</span> Bergh</span>
@@ -2436,7 +2597,7 @@ Defined Parameters:
 <span id="cb48-497"><a href="#cb48-497" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-498"><a href="#cb48-498" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
 <span id="cb48-499"><a href="#cb48-499" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-500"><a href="#cb48-500" aria-hidden="true" tabindex="-1"></a>If we were  interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by Schoemann et al. (2017), which can be accessed via <span class="co">[</span><span class="ot">https://schoemanna.shinyapps.io/mc_power_med/</span><span class="co">](https://schoemanna.shinyapps.io/mc_power_med/)</span>. This app currently enables power analyses for some manifest mediation models: mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, and (iv) three parallel mediators. But as we want to incorporate <span class="in">`generalized prejudice`</span> and <span class="in">`openness to experience`</span> as latent variables, we need to write a simulation-based power analyses ourselves.   </span>
+<span id="cb48-500"><a href="#cb48-500" aria-hidden="true" tabindex="-1"></a>If we were  interested in a mediation model with only manifest variables, we could also use a useful shiny app developed by @schoemann2017, which can be accessed via <span class="co">[</span><span class="ot">https://schoemanna.shinyapps.io/mc_power_med/</span><span class="co">](https://schoemanna.shinyapps.io/mc_power_med/)</span>. This app currently enables power analyses for some manifest mediation models: mediation with (i) one mediator, (ii) two parallel mediators, (iii) two serial mediators, and (iv) three parallel mediators. But as we want to incorporate <span class="in">`generalized prejudice`</span> and <span class="in">`openness to experience`</span> as latent variables, we need to write a simulation-based power analyses ourselves.</span>
 <span id="cb48-501"><a href="#cb48-501" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-502"><a href="#cb48-502" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb48-503"><a href="#cb48-503" aria-hidden="true" tabindex="-1"></a></span>
@@ -2468,7 +2629,7 @@ Defined Parameters:
 <span id="cb48-529"><a href="#cb48-529" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span>
 <span id="cb48-530"><a href="#cb48-530" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb48-531"><a href="#cb48-531" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-532"><a href="#cb48-532" aria-hidden="true" tabindex="-1"></a>To verify that this model syntax works properly, we can fit this model to the data set provided by Bergh et al. (2016).</span>
+<span id="cb48-532"><a href="#cb48-532" aria-hidden="true" tabindex="-1"></a>To verify that this model syntax works properly, we can fit this model to the data set provided by @bergh2016.</span>
 <span id="cb48-533"><a href="#cb48-533" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-534"><a href="#cb48-534" aria-hidden="true" tabindex="-1"></a><span class="in">```{r test mediation model with the pilot data}</span></span>
 <span id="cb48-535"><a href="#cb48-535" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the SEM to the simulated data set</span></span>
@@ -2546,13 +2707,8 @@ Defined Parameters:
 <span id="cb48-607"><a href="#cb48-607" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-608"><a href="#cb48-608" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
 <span id="cb48-609"><a href="#cb48-609" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-610"><a href="#cb48-610" aria-hidden="true" tabindex="-1"></a>Bergh, R., Akrami, N., Sidanius, J., &amp; Sibley, C. G. (2016). Is group membership necessary for understanding generalized prejudice? A re-evaluation of why prejudices are interrelated. Journal of Personality and Social Psychology, 111(3), 367–395. <span class="co">[</span><span class="ot">https://doi.org/10.1037/pspi0000064</span><span class="co">](https://www.researchgate.net/publication/306939541_Is_group_membership_necessary_for_understanding_generalized_prejudice_A_re-evaluation_of_why_prejudices_are_interrelated)</span></span>
-<span id="cb48-611"><a href="#cb48-611" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-612"><a href="#cb48-612" aria-hidden="true" tabindex="-1"></a>Perugini, M., Gallucci, M., &amp; Costantini, G. (2014). Safeguard power as a protection against imprecise power estimates. Perspectives on Psychological Science, 9(3), 319--332. <span class="ot">&lt;https://doi.org/10.1177/1745691614528519&gt;</span></span>
-<span id="cb48-613"><a href="#cb48-613" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-614"><a href="#cb48-614" aria-hidden="true" tabindex="-1"></a>Schoemann, A. M., Boulton, A. J., &amp; Short, S. D. (2017). Determining power and sample size for simple and complex mediation models. Social Psychological and Personality Science, 8(4), 379–386. <span class="co">[</span><span class="ot">https://doi.org/10.1177/1948550617715068</span><span class="co">](https://www.researchgate.net/publication/317631067_Determining_Power_and_Sample_Size_for_Simple_and_Complex_Mediation_Models)</span></span>
-<span id="cb48-615"><a href="#cb48-615" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-616"><a href="#cb48-616" aria-hidden="true" tabindex="-1"></a>Wang, Y. A., &amp; Rhemtulla, M. (2021). Power analysis for parameter estimation in structural equation modeling: A discussion and tutorial. Advances in Methods and Practices in Psychological Science, 4(1), 1–17. <span class="co">[</span><span class="ot">https://doi.org/10.1177/2515245920918253</span><span class="co">](https://doi.org/10.1177/2515245920918253)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb48-610"><a href="#cb48-610" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
+<span id="cb48-611"><a href="#cb48-611" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">

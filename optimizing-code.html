@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.20">
+<meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Felix Schönbrodt">
 <title>Bonus: Optimizing R code for speed – Simulations for Advanced Power Analyses</title>
@@ -59,7 +59,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -73,18 +92,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-47f5fb99abae87aa2c6ae6626d4ea23a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6601c60c13f93198fb48ac96eb2d4be1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-47f5fb99abae87aa2c6ae6626d4ea23a.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-47407c29e8f0cbb45854e90f85b31c93.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-29bebc711971320925fa0dba636024dd.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-47407c29e8f0cbb45854e90f85b31c93.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-979f5be15db9dbe6fa469a13e9456379.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-ef9f7d397fb0b986316238fa4eb973b2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-979f5be15db9dbe6fa469a13e9456379.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-f3005ca03597eb881cb5ef1f376f261c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-988e768f3fcf52bc71cffef2a47ca54c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-f3005ca03597eb881cb5ef1f376f261c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -127,7 +147,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 </script><!-- End Matomo Code --><link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/assets/bootstrap-grid.min.css">
 <link rel="stylesheet" href="footer/footer-style.css">
 </head>
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -150,6 +170,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
       for (let i=0; i < toggles.length; i++) {
         const toggle = toggles[i];
         if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
           if (alternate) {
             toggle.classList.add("alternate");
           } else {
@@ -179,13 +200,19 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
       manageTransitions('#quarto-margin-sidebar .nav-link', true);
       // Switch the toggles
       setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
       if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
         manageTransitions("body", false);
-        window.scrollTo(0, 1);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
         setTimeout(() => {
-          window.scrollTo(0, 0);
+          window.scrollTo(0, scrollY);
           manageTransitions("body", true);
         }, 40);
       }
@@ -279,6 +306,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
       // Read the current dark / light value
       let toAlternate = !hasAlternateSentinel();
       toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
@@ -292,7 +320,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" alt="LMU Open Science Center open book icon" class="navbar-logo light-content"><img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-favicon.jpg" alt="LMU Open Science Center open book icon" class="navbar-logo dark-content"></a>
@@ -300,7 +328,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
     <span class="navbar-title">Simulations for Advanced Power Analyses</span>
     </a>
   </div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -334,7 +362,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
       </ul>
 </div>
     <a href="https://www.osc.lmu.de/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-house-heart"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="bi"></i></button>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -342,12 +370,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 </a>
 </div>
       </div> <!-- /container-fluid -->
-    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+    </nav><nav class="quarto-secondary-nav" aria-label="Toolbar"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./optimizing-code.html">Bonuses</a></li><li class="breadcrumb-item"><a href="./optimizing-code.html">Bonus: Optimizing R code for speed</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./optimizing-code.html">Bonuses</a></li><li class="breadcrumb-item"><a href="./optimizing-code.html">Bonus: Optimizing R code for speed</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -355,7 +383,7 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Section"><div class="pt-lg-2 mt-2 text-left sidebar-header">
       <a href="./index.html" class="sidebar-logo-link">
       <img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-logo.svg" alt="LMU Open Science Center logo" class="sidebar-logo light-content py-0 d-lg-inline d-none"><img src="site_libs/quarto-contrib/quarto-project/lmu-osc/tutorial-template/_extensions/lmu-osc/osc-brand/lmu-osc-logo-dark.svg" alt="LMU Open Science Center logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none"></a>
       </div>
@@ -374,13 +402,10 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Models</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Models</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lm1.html" class="sidebar-item-text sidebar-link">
@@ -415,13 +440,10 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Bonuses</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Bonuses</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./optimizing-code.html" class="sidebar-item-text sidebar-link active">
@@ -469,10 +491,11 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
   <li><a href="#the-final-speed-test-burn-your-machine" id="toc-the-final-speed-test-burn-your-machine" class="nav-link" data-scroll-target="#the-final-speed-test-burn-your-machine">The final speed test: Burn your machine 🔥</a></li>
   <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">Recap</a></li>
   <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session Info</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/edit/main/optimizing-code.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/blob/main/optimizing-code.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/lmu-osc/Simulations-for-Advanced-Power-Analyses/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./optimizing-code.html">Bonuses</a></li><li class="breadcrumb-item"><a href="./optimizing-code.html">Bonus: Optimizing R code for speed</a></li></ol></nav><div class="quarto-title">
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./optimizing-code.html">Bonuses</a></li><li class="breadcrumb-item"><a href="./optimizing-code.html">Bonus: Optimizing R code for speed</a></li></ol></nav><div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Bonus: Optimizing R code for speed</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
@@ -539,19 +562,19 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="va">t0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
-  6.831   0.074   7.140 </code></pre>
+ 20.829   0.024  20.856 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">result</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    n  power
-1 300 0.3424
-2 350 0.4180
-3 400 0.4918
-4 450 0.5506
-5 500 0.6044</code></pre>
+1 300 0.3360
+2 350 0.4160
+3 400 0.4828
+4 450 0.5572
+5 500 0.6106</code></pre>
 </div>
 </div>
-<p>This first version takes 7.14 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
+<p>This first version takes 20.856 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
 </section><section id="rule-1-no-growing-vectorsdata-frames" class="level1"><h1>Rule 1: No growing vectors/data frames</h1>
 <p>This is one of the most common bottlenecks: You start with an empty vector (or even worse, a data frame) and grow it by <code>rbind</code>-ing new rows to it in each iteration.</p>
 <div class="cell">
@@ -601,12 +624,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span></span>
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed   diff rel_diff
-1   7.140     NA       NA
-2   6.762 -0.378   -0.053</code></pre>
+<pre><code>  elapsed  diff rel_diff
+1  20.856    NA       NA
+2  20.416 -0.44   -0.021</code></pre>
 </div>
 </div>
-<p>This change gave a small speed-up of -0.378 seconds (or -5.3%).</p>
+<p>This change gave a small speed-up of -0.44 seconds (or -2.1%).</p>
 </section><section id="rule-2-avoid-data-frames-as-far-as-possible" class="level1"><h1>Rule 2: Avoid data frames as far as possible</h1>
 <p>Use matrizes instead of data frames wherever possible or avoid data frames altogether (as we do in the code below).</p>
 <div class="cell">
@@ -651,12 +674,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  elapsed   diff rel_diff
-1   7.140     NA       NA
-2   6.762 -0.378   -0.053
-3   4.977 -1.785   -0.264</code></pre>
+1  20.856     NA       NA
+2  20.416 -0.440   -0.021
+3  15.072 -5.344   -0.262</code></pre>
 </div>
 </div>
-<p>This showed a substantial improvement of around -1.8 seconds; a relative gain of -26.4% (both compared to the preceding version).</p>
+<p>This showed a substantial improvement of around -5.3 seconds; a relative gain of -26.2% (both compared to the preceding version).</p>
 </section><section id="rule-3-avoid-unnecessary-computations" class="level1"><h1>Rule 3: Avoid unnecessary computations</h1>
 <p>What do we actually need? In fact only the p-value for our focal predictor. But the <code>lm</code> function does so many more things, for example parsing the formula <code>BDI ~ treatment</code>.</p>
 <p>We could strip away all overhead and do only the necessary steps: Fit the linear model, and retrieve the p-values (see <a href="https://stackoverflow.com/q/49732933">https://stackoverflow.com/q/49732933</a>). This needs some deeper knowledge of the functions and some google-fu. When you do this, you should definitely compare your results with the original result from the <code>lm</code> function and verify that they are identical!</p>
@@ -715,14 +738,14 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed   diff rel_diff
-1   7.140     NA       NA
-2   6.762 -0.378   -0.053
-3   4.977 -1.785   -0.264
-4   0.557 -4.420   -0.888</code></pre>
+<pre><code>  elapsed    diff rel_diff
+1  20.856      NA       NA
+2  20.416  -0.440   -0.021
+3  15.072  -5.344   -0.262
+4   1.074 -13.998   -0.929</code></pre>
 </div>
 </div>
-<p>This step led to a massive improvement of around -4.4 seconds; a relative gain of -88.8%.</p>
+<p>This step led to a massive improvement of around -14 seconds; a relative gain of -92.9%.</p>
 </section><section id="rule-4-use-optimized-packages" class="level1"><h1>Rule 4: Use optimized packages</h1>
 <p>For many statistical models, there are packages optimized for speed, see for example here: <a href="https://stackoverflow.com/q/49732933">https://stackoverflow.com/q/49732933</a>.</p>
 <div class="cell">
@@ -777,12 +800,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed   diff rel_diff
-1   7.140     NA       NA
-2   6.762 -0.378   -0.053
-3   4.977 -1.785   -0.264
-4   0.557 -4.420   -0.888
-5   0.443 -0.114   -0.205</code></pre>
+<pre><code>  elapsed    diff rel_diff
+1  20.856      NA       NA
+2  20.416  -0.440   -0.021
+3  15.072  -5.344   -0.262
+4   1.074 -13.998   -0.929
+5   1.141   0.067    0.062</code></pre>
 </div>
 </div>
 <p>This step made no visible increase in speed – but as a bonus, it made our code much easier to read and shorter.</p>
@@ -839,13 +862,13 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed   diff rel_diff
-1   7.140     NA       NA
-2   6.762 -0.378   -0.053
-3   4.977 -1.785   -0.264
-4   0.557 -4.420   -0.888
-5   0.443 -0.114   -0.205
-6   0.541  0.098    0.221</code></pre>
+<pre><code>  elapsed    diff rel_diff
+1  20.856      NA       NA
+2  20.416  -0.440   -0.021
+3  15.072  -5.344   -0.262
+4   1.074 -13.998   -0.929
+5   1.141   0.067    0.062
+6   1.438   0.297    0.260</code></pre>
 </div>
 </div>
 <p>While this refactoring actually slightly increased computation time, we need this for the last, final optimization where we reap the benefits.</p>
@@ -890,14 +913,14 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed   diff rel_diff
-1   7.140     NA       NA
-2   6.762 -0.378    -0.05
-3   4.977 -1.785    -0.26
-4   0.557 -4.420    -0.89
-5   0.443 -0.114    -0.20
-6   0.541  0.098     0.22
-7   0.465 -0.076    -0.14</code></pre>
+<pre><code>  elapsed    diff rel_diff
+1  20.856      NA       NA
+2  20.416  -0.440    -0.02
+3  15.072  -5.344    -0.26
+4   1.074 -13.998    -0.93
+5   1.141   0.067     0.06
+6   1.438   0.297     0.26
+7   1.648   0.210     0.15</code></pre>
 </div>
 </div>
 <p>The speed improvement seems only small – with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take <em>longer</em>.</p>
@@ -936,35 +959,35 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">result_single</span>, power.parallel <span class="op">=</span> <span class="va">result_parallel</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      n   power power.parallel
-1   100 0.07070        0.07360
-2   150 0.12895        0.12865
-3   200 0.19230        0.19600
-4   250 0.26080        0.26130
-5   300 0.33195        0.34250
-6   350 0.40875        0.41300
-7   400 0.47985        0.47600
-8   450 0.55080        0.55150
-9   500 0.61105        0.61605
-10  550 0.67180        0.66535
-11  600 0.71560        0.71845
-12  650 0.76000        0.75880
-13  700 0.80195        0.80335
-14  750 0.83355        0.83695
-15  800 0.86645        0.86615
-16  850 0.89120        0.88820
-17  900 0.91095        0.91310
-18  950 0.92460        0.92995
-19 1000 0.94485        0.94185</code></pre>
+1   100 0.07425        0.07470
+2   150 0.13100        0.12825
+3   200 0.19220        0.19120
+4   250 0.26750        0.26270
+5   300 0.33775        0.34565
+6   350 0.41030        0.40730
+7   400 0.48415        0.48615
+8   450 0.54725        0.54730
+9   500 0.61250        0.61300
+10  550 0.66455        0.67140
+11  600 0.71915        0.72100
+12  650 0.76065        0.76295
+13  700 0.79780        0.80355
+14  750 0.84020        0.83715
+15  800 0.86710        0.86880
+16  850 0.89050        0.89210
+17  900 0.90940        0.91135
+18  950 0.92335        0.92880
+19 1000 0.94125        0.94155</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">t_single</span>, <span class="va">t_parallel</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           user.self sys.self elapsed user.child sys.child
-t_single      10.063    0.107  10.243          0         0
-t_parallel     1.017    0.038   4.100          0         0</code></pre>
+t_single      25.928    0.005  25.934          0         0
+t_parallel     3.920    0.060  17.018          0         0</code></pre>
 </div>
 </div>
-<p>With this optimized setup, we are running 380000 simulations in just 4.1 seconds. If you try this with the first code version, it takes 110.366 seconds.</p>
-<p><strong>With the final, parallelized version we have a 26.9x speed gain relative to the first version!</strong></p>
+<p>With this optimized setup, we are running 380000 simulations in just 17.018 seconds. If you try this with the first code version, it takes 331.698 seconds.</p>
+<p><strong>With the final, parallelized version we have a 19.5x speed gain relative to the first version!</strong></p>
 </section><section id="recap" class="level1"><h1>Recap</h1>
 <p>We covered the most important steps for speeding up your code in R:</p>
 <ol type="1">
@@ -991,7 +1014,7 @@ t_parallel     1.017    0.038   4.100          0         0</code></pre>
 </div>
 <div class="callout-body-container callout-body">
 <p>“We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil. Yet we should not pass up our opportunities in that critical 3%.”</p>
-<p>Donald Knuth <em>(Structured Programming with go to Statements, ACM Journal Computing Surveys, Vol 6, No.&nbsp;4, Dec.&nbsp;1974. p.&nbsp;268)</em></p>
+<p><span class="citation" data-cites="knuth1974">Knuth (<a href="#ref-knuth1974" role="doc-biblioref">1974, 268</a>)</span></p>
 </div>
 </div>
 </section><section id="session-info" class="level1"><h1>Session Info</h1>
@@ -1000,18 +1023,21 @@ t_parallel     1.017    0.038   4.100          0         0</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.6.1 (2026-06-24)
-Platform: aarch64-apple-darwin23
-Running under: macOS Tahoe 26.5.1
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 24.04.5 LTS
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
 
 locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
 
-time zone: Europe/Berlin
-tzcode source: internal
+time zone: UTC
+tzcode source: system (glibc)
 
 attached base packages:
 [1] stats     graphics  grDevices datasets  utils     methods   base     
@@ -1027,6 +1053,12 @@ loaded via a namespace (and not attached):
 [17] Rcpp_1.1.2        yaml_2.3.12       rlang_1.3.0       jsonlite_2.0.0   </code></pre>
 </div>
 </div>
+</section><section id="references" class="level1"><h1>References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-knuth1974" class="csl-entry" role="listitem">
+Knuth, Donald E. 1974. <span>“Structured Programming with Go to Statements.”</span> <em>ACM Computing Surveys</em> 6 (4): 261–301. <a href="https://doi.org/10.1145/356635.356640">https://doi.org/10.1145/356635.356640</a>.
+</div>
+</div>
 
 
 <!-- -->
@@ -1035,15 +1067,50 @@ loaded via a namespace (and not attached):
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
     if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "Toggle dark mode");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
       const i = window.document.createElement("i");
       i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "Toggle dark mode");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
     }
     setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
@@ -1169,11 +1236,30 @@ loaded via a namespace (and not attached):
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp("https:\/\/lmu-osc\.github\.io\/Simulations-for-Advanced-Power-Analyses\/");
+      const newWindowLabel = "(opens in a new tab)";
+      const newWindowNoteId = "quarto-ext-newwindow-label";
+      // Links reference one hidden label through aria-describedby, so the
+      // announcement never changes their accessible name.
+      var describeNewWindow = (link) => {
+        if (!window.document.getElementById(newWindowNoteId)) {
+          var newWindowNote = window.document.createElement("span");
+          newWindowNote.id = newWindowNoteId;
+          newWindowNote.hidden = true;
+          newWindowNote.textContent = newWindowLabel;
+          window.document.body.appendChild(newWindowNote);
+        }
+        var describedBy = (link.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+        if (!describedBy.includes(newWindowNoteId)) {
+          describedBy.push(newWindowNoteId);
+          link.setAttribute("aria-describedby", describedBy.join(" "));
+        }
+      }
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -1187,10 +1273,72 @@ loaded via a namespace (and not attached):
             if (link.getAttribute("rel") === null) {
               link.setAttribute("rel", "noopener");
             }
+            describeNewWindow(link);
+          if (!link.classList.contains('no-external-icon')) {
             // default icon
             link.classList.add("external");
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -1204,6 +1352,7 @@ loaded via a namespace (and not attached):
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1366,44 +1515,54 @@ loaded via a namespace (and not attached):
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1501,7 +1660,9 @@ loaded via a namespace (and not attached):
       }
     }
   });
-  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+  </script><script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script><nav class="page-navigation" aria-label="Page"><div class="nav-page nav-page-previous">
       <a href="./sem.html" class="pagination-link" aria-label="Ch. 5: Structural Equation Models">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ch. 5: Structural Equation Models</span>
       </a>          
@@ -2018,7 +2179,7 @@ loaded via a namespace (and not attached):
 <span id="cb24-522"><a href="#cb24-522" aria-hidden="true" tabindex="-1"></a>"We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil.</span>
 <span id="cb24-523"><a href="#cb24-523" aria-hidden="true" tabindex="-1"></a>Yet we should not pass up our opportunities in that critical 3%."</span>
 <span id="cb24-524"><a href="#cb24-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-525"><a href="#cb24-525" aria-hidden="true" tabindex="-1"></a>Donald Knuth *(Structured Programming with go to Statements, ACM Journal Computing Surveys, Vol 6, No. 4, Dec. 1974. p. 268)*</span>
+<span id="cb24-525"><a href="#cb24-525" aria-hidden="true" tabindex="-1"></a>@knuth1974 <span class="co">[</span><span class="ot">p. 268</span><span class="co">]</span></span>
 <span id="cb24-526"><a href="#cb24-526" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb24-527"><a href="#cb24-527" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-528"><a href="#cb24-528" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session Info</span></span>
@@ -2028,6 +2189,11 @@ loaded via a namespace (and not attached):
 <span id="cb24-534"><a href="#cb24-534" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb24-535"><a href="#cb24-535" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
 <span id="cb24-536"><a href="#cb24-536" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-537"><a href="#cb24-537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-538"><a href="#cb24-538" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb24-539"><a href="#cb24-539" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-540"><a href="#cb24-540" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
+<span id="cb24-541"><a href="#cb24-541" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
