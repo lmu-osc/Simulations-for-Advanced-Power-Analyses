@@ -562,19 +562,19 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="va">t0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
- 20.829   0.024  20.856 </code></pre>
+ 13.936   0.016  13.956 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">result</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    n  power
-1 300 0.3360
-2 350 0.4160
-3 400 0.4828
-4 450 0.5572
-5 500 0.6106</code></pre>
+1 300 0.3348
+2 350 0.4162
+3 400 0.4806
+4 450 0.5296
+5 500 0.6028</code></pre>
 </div>
 </div>
-<p>This first version takes 20.856 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
+<p>This first version takes 13.956 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
 </section><section id="rule-1-no-growing-vectorsdata-frames" class="level1"><h1>Rule 1: No growing vectors/data frames</h1>
 <p>This is one of the most common bottlenecks: You start with an empty vector (or even worse, a data frame) and grow it by <code>rbind</code>-ing new rows to it in each iteration.</p>
 <div class="cell">
@@ -624,12 +624,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span></span>
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed  diff rel_diff
-1  20.856    NA       NA
-2  20.416 -0.44   -0.021</code></pre>
+<pre><code>  elapsed   diff rel_diff
+1  13.956     NA       NA
+2  13.777 -0.179   -0.013</code></pre>
 </div>
 </div>
-<p>This change gave a small speed-up of -0.44 seconds (or -2.1%).</p>
+<p>This change gave a small speed-up of -0.179 seconds (or -1.3%).</p>
 </section><section id="rule-2-avoid-data-frames-as-far-as-possible" class="level1"><h1>Rule 2: Avoid data frames as far as possible</h1>
 <p>Use matrizes instead of data frames wherever possible or avoid data frames altogether (as we do in the code below).</p>
 <div class="cell">
@@ -674,12 +674,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  elapsed   diff rel_diff
-1  20.856     NA       NA
-2  20.416 -0.440   -0.021
-3  15.072 -5.344   -0.262</code></pre>
+1  13.956     NA       NA
+2  13.777 -0.179   -0.013
+3  10.078 -3.699   -0.268</code></pre>
 </div>
 </div>
-<p>This showed a substantial improvement of around -5.3 seconds; a relative gain of -26.2% (both compared to the preceding version).</p>
+<p>This showed a substantial improvement of around -3.7 seconds; a relative gain of -26.8% (both compared to the preceding version).</p>
 </section><section id="rule-3-avoid-unnecessary-computations" class="level1"><h1>Rule 3: Avoid unnecessary computations</h1>
 <p>What do we actually need? In fact only the p-value for our focal predictor. But the <code>lm</code> function does so many more things, for example parsing the formula <code>BDI ~ treatment</code>.</p>
 <p>We could strip away all overhead and do only the necessary steps: Fit the linear model, and retrieve the p-values (see <a href="https://stackoverflow.com/q/49732933">https://stackoverflow.com/q/49732933</a>). This needs some deeper knowledge of the functions and some google-fu. When you do this, you should definitely compare your results with the original result from the <code>lm</code> function and verify that they are identical!</p>
@@ -738,14 +738,14 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed    diff rel_diff
-1  20.856      NA       NA
-2  20.416  -0.440   -0.021
-3  15.072  -5.344   -0.262
-4   1.074 -13.998   -0.929</code></pre>
+<pre><code>  elapsed   diff rel_diff
+1  13.956     NA       NA
+2  13.777 -0.179   -0.013
+3  10.078 -3.699   -0.268
+4   0.813 -9.265   -0.919</code></pre>
 </div>
 </div>
-<p>This step led to a massive improvement of around -14 seconds; a relative gain of -92.9%.</p>
+<p>This step led to a massive improvement of around -9.3 seconds; a relative gain of -91.9%.</p>
 </section><section id="rule-4-use-optimized-packages" class="level1"><h1>Rule 4: Use optimized packages</h1>
 <p>For many statistical models, there are packages optimized for speed, see for example here: <a href="https://stackoverflow.com/q/49732933">https://stackoverflow.com/q/49732933</a>.</p>
 <div class="cell">
@@ -800,12 +800,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed    diff rel_diff
-1  20.856      NA       NA
-2  20.416  -0.440   -0.021
-3  15.072  -5.344   -0.262
-4   1.074 -13.998   -0.929
-5   1.141   0.067    0.062</code></pre>
+<pre><code>  elapsed   diff rel_diff
+1  13.956     NA       NA
+2  13.777 -0.179   -0.013
+3  10.078 -3.699   -0.268
+4   0.813 -9.265   -0.919
+5   0.814  0.001    0.001</code></pre>
 </div>
 </div>
 <p>This step made no visible increase in speed – but as a bonus, it made our code much easier to read and shorter.</p>
@@ -862,13 +862,13 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed    diff rel_diff
-1  20.856      NA       NA
-2  20.416  -0.440   -0.021
-3  15.072  -5.344   -0.262
-4   1.074 -13.998   -0.929
-5   1.141   0.067    0.062
-6   1.438   0.297    0.260</code></pre>
+<pre><code>  elapsed   diff rel_diff
+1  13.956     NA       NA
+2  13.777 -0.179   -0.013
+3  10.078 -3.699   -0.268
+4   0.813 -9.265   -0.919
+5   0.814  0.001    0.001
+6   0.995  0.181    0.222</code></pre>
 </div>
 </div>
 <p>While this refactoring actually slightly increased computation time, we need this for the last, final optimization where we reap the benefits.</p>
@@ -913,14 +913,14 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed    diff rel_diff
-1  20.856      NA       NA
-2  20.416  -0.440    -0.02
-3  15.072  -5.344    -0.26
-4   1.074 -13.998    -0.93
-5   1.141   0.067     0.06
-6   1.438   0.297     0.26
-7   1.648   0.210     0.15</code></pre>
+<pre><code>  elapsed   diff rel_diff
+1  13.956     NA       NA
+2  13.777 -0.179    -0.01
+3  10.078 -3.699    -0.27
+4   0.813 -9.265    -0.92
+5   0.814  0.001     0.00
+6   0.995  0.181     0.22
+7   1.187  0.192     0.19</code></pre>
 </div>
 </div>
 <p>The speed improvement seems only small – with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take <em>longer</em>.</p>
@@ -959,35 +959,35 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">result_single</span>, power.parallel <span class="op">=</span> <span class="va">result_parallel</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      n   power power.parallel
-1   100 0.07425        0.07470
-2   150 0.13100        0.12825
-3   200 0.19220        0.19120
-4   250 0.26750        0.26270
-5   300 0.33775        0.34565
-6   350 0.41030        0.40730
-7   400 0.48415        0.48615
-8   450 0.54725        0.54730
-9   500 0.61250        0.61300
-10  550 0.66455        0.67140
-11  600 0.71915        0.72100
-12  650 0.76065        0.76295
-13  700 0.79780        0.80355
-14  750 0.84020        0.83715
-15  800 0.86710        0.86880
-16  850 0.89050        0.89210
-17  900 0.90940        0.91135
-18  950 0.92335        0.92880
-19 1000 0.94125        0.94155</code></pre>
+1   100 0.07735        0.07115
+2   150 0.12705        0.13030
+3   200 0.19730        0.19325
+4   250 0.26835        0.26025
+5   300 0.33540        0.33870
+6   350 0.41395        0.40940
+7   400 0.47990        0.48455
+8   450 0.55010        0.55490
+9   500 0.61630        0.60990
+10  550 0.66935        0.67485
+11  600 0.71920        0.71690
+12  650 0.76420        0.76750
+13  700 0.80165        0.80350
+14  750 0.83405        0.84045
+15  800 0.87035        0.86735
+16  850 0.89005        0.88590
+17  900 0.91335        0.90790
+18  950 0.92500        0.92890
+19 1000 0.94235        0.94440</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">t_single</span>, <span class="va">t_parallel</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           user.self sys.self elapsed user.child sys.child
-t_single      25.928    0.005  25.934          0         0
-t_parallel     3.920    0.060  17.018          0         0</code></pre>
+t_single      18.662    0.008  18.671          0         0
+t_parallel     2.500    0.059  12.115          0         0</code></pre>
 </div>
 </div>
-<p>With this optimized setup, we are running 380000 simulations in just 17.018 seconds. If you try this with the first code version, it takes 331.698 seconds.</p>
-<p><strong>With the final, parallelized version we have a 19.5x speed gain relative to the first version!</strong></p>
+<p>With this optimized setup, we are running 380000 simulations in just 12.115 seconds. If you try this with the first code version, it takes 229.003 seconds.</p>
+<p><strong>With the final, parallelized version we have a 18.9x speed gain relative to the first version!</strong></p>
 </section><section id="recap" class="level1"><h1>Recap</h1>
 <p>We covered the most important steps for speeding up your code in R:</p>
 <ol type="1">
