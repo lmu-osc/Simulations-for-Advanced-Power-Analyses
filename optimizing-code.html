@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Felix Schönbrodt">
@@ -102,9 +101,9 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-47407c29e8f0cbb45854e90f85b31c93.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f3005ca03597eb881cb5ef1f376f261c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-988e768f3fcf52bc71cffef2a47ca54c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-f3005ca03597eb881cb5ef1f376f261c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-4e5e55a1aa43624eb2da5f750c063e28.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-d9eab4046e637db54cb20c9b9c8f2d13.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-4e5e55a1aa43624eb2da5f750c063e28.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -562,19 +561,19 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="va">t0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
- 13.936   0.016  13.956 </code></pre>
+  9.677   0.018   9.696 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">result</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    n  power
-1 300 0.3348
-2 350 0.4162
-3 400 0.4806
-4 450 0.5296
-5 500 0.6028</code></pre>
+1 300 0.3328
+2 350 0.4154
+3 400 0.4762
+4 450 0.5434
+5 500 0.6138</code></pre>
 </div>
 </div>
-<p>This first version takes 13.956 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
+<p>This first version takes 9.696 seconds. Of course we have sampling error here as well; if you run this code multiple times, you will always get slightly different timings. But, again, we refrain from micro-optimizing in the millisecond range, so a single run is generally good enough. You should only tune your simulation in a way that it takes at least a few seconds; if you are in the millisecond range, the timings are imprecise and you won’t see speed improvements very well.</p>
 </section><section id="rule-1-no-growing-vectorsdata-frames" class="level1"><h1>Rule 1: No growing vectors/data frames</h1>
 <p>This is one of the most common bottlenecks: You start with an empty vector (or even worse, a data frame) and grow it by <code>rbind</code>-ing new rows to it in each iteration.</p>
 <div class="cell">
@@ -624,12 +623,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span></span>
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  elapsed   diff rel_diff
-1  13.956     NA       NA
-2  13.777 -0.179   -0.013</code></pre>
+<pre><code>  elapsed  diff rel_diff
+1   9.696    NA       NA
+2   9.878 0.182    0.019</code></pre>
 </div>
 </div>
-<p>This change gave a small speed-up of -0.179 seconds (or -1.3%).</p>
+<p>This change gave a small speed-up of 0.182 seconds (or 1.9%).</p>
 </section><section id="rule-2-avoid-data-frames-as-far-as-possible" class="level1"><h1>Rule 2: Avoid data frames as far as possible</h1>
 <p>Use matrizes instead of data frames wherever possible or avoid data frames altogether (as we do in the code below).</p>
 <div class="cell">
@@ -674,12 +673,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  elapsed   diff rel_diff
-1  13.956     NA       NA
-2  13.777 -0.179   -0.013
-3  10.078 -3.699   -0.268</code></pre>
+1   9.696     NA       NA
+2   9.878  0.182    0.019
+3   7.426 -2.452   -0.248</code></pre>
 </div>
 </div>
-<p>This showed a substantial improvement of around -3.7 seconds; a relative gain of -26.8% (both compared to the preceding version).</p>
+<p>This showed a substantial improvement of around -2.5 seconds; a relative gain of -24.8% (both compared to the preceding version).</p>
 </section><section id="rule-3-avoid-unnecessary-computations" class="level1"><h1>Rule 3: Avoid unnecessary computations</h1>
 <p>What do we actually need? In fact only the p-value for our focal predictor. But the <code>lm</code> function does so many more things, for example parsing the formula <code>BDI ~ treatment</code>.</p>
 <p>We could strip away all overhead and do only the necessary steps: Fit the linear model, and retrieve the p-values (see <a href="https://stackoverflow.com/q/49732933">https://stackoverflow.com/q/49732933</a>). This needs some deeper knowledge of the functions and some google-fu. When you do this, you should definitely compare your results with the original result from the <code>lm</code> function and verify that they are identical!</p>
@@ -739,13 +738,13 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  elapsed   diff rel_diff
-1  13.956     NA       NA
-2  13.777 -0.179   -0.013
-3  10.078 -3.699   -0.268
-4   0.813 -9.265   -0.919</code></pre>
+1   9.696     NA       NA
+2   9.878  0.182    0.019
+3   7.426 -2.452   -0.248
+4   0.597 -6.829   -0.920</code></pre>
 </div>
 </div>
-<p>This step led to a massive improvement of around -9.3 seconds; a relative gain of -91.9%.</p>
+<p>This step led to a massive improvement of around -6.8 seconds; a relative gain of -92%.</p>
 </section><section id="rule-4-use-optimized-packages" class="level1"><h1>Rule 4: Use optimized packages</h1>
 <p>For many statistical models, there are packages optimized for speed, see for example here: <a href="https://stackoverflow.com/q/49732933">https://stackoverflow.com/q/49732933</a>.</p>
 <div class="cell">
@@ -801,11 +800,11 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  elapsed   diff rel_diff
-1  13.956     NA       NA
-2  13.777 -0.179   -0.013
-3  10.078 -3.699   -0.268
-4   0.813 -9.265   -0.919
-5   0.814  0.001    0.001</code></pre>
+1   9.696     NA       NA
+2   9.878  0.182    0.019
+3   7.426 -2.452   -0.248
+4   0.597 -6.829   -0.920
+5   0.606  0.009    0.015</code></pre>
 </div>
 </div>
 <p>This step made no visible increase in speed – but as a bonus, it made our code much easier to read and shorter.</p>
@@ -863,12 +862,12 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="va">timings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  elapsed   diff rel_diff
-1  13.956     NA       NA
-2  13.777 -0.179   -0.013
-3  10.078 -3.699   -0.268
-4   0.813 -9.265   -0.919
-5   0.814  0.001    0.001
-6   0.995  0.181    0.222</code></pre>
+1   9.696     NA       NA
+2   9.878  0.182    0.019
+3   7.426 -2.452   -0.248
+4   0.597 -6.829   -0.920
+5   0.606  0.009    0.015
+6   0.721  0.115    0.190</code></pre>
 </div>
 </div>
 <p>While this refactoring actually slightly increased computation time, we need this for the last, final optimization where we reap the benefits.</p>
@@ -914,13 +913,13 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>  elapsed   diff rel_diff
-1  13.956     NA       NA
-2  13.777 -0.179    -0.01
-3  10.078 -3.699    -0.27
-4   0.813 -9.265    -0.92
-5   0.814  0.001     0.00
-6   0.995  0.181     0.22
-7   1.187  0.192     0.19</code></pre>
+1   9.696     NA       NA
+2   9.878  0.182     0.02
+3   7.426 -2.452    -0.25
+4   0.597 -6.829    -0.92
+5   0.606  0.009     0.01
+6   0.721  0.115     0.19
+7   0.884  0.163     0.23</code></pre>
 </div>
 </div>
 <p>The speed improvement seems only small – with 4 workers, one might expect that the computations only need 1/4th of the previous time. But parallel processing creates some overhead. For example, 4 separate R sessions need to be created and all packages, code (and sometimes data) need to be loaded in each session. Finally, all results must be collected and aggregated from all separate sessions. This can add up to substantial one-time costs. If your (single-core) computations only take a few seconds or less, parallel processing can even take <em>longer</em>.</p>
@@ -959,35 +958,35 @@ if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
 <span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">result_single</span>, power.parallel <span class="op">=</span> <span class="va">result_parallel</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      n   power power.parallel
-1   100 0.07735        0.07115
-2   150 0.12705        0.13030
-3   200 0.19730        0.19325
-4   250 0.26835        0.26025
-5   300 0.33540        0.33870
-6   350 0.41395        0.40940
-7   400 0.47990        0.48455
-8   450 0.55010        0.55490
-9   500 0.61630        0.60990
-10  550 0.66935        0.67485
-11  600 0.71920        0.71690
-12  650 0.76420        0.76750
-13  700 0.80165        0.80350
-14  750 0.83405        0.84045
-15  800 0.87035        0.86735
-16  850 0.89005        0.88590
-17  900 0.91335        0.90790
-18  950 0.92500        0.92890
-19 1000 0.94235        0.94440</code></pre>
+1   100 0.07925        0.07060
+2   150 0.13055        0.13010
+3   200 0.19425        0.19275
+4   250 0.26295        0.26125
+5   300 0.33775        0.33520
+6   350 0.40985        0.40830
+7   400 0.48340        0.48410
+8   450 0.54980        0.55150
+9   500 0.61200        0.60505
+10  550 0.67055        0.66755
+11  600 0.71305        0.72370
+12  650 0.75990        0.76410
+13  700 0.80235        0.80430
+14  750 0.83455        0.84010
+15  800 0.86880        0.86765
+16  850 0.88970        0.89250
+17  900 0.90700        0.90450
+18  950 0.92485        0.92490
+19 1000 0.94060        0.94410</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">t_single</span>, <span class="va">t_parallel</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           user.self sys.self elapsed user.child sys.child
-t_single      18.662    0.008  18.671          0         0
-t_parallel     2.500    0.059  12.115          0         0</code></pre>
+t_single      13.591    0.009  13.601          0         0
+t_parallel     1.700    0.033   8.171          0         0</code></pre>
 </div>
 </div>
-<p>With this optimized setup, we are running 380000 simulations in just 12.115 seconds. If you try this with the first code version, it takes 229.003 seconds.</p>
-<p><strong>With the final, parallelized version we have a 18.9x speed gain relative to the first version!</strong></p>
+<p>With this optimized setup, we are running 380000 simulations in just 8.171 seconds. If you try this with the first code version, it takes 163.952 seconds.</p>
+<p><strong>With the final, parallelized version we have a 20.1x speed gain relative to the first version!</strong></p>
 </section><section id="recap" class="level1"><h1>Recap</h1>
 <p>We covered the most important steps for speeding up your code in R:</p>
 <ol type="1">
@@ -1022,13 +1021,13 @@ t_parallel     2.500    0.059  12.115          0         0</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.6.1 (2026-06-24)
+<pre><code>R version 4.6.2 (2026-10-29)
 Platform: x86_64-pc-linux-gnu
-Running under: Ubuntu 24.04.5 LTS
+Running under: Ubuntu 26.04.1 LTS
 
 Matrix products: default
 BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
 
 locale:
  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
@@ -1043,13 +1042,13 @@ attached base packages:
 [1] stats     graphics  grDevices datasets  utils     methods   base     
 
 other attached packages:
-[1] future.apply_1.20.2    future_1.75.0          RcppArmadillo_15.4.2-1
+[1] future.apply_1.21.0    future_1.82.0          RcppArmadillo_15.6.2-1
 
 loaded via a namespace (and not attached):
- [1] digest_0.6.39     codetools_0.2-20  fastmap_1.2.0     xfun_0.60        
- [5] knitr_1.51        parallel_4.6.1    htmltools_0.5.9   rmarkdown_2.31   
- [9] cli_3.6.6         parallelly_1.48.0 renv_1.2.4        compiler_4.6.1   
-[13] globals_0.19.1    tools_4.6.1       listenv_1.0.0     evaluate_1.0.5   
+ [1] digest_0.6.39     codetools_0.2-20  fastmap_1.2.0     xfun_0.62        
+ [5] knitr_1.52        parallel_4.6.2    htmltools_0.5.9   rmarkdown_2.32   
+ [9] cli_3.6.6         parallelly_1.50.0 renv_1.3.1        compiler_4.6.2   
+[13] globals_0.20.0    tools_4.6.2       listenv_1.1.0     evaluate_1.0.5   
 [17] Rcpp_1.1.2        yaml_2.3.12       rlang_1.3.0       jsonlite_2.0.0   </code></pre>
 </div>
 </div>

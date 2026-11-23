@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Felix Schönbrodt">
@@ -102,9 +101,9 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-47407c29e8f0cbb45854e90f85b31c93.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f3005ca03597eb881cb5ef1f376f261c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-988e768f3fcf52bc71cffef2a47ca54c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-f3005ca03597eb881cb5ef1f376f261c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-4e5e55a1aa43624eb2da5f750c063e28.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-d9eab4046e637db54cb20c9b9c8f2d13.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-4e5e55a1aa43624eb2da5f750c063e28.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -636,8 +635,8 @@ cov_{xy} &amp; var_y
 <span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            BDI_pre BDI_post0
-BDI_pre   1.0000000 0.6012733
-BDI_post0 0.6012733 1.0000000</code></pre>
+BDI_pre   1.0000000 0.6024972
+BDI_post0 0.6024972 1.0000000</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -760,19 +759,19 @@ lm(formula = BDI_post ~ BDI_pre.c + treatment, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--49.891  -7.330   0.040   7.293  47.824 
+-47.436  -7.334  -0.030   7.295  49.302 
 
 Coefficients:
              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 23.017818   0.048449 475.098   &lt;2e-16 ***
-BDI_pre.c   -0.002873   0.003166  -0.907    0.364    
-treatment   -5.970899   0.068517 -87.145   &lt;2e-16 ***
+(Intercept) 23.068442   0.048267 477.931   &lt;2e-16 ***
+BDI_pre.c   -0.003392   0.003156  -1.075    0.282    
+treatment   -6.167811   0.068260 -90.357   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 10.83 on 99997 degrees of freedom
-Multiple R-squared:  0.0706,    Adjusted R-squared:  0.07058 
-F-statistic:  3798 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 10.79 on 99997 degrees of freedom
+Multiple R-squared:  0.07549,   Adjusted R-squared:  0.07547 
+F-statistic:  4083 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># with pre_post_cor, the residual error should be reduced</span></span>
 <span><span class="fu">sim2</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100000</span>, pre_post_cor <span class="op">=</span> <span class="fl">0.6</span>, print <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -783,19 +782,19 @@ lm(formula = BDI_post ~ BDI_pre.c + treatment, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--39.046  -5.787  -0.045   5.816  35.368 
+-38.543  -5.849  -0.026   5.810  37.396 
 
 Coefficients:
              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 23.100716   0.038603   598.4   &lt;2e-16 ***
-BDI_pre.c    0.600826   0.002521   238.4   &lt;2e-16 ***
-treatment   -6.085188   0.054593  -111.5   &lt;2e-16 ***
+(Intercept) 22.989149   0.038591   595.7   &lt;2e-16 ***
+BDI_pre.c    0.598660   0.002523   237.3   &lt;2e-16 ***
+treatment   -6.084537   0.054576  -111.5   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 8.632 on 99997 degrees of freedom
-Multiple R-squared:  0.4086,    Adjusted R-squared:  0.4086 
-F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 8.629 on 99997 degrees of freedom
+Multiple R-squared:  0.4064,    Adjusted R-squared:  0.4064 
+F-statistic: 3.423e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>Indeed, with <code>pre_post_cor = 0</code> the parameter estimates are identical, and with non-zero pre-post-correlation, the error term gets reduced.</p>
@@ -848,16 +847,16 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n  power
-1   90 0.6565
-2  100 0.7195
-3  110 0.7630
-4  120 0.8160
-5  130 0.8520
-6  140 0.8955
-7  150 0.9235
-8  160 0.9330
+1   90 0.6450
+2  100 0.7125
+3  110 0.7670
+4  120 0.8180
+5  130 0.8355
+6  140 0.8895
+7  150 0.9100
+8  160 0.9305
 9  170 0.9450
-10 180 0.9675</code></pre>
+10 180 0.9600</code></pre>
 </div>
 </div>
 <p>In the original analysis, we needed <span class="math inline">\(n=180\)</span> (90 in each group) for 80% power. Including the baseline covariate (which explains <span class="math inline">\(r^2 = .6^2 = 36\%\)</span> of the variance in post scores) reduces that number to around <span class="math inline">\(n=115\)</span>.</p>
@@ -1064,22 +1063,22 @@ F-statistic: 3.454e+04 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>     n power_treatment power_interaction
-1  100           0.729             0.057
-2  120           0.815             0.068
-3  140           0.906             0.080
-4  160           0.948             0.105
-5  180           0.961             0.111
-6  200           0.983             0.156
-7  220           0.995             0.164
-8  240           0.992             0.204
-9  260           0.995             0.195
-10 280           0.998             0.233
-11 300           1.000             0.239
-12 320           1.000             0.295
-13 340           0.999             0.298
-14 360           1.000             0.332
-15 380           1.000             0.360
-16 400           1.000             0.356</code></pre>
+1  100           0.723             0.040
+2  120           0.835             0.069
+3  140           0.885             0.095
+4  160           0.942             0.101
+5  180           0.968             0.126
+6  200           0.976             0.143
+7  220           0.988             0.164
+8  240           0.990             0.212
+9  260           0.995             0.189
+10 280           0.999             0.248
+11 300           1.000             0.245
+12 320           0.999             0.242
+13 340           1.000             0.296
+14 360           1.000             0.309
+15 380           1.000             0.311
+16 400           1.000             0.375</code></pre>
 </div>
 </div>
 <p>While the power for detecting the main effect quickly approaches 100%, even 400 participants are by far not enough to detect the interaction effect reliably. (In particular when you recall that we set the assumed interaction effect to the largest plausible value).</p>
