@@ -98,8 +98,9 @@ jobs:
           if (length(missing) > 0) install.packages(missing)
         shell: Rscript {0}
 
-      - name: Cache Quarto execution outputs
-        uses: actions/cache@v4
+      - name: Restore Quarto execution outputs
+        id: quarto-cache
+        uses: actions/cache/restore@v4
         with:
           path: |
             _freeze
@@ -107,8 +108,9 @@ jobs:
             **/*_cache
             *_files
             **/*_files
-          key: ${{ runner.os }}-quarto-exec-${{ hashFiles('renv.lock', '_quarto.yml') }}
+          key: ${{ runner.os }}-quarto-exec-${{ hashFiles('renv.lock', '_quarto.yml', '**/*.qmd', '**/*.R', '**/*.Rmd', '**/*.bib', '**/*.css', '**/*.html', '_extensions/**') }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
+            ${{ runner.os }}-quarto-exec-${{ hashFiles('renv.lock', '_quarto.yml', '**/*.qmd', '**/*.R', '**/*.Rmd', '**/*.bib', '**/*.css', '**/*.html', '_extensions/**') }}-
             ${{ runner.os }}-quarto-exec-
 
       - name: Render and Publish
@@ -117,3 +119,15 @@ jobs:
           target: gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Save Quarto execution outputs
+        uses: actions/cache/save@v4
+        if: ${{ success() }}
+        with:
+          path: |
+            _freeze
+            *_cache
+            **/*_cache
+            *_files
+            **/*_files
+          key: ${{ steps.quarto-cache.outputs.cache-primary-key }}
